@@ -136,28 +136,10 @@
                         <!-- QR Code Container -->
                         <div class="bg-gray-50 rounded-xl p-6">
                             <div class="bg-white p-6 rounded-xl shadow-sm text-center">
-                                @if($qrCodeGenerated)
-                                    <!-- QR Code Visual -->
-                                    <div class="w-64 h-64 mx-auto border-2 border-gray-200 rounded-lg overflow-hidden relative">
-                                        <div class="w-full h-full bg-black p-4 relative" style="
-                                            background-image: 
-                                                repeating-linear-gradient(0deg, black 0px, black 3px, white 3px, white 6px),
-                                                repeating-linear-gradient(90deg, black 0px, black 3px, white 3px, white 6px);
-                                            background-size: 12px 12px;
-                                        ">
-                                            <!-- QR Code Center -->
-                                            <div class="absolute inset-8 bg-white rounded flex items-center justify-center">
-                                                <div class="text-center">
-                                                    <div class="text-xs font-mono font-bold mb-2 text-black">{{ $sessionCode }}</div>
-                                                    <div class="w-8 h-8 bg-black mx-auto rounded"></div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Corner Squares -->
-                                            <div class="absolute top-2 left-2 w-8 h-8 bg-black rounded-sm"></div>
-                                            <div class="absolute top-2 right-2 w-8 h-8 bg-black rounded-sm"></div>
-                                            <div class="absolute bottom-2 left-2 w-8 h-8 bg-black rounded-sm"></div>
-                                        </div>
+                                @if($qrCodeGenerated && $qrCodeSvg)
+                                    <!-- Actual QR Code -->
+                                    <div class="flex justify-center mb-4">
+                                        {!! $qrCodeSvg !!}
                                     </div>
 
                                     <!-- Session Information -->
@@ -167,11 +149,16 @@
                                         </div>
                                         
                                         <!-- Timer -->
-                                        <div class="text-sm text-gray-500" id="timer">
+                                        <div class="text-sm text-gray-500" id="timer-container">
                                             <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
-                                            Expires in: <span id="countdown">{{ $this->getFormattedTimeRemaining() }}</span>
+                                            Expires in: <span id="countdown" class="font-mono">{{ $this->getFormattedTimeRemaining() }}</span>
+                                        </div>
+                                        
+                                        <!-- Time remaining progress bar -->
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div id="timer-progress" class="bg-brand-red h-2 rounded-full transition-all duration-1000" style="width: 100%"></div>
                                         </div>
                                     </div>
 
@@ -267,77 +254,417 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
-                <span>QR codes expire in 10 minutes for security. Your verification is encrypted end-to-end.</span>
+                <span>QR codes expire in 6 minutes for security. Your verification is encrypted end-to-end.</span>
             </div>
         </div>
     </main>
 
-    <!-- JavaScript for polling and timer -->
+    <!-- JavaScript for real-time polling, timer and validation -->
     <script>
-        document.addEventListener('livewire:initialized', () => {
+        // Store PHP variables safely in JavaScript
+        window.verificationData = {
+            expirationTimestamp: {{ $this->getExpirationTimestamp() ?: 0 }},
+            qrCodeGenerated: {{ $qrCodeGenerated ? 'true' : 'false' }},
+            verificationStep: '{{ $verificationStep }}',
+            timeRemaining: {{ $timeRemaining ?: 0 }},
+            verificationToken: '{{ $verificationToken }}'
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded');
+            
+            // Multiple initialization strategies
+            setTimeout(initializeVerificationSystem, 100);
+            
+            if (window.Livewire) {
+                console.log('Livewire already available');
+                setTimeout(initializeVerificationSystem, 200);
+            }
+            
+            document.addEventListener('livewire:initialized', function() {
+                console.log('Livewire initialized event fired');
+                setTimeout(initializeVerificationSystem, 100);
+            });
+            
+            // Fallback initialization
+            setTimeout(function() {
+                if (window.Livewire && window.Livewire.all && window.Livewire.all().length > 0) {
+                    console.log('Fallback initialization');
+                    initializeVerificationSystem();
+                }
+            }, 1000);
+        });
+
+        function initializeVerificationSystem() {
+            // Prevent multiple initializations
+            if (window.verificationSystemInitialized) {
+                console.log('Verification system already initialized');
+                return;
+            }
+
+            // Check if required elements exist
+            const livewireComponent = window.Livewire?.all?.()?.[0];
+            if (!livewireComponent) {
+                console.log('Livewire component not ready, retrying...');
+                setTimeout(initializeVerificationSystem, 500);
+                return;
+            }
+
+            window.verificationSystemInitialized = true;
+            
             let pollInterval = null;
             let timerInterval = null;
-            let timeRemaining = {{ $this->getTimeRemaining() }};
-
-            // Start polling when component dispatches start-polling event
-            Livewire.on('start-polling', () => {
-                if (pollInterval) clearInterval(pollInterval);
-                
-                // Poll every 3 seconds
-                pollInterval = setInterval(() => {
-                    @this.checkConnection();
-                }, 3000);
+            let syncInterval = null;
+            let expirationTimestamp = window.verificationData.expirationTimestamp || 0;
+            let isExpired = false;
+            let lastSyncTime = Date.now();
+            
+            console.log('Initializing verification system...', {
+                expirationTimestamp,
+                qrCodeGenerated: window.verificationData.qrCodeGenerated,
+                verificationStep: window.verificationData.verificationStep
             });
-
-            // Stop polling when phone connects
-            Livewire.on('phone-connected', () => {
-                if (pollInterval) {
-                    clearInterval(pollInterval);
-                    pollInterval = null;
+            
+            // Real-time timer that syncs with server
+            class LiveTimer {
+                constructor() {
+                    this.isRunning = false;
+                    this.syncEvery = 30000; // Sync with server every 30 seconds
+                    this.lastSync = Date.now();
                 }
-            });
 
-            // Stop polling when verification completes
-            Livewire.on('verification-completed', () => {
-                if (pollInterval) {
-                    clearInterval(pollInterval);
-                    pollInterval = null;
+                start() {
+                    if (this.isRunning) return;
+                    this.isRunning = true;
+                    console.log('Starting live timer...');
+                    this.updateDisplay();
+                    this.startTimer();
+                    this.startSyncInterval();
                 }
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-            });
 
-            // Start timer countdown
-            function startTimer() {
-                if (timerInterval) clearInterval(timerInterval);
-                
-                timerInterval = setInterval(() => {
-                    timeRemaining--;
+                stop() {
+                    this.isRunning = false;
+                    console.log('Stopping live timer...');
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                    }
+                    if (syncInterval) {
+                        clearInterval(syncInterval);
+                        syncInterval = null;
+                    }
+                }
+
+                startTimer() {
+                    if (timerInterval) clearInterval(timerInterval);
+                    
+                    timerInterval = setInterval(() => {
+                        this.updateDisplay();
+                    }, 1000);
+                }
+
+                startSyncInterval() {
+                    if (syncInterval) clearInterval(syncInterval);
+                    
+                    // Sync with server every 30 seconds
+                    syncInterval = setInterval(() => {
+                        this.syncWithServer();
+                    }, this.syncEvery);
+                }
+
+                updateDisplay() {
+                    if (!expirationTimestamp || isExpired) return;
+
+                    const now = Date.now();
+                    const timeRemaining = Math.max(0, Math.floor((expirationTimestamp - now) / 1000));
                     
                     if (timeRemaining <= 0) {
-                        clearInterval(timerInterval);
-                        document.getElementById('countdown').textContent = '0:00';
+                        this.handleExpiration();
                         return;
                     }
-                    
+
+                    // Update countdown display
                     const minutes = Math.floor(timeRemaining / 60);
                     const seconds = timeRemaining % 60;
-                    document.getElementById('countdown').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    const countdownEl = document.getElementById('countdown');
+                    if (countdownEl) {
+                        countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+
+                    // Update progress bar
+                    const progressEl = document.getElementById('timer-progress');
+                    if (progressEl) {
+                        const totalTime = 360; // 6 minutes
+                        const progressPercent = (timeRemaining / totalTime) * 100;
+                        progressEl.style.width = `${Math.max(0, progressPercent)}%`;
+                        
+                        // Change color as time runs out
+                        if (progressPercent < 25) {
+                            progressEl.className = 'bg-red-500 h-2 rounded-full transition-all duration-1000';
+                        } else if (progressPercent < 50) {
+                            progressEl.className = 'bg-yellow-500 h-2 rounded-full transition-all duration-1000';
+                        } else {
+                            progressEl.className = 'bg-brand-red h-2 rounded-full transition-all duration-1000';
+                        }
+                    }
+
+                    // Auto-sync more frequently when time is running low
+                    const timeSinceLastSync = now - this.lastSync;
+                    if ((timeRemaining < 60 && timeSinceLastSync > 10000) || // Every 10 seconds when < 1 minute
+                        (timeRemaining < 30 && timeSinceLastSync > 5000)) {  // Every 5 seconds when < 30 seconds
+                        this.syncWithServer();
+                    }
+                }
+
+                async syncWithServer() {
+                    try {
+                        this.lastSync = Date.now();
+                        
+                        const livewireComponent = window.Livewire?.all?.()?.[0];
+                        if (!livewireComponent || !livewireComponent.call) {
+                            console.warn('Livewire component not ready for sync');
+                            return;
+                        }
+                        
+                        const response = await livewireComponent.call('syncTimerWithServer');
+                        
+                        if (response && response.expiresAt) {
+                            expirationTimestamp = response.expiresAt;
+                            isExpired = response.expired;
+                            
+                            if (isExpired || response.timeRemaining <= 0) {
+                                this.handleExpiration();
+                                return;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Timer sync error:', error);
+                    }
+                }
+
+                handleExpiration() {
+                    isExpired = true;
+                    this.stop();
+                    
+                    const countdownEl = document.getElementById('countdown');
+                    if (countdownEl) {
+                        countdownEl.textContent = '0:00';
+                        const timerContainer = countdownEl.closest('#timer-container');
+                        if (timerContainer) {
+                            timerContainer.classList.add('text-red-500');
+                        }
+                    }
+                    
+                    const progressEl = document.getElementById('timer-progress');
+                    if (progressEl) {
+                        progressEl.style.width = '0%';
+                        progressEl.className = 'bg-red-500 h-2 rounded-full transition-all duration-1000';
+                    }
+                    
+                    // Notify server about expiration
+                    const livewireComponent = window.Livewire?.all?.()?.[0];
+                    if (livewireComponent && livewireComponent.call) {
+                        livewireComponent.call('updateTimer').catch(error => {
+                            console.error('Error updating timer on server:', error);
+                        });
+                    }
+                }
+            }
+
+            const liveTimer = new LiveTimer();
+
+            // Polling for verification status
+            function startPolling() {
+                if (pollInterval || isExpired) return;
+                
+                console.log('Starting verification polling...');
+                pollInterval = setInterval(async () => {
+                    try {
+                        const livewireComponent = window.Livewire?.all?.()?.[0];
+                        if (livewireComponent && livewireComponent.call) {
+                            await livewireComponent.call('checkConnection');
+                        }
+                    } catch (error) {
+                        console.error('Polling error:', error);
+                    }
+                }, 5000); // Poll every 5 seconds
+            }
+
+            function stopPolling() {
+                if (pollInterval) {
+                    console.log('Stopping verification polling...');
+                    clearInterval(pollInterval);
+                    pollInterval = null;
+                }
+            }
+
+            // Safe event listener registration using Livewire's event system
+            function registerLivewireEvents() {
+                try {
+                    if (window.Livewire && window.Livewire.on) {
+                        window.Livewire.on('start-polling', () => {
+                            console.log('Received start-polling event');
+                            startPolling();
+                            liveTimer.start();
+                        });
+
+                        window.Livewire.on('stop-polling', () => {
+                            console.log('Received stop-polling event');
+                            stopPolling();
+                            liveTimer.stop();
+                        });
+
+                        window.Livewire.on('phone-connected', () => {
+                            console.log('Phone connected! Continuing to poll for verification completion...');
+                            // Don't stop polling yet - wait for verification completion
+                        });
+
+                        window.Livewire.on('verification-completed', () => {
+                            console.log('Verification completed!');
+                            stopPolling();
+                            liveTimer.stop();
+                        });
+
+                        window.Livewire.on('redirect-after-timeout', () => {
+                            console.log('Redirecting after timeout...');
+                            stopPolling();
+                            liveTimer.stop();
+                            
+                            setTimeout(() => {
+                                const livewireComponent = window.Livewire?.all?.()?.[0];
+                                if (livewireComponent && livewireComponent.call) {
+                                    livewireComponent.call('redirectToOptions').catch(error => {
+                                        console.error('Error redirecting:', error);
+                                        // Fallback redirect
+                                        window.location.href = '/verification-options';
+                                    });
+                                }
+                            }, 3000);
+                        });
+
+                        console.log('Livewire events registered successfully');
+                    } else {
+                        console.warn('Livewire.on not available, retrying...');
+                        setTimeout(registerLivewireEvents, 1000);
+                    }
+                } catch (error) {
+                    console.error('Error registering Livewire events:', error);
+                }
+            }
+
+            registerLivewireEvents();
+
+            // Browser event listeners with null checks
+            function registerBrowserEvents() {
+                // Page visibility handling
+                if (document && typeof document.addEventListener === 'function') {
+                    document.addEventListener('visibilitychange', () => {
+                        if (!document.hidden && !isExpired) {
+                            console.log('Page visible - syncing with server...');
+                            liveTimer.syncWithServer();
+                            
+                            // Restart polling if it was stopped
+                            if (!pollInterval && window.verificationData.verificationStep !== 'complete') {
+                                startPolling();
+                            }
+                        } else if (document.hidden) {
+                            console.log('Page hidden - maintaining background sync...');
+                        }
+                    });
+                }
+
+                // Window event listeners
+                if (window && typeof window.addEventListener === 'function') {
+                    window.addEventListener('focus', () => {
+                        if (!isExpired) {
+                            console.log('Window focused - checking status...');
+                            liveTimer.syncWithServer();
+                        }
+                    });
+
+                    window.addEventListener('online', () => {
+                        if (!isExpired) {
+                            console.log('Network reconnected - syncing...');
+                            liveTimer.syncWithServer();
+                            if (!pollInterval && window.verificationData.verificationStep !== 'complete') {
+                                startPolling();
+                            }
+                        }
+                    });
+
+                    window.addEventListener('offline', () => {
+                        console.log('Network disconnected - will resume when online');
+                    });
+
+                    window.addEventListener('beforeunload', () => {
+                        stopPolling();
+                        liveTimer.stop();
+                    });
+                }
+
+                // Livewire navigation cleanup
+                if (document && typeof document.addEventListener === 'function') {
+                    document.addEventListener('livewire:navigating', () => {
+                        stopPolling();
+                        liveTimer.stop();
+                    });
+                }
+            }
+
+            registerBrowserEvents();
+
+            // Initialize if QR code is already generated
+            if (window.verificationData.qrCodeGenerated && !isExpired) {
+                console.log('QR Code is generated, starting system...');
+                
+                // Small delay to ensure all DOM elements are ready
+                setTimeout(() => {
+                    // Sync time first
+                    liveTimer.syncWithServer().then(() => {
+                        if (!isExpired && window.verificationData.timeRemaining > 0) {
+                            liveTimer.start();
+                            
+                            const step = window.verificationData.verificationStep;
+                            if (step === 'waiting' || step === 'connected') {
+                                startPolling();
+                            }
+                        }
+                    }).catch(error => {
+                        console.error('Error during initial sync:', error);
+                        // Start timer anyway with current data
+                        if (!isExpired && window.verificationData.timeRemaining > 0) {
+                            liveTimer.start();
+                            const step = window.verificationData.verificationStep;
+                            if (step === 'waiting' || step === 'connected') {
+                                startPolling();
+                            }
+                        }
+                    });
                 }, 1000);
             }
 
-            // Start timer if QR code is generated
-            if (timeRemaining > 0) {
-                startTimer();
-            }
+            // Auto-refresh QR code if it becomes invalid
+            setInterval(async () => {
+                if (window.verificationData.qrCodeGenerated && !isExpired && window.verificationData.verificationToken) {
+                    try {
+                        const response = await fetch('/api/verify-token/' + window.verificationData.verificationToken);
+                        if (!response.ok) {
+                            console.log('Token invalid - regenerating...');
+                            const livewireComponent = window.Livewire?.all?.()?.[0];
+                            if (livewireComponent && livewireComponent.call) {
+                                livewireComponent.call('regenerateQRCode').catch(error => {
+                                    console.error('Error regenerating QR code:', error);
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Token validation error:', error);
+                    }
+                }
+            }, 60000); // Check every minute
 
-            // Stop polling and timer when component is destroyed
-            document.addEventListener('livewire:navigating', () => {
-                if (pollInterval) clearInterval(pollInterval);
-                if (timerInterval) clearInterval(timerInterval);
-            });
-        });
+            console.log('QR Code Verification system initialized successfully');
+        }
+    </script>
     </script>
 </div>

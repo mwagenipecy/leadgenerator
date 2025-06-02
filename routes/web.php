@@ -4,6 +4,7 @@ use App\Http\Controllers\LenderManagementController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductManagementController;
 use App\Http\Controllers\OnboardingController;
+use App\Models\NidaVerification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NidaVerificationController;
 use App\Livewire\VerificationMethodSelector;
@@ -28,6 +29,10 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), ])->group(
 
     Route::get('verification/option',[OnboardingController::class,'verificationOption'])->name('verification.options');
     Route::get('/verification/phone-photo', [OnboardingController::class,'phoneVerification'])->name('verification.phone-photo');
+
+    Route::get('/verification/phone-photo_', [OnboardingController::class,'phoneVerificationByLink'])->name('verification.phone-photo.link');
+
+    
     Route::get('/verification/qr-code', [OnboardingController::class,'qrCodeVerification'])->name('verification.qr-code');
     Route::get('/verification/questionnaire', function() { return view('verification.questionnaire'); })->name('verification.questionnaire');
     
@@ -36,6 +41,57 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), ])->group(
     });
 
 });
+
+
+
+Route::get('/verify-token/{token}', function ($token) {
+    $verification = NidaVerification::where('verification_token', $token)
+        ->where('token_expires_at', '>', now())
+        ->where('status', 'pending')
+        ->first();
+    
+    if (!$verification) {
+        return response()->json([
+            'valid' => false,
+            'message' => 'Token not found or expired'
+        ], 404);
+    }
+    
+    return response()->json([
+        'valid' => true,
+        'expires_at' => $verification->token_expires_at,
+        'time_remaining' => $verification->token_expires_at->diffInSeconds(now()),
+        'phone_connected' => $verification->phone_connected,
+        'status' => $verification->status
+    ]);
+});
+
+// Real-time status endpoint for polling
+Route::get('/verification-status/{token}', function ($token) {
+    $verification = NidaVerification::where('verification_token', $token)->first();
+    
+    if (!$verification) {
+        return response()->json([
+            'found' => false,
+            'message' => 'Verification not found'
+        ], 404);
+    }
+    
+    $timeRemaining = $verification->token_expires_at->diffInSeconds(now());
+    $isExpired = $verification->isTokenExpired();
+    
+    return response()->json([
+        'found' => true,
+        'status' => $verification->status,
+        'phone_connected' => $verification->phone_connected,
+        'time_remaining' => max(0, $timeRemaining),
+        'expired' => $isExpired,
+        'expires_at' => $verification->token_expires_at->timestamp * 1000, // JS timestamp
+        'updated_at' => $verification->updated_at->timestamp * 1000
+    ]);
+});
+
+
 
 
 

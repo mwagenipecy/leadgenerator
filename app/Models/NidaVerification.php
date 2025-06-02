@@ -127,4 +127,8 @@ class NidaVerification extends Model
     {
         return $query->where('status', 'failed');
     }
+
+
+
+    
 }
