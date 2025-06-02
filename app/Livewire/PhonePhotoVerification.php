@@ -220,7 +220,7 @@ class PhonePhotoVerification extends Component
 
     public function backToMethodSelection()
     {
-        return redirect()->route('verification.method');
+        return redirect()->route('verification.options');
     }
 
     private function resetErrorsAndMessages()

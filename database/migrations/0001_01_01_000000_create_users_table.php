@@ -21,13 +21,18 @@ return new class extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
 
-            $table->string('first_name')->after('name')->nullable();
-            $table->string('last_name')->after('first_name')->nullable();
-            $table->string('phone')->after('email')->nullable();
-            $table->string('nida_number')->after('phone')->unique()->nullable();
-            $table->timestamp('nida_verified_at')->after('email_verified_at')->nullable();
-            $table->enum('verification_status', ['pending', 'verified', 'failed'])->default('pending')->after('nida_verified_at');
-            $table->date('date_of_birth')->after('verification_status')->nullable();
+            $table->string('role')->default('user'); // admin, lender, user
+            $table->boolean('is_active')->default(true);
+
+            $table->string('lender_id')->nullable();
+
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('nida_number')->unique()->nullable();
+            $table->timestamp('nida_verified_at')->nullable();
+            $table->enum('verification_status', ['pending', 'verified', 'failed'])->default('pending');
+            $table->date('date_of_birth')->nullable();
 
             
             $table->timestamps();

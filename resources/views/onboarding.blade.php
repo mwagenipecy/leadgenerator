@@ -28,6 +28,9 @@
 <body class="bg-gray-50 font-inter">
 
     <div class="min-h-screen flex">
+
+
+    
         
         <!-- Left Side - Welcome Content (Hidden on mobile) -->
         <div class="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-brand-red via-brand-dark-red to-red-900 relative overflow-hidden">
@@ -363,6 +366,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 
     <!-- JavaScript -->

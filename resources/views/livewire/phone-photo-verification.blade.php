@@ -9,7 +9,7 @@
                     Lead<span class="text-brand-red">Generator</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">Welcome, {{ auth()->user()->first_name }}</span>
+                    <span class="text-sm text-gray-500">Welcome, {{ auth()->user()->first_name?? '' }}</span>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-sm text-brand-red hover:text-red-700 transition-colors">

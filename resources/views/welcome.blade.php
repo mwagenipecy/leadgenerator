@@ -78,12 +78,11 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
-                    <a href="#about" class="text-gray-600 hover:text-brand-red transition-colors font-medium">About</a>
                     <a href="#eligibility" class="text-gray-600 hover:text-brand-red transition-colors font-medium">Eligibility</a>
                     <a href="#process" class="text-gray-600 hover:text-brand-red transition-colors font-medium">Process</a>
-                    <button class="bg-brand-red text-white px-6 py-2 rounded-md text-sm hover:bg-red-700 transition-all font-semibold">
+                    <a href="{{ route('login') }}" class="bg-brand-red text-white px-6 py-2 rounded-md text-sm hover:bg-red-700 transition-all font-semibold">
                         Get Started
-                    </button>
+    </a>
                 </div>
                 
                 <!-- Mobile Menu Button -->
@@ -97,12 +96,11 @@
             <!-- Mobile Navigation -->
             <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-100">
                 <div class="space-y-3 pt-4">
-                    <a href="#about" class="block text-gray-600 hover:text-brand-red transition-colors font-medium">About</a>
                     <a href="#eligibility" class="block text-gray-600 hover:text-brand-red transition-colors font-medium">Eligibility</a>
                     <a href="#process" class="block text-gray-600 hover:text-brand-red transition-colors font-medium">Process</a>
-                    <button class="w-full text-left bg-brand-red text-white px-6 py-2 rounded-md text-sm hover:bg-red-700 transition-all font-semibold">
+                    <a href="{{ route('login') }}" class="w-full text-left bg-brand-red text-white px-6 py-2 rounded-md text-sm hover:bg-red-700 transition-all font-semibold">
                         Get Started
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -141,9 +139,9 @@
                                 Our verified lenders are ready to help you achieve your financial goals.
                             </p>
                             <div class="space-y-4">
-                                <button class="w-full bg-white text-black px-8 py-4 rounded-md text-lg font-semibold hover:bg-gray-100 transition-all">
+                                <a  href="{{ route('user.register') }}" class="w-full bg-white text-black px-8 py-4 rounded-md text-lg font-semibold hover:bg-gray-100 transition-all">
                                     Apply Now
-                                </button>
+                                </a>
                                 <button class="w-full border-2 border-white/50 text-white px-8 py-4 rounded-md text-lg font-semibold hover:bg-white/10 transition-all">
                                     Learn More
                                 </button>
@@ -218,12 +216,14 @@
                         
                         <!-- Call to Action Buttons -->
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <button class="bg-white text-black px-8 py-4 rounded-md text-lg font-semibold hover:bg-gray-100 transition-all duration-300 flex items-center justify-center group">
+
+                            <a  href="{{ route('user.register') }}"class="bg-white text-black px-8 py-4 rounded-md text-lg font-semibold hover:bg-gray-100 transition-all duration-300 flex items-center justify-center group">
                                 Apply Now
                                 <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                                 </svg>
-                            </button>
+                                </a>
+
                             <button class="border-2 border-white/50 text-white px-8 py-4 rounded-md text-lg font-semibold hover:bg-white/10 hover:border-white transition-all duration-300">
                                 Learn More
                             </button>
@@ -323,7 +323,7 @@
 
 
 
-    <section id="about" class="py-16 md:py-24 bg-white">
+    <section id="eligibility" class="py-16 md:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
             <!-- Section Header -->
             <div class="text-center mb-12 md:mb-16">
@@ -670,7 +670,6 @@
                     <h4 class="font-semibold font-poppins text-lg mb-4">Quick Links</h4>
                     <ul class="space-y-2">
                         <li><a href="#home" class="text-gray-300 hover:text-white transition-colors text-sm">Home</a></li>
-                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors text-sm">About Us</a></li>
                         <li><a href="#eligibility" class="text-gray-300 hover:text-white transition-colors text-sm">Eligibility</a></li>
                         <li><a href="#process" class="text-gray-300 hover:text-white transition-colors text-sm">How It Works</a></li>
                         <li><a href="#" class="text-gray-300 hover:text-white transition-colors text-sm">Lenders</a></li>

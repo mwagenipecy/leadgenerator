@@ -26,6 +26,7 @@
 </head>
 <body class="bg-gray-50 font-inter min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <!-- Login Container -->
+  
     <div class="max-w-md w-full space-y-8">
         
         <!-- Header -->
@@ -40,6 +41,7 @@
 
         <!-- Login Form -->
         <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+            
             <form class="space-y-6" action="#" method="POST">
                 
                 <!-- Email Field -->
@@ -185,6 +187,7 @@
         </div>
 
     </div>
+
 
     <!-- JavaScript -->
     <script>

@@ -35,7 +35,7 @@ return new class extends Migration
             $table->decimal('confidence_score', 5, 2)->nullable();
             
             // Session management
-            $table->timestamp('expires_at');
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
 
             // Indexes for performance

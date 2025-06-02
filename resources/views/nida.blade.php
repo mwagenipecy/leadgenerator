@@ -334,8 +334,9 @@
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
     </style>
-</body>
-</html>,
+
+    <script> 
+
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],
                         'poppins': ['Poppins', 'sans-serif'],
@@ -344,6 +345,12 @@
             }
         }
     </script>
+
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+
+    
 </head>
 <body class="bg-gray-50 font-inter min-h-screen">
 
@@ -352,7 +359,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="text-2xl font-bold font-poppins text-black">
-                    Lead<span class="text-brand-red">Generator</span>
+                    Lead<span class="text-brand-red text-red-600 ">Generator</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm text-gray-500">Welcome, {{ auth()->user()->first_name ?? 'User' }}</span>

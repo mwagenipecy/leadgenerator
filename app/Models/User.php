@@ -37,6 +37,8 @@ class User extends Authenticatable
         'nida_verified_at',
         'verification_status',
         'date_of_birth',
+        'role',
+        'is_active',
 
 
     ];
@@ -108,5 +110,40 @@ class User extends Authenticatable
         return $this->first_name . ' ' . $this->last_name;
     }
 
+
+
+    public function lender()
+    {
+        return $this->belongsTo(Lender::class,'lender_id','id');
+    }
+
+    // Role helpers
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isLender(): bool
+    {
+        return $this->role === 'lender';
+    }
+
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeByRole($query, string $role)
+    {
+        return $query->where('role', $role);
+    }
+
+    
 
 }
