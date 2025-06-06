@@ -376,139 +376,179 @@
 
     <!-- Add Lender Modal -->
     @if($showAddForm)
-        <div class="fixed inset-0 bg-black bg-opacity-50 z-50">
-            <div class="flex items-center justify-center min-h-screen p-4">
-                <div class="bg-white rounded-3xl p-8 w-full max-w-4xl max-h-screen overflow-y-auto">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Add New Lender</h2>
-                        <button wire:click="hideAddLenderForm" class="text-gray-400 hover:text-gray-600 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-3xl p-8 w-full max-w-4xl max-h-screen overflow-y-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Add New Lender</h2>
+                    <button wire:click="hideAddLenderForm" class="text-gray-400 hover:text-gray-600 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Important Notice -->
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div>
+                            <h4 class="text-sm font-semibold text-blue-800 mb-1">Important Notice</h4>
+                            <p class="text-sm text-blue-700">The contact person will become the primary system user for this lender account. They will receive login credentials and have access to manage all loan applications and lender settings.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form wire:submit="saveLender">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Company Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
+                            <input wire:model="company_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter company name">
+                            @error('company_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- License Number -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">License Number</label>
+                            <input wire:model="license_number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter license number">
+                            @error('license_number') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Contact Person -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Contact Person *
+                                <span class="inline-flex items-center ml-1">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                </span>
+                            </label>
+                            <input wire:model="contact_person" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter contact person name">
+                            <p class="text-xs text-blue-600 mt-1 flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                This person will become the system user
+                            </p>
+                            @error('contact_person') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Email Address *
+                                <span class="inline-flex items-center ml-1">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                    </svg>
+                                </span>
+                            </label>
+                            <input wire:model="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter email address">
+                            <p class="text-xs text-blue-600 mt-1 flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                </svg>
+                                Login credentials will be sent to this email
+                            </p>
+                            @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Phone -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                            <input wire:model="phone" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter phone number">
+                            @error('phone') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Website -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                            <input wire:model="website" type="url" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="https://example.com">
+                            @error('website') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- City -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                            <input wire:model="city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter city">
+                            @error('city') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Region -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Region *</label>
+                            <input wire:model="region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter region">
+                            @error('region') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Postal Code -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
+                            <input wire:model="postal_code" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter postal code">
+                            @error('postal_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
-                    <form wire:submit="saveLender">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <!-- Company Name -->
+                    <!-- Address -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
+                        <textarea wire:model="address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter full address"></textarea>
+                        @error('address') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea wire:model="description" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Brief description about the lender"></textarea>
+                        @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Document Uploads -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Required Documents</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Business License -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
-                                <input wire:model="company_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter company name">
-                                @error('company_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Business License</label>
+                                <input wire:model="business_license" type="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                @error('business_license') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
-                            <!-- License Number -->
+                            <!-- Tax Certificate -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">License Number</label>
-                                <input wire:model="license_number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter license number">
-                                @error('license_number') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tax Certificate</label>
+                                <input wire:model="tax_certificate" type="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                @error('tax_certificate') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
-                            <!-- Contact Person -->
+                            <!-- Bank Statement -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Person *</label>
-                                <input wire:model="contact_person" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter contact person name">
-                                @error('contact_person') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- Email -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                                <input wire:model="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter email address">
-                                @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- Phone -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
-                                <input wire:model="phone" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter phone number">
-                                @error('phone') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- Website -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
-                                <input wire:model="website" type="url" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="https://example.com">
-                                @error('website') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- City -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
-                                <input wire:model="city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter city">
-                                @error('city') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- Region -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Region *</label>
-                                <input wire:model="region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter region">
-                                @error('region') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- Postal Code -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                                <input wire:model="postal_code" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter postal code">
-                                @error('postal_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Bank Statement</label>
+                                <input wire:model="bank_statement" type="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                @error('bank_statement') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Address -->
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
-                            <textarea wire:model="address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter full address"></textarea>
-                            @error('address') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Description -->
-                        <div class="mb-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                            <textarea wire:model="description" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Brief description about the lender"></textarea>
-                            @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Document Uploads -->
-                        <div class="mb-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Required Documents</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <!-- Business License -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Business License</label>
-                                    <input wire:model="business_license" type="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    @error('business_license') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                </div>
-
-                                <!-- Tax Certificate -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tax Certificate</label>
-                                    <input wire:model="tax_certificate" type="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    @error('tax_certificate') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                </div>
-
-                                <!-- Bank Statement -->
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Bank Statement</label>
-                                    <input wire:model="bank_statement" type="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    @error('bank_statement') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Form Actions -->
-                        <div class="flex justify-end space-x-4">
-                            <button type="button" wire:click="hideAddLenderForm" class="px-6 py-3 text-gray-600 bg-gray-100 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
-                                Cancel
-                            </button>
-                            <button type="submit" class="px-6 py-3 bg-brand-red text-white rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25">
-                                Submit Application
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Form Actions -->
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" wire:click="hideAddLenderForm" class="px-6 py-3 text-gray-600 bg-gray-100 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-3 bg-brand-red text-white rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25">
+                            Submit Application
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    @endif
+    </div>
+@endif
+
 
     <!-- View Lender Modal -->
     @if($showViewModal && $selectedLender)

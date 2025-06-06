@@ -50,7 +50,9 @@ class LoanProduct extends Model
         'eligibility_criteria',
         'business_sectors_allowed',
         'promotional_tag',
-        'key_features'
+        'key_features',
+        'minimum_dsr',
+        'loan_type'
     ];
 
     protected $casts = [

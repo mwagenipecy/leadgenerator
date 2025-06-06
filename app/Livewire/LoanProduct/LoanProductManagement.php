@@ -106,6 +106,14 @@ class LoanProductManagement extends Component
     #[Rule('required|integer|min:1|max:30')]
     public $disbursement_time_days = 3;
 
+
+    #[Rule('required|string')]
+    public $loan_type;
+
+
+    #[Rule('required|integer|min:1|max:99')]
+    public $minimum_dsr;
+
     public $disbursement_methods = [];
     public $auto_approval_eligible = false;
 
@@ -253,6 +261,7 @@ class LoanProductManagement extends Component
                     'name' => 'required|string',
                     'description' => 'nullable|string',
                     'promotional_tag' => 'nullable|string',
+                    'loan_type'=>'required|string'
                 ]);
                 break;
             case 2:
@@ -475,6 +484,10 @@ class LoanProductManagement extends Component
         $this->collateral_types = $this->selectedCollateralTypes;
         $this->disbursement_methods = $this->selectedDisbursementMethods;
         $this->business_sectors_allowed = $this->selectedBusinessSectors;
+
+        // Dsr
+        $this->minimum_dsr=  $product->minimum_dsr;
+
     }
 
     private function getProductData(): array
@@ -517,6 +530,8 @@ class LoanProductManagement extends Component
             'business_sectors_allowed' => $this->selectedBusinessSectors,
             'key_features' => $this->key_features,
             'is_active' => $this->is_active,
+            'minimum_dsr'=>$this->minimum_dsr,
+            'loan_type'=>$this->loan_type
         ];
     }
 
@@ -552,4 +567,7 @@ class LoanProductManagement extends Component
             $this->min_employment_months = null;
         }
     }
+
+
+
 }

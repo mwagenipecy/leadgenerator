@@ -4,6 +4,7 @@ namespace App\Livewire\LoanApplication;
 
 use App\Models\Application;
 use App\Models\LoanProduct;
+use App\Models\Lender;
 use App\Models\ApplicationDocument;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -16,10 +17,29 @@ class ApplicationManagement extends Component
     use WithFileUploads;
 
     // Component state
-    public $currentStep = 'list'; // list, create, edit, view, products
-    public $currentFormStep = 1; // Multi-step form (1-5)
+    public $currentStep = 'list'; // list, create, edit, view, products, prequalify
+    public $currentFormStep = 1; // Multi-step form (1-6) - added pre-qualification step
     public $selectedApplication = null;
     public $matchingProducts = [];
+    public $preQualificationResults = [];
+    public $selectedLenders = []; // For multi-lender application
+    
+    // Pre-qualification fields
+    #[Rule('required|numeric|min:1000')]
+    public $prequalify_amount = 50000;
+    
+    #[Rule('required|numeric|min:0')]
+    public $prequalify_monthly_income = 0;
+    
+    #[Rule('required|numeric|min:0')]
+    public $prequalify_existing_loans = 0;
+    
+    #[Rule('required|integer|min:1|max:120')]
+    public $prequalify_tenure = 12;
+    
+    public $calculated_dsr = 0;
+    public $can_proceed = false;
+    public $dsr_message = '';
     
     // Step 1: Loan Details
     #[Rule('required|numeric|min:1000')]
@@ -185,18 +205,159 @@ class ApplicationManagement extends Component
         ]);
     }
 
+    // Pre-qualification methods
+    public function startPreQualification()
+    {
+        $this->resetForm();
+        $this->currentStep = 'prequalify';
+    }
+
+    public function calculateDSR()
+    {
+        $this->validate([
+            'prequalify_amount' => 'required|numeric|min:1000',
+            'prequalify_monthly_income' => 'required|numeric|min:1',
+            'prequalify_existing_loans' => 'required|numeric|min:0',
+            'prequalify_tenure' => 'required|integer|min:1|max:120',
+        ]);
+
+        // Calculate estimated monthly payment (using average interest rate of 15%)
+        $principal = $this->prequalify_amount;
+        $monthlyRate = 0.15 / 12; // 15% annual rate
+        $numberOfPayments = $this->prequalify_tenure;
+        
+        $estimatedMonthlyPayment = $principal * 
+            ($monthlyRate * pow(1 + $monthlyRate, $numberOfPayments)) / 
+            (pow(1 + $monthlyRate, $numberOfPayments) - 1);
+
+        // Calculate DSR
+        $totalMonthlyDebt = $this->prequalify_existing_loans + $estimatedMonthlyPayment;
+        $this->calculated_dsr = ($totalMonthlyDebt / $this->prequalify_monthly_income) * 100;
+
+        // Find matching loan products
+        $this->findMatchingLenders();
+    }
+
+    private function findMatchingLenders()
+    {
+        $matchingProducts = LoanProduct::with('lender')
+            ->where('is_active', true)
+            ->where('min_amount', '<=', $this->prequalify_amount)
+            ->where('max_amount', '>=', $this->prequalify_amount)
+            ->where('min_tenure_months', '<=', $this->prequalify_tenure)
+            ->where('max_tenure_months', '>=', $this->prequalify_tenure)
+            ->where('min_monthly_income', '<=', $this->prequalify_monthly_income)
+            ->where(function ($query) {
+                $query->whereNull('minimum_dsr')
+                      ->orWhere('minimum_dsr', '>=', $this->calculated_dsr);
+            })
+            ->orderBy('interest_rate_min', 'asc')
+            ->get();
+
+        $this->preQualificationResults = $matchingProducts->map(function ($product) {
+            // Calculate more accurate monthly payment with product's interest rate
+            $monthlyRate = $product->interest_rate_min / 100 / 12;
+            $monthlyPayment = $this->prequalify_amount * 
+                ($monthlyRate * pow(1 + $monthlyRate, $this->prequalify_tenure)) / 
+                (pow(1 + $monthlyRate, $this->prequalify_tenure) - 1);
+
+            $totalMonthlyDebt = $this->prequalify_existing_loans + $monthlyPayment;
+            $actualDSR = ($totalMonthlyDebt / $this->prequalify_monthly_income) * 100;
+
+            return [
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'lender_name' => $product->lender->company_name,
+                'lender_id' => $product->lender->id,
+                'interest_rate_min' => $product->interest_rate_min,
+                'interest_rate_max' => $product->interest_rate_max,
+                'monthly_payment' => $monthlyPayment,
+                'actual_dsr' => $actualDSR,
+                'max_dsr_allowed' => $product->minimum_dsr ?? 40,
+                'processing_fee_percentage' => $product->processing_fee_percentage,
+                'processing_fee_fixed' => $product->processing_fee_fixed,
+                'approval_time_days' => $product->approval_time_days,
+                'disbursement_time_days' => $product->disbursement_time_days,
+                'eligible' => $actualDSR <= ($product->minimum_dsr ?? 40),
+            ];
+        })->toArray();
+
+        $this->can_proceed = count($this->preQualificationResults) > 0;
+        
+        if (!$this->can_proceed) {
+            $this->dsr_message = "Your DSR of {$this->calculated_dsr}% is too high for available loan products. Consider reducing the loan amount or increasing your income.";
+        } else {
+            $eligibleCount = collect($this->preQualificationResults)->where('eligible', true)->count();
+            $this->dsr_message = "Great! You qualify for {$eligibleCount} loan products with a DSR of {$this->calculated_dsr}%.";
+        }
+    }
+
+    public function proceedToApplication($selectedLenderIds = null)
+    {
+        if (!$this->can_proceed) {
+            session()->flash('error', 'You do not meet the minimum requirements for any loan products.');
+            return;
+        }
+
+        // Store selected lenders
+        if ($selectedLenderIds) {
+            $this->selectedLenders = is_array($selectedLenderIds) ? $selectedLenderIds : [$selectedLenderIds];
+        } else {
+            // If no specific lenders selected, use all eligible ones
+            $this->selectedLenders = collect($this->preQualificationResults)
+                ->where('eligible', true)
+                ->pluck('lender_id')
+                ->toArray();
+        }
+
+        // Pre-fill loan details from pre-qualification
+        $this->requested_amount = $this->prequalify_amount;
+        $this->requested_tenure_months = $this->prequalify_tenure;
+        $this->total_monthly_income = $this->prequalify_monthly_income;
+        $this->existing_loan_payments = $this->prequalify_existing_loans;
+
+        $this->currentStep = 'create';
+        $this->currentFormStep = 1;
+    }
+
+    public function selectLender($lenderId)
+    {
+        if (in_array($lenderId, $this->selectedLenders)) {
+            $this->selectedLenders = array_filter($this->selectedLenders, fn($id) => $id !== $lenderId);
+        } else {
+            $this->selectedLenders[] = $lenderId;
+        }
+    }
+
+    public function selectAllEligibleLenders()
+    {
+        $this->selectedLenders = collect($this->preQualificationResults)
+            ->where('eligible', true)
+            ->pluck('lender_id')
+            ->toArray();
+    }
+
+    public function clearSelectedLenders()
+    {
+        $this->selectedLenders = [];
+    }
+
     // Navigation methods
     public function startNewApplication()
     {
         $this->resetForm();
-        $this->currentStep = 'create';
-        $this->currentFormStep = 1;
+        $this->startPreQualification();
     }
 
     public function backToList()
     {
         $this->currentStep = 'list';
         $this->resetForm();
+    }
+
+    public function backToPreQualification()
+    {
+        $this->currentStep = 'prequalify';
     }
 
     public function viewApplication($id)
@@ -233,7 +394,7 @@ class ApplicationManagement extends Component
     {
         $this->validateCurrentStep();
         
-        if ($this->currentFormStep < 5) {
+        if ($this->currentFormStep < 6) {
             $this->currentFormStep++;
         }
     }
@@ -242,12 +403,14 @@ class ApplicationManagement extends Component
     {
         if ($this->currentFormStep > 1) {
             $this->currentFormStep--;
+        } else {
+            $this->backToPreQualification();
         }
     }
 
     public function goToStep($step)
     {
-        if ($step >= 1 && $step <= 5) {
+        if ($step >= 1 && $step <= 6) {
             // Validate all previous steps
             for ($i = 1; $i < $step; $i++) {
                 $this->validateStep($i);
@@ -323,13 +486,13 @@ class ApplicationManagement extends Component
         }
     }
 
-    // Save application
+    // Save application - modified to handle multiple lenders
     public function saveApplication($submit = false)
     {
         // Validate all steps if submitting
         if ($submit) {
             for ($i = 1; $i <= 5; $i++) {
-             //   $this->validateStep($i);
+                // $this->validateStep($i);
             }
         }
 
@@ -341,27 +504,71 @@ class ApplicationManagement extends Component
             $data['submitted_at'] = now();
         }
 
-        if ($this->currentStep === 'edit' && $this->selectedApplication) {
-            $this->selectedApplication->update($data);
-            $application = $this->selectedApplication;
+        // Calculate final DSR
+        $monthlyPayment = $this->calculateMonthlyPayment($this->requested_amount, $this->requested_tenure_months);
+        $totalDebt = $this->existing_loan_payments + $monthlyPayment;
+        $finalDSR = ($totalDebt / $this->total_monthly_income) * 100;
+        $data['debt_to_income_ratio'] = $finalDSR;
+
+        if (count($this->selectedLenders) > 1) {
+            // Create separate applications for each selected lender
+            $applications = [];
+            foreach ($this->selectedLenders as $lenderId) {
+                $lenderData = $data;
+                $lenderData['lender_id'] = $lenderId;
+                
+                // Find matching product for this lender
+                $matchingProduct = collect($this->preQualificationResults)
+                    ->where('lender_id', $lenderId)
+                    ->first();
+                
+                if ($matchingProduct) {
+                    $product = LoanProduct::find($matchingProduct['product_id']);
+                    $lenderData['loan_product_id'] = $product->id;
+                }
+                
+                $application = Application::create($lenderData);
+                $applications[] = $application;
+            }
+            
+            $message = $submit ? 
+                'Applications submitted to ' . count($applications) . ' lenders successfully!' : 
+                'Applications saved as draft for ' . count($applications) . ' lenders!';
         } else {
-            $application = Application::create($data);
+            // Single lender application
+            if (!empty($this->selectedLenders)) {
+                $data['lender_id'] = $this->selectedLenders[0];
+                
+                $matchingProduct = collect($this->preQualificationResults)
+                    ->where('lender_id', $this->selectedLenders[0])
+                    ->first();
+                
+                if ($matchingProduct) {
+                    $product = LoanProduct::find($matchingProduct['product_id']);
+                    $data['loan_product_id'] = $product->id;
+                }
+            }
+
+            if ($this->currentStep === 'edit' && $this->selectedApplication) {
+                $this->selectedApplication->update($data);
+                $application = $this->selectedApplication;
+            } else {
+                $application = Application::create($data);
+            }
+
+            $message = $submit ? 'Application submitted successfully!' : 'Application saved as draft!';
         }
 
-        // Find matching products if submitting
-        if ($submit) {
-            $matchingProducts = $application->findMatchingProducts();
-            $application->update(['matching_products' => $matchingProducts]);
-        }
-
-        $message = $submit ? 'Application submitted successfully!' : 'Application saved as draft!';
         session()->flash('message', $message);
+        $this->backToList();
+    }
 
-        if ($submit) {
-            $this->viewMatchingProducts($application->id);
-        } else {
-            $this->backToList();
-        }
+    private function calculateMonthlyPayment($amount, $tenure, $interestRate = 15)
+    {
+        $monthlyRate = $interestRate / 100 / 12;
+        return $amount * 
+            ($monthlyRate * pow(1 + $monthlyRate, $tenure)) / 
+            (pow(1 + $monthlyRate, $tenure) - 1);
     }
 
     // Document upload
@@ -413,7 +620,7 @@ class ApplicationManagement extends Component
             'status' => 'under_review',
         ]);
 
-        session()->flash('message', 'Application submitted to ' . $product->lender->name . ' successfully!');
+        session()->flash('message', 'Application submitted to ' . $product->lender->company_name . ' successfully!');
         $this->backToList();
     }
 
@@ -423,17 +630,16 @@ class ApplicationManagement extends Component
         $application = Application::where('user_id', Auth::id())
             ->findOrFail($id);
         
-        if ($application->cancel()) {
-            session()->flash('message', 'Application cancelled successfully!');
-        } else {
-            session()->flash('error', 'Cannot cancel this application.');
-        }
+        $application->update(['status' => 'cancelled']);
+        session()->flash('message', 'Application cancelled successfully!');
     }
 
     // Helper methods
     private function resetForm()
     {
         $this->reset([
+            'prequalify_amount', 'prequalify_monthly_income', 'prequalify_existing_loans', 'prequalify_tenure',
+            'calculated_dsr', 'can_proceed', 'dsr_message', 'preQualificationResults', 'selectedLenders',
             'requested_amount', 'requested_tenure_months', 'loan_purpose',
             'first_name', 'last_name', 'middle_name', 'date_of_birth',
             'gender', 'marital_status', 'national_id', 'phone_number',
@@ -499,6 +705,8 @@ class ApplicationManagement extends Component
         $this->permanent_city = $app->permanent_city;
         $this->permanent_region = $app->permanent_region;
         $this->employment_status = $app->employment_status;
+        $this->total_monthly_income = $app->total_monthly_income;
+        $this->existing_loan_payments = $app->existing_loan_payments;
         // ... continue for all other fields
     }
 
@@ -506,7 +714,7 @@ class ApplicationManagement extends Component
     {
         // Calculate total income
         $totalIncome = $this->monthly_salary + $this->other_monthly_income + $this->monthly_business_income;
-        $this->total_monthly_income = $totalIncome;
+        $this->total_monthly_income = max($totalIncome, $this->total_monthly_income);
 
         return [
             'requested_amount' => $this->requested_amount,
@@ -578,6 +786,13 @@ class ApplicationManagement extends Component
             $this->permanent_address = $this->current_address;
             $this->permanent_city = $this->current_city;
             $this->permanent_region = $this->current_region;
+        }
+
+        // Auto-calculate DSR when pre-qualification fields change
+        if (in_array($propertyName, ['prequalify_amount', 'prequalify_monthly_income', 'prequalify_existing_loans', 'prequalify_tenure'])) {
+            if ($this->prequalify_amount > 0 && $this->prequalify_monthly_income > 0 && $this->prequalify_tenure > 0) {
+                $this->calculateDSR();
+            }
         }
     }
 

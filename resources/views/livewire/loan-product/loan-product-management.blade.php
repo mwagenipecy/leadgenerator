@@ -48,6 +48,7 @@
 
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
             <!-- Total Products -->
             <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between mb-4">
@@ -92,6 +93,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Filters and Search -->
@@ -370,11 +372,35 @@
                             </div>
 
                             <!-- Promotional Tag -->
-                            <div>
+
+                            <div class="flex   space-x-4">
+
+
+                         
+                            <div class="w-1/2 ">
+
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Loan Type</label>
+                            <select wire:model="loan_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                <option value=""  >Select Loan Type</option>
+                                <option value="personal">Personal Loan</option>
+                                <option value="business">Business Loan</option>
+                                <option value="mortgage">Mortgage Loan</option>
+                                <option value="auto">Auto Loan</option>
+                                <option value="student">Student Loan</option>
+                            </select>
+                                @error('loan_type') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+
+
+                            <div class="w-1/2 ">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Promotional Tag (Optional)</label>
                                 <input wire:model="promotional_tag" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="e.g., Best Rate, Quick Approval, No Collateral">
                                 @error('promotional_tag') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                 <p class="text-sm text-gray-500 mt-1">This will appear as a badge on your product card</p>
+                            </div>
+
+
+                               
                             </div>
 
                             <!-- Description -->
@@ -552,6 +578,34 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+
+
+                              <!-- DSR -->
+                              <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-100">
+    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+        <svg class="w-6 h-6 text-orange-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        Minimum DSR
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Minimum DSR (%) *</label>
+            <input wire:model="minimum_dsr" type="number" min="0" max="100" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+            @error('minimum_dsr') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+            <p class="text-sm text-gray-500 mt-1">What is the minimum Debt Service Ratio required for approval?</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
                         </div>
                     </div>
 

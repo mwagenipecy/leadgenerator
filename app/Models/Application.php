@@ -63,6 +63,32 @@ class Application extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    public function creditInfoRequests(): HasMany
+    {
+        return $this->hasMany(CreditInfoRequest::class, 'loan_id');
+    }
+
+
+
+    public function getLatestCreditInfoAttribute(): ?CreditInfoRequest
+    {
+        return $this->creditInfoRequests()->latest()->first();
+    }
+
+    public function hasSuccessfulCreditCheck(): bool
+    {
+        return $this->creditInfoRequests()->where('status', 'success')->exists();
+    }
+
+    public function scopeWithCreditInfo($query)
+    {
+        return $query->with(['creditInfoRequests' => function ($query) {
+            $query->latest();
+        }]);
+    }
+
+
     public function loanProduct(): BelongsTo
     {
         return $this->belongsTo(LoanProduct::class);
