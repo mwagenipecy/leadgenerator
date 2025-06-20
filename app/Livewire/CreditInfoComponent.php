@@ -23,25 +23,25 @@ class CreditInfoComponent extends Component
     public $jsonTitle = '';
 
     // Form fields for manual check
-    public $national_id = '';
-    public $first_name = '';
-    public $last_name = '';
-    public $date_of_birth = '';
-    public $phone_number = '';
-    public $loan_id = '';
+    public $national_id ;
+    public $first_name ;
+    public $last_name ;
+    public $date_of_birth ;
+    public $phone_number ;
+    public $loan_id ;
 
     public $showManualForm = false;
     public $isLoading = false;
 
     protected $rules = [
-        'national_id' => 'required|string|max:50',
-        'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'date_of_birth' => 'required|date|before:today',
-        'phone_number' => 'required|string|max:20',
+        'national_id' => 'nullable|string|max:50',
+        'first_name' => 'nullable|string|max:255',
+        'last_name' => 'nullable|string|max:255',
+        'date_of_birth' => 'nullable|date|before:today',
+        'phone_number' => 'nullable|string|max:20',
         'loan_id' => 'nullable|exists:applications,id',
     ];
-
+    
     public function updatingSearch()
     {
         $this->resetPage();
@@ -76,11 +76,21 @@ class CreditInfoComponent extends Component
                 'first_name' => $application->first_name,
                 'last_name' => $application->last_name,
                 'full_name' => trim($application->first_name . ' ' . ($application->middle_name ? $application->middle_name . ' ' : '') . $application->last_name),
-                'date_of_birth' => $application->date_of_birth,
+                'date_of_birth' => $application->date_of_birth ? $application->date_of_birth->format('Y-m-d') : null,
                 'phone_number' => $application->phone_number,
             ];
         } else {
           //  $this->validate();
+
+          if( empty($this->national_id) && 
+              empty($this->first_name) && 
+              empty($this->last_name) && 
+              empty($this->date_of_birth) && 
+              empty($this->phone_number) && 
+              empty($this->loan_id)) {
+                session()->flash('error', 'Please provide at least one search criterion.');
+                return;
+            }
             
             $data = [
                 'loan_id' => $this->loan_id ?: null,
@@ -88,7 +98,7 @@ class CreditInfoComponent extends Component
                 'first_name' => $this->first_name,
                 'last_name' => $this->last_name,
                 'full_name' => trim($this->first_name . ' ' . $this->last_name),
-               // 'date_of_birth' => $this->date_of_birth,
+                'date_of_birth' => $this->date_of_birth,
                 'phone_number' => $this->phone_number,
             ];
         }
@@ -184,4 +194,6 @@ class CreditInfoComponent extends Component
 
         return view('livewire.credit-info-component', compact('creditRequests', 'applications'));
     }
+
+
 }

@@ -47,54 +47,92 @@
         @endif
 
         <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
-            <!-- Total Products -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                        </svg>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Total Products</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $stats['total'] ?? 0 }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+    <!-- Total Products -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-50 hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
+        <!-- Subtle gradient background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        
+        <div class="relative z-10">
+            <div class="flex items-start justify-between mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Total Products</p>
+                    <p class="text-4xl font-bold text-gray-900 mb-1">{{ $stats['total'] ?? 0 }}</p>
+                    <div class="flex items-center justify-end text-sm text-gray-500">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                        All items
                     </div>
                 </div>
             </div>
-
-            <!-- Active Products -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Active</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $stats['active'] ?? 0 }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Inactive Products -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Inactive</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ $stats['inactive'] ?? 0 }}</p>
-                    </div>
-                </div>
-            </div>
-
+            
+          
         </div>
+    </div>
+
+    <!-- Active Products -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-50 hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
+        <!-- Subtle gradient background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-green-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        
+        <div class="relative z-10">
+            <div class="flex items-start justify-between mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg shadow-green-500/25 group-hover:scale-105 transition-transform duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Active Products</p>
+                    <p class="text-4xl font-bold text-gray-900 mb-1">{{ $stats['active'] ?? 0 }}</p>
+                    <div class="flex items-center justify-end text-sm text-green-600 font-medium">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        Available
+                    </div>
+                </div>
+            </div>
+            
+           
+        </div>
+    </div>
+
+    <!-- Inactive Products -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-50 hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
+        <!-- Subtle gradient background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-red-50/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        
+        <div class="relative z-10">
+            <div class="flex items-start justify-between mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/25 group-hover:scale-105 transition-transform duration-300">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18 18M5.636 5.636L6 6"/>
+                    </svg>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2">Inactive Products</p>
+                    <p class="text-4xl font-bold text-gray-900 mb-1">{{ $stats['inactive'] ?? 0 }}</p>
+                    <div class="flex items-center justify-end text-sm text-red-600 font-medium">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+                        </svg>
+                        Disabled
+                    </div>
+                </div>
+            </div>
+            
+           
+        </div>
+    </div>
+</div>
+
+
+
 
         <!-- Filters and Search -->
         <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-6">
@@ -128,138 +166,131 @@
             </div>
         </div>
 
-        <!-- Products Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-            @forelse($products as $product)
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group">
-                    <!-- Product Header -->
-                    <div class="p-6 pb-4">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center space-x-2 mb-2">
-                                    <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-red transition-colors">{{ $product->name }}</h3>
+       <!-- Products Table -->
+<div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-8">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Product</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Amount Range</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Interest Rate</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Tenure</th>
+                    <th class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($products as $product)
+                <tr class="hover:bg-gray-50/50 transition-colors duration-200 group">
+                    <!-- Product Info -->
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center space-x-2">
+                                    <p class="text-sm font-bold text-gray-900 group-hover:text-brand-red transition-colors">{{ $product->name }}</p>
                                     @if($product->promotional_tag)
-                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-lg">{{ $product->promotional_tag }}</span>
+                                        <span class="bg-yellow-100 text-yellow-700 text-xs font-medium px-2 py-1 rounded-md">{{ $product->promotional_tag }}</span>
                                     @endif
                                 </div>
-                                <p class="text-sm text-gray-500 mb-2">{{ $product->product_code }}</p>
-                                @if($product->description)
-                                    <p class="text-sm text-gray-600 line-clamp-2">{{ $product->description }}</p>
-                                @endif
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-{{ $product->status_badge_color }}-100 text-{{ $product->status_badge_color }}-800 border border-{{ $product->status_badge_color }}-200">
-                                    {{ $product->status_badge_text }}
-                                </span>
+                                <p class="text-xs text-gray-500">{{ $product->product_code }}</p>
                             </div>
                         </div>
-                    </div>
+                    </td>
 
-                    <!-- Product Details -->
-                    <div class="px-6 pb-4">
-                        <div class="space-y-3">
-                            <!-- Amount Range -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-500">Amount Range:</span>
-                                <span class="text-sm font-bold text-gray-900">{{ $product->amount_range }}</span>
-                            </div>
+                    <!-- Amount Range -->
+                    <td class="px-6 py-4">
+                        <span class="text-sm font-semibold text-gray-900">{{ $product->amount_range }}</span>
+                    </td>
 
-                            <!-- Tenure -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-500">Tenure:</span>
-                                <span class="text-sm font-bold text-gray-900">{{ $product->tenure_range }}</span>
-                            </div>
+                    <!-- Interest Rate -->
+                    <td class="px-6 py-4">
+                        <span class="text-sm font-semibold text-green-600">{{ $product->interest_range }}</span>
+                    </td>
 
-                            <!-- Interest Rate -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-500">Interest Rate:</span>
-                                <span class="text-sm font-bold text-gray-900">{{ $product->interest_range }}</span>
-                            </div>
+                    <!-- Tenure -->
+                    <td class="px-6 py-4">
+                        <span class="text-sm font-medium text-gray-700">{{ $product->tenure_range }}</span>
+                    </td>
 
-                            <!-- Employment Requirement -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-500">Employment:</span>
-                                <span class="text-sm font-medium text-blue-600">{{ $product->employment_requirement_label }}</span>
-                            </div>
-
-                            <!-- Processing Fee -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-500">Processing Fee:</span>
-                                <span class="text-sm font-bold text-gray-900">{{ $product->processing_fee }}</span>
-                            </div>
-
-                            <!-- Approval Time -->
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-500">Approval Time:</span>
-                                <span class="text-sm font-medium text-green-600">{{ $product->approval_time_days }} days</span>
-                            </div>
+                    <!-- Status -->
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex flex-col items-center space-y-2">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-{{ $product->status_badge_color }}-100 text-{{ $product->status_badge_color }}-800 border border-{{ $product->status_badge_color }}-200">
+                                {{ $product->status_badge_text }}
+                            </span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" wire:click="toggleProductStatus({{ $product->id }})" {{ $product->is_active ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-red/25 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-red"></div>
+                            </label>
                         </div>
-                    </div>
+                    </td>
 
                     <!-- Actions -->
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <!-- View Button -->
-                                <button wire:click="viewProduct({{ $product->id }})" class="text-blue-600 hover:text-blue-800 p-2 rounded-xl hover:bg-blue-50 transition-all duration-200" title="View Details">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                    </svg>
-                                </button>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center justify-center space-x-1">
+                            <!-- View -->
+                            <button wire:click="viewProduct({{ $product->id }})" 
+                                    class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors duration-200" 
+                                    title="View Details">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
 
-                                <!-- Edit Button -->
-                                <button wire:click="editProduct({{ $product->id }})" class="text-gray-600 hover:text-gray-800 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                    </svg>
-                                </button>
+                            <!-- Edit -->
+                            <button wire:click="editProduct({{ $product->id }})" 
+                                    class="text-gray-600 hover:bg-gray-50 p-2 rounded-lg transition-colors duration-200" 
+                                    title="Edit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
 
-                                <!-- Copy/Duplicate Button -->
-                                <button wire:click="duplicateProduct({{ $product->id }})" class="text-purple-600 hover:text-purple-800 p-2 rounded-xl hover:bg-purple-50 transition-all duration-200" title="Duplicate">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                                    </svg>
-                                </button>
+                           
 
-                                <!-- Delete Button -->
-                                <button wire:click="deleteProduct({{ $product->id }})" 
-                                        wire:confirm="Are you sure you want to delete this product? This action cannot be undone."
-                                        class="text-red-600 hover:text-red-800 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" title="Delete">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <!-- Toggle Status -->
-                            <div class="flex items-center">
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" wire:click="toggleProductStatus({{ $product->id }})" {{ $product->is_active ? 'checked' : '' }} class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-red/25 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-red"></div>
-                                    <span class="ms-3 text-sm font-medium text-gray-500">{{ $product->is_active ? 'Active' : 'Inactive' }}</span>
-                                </label>
-                            </div>
+                            <!-- Delete -->
+                            <button wire:click="deleteProduct({{ $product->id }})" 
+                                    wire:confirm="Are you sure you want to delete this product? This action cannot be undone."
+                                    class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors duration-200" 
+                                    title="Delete">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
                         </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-span-full">
-                    <div class="bg-white rounded-3xl shadow-sm p-12 text-center border border-gray-100">
-                        <div class="w-20 h-20 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                            </svg>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="px-6 py-16 text-center">
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-2xl flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">No loan products found</h3>
+                            <p class="text-gray-500 mb-4">Get started by creating your first loan product.</p>
+                            <button wire:click="showCreateForm" class="bg-brand-red text-white px-6 py-2 rounded-lg font-medium hover:bg-brand-dark-red transition-colors duration-200">
+                                Create First Product
+                            </button>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">No loan products found</h3>
-                        <p class="text-gray-500 mb-6">Get started by creating your first loan product to offer to your customers.</p>
-                        <button wire:click="showCreateForm" class="bg-brand-red text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25">
-                            Create First Product
-                        </button>
-                    </div>
-                </div>
-            @endforelse
-        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 
         <!-- Pagination -->
         @if($products->hasPages())
@@ -1055,64 +1086,66 @@
             </div>
         </div>
 
-        <!-- Quick Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <!-- Amount Range -->
-            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-6 border border-blue-100">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">AMOUNT</span>
-                </div>
-                <p class="text-sm font-medium text-gray-600 mb-1">Loan Range</p>
-                <p class="text-lg font-bold text-gray-900">{{ $selectedProduct->amount_range }}</p>
+<!-- Quick Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <!-- Amount Range -->
+    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center shadow-md">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                </svg>
             </div>
-
-            <!-- Interest Rate -->
-            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl p-6 border border-green-100">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">RATE</span>
-                </div>
-                <p class="text-sm font-medium text-gray-600 mb-1">Interest Rate</p>
-                <p class="text-lg font-bold text-gray-900">{{ $selectedProduct->interest_range }}</p>
-            </div>
-
-            <!-- Tenure -->
-            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-6 border border-purple-100">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full">TENURE</span>
-                </div>
-                <p class="text-sm font-medium text-gray-600 mb-1">Loan Period</p>
-                <p class="text-lg font-bold text-gray-900">{{ $selectedProduct->tenure_range }}</p>
-            </div>
-
-            <!-- Processing Time -->
-            <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl p-6 border border-orange-100">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded-full">TIME</span>
-                </div>
-                <p class="text-sm font-medium text-gray-600 mb-1">Processing</p>
-                <p class="text-lg font-bold text-gray-900">{{ $selectedProduct->approval_time_days }}d approval</p>
-            </div>
+            <span class="text-xs font-semibold text-blue-600 uppercase tracking-wide">Amount</span>
         </div>
+        <div class="text-sm font-medium text-gray-600 mb-1">Loan Range</div>
+        <div class="text-sm  font-bold text-gray-900">{{ $selectedProduct->amount_range }}</div>
+    </div>
+
+    <!-- Interest Rate -->
+    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center shadow-md">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+            </div>
+            <span class="text-xs font-semibold text-green-600 uppercase tracking-wide">Rate</span>
+        </div>
+        <div class="text-sm font-medium text-gray-600 mb-1">Interest Rate</div>
+        <div class="text-sm  font-bold text-green-600">{{ $selectedProduct->interest_range }}</div>
+    </div>
+
+    <!-- Tenure -->
+    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center shadow-md">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <span class="text-xs font-semibold text-purple-600 uppercase tracking-wide">Tenure</span>
+        </div>
+        <div class="text-sm font-medium text-gray-600 mb-1">Loan Period</div>
+        <div class="text-2xl font-bold text-gray-900">{{ $selectedProduct->tenure_range }}</div>
+    </div>
+
+    <!-- Processing Time -->
+    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center shadow-md">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <span class="text-xs font-semibold text-orange-600 uppercase tracking-wide">Time</span>
+        </div>
+        <div class="text-sm font-medium text-gray-600 mb-1">Processing</div>
+        <div class="text-2xl font-bold text-orange-600">{{ $selectedProduct->approval_time_days }}d approval</div>
+    </div>
+</div>
+
+
 
         <!-- Main Content Area -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

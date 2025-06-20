@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\LenderManagementController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductManagementController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\SystemSettingController;
+use App\Http\Controllers\TRAController;
+use App\Http\Controllers\UserManagementController;
 use App\Models\NidaVerification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NidaVerificationController;
@@ -118,6 +122,26 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
 
 
+
+    /*********************************** USERMANAGEMENT ****************************************/
+    Route::get('user-management',[UserManagementController::class,'index'])->name('user.management');
+
+
+
+    /********************************** SYSTEM SETTINGS *************************/
+    Route::get('system-settings',[SystemSettingController::class,'index'])->name('system.settings');
+
+
+    /************************************* WEBHOOK INTEGRATION *********************************/
+    Route::get('webhook-integration',[IntegrationController::class,'webhookIntegration'])->name('webhook.integration');
+
+
+
+
+    /********************************* VERIFICATION CHECK ********************************/
+    Route::get('lincense-verification',[TRAController::class,'lincenseVerification'])->name('lincense.verification');
+    Route::get('taxpayer-verification',[TRAController::class,'taxpayerVerification'])->name('taxpayer.verification');
+   Route::get('motor-vehicle-verification',[TRAController::class,'motorVehicleVerification'])->name('motor.vehicle.verification');
 
     Route::get('/verification', VerificationMethodSelector::class)->name('verification.method');
     

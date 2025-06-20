@@ -2469,9 +2469,9 @@
                                 <a href="mailto:support@loanplatform.com" class="block w-full bg-blue-100 text-blue-700 py-2 px-4 rounded-xl font-medium hover:bg-blue-200 transition-colors text-sm">
                                     ✉️ Email Support
                                 </a>
-                                <button class="w-full bg-purple-100 text-purple-700 py-2 px-4 rounded-xl font-medium hover:bg-purple-200 transition-colors text-sm">
+                                <!-- <button class="w-full bg-purple-100 text-purple-700 py-2 px-4 rounded-xl font-medium hover:bg-purple-200 transition-colors text-sm">
                                     💬 Live Chat
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>

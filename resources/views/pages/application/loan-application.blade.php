@@ -1,4 +1,4 @@
-<x-app-layout>
+        <x-app-layout>
    
  <livewire:loan-application.application-management />
  

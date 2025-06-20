@@ -165,10 +165,10 @@
                                         {{ $request->full_name }}
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                        DOB: {{ $request->date_of_birth->format('M d, Y') }}
+                                        DOB: {{ $request->date_of_birth ?->format('M d, Y') }}
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                        {{ $request->phone_number }}
+                                        {{ $request->phone_number ?? "N/A" }}
                                     </div>
                                 </div>
                             </td>
@@ -272,7 +272,7 @@
                             <div><span class="font-medium">Name:</span> {{ $selectedRequest->full_name }}</div>
                             <div><span class="font-medium">National ID:</span> {{ $selectedRequest->national_id }}</div>
                             <div><span class="font-medium">Phone:</span> {{ $selectedRequest->phone_number }}</div>
-                            <div><span class="font-medium">DOB:</span> {{ $selectedRequest->date_of_birth->format('M d, Y') }}</div>
+                            <div><span class="font-medium">DOB:</span> {{ $selectedRequest->date_of_birth ?->format('M d, Y') }}</div>
                             <div><span class="font-medium">Status:</span> 
                                 <span class="px-2 py-1 text-xs rounded-full {{ $selectedRequest->status === 'success' ? 'bg-green-100 text-green-800' : ($selectedRequest->status === 'failed' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
                                     {{ ucfirst($selectedRequest->status) }}

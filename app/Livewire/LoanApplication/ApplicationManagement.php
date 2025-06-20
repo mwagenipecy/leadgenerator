@@ -224,6 +224,7 @@ class ApplicationManagement extends Component
         // Calculate estimated monthly payment (using average interest rate of 15%)
         $principal = $this->prequalify_amount;
         $monthlyRate = 0.15 / 12; // 15% annual rate
+        
         $numberOfPayments = $this->prequalify_tenure;
         
         $estimatedMonthlyPayment = $principal * 
