@@ -145,19 +145,19 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
-                        <input wire:model.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search products...">
+                        <input wire:model.live.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search products...">
                     </div>
                 </div>
 
                 <!-- Filters -->
                 <div class="flex items-center space-x-4">
-                    <select wire:model.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                    <select wire:model.live.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                         <option value="all">All Status</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
 
-                    <select wire:model.live="employmentFilter" class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                    <select wire:model.live.live="employmentFilter" class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                         <option value="all">All Employment Types</option>
                         <option value="employed">Employed Only</option>
                         <option value="unemployed">Unemployed/Self-Employed</option>
@@ -293,13 +293,7 @@
 
 
         <!-- Pagination -->
-        @if($products->hasPages())
-            <div class="flex justify-center mt-8">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-4">
-                    {{ $products->links() }}
-                </div>
-            </div>
-        @endif
+      
 
     
         @elseif(in_array($currentStep, ['create', 'edit']))
@@ -383,7 +377,7 @@
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <div class="lg:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Product Name *</label>
-                                    <input wire:model="name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-medium" placeholder="e.g., Personal Loan, Business Loan, Emergency Loan">
+                                    <input wire:model.live="name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-medium" placeholder="e.g., Personal Loan, Business Loan, Emergency Loan">
                                     @error('name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
 
@@ -391,11 +385,11 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                                     <div class="flex items-center space-x-4 pt-3">
                                         <label class="flex items-center cursor-pointer">
-                                            <input wire:model="is_active" type="radio" value="1" class="text-brand-red focus:ring-brand-red">
+                                            <input wire:model.live="is_active" type="radio" value="1" class="text-brand-red focus:ring-brand-red">
                                             <span class="ml-2 text-sm font-medium text-gray-700">Active</span>
                                         </label>
                                         <label class="flex items-center cursor-pointer">
-                                            <input wire:model="is_active" type="radio" value="0" class="text-brand-red focus:ring-brand-red">
+                                            <input wire:model.live="is_active" type="radio" value="0" class="text-brand-red focus:ring-brand-red">
                                             <span class="ml-2 text-sm font-medium text-gray-700">Inactive</span>
                                         </label>
                                     </div>
@@ -411,7 +405,7 @@
                             <div class="w-1/2 ">
 
                             <label class="block text-sm font-medium text-gray-700 mb-2">Loan Type</label>
-                            <select wire:model="loan_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                            <select wire:model.live="loan_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                 <option value=""  >Select Loan Type</option>
                                 <option value="personal">Personal Loan</option>
                                 <option value="business">Business Loan</option>
@@ -425,7 +419,7 @@
 
                             <div class="w-1/2 ">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Promotional Tag (Optional)</label>
-                                <input wire:model="promotional_tag" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="e.g., Best Rate, Quick Approval, No Collateral">
+                                <input wire:model.live="promotional_tag" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="e.g., Best Rate, Quick Approval, No Collateral">
                                 @error('promotional_tag') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                 <p class="text-sm text-gray-500 mt-1">This will appear as a badge on your product card</p>
                             </div>
@@ -437,7 +431,7 @@
                             <!-- Description -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Product Description</label>
-                                <textarea wire:model="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Describe your loan product, its benefits, and who it's designed for..."></textarea>
+                                <textarea wire:model.live="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Describe your loan product, its benefits, and who it's designed for..."></textarea>
                                 @error('description') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
@@ -446,7 +440,7 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Key Features</label>
                                 <div class="space-y-4">
                                     <div class="flex items-center space-x-3">
-                                        <input wire:model="newKeyFeature" wire:keydown.enter="addKeyFeature" type="text" class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Add a key feature (e.g., No hidden fees, Fast approval)">
+                                        <input wire:model.live="newKeyFeature" wire:keydown.enter="addKeyFeature" type="text" class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Add a key feature (e.g., No hidden fees, Fast approval)">
                                         <button type="button" wire:click="addKeyFeature" class="bg-brand-red text-white px-6 py-3 rounded-xl hover:bg-brand-dark-red transition-colors font-semibold">
                                             Add Feature
                                         </button>
@@ -500,12 +494,12 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Amount (TSh) *</label>
-                                        <input wire:model="min_amount" type="number" step="1000" min="1000" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="min_amount" type="number" step="1000" min="1000" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('min_amount') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Amount (TSh) *</label>
-                                        <input wire:model="max_amount" type="number" step="1000" min="1000" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="max_amount" type="number" step="1000" min="1000" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('max_amount') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -529,12 +523,12 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Tenure (Months) *</label>
-                                        <input wire:model="min_tenure_months" type="number" min="1" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="min_tenure_months" type="number" min="1" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('min_tenure_months') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Tenure (Months) *</label>
-                                        <input wire:model="max_tenure_months" type="number" min="1" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="max_tenure_months" type="number" min="1" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('max_tenure_months') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -559,17 +553,17 @@
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Rate (%) *</label>
-                                        <input wire:model="interest_rate_min" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="interest_rate_min" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('interest_rate_min') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Rate (%) *</label>
-                                        <input wire:model="interest_rate_max" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="interest_rate_max" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('interest_rate_max') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Interest Type *</label>
-                                        <select wire:model="interest_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <select wire:model.live="interest_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                             <option value="reducing">Reducing Balance</option>
                                             <option value="flat">Flat Rate</option>
                                             <option value="fixed">Fixed Rate</option>
@@ -597,13 +591,13 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Approval Time (Days) *</label>
-                                        <input wire:model="approval_time_days" type="number" min="1" max="90" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="approval_time_days" type="number" min="1" max="90" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('approval_time_days') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">How long does it take to approve applications?</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Disbursement Time (Days) *</label>
-                                        <input wire:model="disbursement_time_days" type="number" min="1" max="30" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                        <input wire:model.live="disbursement_time_days" type="number" min="1" max="30" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         @error('disbursement_time_days') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">How long after approval to disburse funds?</p>
                                     </div>
@@ -620,14 +614,14 @@
         <svg class="w-6 h-6 text-orange-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
-        Minimum DSR
+        Maximum  DSR
     </h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Minimum DSR (%) *</label>
-            <input wire:model="minimum_dsr" type="number" min="0" max="100" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Maximum DSR (%) *</label>
+            <input wire:model.live="minimum_dsr" type="number" min="0" max="100" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
             @error('minimum_dsr') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
-            <p class="text-sm text-gray-500 mt-1">What is the minimum Debt Service Ratio required for approval?</p>
+            <p class="text-sm text-gray-500 mt-1">What is the maximum Debt Service Ratio required for approval?</p>
         </div>
     </div>
 </div>
@@ -662,7 +656,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Employment Type *</label>
-                                        <select wire:model="employment_requirement" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <select wire:model.live="employment_requirement" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                             <option value="all">All Employment Types</option>
                                             <option value="employed">Employed Only</option>
                                             <option value="unemployed">Unemployed/Self-Employed</option>
@@ -672,7 +666,7 @@
                                     @if($employment_requirement === 'employed')
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Employment Period (Months)</label>
-                                            <input wire:model="min_employment_months" type="number" min="1" max="120" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                            <input wire:model.live="min_employment_months" type="number" min="1" max="120" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                             @error('min_employment_months') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             <p class="text-sm text-gray-500 mt-1">How long must they be employed?</p>
                                         </div>
@@ -691,12 +685,12 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Age *</label>
-                                        <input wire:model="min_age" type="number" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="min_age" type="number" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('min_age') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Age *</label>
-                                        <input wire:model="max_age" type="number" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="max_age" type="number" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('max_age') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -720,13 +714,13 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Monthly Income (TSh)</label>
-                                        <input wire:model="min_monthly_income" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="min_monthly_income" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('min_monthly_income') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">Leave empty if no minimum income required</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Max Debt-to-Income Ratio (%)</label>
-                                        <input wire:model="max_debt_to_income_ratio" type="number" step="0.1" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="max_debt_to_income_ratio" type="number" step="0.1" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('max_debt_to_income_ratio') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">Maximum percentage of income that can go to debt payments</p>
                                     </div>
@@ -744,13 +738,13 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Credit Score</label>
-                                        <input wire:model="min_credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="min_credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('min_credit_score') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">Leave empty if no credit score requirement</p>
                                     </div>
                                     <div class="flex items-center pt-8">
                                         <label class="flex items-center cursor-pointer bg-white p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors w-full">
-                                            <input wire:model="allow_bad_credit" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
+                                            <input wire:model.live="allow_bad_credit" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
                                             <span class="ml-3 text-sm font-medium text-gray-700">Accept applications with bad credit history</span>
                                         </label>
                                     </div>
@@ -807,24 +801,24 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Processing Fee (%)</label>
-                                        <input wire:model="processing_fee_percentage" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="processing_fee_percentage" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('processing_fee_percentage') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">Percentage of loan amount</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Processing Fee (Fixed TSh)</label>
-                                        <input wire:model="processing_fee_fixed" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="processing_fee_fixed" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('processing_fee_fixed') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">Fixed amount in TSh</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Late Payment Fee (TSh)</label>
-                                        <input wire:model="late_payment_fee" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="late_payment_fee" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('late_payment_fee') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Early Repayment Fee (%)</label>
-                                        <input wire:model="early_repayment_fee_percentage" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                        <input wire:model.live="early_repayment_fee_percentage" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                         @error('early_repayment_fee_percentage') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -840,7 +834,7 @@
                                 </h3>
                                 <div class="space-y-6">
                                     <label class="flex items-center cursor-pointer bg-white p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
-                                        <input wire:model="requires_collateral" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
+                                        <input wire:model.live="requires_collateral" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
                                         <span class="ml-3 text-sm font-bold text-gray-700">This loan requires collateral</span>
                                     </label>
                                     
@@ -871,7 +865,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="space-y-4">
                                         <label class="flex items-center cursor-pointer bg-white p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
-                                            <input wire:model="requires_guarantor" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
+                                            <input wire:model.live="requires_guarantor" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
                                             <span class="ml-3 text-sm font-bold text-gray-700">This loan requires guarantors</span>
                                         </label>
                                     </div>
@@ -879,7 +873,7 @@
                                     @if($requires_guarantor)
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Number of Guarantors</label>
-                                            <input wire:model="min_guarantors" type="number" min="1" max="5" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                            <input wire:model.live="min_guarantors" type="number" min="1" max="5" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                             @error('min_guarantors') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                     @endif
@@ -947,7 +941,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="space-y-4">
                                         <label class="flex items-center cursor-pointer bg-white p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
-                                            <input wire:model="auto_approval_eligible" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
+                                            <input wire:model.live="auto_approval_eligible" type="checkbox" class="text-brand-red focus:ring-brand-red rounded h-5 w-5">
                                             <span class="ml-3 text-sm font-bold text-gray-700">Enable auto approval for qualified applicants</span>
                                         </label>
                                     </div>
@@ -955,7 +949,7 @@
                                     @if($auto_approval_eligible)
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Auto Approval Maximum Amount (TSh)</label>
-                                            <input wire:model="auto_approval_max_amount" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
+                                            <input wire:model.live="auto_approval_max_amount" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium">
                                             @error('auto_approval_max_amount') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             <p class="text-sm text-gray-500 mt-1">Maximum loan amount for auto approval</p>
                                         </div>
@@ -974,12 +968,12 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Terms and Conditions</label>
-                                        <textarea wire:model="terms_and_conditions" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter the terms and conditions for this loan product..."></textarea>
+                                        <textarea wire:model.live="terms_and_conditions" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter the terms and conditions for this loan product..."></textarea>
                                         @error('terms_and_conditions') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Eligibility Criteria Summary</label>
-                                        <textarea wire:model="eligibility_criteria" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Summarize the eligibility criteria for this loan..."></textarea>
+                                        <textarea wire:model.live="eligibility_criteria" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Summarize the eligibility criteria for this loan..."></textarea>
                                         @error('eligibility_criteria') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>

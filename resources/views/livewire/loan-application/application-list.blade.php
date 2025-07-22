@@ -57,7 +57,10 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         @if($currentStep === 'list')
-            {{-- Dashboard Stats Cards --}}
+            
+        
+        
+             {{-- Dashboard Stats Cards --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
                     <div class="flex items-center">
@@ -105,8 +108,9 @@
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500">Approved</p>
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['approved']) }}</p>
-                            <p class="text-xs text-green-600 mt-1">{{ number_format(($stats['approved']/$stats['total'])*100, 1) }}% approval rate</p>
-                        </div>
+                            <p class="text-xs text-green-600 mt-1">
+  {{ $stats['total'] > 0 ? number_format(($stats['approved'] / $stats['total']) * 100, 1) : '0.0' }}% approval rate
+</p>                        </div>
                     </div>
                 </div>
 
@@ -568,50 +572,92 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse($applications as $application)
-                                    <tr class="hover:bg-gray-50 transition-colors duration-150 {{ in_array($application->id, $selectedApplications) ? 'bg-blue-50 border-l-4 border-blue-500' : '' }}">
+                                    @php
+                                        $isBooked = $application->booking_status === 'booked';
+                                        $isUnbooked = $application->booking_status === 'unbooked';
+                                    @endphp
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150 {{ in_array($application->id, $selectedApplications) ? 'bg-blue-50 border-l-4 border-blue-500' : '' }} {{ $isUnbooked ? 'opacity-75' : '' }}">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <input type="checkbox" 
                                                    wire:click="toggleApplicationSelection({{ $application->id }})"
                                                    {{ in_array($application->id, $selectedApplications) ? 'checked' : '' }}
-                                                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                   {{ $isUnbooked ? 'disabled' : '' }}>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900">{{ $application->application_number }}</div>
                                             <div class="text-sm text-gray-500">{{ $application->loanProduct->name ?? 'No Product' }}</div>
+                                            @if($isUnbooked)
+                                                <div class="mt-1">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                                                        Unbooked
+                                                    </span>
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="flex-shrink-0 h-10 w-10">
-                                                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                                                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center {{ $isUnbooked ? 'blur-sm' : '' }}">
                                                         <span class="text-sm font-bold text-white">
                                                             {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">
-                                                        {{ $application->first_name }} {{ $application->last_name }}
+                                                    <div class="text-sm font-medium text-gray-900 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                                        @if($isUnbooked)
+                                                            {{ substr($application->first_name, 0, 1) }}*** {{ substr($application->last_name, 0, 1) }}***
+                                                        @else
+                                                            {{ $application->first_name }} {{ $application->last_name }}
+                                                        @endif
                                                     </div>
-                                                    <div class="text-sm text-gray-500">{{ $application->email }}</div>
-                                                    <div class="text-xs text-gray-400">{{ $application->phone_number }}</div>
+                                                    <div class="text-sm text-gray-500 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                                        @if($isUnbooked)
+                                                            ***@***.***
+                                                        @else
+                                                            {{ $application->email }}
+                                                        @endif
+                                                    </div>
+                                                    <div class="text-xs text-gray-400 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                                        @if($isUnbooked)
+                                                            +255***-***-***
+                                                        @else
+                                                            {{ $application->phone_number }}
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-bold text-gray-900">TSh {{ number_format($application->requested_amount) }}</div>
+                                            <div class="text-sm font-bold text-gray-900 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                                @if($isUnbooked)
+                                                    TSh ***,***
+                                                @else
+                                                    TSh {{ number_format($application->requested_amount) }}
+                                                @endif
+                                            </div>
                                             <div class="text-sm text-gray-500">{{ $application->requested_tenure_months }} months</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">TSh {{ number_format($application->total_monthly_income) }}</div>
+                                            <div class="text-sm font-medium text-gray-900 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                                @if($isUnbooked)
+                                                    TSh ***,***
+                                                @else
+                                                    TSh {{ number_format($application->total_monthly_income) }}
+                                                @endif
+                                            </div>
                                             <div class="text-xs text-gray-500">{{ ucwords(str_replace('_', ' ', $application->employment_status)) }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($application->debt_to_income_ratio)
+                                            @if($application->debt_to_income_ratio && $isBooked)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                     {{ $application->debt_to_income_ratio <= 30 ? 'bg-green-100 text-green-800' : 
                                                        ($application->debt_to_income_ratio <= 40 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                                     {{ number_format($application->debt_to_income_ratio, 1) }}%
                                                 </span>
+                                            @elseif($isUnbooked)
+                                                <span class="text-gray-400 text-sm blur-sm">**.*%</span>
                                             @else
                                                 <span class="text-gray-400 text-sm">N/A</span>
                                             @endif
@@ -635,49 +681,61 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex items-center space-x-2">
-                                                <button wire:click="viewApplication({{ $application->id }})" 
-                                                        class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-lg hover:bg-indigo-50 transition-all duration-200"
-                                                        title="View Details">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                    </svg>
-                                                </button>
-                                                
-                                                @if($application->status === 'submitted')
-                                                    <button wire:click="startReview({{ $application->id }})" 
-                                                            class="text-blue-600 hover:text-blue-900 p-1.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
-                                                            title="Start Review">
+                                                @if($isUnbooked)
+                                                    {{-- Book Application Button --}}
+                                                    <button wire:click="bookApplication({{ $application->id }})" 
+                                                            class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all duration-200">
+                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                                        </svg>
+                                                        Book
+                                                    </button>
+                                                @else
+                                                    {{-- Regular Action Buttons (only for booked applications) --}}
+                                                    <button wire:click="viewApplication({{ $application->id }})" 
+                                                            class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-lg hover:bg-indigo-50 transition-all duration-200"
+                                                            title="View Details">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         </svg>
                                                     </button>
-                                                @endif
+                                                    
+                                                    @if($application->status === 'submitted')
+                                                        <button wire:click="startReview({{ $application->id }})" 
+                                                                class="text-blue-600 hover:text-blue-900 p-1.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
+                                                                title="Start Review">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
 
-                                                @if(in_array($application->status, ['submitted', 'under_review']))
-                                                    <button wire:click="approveApplication({{ $application->id }})" 
-                                                            class="text-green-600 hover:text-green-900 p-1.5 rounded-lg hover:bg-green-50 transition-all duration-200"
-                                                            title="Approve">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                        </svg>
-                                                    </button>
-                                                    <button wire:click="rejectApplication({{ $application->id }})" 
-                                                            class="text-red-600 hover:text-red-900 p-1.5 rounded-lg hover:bg-red-50 transition-all duration-200"
-                                                            title="Reject">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                        </svg>
-                                                    </button>
-                                                @endif
+                                                    @if(in_array($application->status, ['submitted', 'under_review']))
+                                                        <button wire:click="approveApplication({{ $application->id }})" 
+                                                                class="text-green-600 hover:text-green-900 p-1.5 rounded-lg hover:bg-green-50 transition-all duration-200"
+                                                                title="Approve">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                            </svg>
+                                                        </button>
+                                                        <button wire:click="rejectApplication({{ $application->id }})" 
+                                                                class="text-red-600 hover:text-red-900 p-1.5 rounded-lg hover:bg-red-50 transition-all duration-200"
+                                                                title="Reject">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
 
-                                                @if($application->status === 'approved')
-                                                    <button wire:click="markDisbursed({{ $application->id }})" 
-                                                            class="text-purple-600 hover:text-purple-900 p-1.5 rounded-lg hover:bg-purple-50 transition-all duration-200"
-                                                            title="Mark as Disbursed">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                                                        </svg>
-                                                    </button>
+                                                    @if($application->status === 'approved')
+                                                        <button wire:click="markDisbursed({{ $application->id }})" 
+                                                                class="text-purple-600 hover:text-purple-900 p-1.5 rounded-lg hover:bg-purple-50 transition-all duration-200"
+                                                                title="Mark as Disbursed">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                                            </svg>
+                                                        </button>
+                                                    @endif
                                                 @endif
                                             </div>
                                         </td>
@@ -700,18 +758,15 @@
                     </div>
                 </div>
 
-
-            @endif
-
-      
-        
-        
-
         {{-- GRID VIEW --}}
         @elseif($viewMode === 'grid')
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($applications as $application)
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden {{ in_array($application->id, $selectedApplications) ? 'ring-2 ring-blue-500 bg-blue-50' : '' }}">
+                    @php
+                        $isBooked = $application->booking_status === 'booked';
+                        $isUnbooked = $application->booking_status === 'unbooked';
+                    @endphp
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden {{ in_array($application->id, $selectedApplications) ? 'ring-2 ring-blue-500 bg-blue-50' : '' }} {{ $isUnbooked ? 'opacity-75' : '' }}">
                         <!-- Card Header -->
                         <div class="p-6 pb-4">
                             <div class="flex items-start justify-between mb-4">
@@ -719,32 +774,50 @@
                                     <input type="checkbox" 
                                         wire:click="toggleApplicationSelection({{ $application->id }})"
                                         {{ in_array($application->id, $selectedApplications) ? 'checked' : '' }}
-                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        {{ $isUnbooked ? 'disabled' : '' }}>
+                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center {{ $isUnbooked ? 'blur-sm' : '' }}">
                                         <span class="text-lg font-bold text-white">
                                             {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                                         </span>
                                     </div>
                                 </div>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                    @switch($application->status)
-                                        @case('submitted') bg-blue-100 text-blue-800 @break
-                                        @case('under_review') bg-yellow-100 text-yellow-800 @break
-                                        @case('approved') bg-green-100 text-green-800 @break
-                                        @case('rejected') bg-red-100 text-red-800 @break
-                                        @case('disbursed') bg-purple-100 text-purple-800 @break
-                                        @default bg-gray-100 text-gray-800
-                                    @endswitch">
-                                    {{ ucwords(str_replace('_', ' ', $application->status)) }}
-                                </span>
+                                <div class="flex flex-col items-end space-y-2">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        @switch($application->status)
+                                            @case('submitted') bg-blue-100 text-blue-800 @break
+                                            @case('under_review') bg-yellow-100 text-yellow-800 @break
+                                            @case('approved') bg-green-100 text-green-800 @break
+                                            @case('rejected') bg-red-100 text-red-800 @break
+                                            @case('disbursed') bg-purple-100 text-purple-800 @break
+                                            @default bg-gray-100 text-gray-800
+                                        @endswitch">
+                                        {{ ucwords(str_replace('_', ' ', $application->status)) }}
+                                    </span>
+                                    @if($isUnbooked)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                                            Unbooked
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- Applicant Info -->
                             <div class="mb-4">
-                                <h3 class="text-lg font-semibold text-gray-900">
-                                    {{ $application->first_name }} {{ $application->last_name }}
+                                <h3 class="text-lg font-semibold text-gray-900 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                    @if($isUnbooked)
+                                        {{ substr($application->first_name, 0, 1) }}*** {{ substr($application->last_name, 0, 1) }}***
+                                    @else
+                                        {{ $application->first_name }} {{ $application->last_name }}
+                                    @endif
                                 </h3>
-                                <p class="text-sm text-gray-600">{{ $application->email }}</p>
+                                <p class="text-sm text-gray-600 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                    @if($isUnbooked)
+                                        ***@***.***
+                                    @else
+                                        {{ $application->email }}
+                                    @endif
+                                </p>
                                 <p class="text-xs text-gray-500">{{ $application->application_number }}</p>
                             </div>
 
@@ -752,14 +825,22 @@
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div class="text-center p-3 bg-gray-50 rounded-lg">
                                     <div class="text-xs text-gray-500 mb-1">Loan Amount</div>
-                                    <div class="text-sm font-bold text-gray-900">TSh {{ number_format($application->requested_amount/1000) }}K</div>
+                                    <div class="text-sm font-bold text-gray-900 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                        @if($isUnbooked)
+                                            TSh ***K
+                                        @else
+                                            TSh {{ number_format($application->requested_amount/1000) }}K
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="text-center p-3 bg-gray-50 rounded-lg">
                                     <div class="text-xs text-gray-500 mb-1">DSR</div>
-                                    @if($application->debt_to_income_ratio)
+                                    @if($application->debt_to_income_ratio && $isBooked)
                                         <div class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
                                             {{ number_format($application->debt_to_income_ratio, 1) }}%
                                         </div>
+                                    @elseif($isUnbooked)
+                                        <div class="text-sm font-bold text-gray-400 blur-sm">**.*%</div>
                                     @else
                                         <div class="text-sm text-gray-400">N/A</div>
                                     @endif
@@ -770,7 +851,13 @@
                             <div class="space-y-2 text-sm">
                                 <div class="flex justify-between">
                                     <span class="text-gray-500">Income:</span>
-                                    <span class="font-medium">TSh {{ number_format($application->total_monthly_income) }}</span>
+                                    <span class="font-medium {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                        @if($isUnbooked)
+                                            TSh ***,***
+                                        @else
+                                            TSh {{ number_format($application->total_monthly_income) }}
+                                        @endif
+                                    </span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-500">Tenure:</span>
@@ -789,51 +876,65 @@
 
                         <!-- Card Actions -->
                         <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                            <div class="flex items-center justify-between">
-                                <button wire:click="viewApplication({{ $application->id }})" 
-                                        class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
-                                    View Details
-                                </button>
-                                
-                                <div class="flex items-center space-x-2">
-                                    @if($application->status === 'submitted')
-                                        <button wire:click="startReview({{ $application->id }})" 
-                                                class="text-blue-600 hover:text-blue-800 p-1.5 rounded-lg hover:bg-blue-100 transition-all duration-200"
-                                                title="Start Review">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                            </svg>
-                                        </button>
-                                    @endif
-
-                                    @if(in_array($application->status, ['submitted', 'under_review']))
-                                        <button wire:click="approveApplication({{ $application->id }})" 
-                                                class="text-green-600 hover:text-green-800 p-1.5 rounded-lg hover:bg-green-100 transition-all duration-200"
-                                                title="Approve">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                            </svg>
-                                        </button>
-                                        <button wire:click="rejectApplication({{ $application->id }})" 
-                                                class="text-red-600 hover:text-red-800 p-1.5 rounded-lg hover:bg-red-100 transition-all duration-200"
-                                                title="Reject">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
-                                    @endif
-
-                                    @if($application->status === 'approved')
-                                        <button wire:click="markDisbursed({{ $application->id }})" 
-                                                class="text-purple-600 hover:text-purple-800 p-1.5 rounded-lg hover:bg-purple-100 transition-all duration-200"
-                                                title="Mark as Disbursed">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                                            </svg>
-                                        </button>
-                                    @endif
+                            @if($isUnbooked)
+                                {{-- Book Application Button --}}
+                                <div class="flex justify-center">
+                                    <button wire:click="bookApplication({{ $application->id }})" 
+                                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all duration-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                        </svg>
+                                        Book Application
+                                    </button>
                                 </div>
-                            </div>
+                            @else
+                                {{-- Regular Actions for Booked Applications --}}
+                                <div class="flex items-center justify-between">
+                                    <button wire:click="viewApplication({{ $application->id }})" 
+                                            class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+                                        View Details
+                                    </button>
+                                    
+                                    <div class="flex items-center space-x-2">
+                                        @if($application->status === 'submitted')
+                                            <button wire:click="startReview({{ $application->id }})" 
+                                                    class="text-blue-600 hover:text-blue-800 p-1.5 rounded-lg hover:bg-blue-100 transition-all duration-200"
+                                                    title="Start Review">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                                </svg>
+                                            </button>
+                                        @endif
+
+                                        @if(in_array($application->status, ['submitted', 'under_review']))
+                                            <button wire:click="approveApplication({{ $application->id }})" 
+                                                    class="text-green-600 hover:text-green-800 p-1.5 rounded-lg hover:bg-green-100 transition-all duration-200"
+                                                    title="Approve">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                </svg>
+                                            </button>
+                                            <button wire:click="rejectApplication({{ $application->id }})" 
+                                                    class="text-red-600 hover:text-red-800 p-1.5 rounded-lg hover:bg-red-100 transition-all duration-200"
+                                                    title="Reject">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        @endif
+
+                                        @if($application->status === 'approved')
+                                            <button wire:click="markDisbursed({{ $application->id }})" 
+                                                    class="text-purple-600 hover:text-purple-800 p-1.5 rounded-lg hover:bg-purple-100 transition-all duration-200"
+                                                    title="Mark as Disbursed">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                                </svg>
+                                            </button>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @empty
@@ -853,7 +954,11 @@
         @elseif($viewMode === 'detailed')
             <div class="space-y-6">
                 @forelse($applications as $application)
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden {{ in_array($application->id, $selectedApplications) ? 'ring-2 ring-blue-500' : '' }}">
+                    @php
+                        $isBooked = $application->booking_status === 'booked';
+                        $isUnbooked = $application->booking_status === 'unbooked';
+                    @endphp
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden {{ in_array($application->id, $selectedApplications) ? 'ring-2 ring-blue-500' : '' }} {{ $isUnbooked ? 'opacity-75' : '' }}">
                         <!-- Header Section -->
                         <div class="p-6 border-b border-gray-100">
                             <div class="flex items-start justify-between">
@@ -861,36 +966,60 @@
                                     <input type="checkbox" 
                                         wire:click="toggleApplicationSelection({{ $application->id }})"
                                         {{ in_array($application->id, $selectedApplications) ? 'checked' : '' }}
-                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mt-1">
+                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mt-1"
+                                        {{ $isUnbooked ? 'disabled' : '' }}>
                                     
-                                    <div class="h-16 w-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                                    <div class="h-16 w-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center {{ $isUnbooked ? 'blur-sm' : '' }}">
                                         <span class="text-xl font-bold text-white">
                                             {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                                         </span>
                                     </div>
                                     
                                     <div>
-                                        <h3 class="text-xl font-semibold text-gray-900">
-                                            {{ $application->first_name }} {{ $application->last_name }}
+                                        <h3 class="text-xl font-semibold text-gray-900 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                            @if($isUnbooked)
+                                                {{ substr($application->first_name, 0, 1) }}*** {{ substr($application->last_name, 0, 1) }}***
+                                            @else
+                                                {{ $application->first_name }} {{ $application->last_name }}
+                                            @endif
                                         </h3>
-                                        <p class="text-sm text-gray-600">{{ $application->email }}</p>
-                                        <p class="text-sm text-gray-600">{{ $application->phone_number }}</p>
+                                        <p class="text-sm text-gray-600 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                            @if($isUnbooked)
+                                                ***@***.***
+                                            @else
+                                                {{ $application->email }}
+                                            @endif
+                                        </p>
+                                        <p class="text-sm text-gray-600 {{ $isUnbooked ? 'blur-sm' : '' }}">
+                                            @if($isUnbooked)
+                                                +255***-***-***
+                                            @else
+                                                {{ $application->phone_number }}
+                                            @endif
+                                        </p>
                                         <p class="text-xs text-gray-500 mt-1">Application: {{ $application->application_number }}</p>
                                     </div>
                                 </div>
                                 
                                 <div class="text-right">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                                        @switch($application->status)
-                                            @case('submitted') bg-blue-100 text-blue-800 @break
-                                            @case('under_review') bg-yellow-100 text-yellow-800 @break
-                                            @case('approved') bg-green-100 text-green-800 @break
-                                            @case('rejected') bg-red-100 text-red-800 @break
-                                            @case('disbursed') bg-purple-100 text-purple-800 @break
-                                            @default bg-gray-100 text-gray-800
-                                        @endswitch">
-                                        {{ ucwords(str_replace('_', ' ', $application->status)) }}
-                                    </span>
+                                    <div class="flex flex-col items-end space-y-2">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                                            @switch($application->status)
+                                                @case('submitted') bg-blue-100 text-blue-800 @break
+                                                @case('under_review') bg-yellow-100 text-yellow-800 @break
+                                                @case('approved') bg-green-100 text-green-800 @break
+                                                @case('rejected') bg-red-100 text-red-800 @break
+                                                @case('disbursed') bg-purple-100 text-purple-800 @break
+                                                @default bg-gray-100 text-gray-800
+                                            @endswitch">
+                                            {{ ucwords(str_replace('_', ' ', $application->status)) }}
+                                        </span>
+                                        @if($isUnbooked)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                                                Unbooked
+                                            </span>
+                                        @endif
+                                    </div>
                                     <div class="text-sm text-gray-500 mt-2">
                                         Applied {{ $application->created_at->diffForHumans() }}
                                     </div>
@@ -899,172 +1028,193 @@
                         </div>
 
                         <!-- Content Section -->
-                        <div class="p-6">
-                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                <!-- Loan Details -->
-                                <div class="lg:col-span-1">
-                                    <h4 class="text-lg font-medium text-gray-900 mb-4">Loan Details</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">Requested Amount:</span>
-                                            <span class="text-sm font-semibold text-gray-900">TSh {{ number_format($application->requested_amount) }}</span>
-                                        </div>
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">Tenure:</span>
-                                            <span class="text-sm font-semibold text-gray-900">{{ $application->requested_tenure_months }} months</span>
-                                        </div>
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">Product:</span>
-                                            <span class="text-sm font-semibold text-gray-900">{{ $application->loanProduct->name ?? 'N/A' }}</span>
-                                        </div>
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">Purpose:</span>
-                                            <span class="text-sm font-semibold text-gray-900">{{ ucwords(str_replace('_', ' ', $application->loan_purpose ?? 'N/A')) }}</span>
-                                        </div>
-                                    </div>
+                        @if($isUnbooked)
+                            {{-- Simplified view for unbooked applications --}}
+                            <div class="p-6">
+                                <div class="text-center py-8">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">Application Details Protected</h3>
+                                    <p class="text-sm text-gray-500 mb-6">Book this application to view full details and perform actions.</p>
+                                    <button wire:click="bookApplication({{ $application->id }})" 
+                                            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all duration-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                        </svg>
+                                        Book Application
+                                    </button>
                                 </div>
-
-                                <!-- Financial Details -->
-                                <div class="lg:col-span-1">
-                                    <h4 class="text-lg font-medium text-gray-900 mb-4">Financial Profile</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">Monthly Income:</span>
-                                            <span class="text-sm font-semibold text-gray-900">TSh {{ number_format($application->total_monthly_income) }}</span>
-                                        </div>
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">Employment:</span>
-                                            <span class="text-sm font-semibold text-gray-900">{{ ucwords(str_replace('_', ' ', $application->employment_status)) }}</span>
-                                        </div>
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">DSR:</span>
-                                            @if($application->debt_to_income_ratio)
-                                                <span class="text-sm font-semibold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
-                                                    {{ number_format($application->debt_to_income_ratio, 1) }}%
-                                                </span>
-                                            @else
-                                                <span class="text-sm text-gray-400">N/A</span>
-                                            @endif
-                                        </div>
-                                        <div class="flex justify-between py-2 border-b border-gray-100">
-                                            <span class="text-sm text-gray-600">Credit Score:</span>
-                                            <span class="text-sm font-semibold text-gray-900">{{ $application->credit_score ?? 'N/A' }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Application Progress -->
-                                <div class="lg:col-span-1">
-                                    <h4 class="text-lg font-medium text-gray-900 mb-4">Application Progress</h4>
-                                    <div class="space-y-4">
-                                        <!-- Documents Status -->
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-sm text-gray-600">Documents:</span>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                {{ $application->documents->count() }} files
-                                            </span>
-                                        </div>
-                                        
-                                        <!-- Reviewer Info -->
-                                        @if($application->reviewed_by)
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-sm text-gray-600">Reviewed by:</span>
-                                                <span class="text-sm font-medium text-gray-900">{{ $application->reviewedByUser->name ?? 'Unknown' }}</span>
+                            </div>
+                        @else
+                            {{-- Full detailed view for booked applications --}}
+                            <div class="p-6">
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <!-- Loan Details -->
+                                    <div class="lg:col-span-1">
+                                        <h4 class="text-lg font-medium text-gray-900 mb-4">Loan Details</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">Requested Amount:</span>
+                                                <span class="text-sm font-semibold text-gray-900">TSh {{ number_format($application->requested_amount) }}</span>
                                             </div>
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">Tenure:</span>
+                                                <span class="text-sm font-semibold text-gray-900">{{ $application->requested_tenure_months }} months</span>
+                                            </div>
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">Product:</span>
+                                                <span class="text-sm font-semibold text-gray-900">{{ $application->loanProduct->name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">Purpose:</span>
+                                                <span class="text-sm font-semibold text-gray-900">{{ ucwords(str_replace('_', ' ', $application->loan_purpose ?? 'N/A')) }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Financial Details -->
+                                    <div class="lg:col-span-1">
+                                        <h4 class="text-lg font-medium text-gray-900 mb-4">Financial Profile</h4>
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">Monthly Income:</span>
+                                                <span class="text-sm font-semibold text-gray-900">TSh {{ number_format($application->total_monthly_income) }}</span>
+                                            </div>
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">Employment:</span>
+                                                <span class="text-sm font-semibold text-gray-900">{{ ucwords(str_replace('_', ' ', $application->employment_status)) }}</span>
+                                            </div>
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">DSR:</span>
+                                                @if($application->debt_to_income_ratio)
+                                                    <span class="text-sm font-semibold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                                        {{ number_format($application->debt_to_income_ratio, 1) }}%
+                                                    </span>
+                                                @else
+                                                    <span class="text-sm text-gray-400">N/A</span>
+                                                @endif
+                                            </div>
+                                            <div class="flex justify-between py-2 border-b border-gray-100">
+                                                <span class="text-sm text-gray-600">Credit Score:</span>
+                                                <span class="text-sm font-semibold text-gray-900">{{ $application->credit_score ?? 'N/A' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Application Progress -->
+                                    <div class="lg:col-span-1">
+                                        <h4 class="text-lg font-medium text-gray-900 mb-4">Application Progress</h4>
+                                        <div class="space-y-4">
+                                            <!-- Documents Status -->
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-sm text-gray-600">Documents:</span>
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    {{ $application->documents->count() }} files
+                                                </span>
+                                            </div>
+                                            
+                                            <!-- Reviewer Info -->
+                                            @if($application->reviewed_by)
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-sm text-gray-600">Reviewed by:</span>
+                                                    <span class="text-sm font-medium text-gray-900">{{ $application->reviewedByUser->name ?? 'Unknown' }}</span>
+                                                </div>
+                                            @endif
+
+                                            <!-- Timeline -->
+                                            <div class="mt-4">
+                                                <div class="text-sm text-gray-600 mb-2">Timeline:</div>
+                                                <div class="space-y-2">
+                                                    <div class="flex items-center text-xs">
+                                                        <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                                                        <span class="text-gray-600">Applied: {{ $application->created_at->format('M d, Y H:i') }}</span>
+                                                    </div>
+                                                    @if($application->reviewed_at)
+                                                        <div class="flex items-center text-xs">
+                                                            <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                                                            <span class="text-gray-600">Reviewed: {{ $application->reviewed_at->format('M d, Y H:i') }}</span>
+                                                        </div>
+                                                    @endif
+                                                    @if($application->approved_at)
+                                                        <div class="flex items-center text-xs">
+                                                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                                            <span class="text-gray-600">Approved: {{ $application->approved_at->format('M d, Y H:i') }}</span>
+                                                        </div>
+                                                    @endif
+                                                    @if($application->disbursed_at)
+                                                        <div class="flex items-center text-xs">
+                                                            <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                                                            <span class="text-gray-600">Disbursed: {{ $application->disbursed_at->format('M d, Y H:i') }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Notes Section -->
+                                @if($application->notes)
+                                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                                        <h5 class="text-sm font-medium text-gray-900 mb-2">Notes:</h5>
+                                        <p class="text-sm text-gray-700">{{ $application->notes }}</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Actions Footer for Booked Applications -->
+                            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <button wire:click="viewApplication({{ $application->id }})" 
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                        View Full Details
+                                    </button>
+                                    
+                                    <div class="flex items-center space-x-2">
+                                        @if($application->status === 'submitted')
+                                            <button wire:click="startReview({{ $application->id }})" 
+                                                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                                </svg>
+                                                Start Review
+                                            </button>
                                         @endif
 
-                                        <!-- Timeline -->
-                                        <div class="mt-4">
-                                            <div class="text-sm text-gray-600 mb-2">Timeline:</div>
-                                            <div class="space-y-2">
-                                                <div class="flex items-center text-xs">
-                                                    <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-                                                    <span class="text-gray-600">Applied: {{ $application->created_at->format('M d, Y H:i') }}</span>
-                                                </div>
-                                                @if($application->reviewed_at)
-                                                    <div class="flex items-center text-xs">
-                                                        <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
-                                                        <span class="text-gray-600">Reviewed: {{ $application->reviewed_at->format('M d, Y H:i') }}</span>
-                                                    </div>
-                                                @endif
-                                                @if($application->approved_at)
-                                                    <div class="flex items-center text-xs">
-                                                        <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                                                        <span class="text-gray-600">Approved: {{ $application->approved_at->format('M d, Y H:i') }}</span>
-                                                    </div>
-                                                @endif
-                                                @if($application->disbursed_at)
-                                                    <div class="flex items-center text-xs">
-                                                        <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
-                                                        <span class="text-gray-600">Disbursed: {{ $application->disbursed_at->format('M d, Y H:i') }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
+                                        @if(in_array($application->status, ['submitted', 'under_review']))
+                                            <button wire:click="approveApplication({{ $application->id }})" 
+                                                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                </svg>
+                                                Approve
+                                            </button>
+                                            <button wire:click="rejectApplication({{ $application->id }})" 
+                                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                                Reject
+                                            </button>
+                                        @endif
+
+                                        @if($application->status === 'approved')
+                                            <button wire:click="markDisbursed({{ $application->id }})" 
+                                                    class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                                </svg>
+                                                Mark Disbursed
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Notes Section -->
-                            @if($application->notes)
-                                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                                    <h5 class="text-sm font-medium text-gray-900 mb-2">Notes:</h5>
-                                    <p class="text-sm text-gray-700">{{ $application->notes }}</p>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Actions Footer -->
-                        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                            <div class="flex items-center justify-between">
-                                <button wire:click="viewApplication({{ $application->id }})" 
-                                        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                    View Full Details
-                                </button>
-                                
-                                <div class="flex items-center space-x-2">
-                                    @if($application->status === 'submitted')
-                                        <button wire:click="startReview({{ $application->id }})" 
-                                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                            </svg>
-                                            Start Review
-                                        </button>
-                                    @endif
-
-                                    @if(in_array($application->status, ['submitted', 'under_review']))
-                                        <button wire:click="approveApplication({{ $application->id }})" 
-                                                class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                            </svg>
-                                            Approve
-                                        </button>
-                                        <button wire:click="rejectApplication({{ $application->id }})" 
-                                                class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                            Reject
-                                        </button>
-                                    @endif
-
-                                    @if($application->status === 'approved')
-                                        <button wire:click="markDisbursed({{ $application->id }})" 
-                                                class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                                            </svg>
-                                            Mark Disbursed
-                                        </button>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 @empty
                     <div class="text-center py-12">
@@ -1076,16 +1226,15 @@
                     </div>
                 @endforelse
             </div>
+        
         <!-- Pagination -->
         <div class="mt-8">
             {{ $applications->links() }}
         </div>
+        @endif
 
-
-
-
-{{-- APPLICATION DETAIL VIEW (when currentStep === 'view') --}}
-@elseif($currentStep === 'view' && $selectedApplication)
+  
+     @elseif($currentStep === 'view' && $selectedApplication)
     <div class="max-w-7xl mx-auto">
         <!-- Header with Back Button -->
         <div class="flex items-center justify-between mb-8">
@@ -1221,41 +1370,41 @@
                 <nav class="flex space-x-8 px-6" aria-label="Tabs">
                     <button wire:click="switchTab('overview')" 
                             id="tab-overview"
-                            class="tab-button border-b-2 border-blue-500 text-blue-600 py-4 px-1 text-sm font-medium">
+                            class="tab-button @if($this->tabName=="overview") border-b-2 border-blue-500 text-blue-600 @endif  py-4 px-1 text-sm font-medium">
                         Overview
                     </button>
                     <button wire:click="switchTab('personal')" 
                             id="tab-personal"
-                            class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
+                            class="tab-button  @if($this->tabName=="personal") border-b-2 border-blue-500 text-blue-600 @endif border-transparent  py-4 px-1 text-sm font-medium">
                         Personal Details
                     </button>
 
                     <button wire:click="switchTab('financial')" 
                             id="tab-financial"
-                            class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
+                            class="tab-button  @if($this->tabName=="financial") border-b-2 border-blue-500 text-blue-600 @endif border-transparent  py-4 px-1 text-sm font-medium">
                         Financial Information
                     </button>
                     <button wire:click="switchTab('employment')" 
                             id="tab-employment"
-                            class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
+                            class="tab-button  @if($this->tabName=="employment") border-b-2 border-blue-500 text-blue-600 @endif border-transparent  py-4 px-1 text-sm font-medium">
                         Employment
                     </button>
                     <button wire:click="switchTab('documents')" 
                             id="tab-documents"
-                            class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
+                            class="tab-button  @if($this->tabName=="documents") border-b-2 border-blue-500 text-blue-600 @endif border-transparent  py-4 px-1 text-sm font-medium">
                         Documents
                         <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ $selectedApplication->documents->count() }}</span>
                     </button>
                     <button wire:click="switchTab('history')" 
                             id="tab-history"
-                            class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
-                        History & Notes
+                            class="tab-button  @if($this->tabName=="history") border-b-2 border-blue-500 text-blue-600 @endif border-transparent  py-4 px-1 text-sm font-medium">
+                        Return 
                     </button>
 
 
                     <button wire:click="switchTab('creditReport')" 
                             id="tab-history"
-                            class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
+                            class="tab-button @if($this->tabName=="creditReport") border-b-2 border-blue-500 text-blue-600 @endif border-transparent  py-4 px-1 text-sm font-medium">
                         CRB Report
                     </button>
 
@@ -1263,7 +1412,7 @@
 
                     <button wire:click="switchTab('statementAnalyser')" 
                             id="tab-history"
-                            class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium">
+                            class="tab-button @if($this->tabName=="statementAnalyser") border-b-2 border-blue-500 text-blue-600 @endif border-transparent  py-4 px-1 text-sm font-medium">
                        Statement Analyser
                     </button>
 
@@ -1461,20 +1610,20 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="text-sm font-medium text-gray-600">First Name</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->alternative_phone ?? 'N/A' }}</p>
+                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->first_name ?? 'N/A' }}</p>
                                 </div>
                                 <div>
                                     <label class="text-sm font-medium text-gray-600">Residential Address</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->residential_address ?? 'N/A' }}</p>
+                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->current_address ?? 'N/A' }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <label class="text-sm font-medium text-gray-600">City</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->city ?? 'N/A' }}</p>
+                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->current_city ?? 'N/A' }}</p>
                                     </div>
                                     <div>
                                         <label class="text-sm font-medium text-gray-600">Region</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->region ?? 'N/A' }}</p>
+                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->current_region ?? 'N/A' }}</p>
                                     </div>
                                 </div>
                                 <div>
@@ -1528,22 +1677,12 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="text-sm font-medium text-gray-600">Primary Income</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->primary_income ?? 0) }}</p>
+                                        <label class="text-sm font-medium text-gray-600">Busines Income</label>
+                                        <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->monthly_business_income ?? 0) }}</p>
                                     </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Secondary Income</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->secondary_income ?? 0) }}</p>
-                                    </div>
+                                    
                                 </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Other Income Sources</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->other_income ?? 0) }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Income Verification</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ ucwords(str_replace('_', ' ', $selectedApplication->income_verification_status ?? 'Pending')) }}</p>
-                                </div>
+                               
                             </div>
                         </div>
 
@@ -1553,13 +1692,10 @@
                             <div class="bg-gray-50 rounded-lg p-6 space-y-4">
                                 <div>
                                     <label class="text-sm font-medium text-gray-600">Total Monthly Obligations</label>
-                                    <p class="text-lg font-bold text-red-600 mt-1">TSh {{ number_format($selectedApplication->total_monthly_obligations ?? 0) }}</p>
+                                    <p class="text-lg font-bold text-red-600 mt-1">TSh {{ number_format($selectedApplication->monthly_expenses ?? 0) }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Rent/Mortgage</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->monthly_rent ?? 0) }}</p>
-                                    </div>
+                                    
                                     <div>
                                         <label class="text-sm font-medium text-gray-600">Loan Payments</label>
                                         <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->existing_loan_payments ?? 0) }}</p>
@@ -1567,19 +1703,16 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="text-sm font-medium text-gray-600">Credit Cards</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->credit_card_payments ?? 0) }}</p>
+                                        <label class="text-sm font-medium text-gray-600"> Debt to Income Ratio </label>
+                                        <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->debt_to_income_ratio ?? 0) }}</p>
                                     </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600">Other Expenses</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->other_monthly_expenses ?? 0) }}</p>
-                                    </div>
+                                   
                                 </div>
                                 <div class="pt-4 border-t border-gray-200">
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm font-medium text-gray-600">Net Monthly Income</span>
                                         <span class="text-lg font-bold text-green-600">
-                                            TSh {{ number_format(($selectedApplication->total_monthly_income ?? 0) - ($selectedApplication->total_monthly_obligations ?? 0)) }}
+                                            TSh {{ number_format(($selectedApplication->total_monthly_income ?? 0) - ($selectedApplication->monthly_expenses ?? 0)) }}
                                         </span>
                                     </div>
                                 </div>
@@ -1587,66 +1720,7 @@
                         </div>
                     </div>
 
-                    <!-- Assets & Credit History -->
-                    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Assets -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Assets & Collateral</h3>
-                            <div class="bg-gray-50 rounded-lg p-6 space-y-4">
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Bank Account Balance</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->bank_account_balance ?? 0) }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Property Value</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->property_value ?? 0) }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Vehicle Value</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->vehicle_value ?? 0) }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Other Assets</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">TSh {{ number_format($selectedApplication->other_assets ?? 0) }}</p>
-                                </div>
-                                <div class="pt-4 border-t border-gray-200">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium text-gray-600">Total Assets</span>
-                                        <span class="text-lg font-bold text-blue-600">
-                                            TSh {{ number_format(($selectedApplication->bank_account_balance ?? 0) + ($selectedApplication->property_value ?? 0) + ($selectedApplication->vehicle_value ?? 0) + ($selectedApplication->other_assets ?? 0)) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Credit History -->
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Credit History</h3>
-                            <div class="bg-gray-50 rounded-lg p-6 space-y-4">
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Credit Score</label>
-                                    <p class="text-lg font-bold text-gray-900 mt-1">{{ $selectedApplication->credit_score ?? 'N/A' }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Credit Bureau</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->credit_bureau ?? 'N/A' }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Previous Defaults</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->has_previous_defaults ? 'Yes' : 'No' }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Bankruptcy History</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->has_bankruptcy_history ? 'Yes' : 'No' }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Current Loans</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->number_of_current_loans ?? 0 }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
                 </div>
 
                 @elseif($this->tabName=="employment")
@@ -1672,12 +1746,12 @@
                                 </div>
                                 <div>
                                     <label class="text-sm font-medium text-gray-600">Industry</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->industry ?? 'N/A' }}</p>
+                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->employment_sector ?? 'N/A' }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="text-sm font-medium text-gray-600">Years with Employer</label>
-                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->years_with_employer ?? 'N/A' }} years</p>
+                                        <label class="text-sm font-medium text-gray-600">Months with Employer</label>
+                                        <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->months_with_current_employer ?? 'N/A' }} years</p>
                                     </div>
                                     <div>
                                         <label class="text-sm font-medium text-gray-600">Employment Type</label>
@@ -1696,8 +1770,8 @@
                             <h3 class="text-lg font-semibold text-gray-900 mb-4">Employer Information</h3>
                             <div class="bg-gray-50 rounded-lg p-6 space-y-4">
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Company Address</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->employer_address ?? 'N/A' }}</p>
+                                    <label class="text-sm font-medium text-gray-600">Company Name / Employer </label>
+                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->employer_name ?? 'N/A' }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
@@ -1713,14 +1787,8 @@
                                     <label class="text-sm font-medium text-gray-600">HR Email</label>
                                     <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->hr_contact_email ?? 'N/A' }}</p>
                                 </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Supervisor Name</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->supervisor_name ?? 'N/A' }}</p>
-                                </div>
-                                <div>
-                                    <label class="text-sm font-medium text-gray-600">Supervisor Phone</label>
-                                    <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->supervisor_phone ?? 'N/A' }}</p>
-                                </div>
+                                
+                                
                             </div>
                         </div>
                     </div>
@@ -1843,7 +1911,7 @@
                                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                             </svg>
-                                            Add Note
+                                           Return  with note
                                         </button>
                                     </div>
                                 </div>

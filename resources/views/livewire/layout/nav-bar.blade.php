@@ -34,6 +34,11 @@
                         <p class="text-sm font-semibold text-gray-900">{{ auth()->user()->name }}</p>
                         <p class="text-xs text-gray-500"> {{ auth()->user()->email }}</p>
                     </div>
+
+                    <!-- <a href="{{ route('user.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a> -->
+                    <a href="{{ route('user.setting') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                         
+
                     
                     <!-- Laravel Logout Form -->
                     <form method="POST" action="{{ route('logout') }}" class="block">

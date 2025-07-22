@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Role;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
@@ -9,6 +10,9 @@ use App\Models\Lender;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;   // Add this
+use Illuminate\Support\Facades\Log; 
+use App\Models\Permission; 
 
 class UserManagement extends Component
 {
@@ -69,13 +73,14 @@ class UserManagement extends Component
     public $totalBorrowers;
     public $totalAdmins;
     public $recentUsers;
-    public $availableLenders;
+    public $availableLenders, $roles=[];
 
     protected $paginationTheme = 'tailwind';
 
     public function mount()
     {
         $this->loadStats();
+        $this->roles=Role::get();
         $this->availableLenders = Lender::where('status', 'approved')->get();
     }
 
@@ -138,23 +143,7 @@ class UserManagement extends Component
         ];
     }
 
-    public function lenderRules()
-    {
-        return [
-            'company_name' => 'required|string|max:255',
-            'license_number' => 'nullable|string|max:255|unique:lenders,license_number',
-            'contact_person' => 'required|string|max:255',
-            'lender_email' => 'required|email|unique:users,email',
-            'lender_phone' => 'required|string|max:255',
-            'address' => 'required|string',
-            'city' => 'required|string|max:255',
-            'region' => 'required|string|max:255',
-            'postal_code' => 'nullable|string|max:255',
-            'website' => 'nullable|url',
-            'description' => 'nullable|string',
-            'lender_password' => 'required|string|min:8|confirmed',
-        ];
-    }
+  
 
     public function openCreateUserModal()
     {
@@ -163,12 +152,7 @@ class UserManagement extends Component
         $this->showCreateUserModal = true;
     }
 
-    public function openCreateLenderModal()
-    {
-        $this->resetValidation();
-        $this->resetCreateLenderForm();
-        $this->showCreateLenderModal = true;
-    }
+ 
 
     public function openEditUserModal($userId)
     {
@@ -192,109 +176,173 @@ class UserManagement extends Component
     public function createUser()
     {
         $this->validate();
-
-        $userData = [
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => Hash::make($this->password),
-            'role' => $this->role,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'phone' => $this->phone,
-            'nida_number' => $this->nida_number,
-            'date_of_birth' => $this->date_of_birth,
-            'is_active' => $this->is_active,
-            'email_verified_at' => now(), // Auto-verify admin created users
-        ];
-
-        // Add lender association if selected and role is appropriate
-        if ($this->selected_lender_id && in_array($this->role, ['lender', 'user'])) {
-            $userData['lender_id'] = $this->selected_lender_id;
+    
+        try {
+            DB::transaction(function () {
+                // Create user data
+                $userData = [
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'password' => Hash::make($this->password),
+                    'role' => $this->role, // Keep for legacy compatibility
+                    'first_name' => $this->first_name,
+                    'last_name' => $this->last_name,
+                    'phone' => $this->phone,
+                    'nida_number' => $this->nida_number,
+                    'date_of_birth' => $this->date_of_birth,
+                    'is_active' => $this->is_active,
+                    'email_verified_at' => now(), // Auto-verify admin created users
+                ];
+    
+                // Add lender association if selected and role is appropriate
+                if ($this->selected_lender_id && in_array($this->role, ['lender', 'borrower'])) {
+                    $userData['lender_id'] = $this->selected_lender_id;
+                }
+    
+                // Create the user
+                $user = User::create($userData);
+    
+                // Assign role using the new role system
+                $this->assignRoleToUser($user, $this->role);
+    
+                $this->loadStats();
+                $this->resetCreateUserForm();
+                $this->showCreateUserModal = false;
+                session()->flash('message', 'User created successfully with role assigned!');
+            });
+        } catch (\Exception $e) {
+            \Log::error('User creation failed: ' . $e->getMessage());
+            session()->flash('error', 'Failed to create user. Please try again.');
         }
-
-        User::create($userData);
-
-        $this->loadStats();
-        $this->resetCreateUserForm();
-        $this->showCreateUserModal = false;
-        session()->flash('message', 'User created successfully!');
     }
-
+    
+    // Update your updateUser() method
     public function updateUser()
     {
         $this->validate($this->editRules());
-
-        $userData = [
-            'name' => $this->edit_name,
-            'email' => $this->edit_email,
-            'role' => $this->edit_role,
-            'first_name' => $this->edit_first_name,
-            'last_name' => $this->edit_last_name,
-            'phone' => $this->edit_phone,
-            'nida_number' => $this->edit_nida_number,
-            'date_of_birth' => $this->edit_date_of_birth,
-            'is_active' => $this->edit_is_active,
-        ];
-
-        // Handle lender association
-        if ($this->edit_selected_lender_id && in_array($this->edit_role, ['lender', 'user'])) {
-            $userData['lender_id'] = $this->edit_selected_lender_id;
-        } else {
-            $userData['lender_id'] = null;
+    
+        try {
+            DB::transaction(function () {
+                $userData = [
+                    'name' => $this->edit_name,
+                    'email' => $this->edit_email,
+                    'role' => $this->edit_role, // Keep for legacy compatibility
+                    'first_name' => $this->edit_first_name,
+                    'last_name' => $this->edit_last_name,
+                    'phone' => $this->edit_phone,
+                    'nida_number' => $this->edit_nida_number,
+                    'date_of_birth' => $this->edit_date_of_birth,
+                    'is_active' => $this->edit_is_active,
+                ];
+    
+                // Handle lender association
+                if ($this->edit_selected_lender_id && in_array($this->edit_role, ['lender', 'borrower'])) {
+                    $userData['lender_id'] = $this->edit_selected_lender_id;
+                } else {
+                    $userData['lender_id'] = null;
+                }
+    
+                // Update user data
+                $this->selectedUser->update($userData);
+    
+                // Update role assignment if role changed
+                $currentPrimaryRole = $this->selectedUser->getPrimaryRole();
+                if (!$currentPrimaryRole || $currentPrimaryRole->name !== $this->edit_role) {
+                    $this->updateUserRole($this->selectedUser, $this->edit_role);
+                }
+    
+                $this->loadStats();
+                $this->showEditUserModal = false;
+                session()->flash('message', 'User updated successfully with role updated!');
+            });
+        } catch (\Exception $e) {
+            \Log::error('User update failed: ' . $e->getMessage());
+            session()->flash('error', 'Failed to update user. Please try again.');
         }
-
-        $this->selectedUser->update($userData);
-
-        $this->loadStats();
-        $this->showEditUserModal = false;
-        session()->flash('message', 'User updated successfully!');
     }
-
-    public function createLender()
+    
+    // Add this helper method to assign roles
+    private function assignRoleToUser($user, $roleName)
     {
-        $this->validate($this->lenderRules());
-
-        // Create user account for lender
-        $user = User::create([
-            'name' => $this->contact_person,
-            'email' => $this->lender_email,
-            'password' => Hash::make($this->lender_password),
-            'role' => 'lender',
-            'first_name' => explode(' ', $this->contact_person)[0] ?? '',
-            'last_name' => explode(' ', $this->contact_person)[1] ?? '',
-            'phone' => $this->lender_phone,
-            'is_active' => true,
-            'email_verified_at' => now(),
-        ]);
-
-        // Create lender record
-        $lender = Lender::create([
-            'company_name' => $this->company_name,
-            'license_number' => $this->license_number,
-            'contact_person' => $this->contact_person,
-            'email' => $this->lender_email,
-            'phone' => $this->lender_phone,
-            'address' => $this->address,
-            'city' => $this->city,
-            'region' => $this->region,
-            'postal_code' => $this->postal_code,
-            'website' => $this->website,
-            'description' => $this->description,
-            'status' => 'approved', // Auto-approve admin created lenders
-            'approved_at' => now(),
-            'approved_by' => Auth::id(),
+        // Find the role
+        $role = Role::where('name', $roleName)->first();
+        
+        if (!$role) {
+            throw new \Exception("Role '{$roleName}' not found.");
+        }
+    
+        // Check if current user can assign this role
+        // if (auth()->user()->role_level <= $role->level) {
+        //     throw new \Exception('You cannot assign a role equal or higher than your own.');
+        // }
+    
+        // Assign the role
+        if (method_exists($user, 'assignRole')) {
+            $user->assignRole($role, auth()->user());
+        } else {
+            // Fallback: direct database insertion
+            $user->roles()->syncWithoutDetaching([
+                $role->id => [
+                    'assigned_at' => now(),
+                    'assigned_by' => auth()->id(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ]);
+            
+            // Update role level manually
+            $user->update(['role_level' => $role->level]);
+        }
+    
+        \Log::info('Role assigned to user', [
             'user_id' => $user->id,
+            'role' => $roleName,
+            'assigned_by' => auth()->id()
         ]);
-
-        // Update user with lender_id
-        $user->update(['lender_id' => $lender->id]);
-
-        $this->availableLenders = Lender::where('status', 'approved')->get();
-        $this->loadStats();
-        $this->resetCreateLenderForm();
-        $this->showCreateLenderModal = false;
-        session()->flash('message', 'Lender created successfully!');
     }
+    
+    // Add this helper method to update user roles
+    private function updateUserRole($user, $newRoleName)
+    {
+        // Find the new role
+        $newRole = Role::where('name', $newRoleName)->first();
+        
+        if (!$newRole) {
+            throw new \Exception("Role '{$newRoleName}' not found.");
+        }
+    
+        // Check permissions
+        if (auth()->user()->role_level <= $newRole->level) {
+            throw new \Exception('You cannot assign a role equal or higher than your own.');
+        }
+    
+        // Remove all current roles and assign new one
+        $user->roles()->detach();
+        
+        if (method_exists($user, 'assignRole')) {
+            $user->assignRole($newRole, auth()->user());
+        } else {
+            // Fallback
+            $user->roles()->attach($newRole->id, [
+                'assigned_at' => now(),
+                'assigned_by' => auth()->id(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+            $user->update(['role_level' => $newRole->level]);
+        }
+    
+        \Log::info('User role updated', [
+            'user_id' => $user->id,
+            'new_role' => $newRoleName,
+            'updated_by' => auth()->id()
+        ]);
+    }
+
+
+
+  
 
     public function toggleUserStatus($userId)
     {
@@ -336,19 +384,10 @@ class UserManagement extends Component
         $this->is_active = true;
     }
 
-    public function resetCreateLenderForm()
-    {
-        $this->reset([
-            'company_name', 'license_number', 'contact_person', 'lender_email',
-            'lender_phone', 'address', 'city', 'region', 'postal_code',
-            'website', 'description', 'lender_password', 'lender_password_confirmation'
-        ]);
-    }
-
     public function render()
     {
-        $query = User::with('lender')
-            ->when($this->search, function ($q) {
+        $query = User::
+            when($this->search, function ($q) {
                 $q->where(function ($query) {
                     $query->where('name', 'like', '%' . $this->search . '%')
                           ->orWhere('email', 'like', '%' . $this->search . '%')

@@ -21,7 +21,7 @@ return new class extends Migration
             // Amount limits
             $table->decimal('min_amount', 15, 2);
             $table->decimal('max_amount', 15, 2);
-            $table->decimal('minimum_dsr',2)->default(0);
+            $table->string('minimum_dsr')->default(0);
             
             $table->string('loan_type')->nullable();
             // Tenure limits (in months)

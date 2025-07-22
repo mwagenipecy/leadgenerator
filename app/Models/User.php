@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Role;
+use App\Models\Permission;
 
 class User extends Authenticatable
 {
@@ -39,6 +41,7 @@ class User extends Authenticatable
         'date_of_birth',
         'role',
         'is_active',
+        'lender_id'
 
 
     ];
@@ -139,11 +142,228 @@ class User extends Authenticatable
         return $query->where('is_active', true);
     }
 
+
     public function scopeByRole($query, string $role)
     {
         return $query->where('role', $role);
     }
 
     
+
+    public function roles()
+{
+    return $this->belongsToMany(Role::class, 'user_roles')
+                ->withPivot(['assigned_at', 'assigned_by', 'expires_at', 'metadata'])
+                ->withTimestamps();
+}
+
+/**
+ * The permissions that belong to the user directly.
+ */
+public function permissions()
+{
+    return $this->belongsToMany(Permission::class, 'user_permissions')
+                ->withPivot(['type', 'assigned_at', 'assigned_by', 'expires_at', 'metadata'])
+                ->withTimestamps();
+}
+
+/**
+ * Check if user has a specific role
+ */
+public function hasRole(string $role): bool
+{
+    return $this->roles()->where('name', $role)->exists();
+}
+
+/**
+ * Check if user has any of the given roles
+ */
+public function hasAnyRole(array $roles): bool
+{
+    return $this->roles()->whereIn('name', $roles)->exists();
+}
+
+/**
+ * Check if user has a specific permission
+ */
+public function hasPermission(string $permission): bool
+{
+    // Check direct permissions first
+    $directPermission = $this->permissions()
+        ->where('name', $permission)
+        ->wherePivot('type', 'grant')
+        ->where(function ($query) {
+            $query->whereNull('user_permissions.expires_at')
+                  ->orWhere('user_permissions.expires_at', '>', now());
+        })
+        ->exists();
+
+    if ($directPermission) {
+        return true;
+    }
+
+    // Check if explicitly denied
+    $deniedPermission = $this->permissions()
+        ->where('name', $permission)
+        ->wherePivot('type', 'deny')
+        ->where(function ($query) {
+            $query->whereNull('user_permissions.expires_at')
+                  ->orWhere('user_permissions.expires_at', '>', now());
+        })
+        ->exists();
+
+    if ($deniedPermission) {
+        return false;
+    }
+
+    // Check role permissions
+    return $this->roles()
+        ->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('name', $permission);
+        })
+        ->where(function ($query) {
+            $query->whereNull('user_roles.expires_at')
+                  ->orWhere('user_roles.expires_at', '>', now());
+        })
+        ->exists();
+}
+
+/**
+ * Get all user permissions (from roles and direct assignments)
+ */
+public function getAllPermissions()
+{
+    $rolePermissions = $this->roles()
+        ->with('permissions')
+        ->where(function ($query) {
+            $query->whereNull('user_roles.expires_at')
+                  ->orWhere('user_roles.expires_at', '>', now());
+        })
+        ->get()
+        ->pluck('permissions')
+        ->flatten();
+
+    $directPermissions = $this->permissions()
+        ->wherePivot('type', 'grant')
+        ->where(function ($query) {
+            $query->whereNull('user_permissions.expires_at')
+                  ->orWhere('user_permissions.expires_at', '>', now());
+        })
+        ->get();
+
+    $deniedPermissions = $this->permissions()
+        ->wherePivot('type', 'deny')
+        ->where(function ($query) {
+            $query->whereNull('user_permissions.expires_at')
+                  ->orWhere('user_permissions.expires_at', '>', now());
+        })
+        ->pluck('name');
+
+    return $rolePermissions
+        ->merge($directPermissions)
+        ->unique('id')
+        ->reject(function ($permission) use ($deniedPermissions) {
+            return $deniedPermissions->contains($permission->name);
+        });
+}
+
+/**
+ * Assign role to user
+ */
+public function assignRole(Role|string $role, ?User $assignedBy = null, ?\DateTime $expiresAt = null): void
+{
+    if (is_string($role)) {
+        $role = Role::where('name', $role)->firstOrFail();
+    }
+
+    $this->roles()->syncWithoutDetaching([
+        $role->id => [
+            'assigned_at' => now(),
+            'assigned_by' => $assignedBy?->id,
+            'expires_at' => $expiresAt
+        ]
+    ]);
+
+    $this->updateRoleLevel();
+    $this->clearPermissionsCache();
+}
+
+/**
+ * Remove role from user
+ */
+public function removeRole(Role|string $role): void
+{
+    if (is_string($role)) {
+        $role = Role::where('name', $role)->firstOrFail();
+    }
+
+    $this->roles()->detach($role->id);
+    $this->updateRoleLevel();
+    $this->clearPermissionsCache();
+}
+
+/**
+ * Give permission directly to user
+ */
+public function givePermission(Permission|string $permission, ?User $assignedBy = null, ?\DateTime $expiresAt = null): void
+{
+    if (is_string($permission)) {
+        $permission = Permission::where('name', $permission)->firstOrFail();
+    }
+
+    $this->permissions()->syncWithoutDetaching([
+        $permission->id => [
+            'type' => 'grant',
+            'assigned_at' => now(),
+            'assigned_by' => $assignedBy?->id,
+            'expires_at' => $expiresAt
+        ]
+    ]);
+
+    $this->clearPermissionsCache();
+}
+
+/**
+ * Deny permission to user
+ */
+public function denyPermission(Permission|string $permission, ?User $assignedBy = null, ?\DateTime $expiresAt = null): void
+{
+    if (is_string($permission)) {
+        $permission = Permission::where('name', $permission)->firstOrFail();
+    }
+
+    $this->permissions()->syncWithoutDetaching([
+        $permission->id => [
+            'type' => 'deny',
+            'assigned_at' => now(),
+            'assigned_by' => $assignedBy?->id,
+            'expires_at' => $expiresAt
+        ]
+    ]);
+
+    $this->clearPermissionsCache();
+}
+
+/**
+ * Update user's role level based on highest role
+ */
+public function updateRoleLevel(): void
+{
+    $highestLevel = $this->roles()->max('level') ?? 1;
+    $this->update(['role_level' => $highestLevel]);
+}
+
+/**
+ * Clear permissions cache
+ */
+public function clearPermissionsCache(): void
+{
+    $this->update([
+        'permissions_cache' => null,
+        'permissions_updated_at' => null
+    ]);
+}
+
+
 
 }

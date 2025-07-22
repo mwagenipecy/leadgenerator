@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Onboarding;
 
+use App\Models\Role;
+use Illuminate\Support\Facades\DB;
+
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -55,36 +58,105 @@ class Register extends Component
     public function register()
     {
         $this->validate();
-
+    
         try {
-            $user = User::create([
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
-                'name' => $this->first_name . ' ' . $this->last_name,
-                'email' => $this->email,
-                'phone' => $this->phone,
-                'nida_number' => $this->nida_number,
-                'password' => Hash::make($this->password),
-            ]);
-
-            // Optional: Send email verification
-            // $user->sendEmailVerificationNotification();
-
-            // Optional: Auto-login the user
+            $user = DB::transaction(function () {
+                // Create the user
+                $user = User::create([
+                    'first_name' => $this->first_name,
+                    'last_name' => $this->last_name,
+                    'name' => $this->first_name . ' ' . $this->last_name,
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                    'nida_number' => $this->nida_number,
+                    'password' => Hash::make($this->password),
+                    'email_verified_at' => now(), // Auto-verify super admin
+                    'role' => 'borrower', // Set the legacy role field if still using it
+                ]);
+    
+                // Assign Super Admin role using the new role system
+                $this->assignSuperAdminRole($user);
+    
+                return $user;
+            });
+    
+            // Auto-login the user
             auth()->login($user);
-
-            session()->flash('success', 'Account created successfully! Please check your email to verify your account.');
+    
+            // Log successful super admin creation
+            \Log::info('Super Admin account created', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'name' => $user->name,
+            ]);
+    
+            session()->flash('success', 'Super Admin account created successfully! You now have full system access.');
             
             // Reset form
             $this->reset();
             
-            // Redirect to login or dashboard
+            // Redirect to admin dashboard
             return redirect()->route('verification.options');
             
         } catch (\Exception $e) {
+            // Log the detailed error
+            \Log::error('Super Admin registration failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'email' => $this->email ?? 'N/A',
+            ]);
+            
             session()->flash('error', 'Registration failed. Please try again.');
         }
     }
+    
+    /**
+     * Assign Super Admin role to user
+     */
+    private function assignSuperAdminRole($user)
+    {
+        // Try to get existing super admin role
+        $superAdminRole = Role::where('name', 'super_admin')->first();
+        
+        if (!$superAdminRole) {
+            // Create super admin role if it doesn't exist
+            $superAdminRole = Role::create([
+                'name' => 'super_admin',
+                'display_name' => 'Super Administrator',
+                'description' => 'Full system access with all permissions',
+                'level' => 100,
+                'is_system_role' => true,
+                'is_active' => true,
+            ]);
+    
+            // Assign all permissions to super admin role
+            $allPermissions = \App\Models\Permission::where('is_active', true)->pluck('id');
+            if ($allPermissions->isNotEmpty()) {
+                $superAdminRole->permissions()->sync($allPermissions);
+            }
+        }
+    
+        // Assign role to user
+        if (method_exists($user, 'assignRole')) {
+            // Use the trait method if available
+            $user->assignRole($superAdminRole);
+        } else {
+            // Direct database assignment
+            $user->roles()->syncWithoutDetaching([
+                $superAdminRole->id => [
+                    'assigned_at' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ]);
+        }
+    
+        // Update user's role level
+        $user->update(['role_level' => $superAdminRole->level]);
+    }
+
+    
+
 
     public function render()
     {

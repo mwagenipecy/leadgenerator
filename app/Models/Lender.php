@@ -188,6 +188,7 @@ class Lender extends Model
             'role' => 'lender',
             'email_verified_at' => now(),
             'is_active' => true,
+            'lender_id'=> $this->id,
         ]);
 
         $this->update([

@@ -11,6 +11,7 @@ use Livewire\WithFileUploads;
 use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ApplicationManagement extends Component
 {
@@ -21,6 +22,8 @@ class ApplicationManagement extends Component
     public $currentFormStep = 1; // Multi-step form (1-6) - added pre-qualification step
     public $selectedApplication = null;
     public $matchingProducts = [];
+    public $has_bank_account = null;
+
     public $preQualificationResults = [];
     public $selectedLenders = []; // For multi-lender application
     
@@ -100,6 +103,8 @@ class ApplicationManagement extends Component
     public $permanent_city = '';
     public $permanent_region = '';
 
+    public $application_id;
+
     // Step 4: Employment & Financial Information
     #[Rule('required|in:employed,self_employed,unemployed,retired,student')]
     public $employment_status = 'employed';
@@ -164,6 +169,11 @@ class ApplicationManagement extends Component
     public $search = '';
     public $statusFilter = 'all';
 
+    public function  boot(){
+
+      //  $this->application_id=12345678;
+    }
+
     public function mount()
     {
         // Pre-fill user information if available
@@ -173,6 +183,9 @@ class ApplicationManagement extends Component
             $this->first_name = $user->first_name ?? '';
             $this->last_name = $user->last_name ?? '';
             $this->phone_number = $user->phone ?? '';
+
+            $this->application_id=$user->id;
+
         }
     }
 
@@ -511,6 +524,8 @@ class ApplicationManagement extends Component
         $finalDSR = ($totalDebt / $this->total_monthly_income) * 100;
         $data['debt_to_income_ratio'] = $finalDSR;
 
+        
+
         if (count($this->selectedLenders) > 1) {
             // Create separate applications for each selected lender
             $applications = [];
@@ -560,6 +575,18 @@ class ApplicationManagement extends Component
             $message = $submit ? 'Application submitted successfully!' : 'Application saved as draft!';
         }
 
+
+
+
+
+
+        ApplicationDocument::where('application_id', $this->application_id)
+            ->update(['application_id' => $application->id]);
+
+
+
+
+
         session()->flash('message', $message);
         $this->backToList();
     }
@@ -581,16 +608,41 @@ class ApplicationManagement extends Component
 
         $file = $this->documents[$documentType];
         $path = $file->store('application-documents', 'public');
+        
+        // Generate file hash for integrity checking
+        $fileHash = hash_file('sha256', $file->getRealPath());
+
+        // Save to application_documents table
+        $documentRecord = DB::table('application_documents')->insert([
+            'application_id' => $this->application_id, // Make sure this property exists in your component
+            'document_type' => $documentType,
+            'document_name' => $file->getClientOriginalName(),
+            'file_path' => $path,
+            'file_type' => $file->getClientOriginalExtension(),
+            'file_size' => $file->getSize(),
+            'mime_type' => $file->getMimeType(),
+            'status' => 'uploaded',
+            'document_date' => now()->toDateString(),
+            'file_hash' => $fileHash,
+            'is_required' => 1,
+            'is_encrypted' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $this->uploadedDocuments[$documentType] = [
             'path' => $path,
             'name' => $file->getClientOriginalName(),
             'size' => $file->getSize(),
             'type' => $file->getClientOriginalExtension(),
+            'hash' => $fileHash,
+            'uploaded_at' => now(),
         ];
 
-        session()->flash('message', 'Document uploaded successfully!');
+        session()->flash('message', 'Document uploaded and saved successfully!');
     }
+
+
 
     public function removeDocument($documentType)
     {
@@ -847,13 +899,13 @@ class ApplicationManagement extends Component
     private function getRequiredDocuments(): array
     {
         return [
-            'national_id' => 'National ID',
+           // 'national_id' => 'National ID',
             'salary_slip' => 'Salary Slip',
             'bank_statement' => 'Bank Statement',
-            'employment_letter' => 'Employment Letter',
-            'utility_bill' => 'Utility Bill',
-            'business_license' => 'Business License',
-            'tax_certificate' => 'Tax Certificate',
+           // 'employment_letter' => 'Employment Letter',
+           // 'utility_bill' => 'Utility Bill',
+           // 'business_license' => 'Business License',
+            //'tax_certificate' => 'Tax Certificate',
         ];
     }
 }

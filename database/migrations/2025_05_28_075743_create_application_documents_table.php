@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('application_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('application_id')->constrained()->onDelete('cascade');
+            $table->string('application_id')->nullable();
             
             // Document Information
             $table->string('document_type'); // national_id, salary_slip, bank_statement, etc.

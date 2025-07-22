@@ -104,7 +104,7 @@ class SettingsManagement extends Component
         $this->commission_collection_frequency = $settings['commission_collection_frequency'] ?? 'per_loan';
         $this->auto_collection_enabled = (bool) ($settings['auto_collection_enabled'] ?? true);
         $this->minimum_commission_amount = (float) ($settings['minimum_commission_amount'] ?? 100);
-        $this->maximum_commission_amount = $settings['maximum_commission_amount'] ? (float) $settings['maximum_commission_amount'] : null;
+      //  $this->maximum_commission_amount = $settings['maximum_commission_amount'] ? (float) $settings['maximum_commission_amount'] : null;
 
         $this->payment_due_days = (int) ($settings['payment_due_days'] ?? 30);
         $this->late_payment_penalty_percentage = (float) ($settings['late_payment_penalty_percentage'] ?? 2.0);

@@ -85,6 +85,15 @@ class LoanProduct extends Model
         return $this->belongsTo(Lender::class);
     }
 
+
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
+    
+
     // Boot method to generate product code
     protected static function boot()
     {

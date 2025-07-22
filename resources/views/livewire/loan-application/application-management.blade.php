@@ -54,13 +54,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
-                        <input wire:model.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search applications...">
+                        <input wire:model.live.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search applications...">
                     </div>
                 </div>
 
                 <!-- Filters -->
                 <div class="flex items-center space-x-4">
-                    <select wire:model.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                    <select wire:model.live.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                         <option value="all">All Status</option>
                         <option value="draft">Draft</option>
                         <option value="submitted">Submitted</option>
@@ -290,7 +290,7 @@
                         </label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                            <input wire:model.live="prequalify_amount" 
+                            <input wire:model.live.live="prequalify_amount" 
                                    type="number" 
                                    step="1000" 
                                    min="1000" 
@@ -307,7 +307,7 @@
                         <label class="block text-sm font-bold text-gray-700 mb-2">
                             Loan Period (Months) *
                         </label>
-                        <select wire:model.live="prequalify_tenure" 
+                        <select wire:model.live.live="prequalify_tenure" 
                                 class="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50">
                             <option value="">Select period</option>
                             <option value="6">6 months</option>
@@ -334,7 +334,7 @@
                         </label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                            <input wire:model.live="prequalify_monthly_income" 
+                            <input wire:model.live.live="prequalify_monthly_income" 
                                    type="number" 
                                    step="1000" 
                                    min="0" 
@@ -354,7 +354,7 @@
                         </label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                            <input wire:model.live="prequalify_existing_loans" 
+                            <input wire:model.live.live="prequalify_existing_loans" 
                                    type="number" 
                                    step="1000" 
                                    min="0" 
@@ -839,7 +839,7 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Requested Amount (TSh) *</label>
                                     <div class="relative">
                                         <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                        <input wire:model="requested_amount" type="number" step="1000" min="1000" 
+                                        <input wire:model.live="requested_amount" type="number" step="1000" min="1000" 
                                                class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold"
                                                placeholder="50,000">
                                     </div>
@@ -847,7 +847,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Loan Period (Months) *</label>
-                                    <select wire:model="requested_tenure_months" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                    <select wire:model.live="requested_tenure_months" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         <option value="">Select period</option>
                                         <option value="6">6 months</option>
                                         <option value="12">12 months</option>
@@ -867,7 +867,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Loan Purpose</label>
-                                <select wire:model="loan_purpose" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                <select wire:model.live="loan_purpose" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                     <option value="">Select purpose</option>
                                     <option value="business">Business Investment</option>
                                     <option value="education">Education</option>
@@ -935,17 +935,17 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
-                                        <input wire:model="first_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="first_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('first_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                                        <input wire:model="middle_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="middle_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('middle_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
-                                        <input wire:model="last_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="last_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('last_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -957,12 +957,12 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth *</label>
-                                        <input wire:model="date_of_birth" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="date_of_birth" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('date_of_birth') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
-                                        <select wire:model="gender" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <select wire:model.live="gender" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             <option value="">Select gender</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
@@ -972,7 +972,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Marital Status *</label>
-                                        <select wire:model="marital_status" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <select wire:model.live="marital_status" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             <option value="">Select status</option>
                                             @foreach($maritalStatuses as $key => $status)
                                                 <option value="{{ $key }}">{{ $status }}</option>
@@ -989,17 +989,17 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">National ID *</label>
-                                        <input wire:model="national_id" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="national_id" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('national_id') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
-                                        <input wire:model="phone_number" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="phone_number" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('phone_number') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                                        <input wire:model="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('email') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -1024,29 +1024,29 @@
                                 <div class="space-y-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
-                                        <textarea wire:model="current_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your current street address"></textarea>
+                                        <textarea wire:model.live="current_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your current street address"></textarea>
                                         @error('current_address') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
-                                            <input wire:model="current_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="current_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('current_city') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Region *</label>
-                                            <input wire:model="current_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="current_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('current_region') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                                            <input wire:model="current_postal_code" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="current_postal_code" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('current_postal_code') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Years at Current Address *</label>
-                                        <input wire:model="years_at_current_address" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="years_at_current_address" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('years_at_current_address') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -1057,7 +1057,7 @@
                                 <div class="flex items-center justify-between mb-4">
                                     <h3 class="text-lg font-bold text-gray-900">Permanent Address</h3>
                                     <label class="flex items-center cursor-pointer">
-                                        <input wire:model="is_permanent_same_as_current" type="checkbox" class="text-brand-red focus:ring-brand-red rounded">
+                                        <input wire:model.live="is_permanent_same_as_current" type="checkbox" class="text-brand-red focus:ring-brand-red rounded">
                                         <span class="ml-2 text-sm font-medium text-gray-700">Same as current address</span>
                                     </label>
                                 </div>
@@ -1066,16 +1066,16 @@
                                     <div class="space-y-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
-                                            <textarea wire:model="permanent_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your permanent address"></textarea>
+                                            <textarea wire:model.live="permanent_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your permanent address"></textarea>
                                         </div>
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
-                                                <input wire:model="permanent_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="permanent_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
-                                                <input wire:model="permanent_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="permanent_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                     </div>
@@ -1106,7 +1106,7 @@
                                 <h3 class="text-lg font-bold text-gray-900 mb-4">Employment Status</h3>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Current Employment Status *</label>
-                                    <select wire:model="employment_status" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                    <select wire:model.live="employment_status" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         <option value="">Select employment status</option>
                                         <option value="employed">Employed</option>
                                         <option value="self_employed">Self Employed</option>
@@ -1126,19 +1126,19 @@
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Employer Name *</label>
-                                                <input wire:model="employer_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="employer_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 @error('employer_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
-                                                <input wire:model="job_title" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="job_title" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 @error('job_title') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Employment Sector</label>
-                                                <select wire:model="employment_sector" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <select wire:model.live="employment_sector" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                     <option value="">Select sector</option>
                                                     @foreach($employmentSectors as $key => $sector)
                                                         <option value="{{ $key }}">{{ $sector }}</option>
@@ -1147,7 +1147,7 @@
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Months with Current Employer</label>
-                                                <input wire:model="months_with_current_employer" type="number" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="months_with_current_employer" type="number" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                     </div>
@@ -1162,12 +1162,12 @@
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
-                                                <input wire:model="business_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="business_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 @error('business_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Business Type *</label>
-                                                <select wire:model="business_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <select wire:model.live="business_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                     <option value="">Select business type</option>
                                                     @foreach($businessTypes as $key => $type)
                                                         <option value="{{ $key }}">{{ $type }}</option>
@@ -1179,16 +1179,16 @@
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
-                                                <input wire:model="business_registration_number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="business_registration_number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Years in Business</label>
-                                                <input wire:model="years_in_business" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="years_in_business" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Business Address</label>
-                                            <textarea wire:model="business_address" rows="2" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red"></textarea>
+                                            <textarea wire:model.live="business_address" rows="2" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -1204,7 +1204,7 @@
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Salary (TSh) *</label>
                                                 <div class="relative">
                                                     <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                    <input wire:model="monthly_salary" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                    <input wire:model.live="monthly_salary" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 </div>
                                                 @error('monthly_salary') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
@@ -1215,7 +1215,7 @@
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Business Income (TSh) *</label>
                                                 <div class="relative">
                                                     <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                    <input wire:model="monthly_business_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                    <input wire:model.live="monthly_business_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 </div>
                                                 @error('monthly_business_income') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
@@ -1225,7 +1225,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Other Monthly Income (TSh)</label>
                                             <div class="relative">
                                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                <input wire:model="other_monthly_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="other_monthly_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             <p class="text-sm text-gray-500 mt-1">Rental income, investments, etc.</p>
                                         </div>
@@ -1236,7 +1236,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Expenses (TSh) *</label>
                                             <div class="relative">
                                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                <input wire:model="monthly_expenses" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="monthly_expenses" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             @error('monthly_expenses') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
@@ -1244,7 +1244,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Existing Loan Payments (TSh)</label>
                                             <div class="relative">
                                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                <input wire:model="existing_loan_payments" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="existing_loan_payments" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                     </div>
@@ -1274,30 +1274,116 @@
                             </div>
 
                             <!-- Bank Information -->
-                            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-100">
-                                <h3 class="text-lg font-bold text-gray-900 mb-4">Bank Information</h3>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Bank Name</label>
-                                        <input wire:model="bank_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
-                                        <input wire:model="account_number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Account Name</label>
-                                        <input wire:model="account_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
-                                        <select wire:model="account_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                            <option value="savings">Savings Account</option>
-                                            <option value="current">Current Account</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-100 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Do you have a bank account?</h3>
+            
+            <div class="flex gap-4">
+                <label class="flex items-center">
+                    <input wire:model.live="has_bank_account" type="radio" value="1" class="mr-2 text-brand-red focus:ring-brand-red">
+                    <span class="text-gray-700">Yes, I have a bank account</span>
+                </label>
+                <label class="flex items-center">
+                    <input wire:model.live="has_bank_account" type="radio" value="0" class="mr-2 text-brand-red focus:ring-brand-red">
+                    <span class="text-gray-700">No, I don't have a bank account</span>
+                </label>
+            </div>
+            
+            @error('has_bank_account')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Bank Information Section (Conditional) -->
+        @if($has_bank_account === true || $has_bank_account === 1)
+            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-100">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Bank Information</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Bank Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Bank Name <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            wire:model.live="bank_name" 
+                            type="text" 
+                            placeholder="Enter your bank name"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('bank_name') border-red-300 @enderror"
+                        >
+                        @error('bank_name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Account Number -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Account Number <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            wire:model.live="account_number" 
+                            type="text" 
+                            placeholder="Enter your account number"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_number') border-red-300 @enderror"
+                        >
+                        @error('account_number')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Account Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Account Name <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            wire:model.live="account_name" 
+                            type="text" 
+                            placeholder="Enter account holder name"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_name') border-red-300 @enderror"
+                        >
+                        @error('account_name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Account Type -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Account Type <span class="text-red-500">*</span>
+                        </label>
+                        <select 
+                            wire:model.live="account_type" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_type') border-red-300 @enderror"
+                        >
+                            <option value="">Select account type</option>
+                            <option value="savings">Savings Account</option>
+                            <option value="current">Current Account</option>
+                        </select>
+                        @error('account_type')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- No Bank Account Message -->
+        @if($has_bank_account === false || $has_bank_account === 0)
+            <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-yellow-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div>
+                        <h4 class="text-sm font-medium text-yellow-800">No Bank Account</h4>
+                        <p class="text-sm text-yellow-700 mt-1">You've indicated that you don't have a bank account. You may need to open one to receive payments or transfers.</p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
 
                             <!-- Credit Information -->
                             <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-6 border border-red-100">
@@ -1305,12 +1391,12 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Credit Score (if known)</label>
-                                        <input wire:model="credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         <p class="text-sm text-gray-500 mt-1">Leave empty if you don't know your credit score</p>
                                     </div>
                                     <div class="flex items-center pt-8">
                                         <label class="flex items-center cursor-pointer">
-                                            <input wire:model="has_bad_credit_history" type="checkbox" class="text-brand-red focus:ring-brand-red rounded">
+                                            <input wire:model.live="has_bad_credit_history" type="checkbox" class="text-brand-red focus:ring-brand-red rounded">
                                             <span class="ml-2 text-sm font-medium text-gray-700">I have a bad credit history</span>
                                         </label>
                                     </div>
@@ -1337,12 +1423,12 @@
                                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Contact Name *</label>
-                                            <input wire:model="emergency_contact_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="emergency_contact_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('emergency_contact_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Relationship *</label>
-                                            <select wire:model="emergency_contact_relationship" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <select wire:model.live="emergency_contact_relationship" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 <option value="">Select relationship</option>
                                                 <option value="spouse">Spouse</option>
                                                 <option value="parent">Parent</option>
@@ -1358,12 +1444,12 @@
                                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
-                                            <input wire:model="emergency_contact_phone" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="emergency_contact_phone" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('emergency_contact_phone') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                                            <input wire:model="emergency_contact_address" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="emergency_contact_address" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         </div>
                                     </div>
                                 </div>
@@ -1374,7 +1460,7 @@
                                 <h3 class="text-lg font-bold text-gray-900 mb-4">Disbursement Preference</h3>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Disbursement Method</label>
-                                    <select wire:model="preferred_disbursement_method" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                    <select wire:model.live="preferred_disbursement_method" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         <option value="bank_transfer">Bank Transfer</option>
                                         <option value="mobile_money">Mobile Money</option>
                                         <option value="cash">Cash Pickup</option>
@@ -1447,7 +1533,7 @@
                                                 @else
                                                     <!-- Upload interface -->
                                                     <div class="space-y-3">
-                                                        <input wire:model="documents.{{ $key }}" type="file" 
+                                                        <input wire:model.live="documents.{{ $key }}" type="file" 
                                                                class="block w-full text-sm text-gray-500
                                                                     file:mr-4 file:py-2 file:px-4
                                                                     file:rounded-full file:border-0
@@ -1602,7 +1688,7 @@
                             <!-- Form Completion Status -->
                             @if($currentFormStep === 6)
                                 @php
-                                    $requiredDocs = ['national_id', 'salary_slip', 'bank_statement'];
+                                    $requiredDocs = [ 'bank_statement'];
                                     $requiredUploaded = count(array_intersect($requiredDocs, array_keys($uploadedDocuments)));
                                     $allRequiredUploaded = $requiredUploaded === count($requiredDocs);
                                 @endphp
@@ -1677,7 +1763,7 @@
                             @else
                                 <!-- Final Step Buttons -->
                                 @php
-                                    $requiredDocs = ['national_id', 'salary_slip', 'bank_statement'];
+                                    $requiredDocs = [ 'bank_statement'];
                                     $requiredUploaded = count(array_intersect($requiredDocs, array_keys($uploadedDocuments)));
                                     $canSubmit = $requiredUploaded === count($requiredDocs);
                                 @endphp

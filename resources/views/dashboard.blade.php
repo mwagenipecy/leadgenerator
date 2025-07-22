@@ -1,18 +1,28 @@
 <x-app-layout>
     
 
- Admin #
 
- <livewire:dashboard.admin-dashboard />
 
- lender
+ 
 
+@if(auth()->user()->role=='lender')
  <livewire:lender.lender-dashboard />
 
-    borrower
 
-    <livewire:borrower.borrower-dashboard />
+ @elseif(auth()->user()->role=='borrower')
 
+
+
+
+  
+<livewire:borrower.borrower-dashboard />
+
+@elseif(auth()->user()->role=='super_admin')
+
+<livewire:admin.admin-dashboard />
+
+
+@endif 
 
 
 </x-app-layout>

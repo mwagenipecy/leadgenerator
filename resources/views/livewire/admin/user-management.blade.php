@@ -16,12 +16,7 @@
                         </svg>
                         Create User
                     </button>
-                    <button wire:click="openCreateLenderModal" class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
-                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                        </svg>
-                        Create Lender
-                    </button>
+                    
                 </div>
             </div>
         </div>
@@ -164,9 +159,10 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Role</label>
                     <select wire:model.live="roleFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                         <option value="">All Roles</option>
-                        <option value="admin">Admin</option>
-                        <option value="lender">Lender</option>
-                        <option value="user">Borrower</option>
+                            @foreach($roles as $role)
+                                    <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+                            @endforeach
+                              
                     </select>
                 </div>
 
@@ -422,8 +418,12 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">User Role *</label>
                             <select wire:model="role" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                 <option value="user">Borrower</option>
-                                <option value="lender">Lender</option>
-                                <option value="admin">Administrator</option>
+
+                                @foreach($roles as $role)
+                                        <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+                                @endforeach
+
+
                             </select>
                             @error('role') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
@@ -477,126 +477,7 @@
         </div>
     @endif
 
-    <!-- Create Lender Modal -->
-    @if($showCreateLenderModal)
-        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showCreateLenderModal', false)">
-            <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-3xl bg-white">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-2xl font-bold text-gray-900">Create New Lender</h3>
-                    <button wire:click="$set('showCreateLenderModal', false)" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <form wire:submit.prevent="createLender" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Company Information -->
-                        <div class="md:col-span-2">
-                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Company Information</h4>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
-                            <input wire:model="company_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('company_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">License Number</label>
-                            <input wire:model="license_number" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('license_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Contact Person *</label>
-                            <input wire:model="contact_person" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('contact_person') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                            <input wire:model="lender_email" type="email" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('lender_email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
-                            <input wire:model="lender_phone" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('lender_phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
-                            <input wire:model="website" type="url" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('website') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Address Information -->
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
-                            <textarea wire:model="address" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
-                            @error('address') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
-                            <input wire:model="city" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('city') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Region *</label>
-                            <input wire:model="region" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('region') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                            <input wire:model="postal_code" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('postal_code') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                            <textarea wire:model="description" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="Brief description of the lending institution..."></textarea>
-                            @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <!-- Account Credentials -->
-                        <div class="md:col-span-2">
-                            <h4 class="text-lg font-semibold text-gray-900 mb-4 mt-6">Account Credentials</h4>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Password *</label>
-                            <input wire:model="lender_password" type="password" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('lender_password') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password *</label>
-                            <input wire:model="lender_password_confirmation" type="password" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('lender_password_confirmation') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="flex justify-end space-x-4 pt-6">
-                        <button type="button" wire:click="$set('showCreateLenderModal', false)" 
-                            class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
-                            Create Lender
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    @endif
+  
 
     <!-- Edit User Modal -->
     @if($showEditUserModal && $selectedUser)
@@ -701,7 +582,20 @@
                 </form>
             </div>
         </div>
+
+
+
     @endif
 </div>
+
+
+
+
+
+
+
+
+
+
 
 </div>

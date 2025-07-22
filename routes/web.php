@@ -1,10 +1,13 @@
 <?php
 
+
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\LenderManagementController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductManagementController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SystemSettingController;
 use App\Http\Controllers\TRAController;
 use App\Http\Controllers\UserManagementController;
@@ -26,26 +29,14 @@ Route::get('/', function () {return view('welcome');});
     Route::get('register',[OnboardingController::class,'registerNewUser'])->name('user.register');
 
 Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), ])->group(function () {
-
     Route::group(['prefix'=>'onboarding'],function(){
-
-
-
     Route::get('verification/option',[OnboardingController::class,'verificationOption'])->name('verification.options');
     Route::get('/verification/phone-photo', [OnboardingController::class,'phoneVerification'])->name('verification.phone-photo');
-
     Route::get('/verification/phone-photo_', [OnboardingController::class,'phoneVerificationByLink'])->name('verification.phone-photo.link');
-
-    
     Route::get('/verification/qr-code', [OnboardingController::class,'qrCodeVerification'])->name('verification.qr-code');
     Route::get('/verification/questionnaire', function() { return view('verification.questionnaire'); })->name('verification.questionnaire');
-    
-
-
     });
-
 });
-
 
 
 Route::get('/verify-token/{token}', function ($token) {
@@ -96,10 +87,6 @@ Route::get('/verification-status/{token}', function ($token) {
 });
 
 
-
-
-
-
 Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified',])->group(function () {
 
    
@@ -121,6 +108,12 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
 
 
+      /*********************************** USER  PROFILE ***********************/
+      Route::group(['prefix'=> 'user'], function () {
+        Route::get('profile',[ProfileController::class,'viewProfile'])->name('user.profile');
+        Route::get('setting',[ProfileController::class,'userSetting'])->name('user.setting');
+    
+       });
 
 
     /*********************************** USERMANAGEMENT ****************************************/
@@ -143,6 +136,14 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     Route::get('taxpayer-verification',[TRAController::class,'taxpayerVerification'])->name('taxpayer.verification');
    Route::get('motor-vehicle-verification',[TRAController::class,'motorVehicleVerification'])->name('motor.vehicle.verification');
 
+
+
+   /********************************** BILLING SECTION  ***************************************/
+   Route::get('billing-section',[BillingController::class,'billingSection'])->name('billing.section');
+
+
+
+
     Route::get('/verification', VerificationMethodSelector::class)->name('verification.method');
     
     // Individual verification method pages
@@ -158,11 +159,7 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
 });
 
-
-
 Route::get('/mobile/verify/{token}', [NidaVerificationController::class, 'showMobileVerification'])->name('mobile.verification');
-
-
 
 
 Route::get('test',function(){
@@ -182,6 +179,10 @@ Route::get('test',function(){
          return view('nida');
 });
 
+
+
+// <!-- <livewire:dashboard.admin-dashboard /> -->
+// <!-- <livewire:borrower.borrower-dashboard /> -->
 
 
 

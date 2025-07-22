@@ -34,6 +34,14 @@ return new class extends Migration
             $table->enum('verification_status', ['pending', 'verified', 'failed'])->default('pending');
             $table->date('date_of_birth')->nullable();
 
+
+
+            $table->integer('role_level')->default(1);
+            $table->json('permissions_cache')->nullable(); // Cache computed permissions
+            $table->timestamp('permissions_updated_at')->nullable();
+      
+
+
             
             $table->timestamps();
         });
@@ -62,5 +70,17 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['role_level', 'permissions_cache', 'permissions_updated_at']);
+        });
+        
+        Schema::dropIfExists('user_permissions');
+        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('role_permissions');
+        Schema::dropIfExists('roles');
+        Schema::dropIfExists('permissions');
+
     }
 };

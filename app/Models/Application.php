@@ -31,7 +31,7 @@ class Application extends Model
         'collateral_offered', 'guarantors', 'preferred_disbursement_method', 
         'matching_products', 'rejection_reasons', 'notes', 'submitted_at', 
         'reviewed_at', 'approved_at', 'disbursed_at', 'reviewed_by', 'ip_address', 
-        'user_agent', 'application_source'
+        'user_agent', 'application_source','booking_status'
     ];
 
     protected $casts = [
@@ -68,6 +68,13 @@ class Application extends Model
     {
         return $this->hasMany(CreditInfoRequest::class, 'loan_id');
     }
+
+
+    public function commissionBills()
+{
+    return $this->hasMany(CommissionBill::class, 'application_id');
+}
+
 
 
 
@@ -477,4 +484,69 @@ class Application extends Model
 
         return (int) (($filledFields / count($requiredFields)) * 100);
     }
+
+
+
+    public function commissionBill()
+    {
+        return $this->hasOne(CommissionBill::class);
+    }
+
+    // Scopes
+    public function scopeBooked($query)
+    {
+        return $query->where('booking_status', 'booked');
+    }
+
+    public function scopeUnbooked($query)
+    {
+        return $query->where('booking_status', 'unbooked');
+    }
+
+  
+
+    public function scopeBookedAndApproved($query)
+    {
+        return $query->where('booking_status', 'booked')
+                    ->where('status', 'approved');
+    }
+
+    public function scopePendingBilling($query)
+    {
+        return $query->where('booking_status', 'booked')
+                    ->where('status', 'approved')
+                    ->whereDoesntHave('commissionBill');
+    }
+
+  
+
+    public function getHasBillAttribute(): bool
+    {
+        return $this->commissionBill()->exists();
+    }
+
+    public function getCanCreateBillAttribute(): bool
+    {
+        return $this->booking_status === 'booked' 
+            && $this->status === 'approved' 
+            && !$this->has_bill;
+    }
+
+    // Mutators
+    public function markAsBooked(): void
+    {
+        $this->update(['booking_status' => 'booked']);
+    }
+
+    public function markAsUnbooked(): void
+    {
+        $this->update(['booking_status' => 'unbooked']);
+    }
+
+    // Boot method for auto-generating application number
+
+   
+
+  
+
 }

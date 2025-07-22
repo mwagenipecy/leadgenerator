@@ -153,7 +153,7 @@ class LoanProductManagement extends Component
 
         if ($this->currentStep === 'list') {
             // Get lender ID from authenticated user
-            $lenderId = 1 ; //auth()->user()->lender?->id;
+            $lenderId = auth()->user()->lender?->id;
             
             if ($lenderId) {
                 $products = LoanProduct::where('lender_id', $lenderId)
@@ -317,11 +317,12 @@ class LoanProductManagement extends Component
 
         $data = $this->getProductData();
         $data['lender_id'] = $lender->id;
-
         if ($this->currentStep === 'edit' && $this->selectedProduct) {
             $this->selectedProduct->update($data);
             session()->flash('message', 'Loan product updated successfully!');
         } else {
+
+         //   dd($this->currentStep , $this->selectedProduct);
             LoanProduct::create($data);
             session()->flash('message', 'Loan product created successfully!');
         }
@@ -471,6 +472,8 @@ class LoanProductManagement extends Component
         $this->terms_and_conditions = $product->terms_and_conditions;
         $this->eligibility_criteria = $product->eligibility_criteria;
         $this->is_active = $product->is_active;
+
+        $this->loan_type= $product->loan_type ?? 'personal'; // Default to 'personal' if not set
 
         // Load arrays
         $this->key_features = $product->key_features ?? [];

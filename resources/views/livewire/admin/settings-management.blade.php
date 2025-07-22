@@ -520,13 +520,13 @@
                                         <div class="text-sm text-gray-900">
                                             Min: {{ $system_currency }} {{ number_format($commission->minimum_amount) }}
                                         </div>
-                                        @if($commission->maximum_amount)
-                                            <div class="text-xs text-gray-500">
-                                                Max: {{ $system_currency }} {{ number_format($commission->maximum_amount) }}
-                                            </div>
-                                        @else
-                                            <div class="text-xs text-gray-500">No maximum limit</div>
-                                        @endif
+                                <!-- @if(!is_null($commission->maximum_amount))
+                                <div class="text-xs text-gray-500">
+                                    Max: {{ $system_currency }} {{ number_format($commission->maximum_amount) }}
+                                </div>
+                            @else
+                                <div class="text-xs text-gray-500">No maximum limit</div>
+                            @endif -->
                                     </td>
                                     <td class="px-6 py-6 whitespace-nowrap">
                                         <button wire:click="toggleLenderStatus({{ $commission->lender_id }})"
