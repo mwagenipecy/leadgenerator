@@ -13,7 +13,7 @@
                     <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                     <span class="text-sm font-medium text-green-700">{{ $stats['pending'] }} Pending Review</span>
                 </div>
-                <button wire:click="showAddLenderForm" class="bg-brand-red text-white px-6 py-2 rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25">
+                <button wire:click="showAddLenderForm" class="bg-brand-red text-white px-6 py-2 rounded-lg font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-sm shadow-brand-red/25">
                     + Add Lender
                 </button>
             </div>
@@ -47,7 +47,7 @@
     <!-- Statistics Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Total Lenders -->
-    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 group">
+    <div class="bg-white rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
         <div class="flex items-center justify-between">
             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Pending -->
-    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 group">
+    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
         <div class="flex items-center justify-between">
             <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Approved -->
-    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 group">
+    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
         <div class="flex items-center justify-between">
             <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,7 +92,7 @@
     </div>
 
     <!-- Rejected -->
-    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 group">
+    <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
         <div class="flex items-center justify-between">
             <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,6 +108,46 @@
 
     
 </div>
+
+
+
+
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Search -->
+                <div class="lg:col-span-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Lenders</label>
+                    <div class="relative">
+                        <input wire:model.live="search" type="text" placeholder="Search by name, email..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Status Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+                    <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        <option value="">All Statuses</option>
+
+                        @foreach ($lender_status  as  $status)
+ 
+                        <option value="{{ $status }}">{{ $status }}</option>
+
+
+                        @endforeach
+
+
+
+                    </select>
+                </div>
+
+              
+            </div>
+        </div>
+
+
 
 
   
@@ -145,7 +185,7 @@
                                         <span class="text-white text-sm font-bold">{{ substr($lender->company_name, 0, 2) }}</span>
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-bold text-gray-900 group-hover:text-brand-red transition-colors">{{ $lender->company_name }}</div>
+                                        <a href="{{ route('lender.dashboard',$lender) }}" class="text-sm font-bold text-gray-900 group-hover:text-brand-red transition-colors">{{ $lender->company_name }}</a>
                                         <div class="text-xs text-gray-500">{{ $lender->license_number ?? 'No License' }}</div>
                                         <div class="text-xs text-blue-600 font-medium mt-1">{{ $lender->contact_person }}</div>
                                     </div>
@@ -495,7 +535,7 @@
                         <button type="button" wire:click="hideAddLenderForm" class="px-6 py-3 text-gray-600 bg-gray-100 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
                             Cancel
                         </button>
-                        <button type="submit" class="px-6 py-3 bg-brand-red text-white rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25">
+                        <button type="submit" class="px-6 py-3 bg-brand-red text-white rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-sm shadow-brand-red/25">
                             Submit Application
                         </button>
                     </div>

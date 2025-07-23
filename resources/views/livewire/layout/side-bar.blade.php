@@ -16,13 +16,15 @@
                 <p class="text-red-200 text-xs font-medium mt-0.5 hidden sm:block">Advanced Analytics</p>
             </div>
         </div>
-    </div>
+   </div>
 
     <!-- Navigation Menu - Enhanced Mobile -->
     <nav class="mt-4 sm:mt-8 px-3 sm:px-4 pb-4 overflow-y-auto max-h-[calc(100vh-200px)]">
         <div class="space-y-2 sm:space-y-3">
             <!-- Dashboard - Active -->
-            <a href="{{ route('dashboard') }}" class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('dashboard*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg">
+            <a href="{{ route('dashboard') }}"
+             class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('dashboard*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg"
+             >
                 <svg class="mr-4 h-5 w-5 {{ request()->routeIs('dashboard.*') ? '' : 'group-hover:text-brand-red' }} transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"/> 
@@ -154,8 +156,10 @@
 
       @if(auth()->user()->role=='super_admin')
 
-        <a href="{{ route('user.management') }}" class="group flex items-center px-3 sm:px-5 py-3 sm:py-4 text-sm font-medium text-gray-300 rounded-xl sm:rounded-2xl hover:bg-sidebar-gray hover:text-white transition-all duration-200 hover:shadow-lg">
-            <svg class="mr-3 sm:mr-4 h-4 w-4 sm:h-5 sm:w-5 group-hover:text-brand-red transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="{{ route('user.management') }}" 
+        class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('user*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg"
+        >
+            <svg class="mr-3 sm:mr-4 h-4 w-4 {{ request()->routeIs('user.*') ? '' : 'group-hover:text-brand-red' }} transition-colors " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
             </svg>
             <span class="truncate flex-1">User Management</span>
@@ -166,7 +170,8 @@
 
 
             <!-- Lender Management -->
-            <a href="{{ route('lenders.index') }}" class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('lenders.*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg">
+            <a href="{{ route('lenders.index') }}"
+             class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('lenders.*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg">
                 <svg class="mr-4 h-5 w-5 {{ request()->routeIs('lenders.*') ? '' : 'group-hover:text-brand-red' }} transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
@@ -210,7 +215,9 @@
             @else
 
             <!-- Integration -->
-            <a href="{{ route('webhook.integration') }}" class="group flex items-center px-3 sm:px-5 py-3 sm:py-4 text-sm font-medium text-gray-300 rounded-xl sm:rounded-2xl hover:bg-sidebar-gray hover:text-white transition-all duration-200 hover:shadow-lg">
+            <a href="{{ route('webhook.integration') }}" 
+            class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('webhook*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg"
+            >
                 <svg class="mr-3 sm:mr-4 h-4 w-4 sm:h-5 sm:w-5 group-hover:text-brand-red transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
@@ -223,7 +230,9 @@
 
 
             <!-- Settings -->
-            <a href="{{ route('system.settings') }}" class="group flex items-center px-3 sm:px-5 py-3 sm:py-4 text-sm font-medium text-gray-300 rounded-xl sm:rounded-2xl hover:bg-sidebar-gray hover:text-white transition-all duration-200 hover:shadow-lg">
+            <a href="{{ route('system.settings') }}" 
+            class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('system*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg"
+            >
                 <svg class="mr-3 sm:mr-4 h-4 w-4 sm:h-5 sm:w-5 group-hover:text-brand-red transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -233,7 +242,9 @@
 
 
 
-            <a href="{{ route('billing.section') }}" class="group flex items-center px-3 sm:px-5 py-3 sm:py-4 text-sm font-medium text-gray-300 rounded-xl sm:rounded-2xl hover:bg-sidebar-gray hover:text-white transition-all duration-200 hover:shadow-lg">
+            <a href="{{ route('billing.section') }}" 
+            class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('billing*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg"
+            >
                 <svg class="mr-3 sm:mr-4 h-4 w-4 sm:h-5 sm:w-5 group-hover:text-brand-red transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

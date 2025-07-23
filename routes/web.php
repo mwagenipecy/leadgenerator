@@ -16,12 +16,156 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NidaVerificationController;
 use App\Livewire\VerificationMethodSelector;
 use App\Livewire\PhonePhotoVerification;
+use App\Livewire\Lender\Dashboard;
 use App\Livewire\QrCodeVerification;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\OtpController;
+use App\Http\Middleware\CheckPermissions;
+
+
+use App\Services\OtpService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+
+use App\Livewire\NoPermissions;
+
+
+
+
+Route::get('/no-permissions', NoPermissions::class)
+    ->name('no-permissions')
+    ->middleware('auth');
 
 
 // LANDING PAGE
 Route::get('/', function () {return view('welcome');});
+
+
+
+
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    // Login form
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+
+    // Handle login submission
+    Route::post('/login', function (Request $request) {
+        $request->validate([
+            'login' => 'required',
+            'password' => 'required',
+        ]);
+
+
+        $login_type = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+
+       // $credentials = $request->only('email', 'password');
+
+        $credentials = [
+            $login_type => $request->input('login'),
+            'password' => $request->input('password'),
+        ];
+
+
+        $remember = $request->boolean('remember');
+
+        Log::info('Login attempt', ['login' =>$request->input('login')]);
+
+        // Attempt authentication
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+            
+            Log::info('Authentication successful, starting OTP flow', [
+                'user_id' => $user->id,
+                'email' => $user->email
+            ]);
+
+            // Regenerate session for security
+            $request->session()->regenerate();
+
+            // Store user before logout
+            $userId = $user->id;
+            $userModel = $user;
+
+            // Immediately log out for OTP verification
+            Auth::logout();
+
+            // Clear any previous OTP verification
+            Session::forget('otp_verified');
+
+            // Store user info for OTP process
+            Session::put('otp_user_id', $userId);
+            Session::put('login_timestamp', now()->timestamp);
+
+            // Generate and send OTP
+            $otpService = app(OtpService::class);
+            if ($otpService->generateAndSendOtp($userModel)) {
+                Log::info('OTP sent successfully, redirecting to OTP page', ['user_id' => $userId]);
+                
+                return redirect()->route('otp.show')
+                    ->with('success', 'Please check your email for the verification code.');
+            } else {
+                Log::error('Failed to send OTP', ['user_id' => $userId]);
+                
+                // Clean up session if OTP fails
+                Session::forget(['otp_user_id', 'login_timestamp']);
+                
+                return back()->withErrors([
+                    'email' => 'Failed to send verification code. Please try again.',
+                ])->withInput($request->except('password'));
+            }
+        }
+
+        Log::warning('Authentication failed', ['email' => $credentials['email']]);
+
+        throw ValidationException::withMessages([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    });
+
+    // OTP verification routes
+    Route::get('/otp', [OtpController::class, 'show'])->name('otp.show');
+    Route::post('/otp/verify', [OtpController::class, 'verify'])->name('otp.verify');
+    Route::post('/otp/resend', [OtpController::class, 'resend'])->name('otp.resend');
+});
+
+
+
+// Logout route
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->middleware('auth')->name('logout');
+
+
+
+// Protected routes
+Route::middleware(['auth', 'otp.required'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    
+    Route::get('/profile', function () {
+        return view('profile.show');
+    })->name('profile.show');
+});
+
+
+
+
+
+// Route::middleware(['guest'])->group(function () {
+//     Route::get('/otp', [OtpController::class, 'show'])->name('otp.show');
+//     Route::post('/otp/verify', [OtpController::class, 'verify'])->name('otp.verify');
+//     Route::post('/otp/resend', [OtpController::class, 'resend'])->name('otp.resend');
+// });
 
 
 
@@ -96,6 +240,7 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
     /// lender managenent section
     Route::get('lender-list',[LenderManagementController::class,'index'])->name('lenders.index');
+    Route::get('lenders/{lender}/dashboard', [LenderManagementController::class,'viewLender'])->name('lender.dashboard');
 
     // Loan product management
     Route::get('loan-product',[LoanProductManagementController::class,'index'])->name('loan.product.index');
@@ -164,25 +309,10 @@ Route::get('/mobile/verify/{token}', [NidaVerificationController::class, 'showMo
 
 Route::get('test',function(){
 
-   // return view('login');
-   // return view('dome3');
-     //  return view('demo');
-           //  return view('demo2'); //kaliii
-
-    //return view('welcome');
-      // return view('login2');
-       // return view('onboarding');
-
-      //  return view('pages.onboarding.register');
-
-      //  return view('dashboard3');
          return view('nida');
 });
 
 
-
-// <!-- <livewire:dashboard.admin-dashboard /> -->
-// <!-- <livewire:borrower.borrower-dashboard /> -->
 
 
 

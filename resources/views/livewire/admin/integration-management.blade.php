@@ -14,7 +14,7 @@
                         <span class="text-sm font-medium text-blue-700">Webhooks Active</span>
                     </div>
                     <button wire:click="openCreateModal" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                            class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
@@ -26,7 +26,7 @@
 
         <!-- Flash Messages -->
         @if (session()->has('message'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-3xl mb-6 flex items-center space-x-3">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
@@ -35,7 +35,7 @@
         @endif
 
         @if (session()->has('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-3xl mb-6 flex items-center space-x-3">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -44,14 +44,14 @@
         @endif
 
         <!-- Filters -->
-        <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Search -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Search Integrations</label>
                     <div class="relative">
                         <input wire:model.live="search" type="text" placeholder="Search by name, API name, or URL..." 
-                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
                         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
@@ -61,7 +61,7 @@
                 <!-- Status Filter -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
-                    <select wire:model.live="status_filter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    <select wire:model.live="status_filter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                         <option value="">All Statuses</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -71,11 +71,11 @@
                 <!-- Quick Stats -->
                 <div class="flex items-end">
                     <div class="grid grid-cols-2 gap-4 w-full">
-                        <div class="text-center p-3 bg-green-50 rounded-xl">
+                        <div class="text-center p-3 bg-green-50 rounded-lg">
                             <div class="text-2xl font-bold text-green-600">{{ $integrations->where('is_active', true)->count() }}</div>
                             <div class="text-xs text-green-600">Active</div>
                         </div>
-                        <div class="text-center p-3 bg-gray-50 rounded-xl">
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
                             <div class="text-2xl font-bold text-gray-600">{{ $integrations->total() }}</div>
                             <div class="text-xs text-gray-600">Total</div>
                         </div>
@@ -85,7 +85,7 @@
         </div>
 
         <!-- Integrations Table -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex items-center justify-between">
                     <div>
@@ -114,13 +114,13 @@
                             <tr class="hover:bg-gray-50 transition-colors duration-200 group">
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-md">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-gray-800 to-red-600 rounded-2xl flex items-center justify-center shadow-md">
                                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                             </svg>
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ $integration->name }}</div>
+                                            <div class="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ $integration->name }}</div>
                                             <div class="text-xs text-gray-500">API: {{ $integration->api_name }}</div>
                                             @if($integration->description)
                                                 <div class="text-xs text-gray-400 mt-1">{{ Str::limit($integration->description, 50) }}</div>
@@ -161,29 +161,29 @@
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
                                         <button wire:click="openTestModal({{ $integration->id }})" 
-                                            class="text-green-600 hover:text-green-700 p-2 rounded-xl hover:bg-green-50 transition-all duration-200" 
+                                            class="text-green-600 hover:text-green-700 p-2 rounded-lg hover:bg-green-50 transition-all duration-200" 
                                             title="Test Integration">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
                                         </button>
                                         <button wire:click="openLogsModal({{ $integration->id }})" 
-                                            class="text-blue-600 hover:text-blue-700 p-2 rounded-xl hover:bg-blue-50 transition-all duration-200"
+                                            class="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-all duration-200"
                                             title="View Logs">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
                                         </button>
-                                        <button wire:click="openEditModal({{ $integration->id }})" 
-                                            class="text-yellow-600 hover:text-yellow-700 p-2 rounded-xl hover:bg-yellow-50 transition-all duration-200"
+                                        <!-- <button wire:click="openEditModal({{ $integration->id }})" 
+                                            class="text-yellow-600 hover:text-yellow-700 p-2 rounded-lg hover:bg-yellow-50 transition-all duration-200"
                                             title="Edit Integration">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
-                                        </button>
+                                        </button> -->
                                         <button wire:click="deleteIntegration({{ $integration->id }})" 
                                             onclick="return confirm('Are you sure you want to delete this integration? This action cannot be undone.')"
-                                            class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200"
+                                            class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
                                             title="Delete Integration">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -195,7 +195,7 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="px-8 py-12 text-center">
-                                    <div class="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                                    <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                                         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                         </svg>
@@ -203,7 +203,7 @@
                                     <h4 class="text-lg font-semibold text-gray-900 mb-2">No Integrations Found</h4>
                                     <p class="text-gray-500 mb-4">Create your first integration to start sending webhook data when offers are accepted.</p>
                                     <button wire:click="openCreateModal" 
-                                        class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
+                                        class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
                                         Create Your First Integration
                                     </button>
                                 </td>
@@ -225,7 +225,7 @@
     <!-- Create Integration Modal -->
     @if($showCreateModal)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showCreateModal', false)">
-            <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-3xl bg-white">
+            <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-lg bg-white">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-bold text-gray-900">Create New Integration</h3>
                     <button wire:click="$set('showCreateModal', false)" class="text-gray-400 hover:text-gray-600">
@@ -240,19 +240,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Integration Name *</label>
-                            <input wire:model.live="name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <input wire:model.live="name" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                             @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">API Name *</label>
-                            <input wire:model="api_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <input wire:model="api_name" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                             @error('api_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                            <textarea wire:model="description" rows="2" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                            <textarea wire:model="description" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
                         </div>
                     </div>
 
@@ -262,13 +262,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Webhook URL *</label>
-                                <input wire:model="webhook_url" type="url" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="https://your-api.com/webhook">
+                                <input wire:model="webhook_url" type="url" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="https://your-api.com/webhook">
                                 @error('webhook_url') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">HTTP Method</label>
-                                <select wire:model="http_method" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <select wire:model="http_method" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                     <option value="POST">POST</option>
                                     <option value="PUT">PUT</option>
                                     <option value="PATCH">PATCH</option>
@@ -277,7 +277,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Content Type</label>
-                                <select wire:model="content_type" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <select wire:model="content_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                     <option value="application/json">application/json</option>
                                     <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
                                 </select>
@@ -291,7 +291,7 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Authentication Type</label>
-                                <select wire:model.live="auth_type" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <select wire:model.live="auth_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                     <option value="none">None</option>
                                     <option value="basic">Basic Authentication</option>
                                     <option value="bearer">Bearer Token</option>
@@ -303,31 +303,31 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Username *</label>
-                                        <input wire:model="auth_username" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                        <input wire:model="auth_username" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                         @error('auth_username') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Password *</label>
-                                        <input wire:model="auth_password" type="password" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                        <input wire:model="auth_password" type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                         @error('auth_password') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                             @elseif($auth_type === 'bearer')
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Bearer Token *</label>
-                                    <input wire:model="auth_token" type="password" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    <input wire:model="auth_token" type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                     @error('auth_token') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
                             @elseif($auth_type === 'api_key')
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Header Name *</label>
-                                        <input wire:model="api_key_header" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="X-API-Key">
+                                        <input wire:model="api_key_header" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="X-API-Key">
                                         @error('api_key_header') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">API Key *</label>
-                                        <input wire:model="api_key_value" type="password" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                        <input wire:model="api_key_value" type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                         @error('api_key_value') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -339,7 +339,7 @@
                     <div class="border-t pt-6">
                         <div class="flex items-center justify-between mb-4">
                             <h4 class="text-lg font-semibold text-gray-900">Field Mappings</h4>
-                            <button type="button" wire:click="addFieldMapping" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors">
+                            <button type="button" wire:click="addFieldMapping" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
                                 Add Field
                             </button>
                         </div>
@@ -379,11 +379,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Timeout (seconds)</label>
-                                <input wire:model="timeout_seconds" type="number" min="5" max="300" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <input wire:model="timeout_seconds" type="number" min="5" max="300" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Retry Attempts</label>
-                                <input wire:model="retry_attempts" type="number" min="0" max="10" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <input wire:model="retry_attempts" type="number" min="0" max="10" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                             </div>
                             <div class="flex items-end">
                                 <label class="flex items-center">
@@ -403,11 +403,11 @@
                     <!-- Action Buttons -->
                     <div class="flex justify-end space-x-4 pt-6 border-t">
                         <button type="button" wire:click="$set('showCreateModal', false)" 
-                            class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                            class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                             Cancel
                         </button>
                         <button type="submit" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
+                            class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
                             Create Integration
                         </button>
                     </div>
@@ -419,7 +419,7 @@
     <!-- Test Integration Modal -->
     @if($showTestModal && $selectedIntegration)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showTestModal', false)">
-            <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-3xl bg-white">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-lg bg-white">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-bold text-gray-900">Test Integration: {{ $selectedIntegration->name }}</h3>
                     <button wire:click="$set('showTestModal', false)" class="text-gray-400 hover:text-gray-600">
@@ -433,18 +433,22 @@
                     <!-- Test Configuration -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Test with Application (Optional)</label>
-                        <select wire:model="test_application_id" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        <select required wire:model="test_application_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
                             <option value="">Use sample data</option>
                             @foreach($recentApplications as $app)
                                 <option value="{{ $app->id }}">{{ $app->application_number }} - {{ $app->first_name }} {{ $app->last_name }}</option>
                             @endforeach
                         </select>
+
+                        @error('test_application_id') 
+                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Test Button -->
                     <div class="text-center">
                         <button wire:click="testIntegration" 
-                            class="bg-green-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors">
+                            class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
@@ -511,7 +515,7 @@
                 <!-- Close Button -->
                 <div class="flex justify-end pt-6 border-t">
                     <button wire:click="$set('showTestModal', false)" 
-                        class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                        class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                         Close
                     </button>
                 </div>
@@ -522,7 +526,7 @@
     <!-- Integration Logs Modal -->
     @if($showLogsModal && $selectedIntegration)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showLogsModal', false)">
-            <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-3xl bg-white">
+            <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-lg bg-white">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-bold text-gray-900">Integration Logs: {{ $selectedIntegration->name }}</h3>
                     <button wire:click="$set('showLogsModal', false)" class="text-gray-400 hover:text-gray-600">
@@ -594,7 +598,7 @@
                 <!-- Close Button -->
                 <div class="flex justify-end pt-6 border-t">
                     <button wire:click="$set('showLogsModal', false)" 
-                        class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                        class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                         Close
                     </button>
                 </div>

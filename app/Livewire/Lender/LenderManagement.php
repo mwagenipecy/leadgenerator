@@ -64,15 +64,23 @@ class LenderManagement extends Component
     public $showViewModal = false;
     public $selectedLender = null;
     public $search = '';
-    public $statusFilter = 'all';
-    public $regionFilter = 'all';
+    public $statusFilter = ''; // Fixed: empty string instead of 'all'
+    public $regionFilter = '';
     public $rejection_reason = '';
+
+    // Fixed: Match database enum values exactly
+    public $lender_status = [
+        'pending',
+        'approved', 
+        'rejected',
+        'suspended'
+    ];
 
     protected $paginationTheme = 'bootstrap';
 
     public function mount()
     {
-        //
+        
     }
 
     public function render()
@@ -83,13 +91,15 @@ class LenderManagement extends Component
                     $q->where('company_name', 'like', '%' . $this->search . '%')
                       ->orWhere('contact_person', 'like', '%' . $this->search . '%')
                       ->orWhere('email', 'like', '%' . $this->search . '%')
-                      ->orWhere('phone', 'like', '%' . $this->search . '%');
+                      ->orWhere('phone', 'like', '%' . $this->search . '%')
+                      ->orWhere('city', 'like', '%' . $this->search . '%')
+                      ->orWhere('region', 'like', '%' . $this->search . '%');
                 });
             })
-            ->when($this->statusFilter !== 'all', function ($query) {
+            ->when($this->statusFilter !== '', function ($query) { // Fixed: check for empty string
                 $query->where('status', $this->statusFilter);
             })
-            ->when($this->regionFilter !== 'all', function ($query) {
+            ->when($this->regionFilter !== '', function ($query) { // Fixed: check for empty string
                 $query->where('region', $this->regionFilter);
             })
             ->orderBy('created_at', 'desc')
@@ -168,6 +178,12 @@ class LenderManagement extends Component
     {
         $this->showViewModal = false;
         $this->selectedLender = null;
+    }
+
+    // New method to redirect to lender dashboard
+    public function viewLenderDashboard($id)
+    {
+        return redirect()->route('lender.dashboard', ['lender' => $id]);
     }
 
     public function approveLender($id)
@@ -277,10 +293,10 @@ class LenderManagement extends Component
     {
         return [
             'total' => Lender::count(),
-            'pending' => Lender::pending()->count(),
-            'approved' => Lender::approved()->count(),
-            'rejected' => Lender::rejected()->count(),
-            'suspended' => Lender::suspended()->count(),
+            'pending' => Lender::where('status', 'pending')->count(),
+            'approved' => Lender::where('status', 'approved')->count(),
+            'rejected' => Lender::where('status', 'rejected')->count(),
+            'suspended' => Lender::where('status', 'suspended')->count(),
         ];
     }
 
@@ -299,5 +315,3 @@ class LenderManagement extends Component
         $this->resetPage();
     }
 }
-
-

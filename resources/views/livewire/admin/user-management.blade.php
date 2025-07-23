@@ -10,7 +10,7 @@
                     <p class="text-gray-600 text-lg">Manage system users, create lenders, and control access</p>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button wire:click="openCreateUserModal" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg shadow-blue-600/25">
+                    <button wire:click="openCreateUserModal" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
@@ -23,7 +23,7 @@
 
         <!-- Flash Messages -->
         @if (session()->has('message'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-3xl mb-6 flex items-center space-x-3">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
@@ -32,7 +32,7 @@
         @endif
 
         @if (session()->has('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-3xl mb-6 flex items-center space-x-3">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -43,7 +43,7 @@
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Total Users Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-blue-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-blue-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                         <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Total Users</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalUsers) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalUsers) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Total Admins Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-purple-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-purple-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                         <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Administrators</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">{{ number_format($totalAdmins) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors">{{ number_format($totalAdmins) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -91,7 +91,7 @@
             </div>
 
             <!-- Total Lenders Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
                         <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +100,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Lender Users</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalLenders) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalLenders) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -115,7 +115,7 @@
             </div>
 
             <!-- Total Borrowers Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-green-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-green-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center group-hover:bg-green-200 transition-colors">
                         <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Borrower Users</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">{{ number_format($totalBorrowers) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors">{{ number_format($totalBorrowers) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -140,7 +140,7 @@
         </div>
 
         <!-- Filters and Search -->
-        <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- Search -->
                 <div class="lg:col-span-2">
@@ -190,7 +190,7 @@
         </div>
 
         <!-- Users Table -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex items-center justify-between">
                     <div>
@@ -223,7 +223,7 @@
                                             <div class="w-12 h-12 bg-gradient-to-br 
                                                 @if($user->role === 'admin') from-purple-500 to-purple-600
                                                 @elseif($user->role === 'lender') from-red-500 to-red-600
-                                                @else from-green-500 to-green-600
+                                                @else from-red-500 to-red-600
                                                 @endif rounded-2xl flex items-center justify-center shadow-md">
                                                 <span class="text-white text-sm font-bold">
                                                     {{ substr($user->first_name ?: $user->name, 0, 1) }}{{ substr($user->last_name ?: '', 0, 1) }}
@@ -333,7 +333,7 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="px-8 py-12 text-center">
-                                    <div class="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                                    <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                                         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                                         </svg>
@@ -359,7 +359,7 @@
     <!-- Create User Modal -->
     @if($showCreateUserModal)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showCreateUserModal', false)">
-            <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-3xl bg-white">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-lg bg-white">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-bold text-gray-900">Create New User</h3>
                     <button wire:click="$set('showCreateUserModal', false)" class="text-gray-400 hover:text-gray-600">
@@ -482,7 +482,7 @@
     <!-- Edit User Modal -->
     @if($showEditUserModal && $selectedUser)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showEditUserModal', false)">
-            <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-3xl bg-white">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-lg bg-white">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-2xl font-bold text-gray-900">Edit User</h3>
                     <button wire:click="$set('showEditUserModal', false)" class="text-gray-400 hover:text-gray-600">

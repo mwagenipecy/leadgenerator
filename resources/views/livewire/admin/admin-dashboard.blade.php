@@ -15,7 +15,7 @@
                         <span class="text-sm font-medium text-green-700">All Systems Operational</span>
                     </div>
                     <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl font-medium hover:bg-gray-50 transition-colors">
-                        Last 30 days
+                        {{ date('Y-M-d') }}
                     </button>
                 </div>
             </div>
@@ -23,7 +23,7 @@
 
         <!-- Flash Message -->
         @if (session()->has('message'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-3xl mb-6 flex items-center space-x-3">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
@@ -34,7 +34,7 @@
         <!-- Key Performance Metrics -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Total Lenders Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-blue-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-blue-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                         <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Total Lenders</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalLenders) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalLenders) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -58,7 +58,7 @@
             </div>
 
             <!-- Total Applications Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
                         <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Total Applications</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalApplications) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalApplications) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -82,7 +82,7 @@
             </div>
 
             <!-- Total Borrowers Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-green-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-green-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center group-hover:bg-green-200 transition-colors">
                         <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +91,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Total Borrowers</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">{{ number_format($totalBorrowers) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors">{{ number_format($totalBorrowers) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -106,7 +106,7 @@
             </div>
 
             <!-- Revenue Card -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-purple-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-purple-500/20">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                         <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Total Revenue</p>
-                        <p class="text-3xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">TSh {{ number_format($totalRevenue/1000000, 1) }}M</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors">TSh {{ number_format($totalRevenue/1000000, 1) }}M</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -130,18 +130,58 @@
             </div>
         </div>
 
-        <!-- Charts and Activity Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-7 gap-6 mb-8">
-            <!-- Applications Status Chart -->
-            <div class="lg:col-span-5 bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
+        <!-- Charts Section - Full Width -->
+        <div class="mb-8 space-y-6">
+            <!-- Monthly Applications Trend Chart -->
+            <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-100">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Monthly Application Trends</h3>
+                        <p class="text-gray-600">Application submissions and approvals throughout the year</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-red-600/25">Current Year</button>
+                        <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Export</button> -->
+                    </div>
+                </div>
+                <div class="h-96">
+                    <canvas id="monthlyTrendsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Application Status Distribution Chart -->
+            <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-8">
                     <div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-2">Application Status Distribution</h3>
-                        <p class="text-gray-600">Monitor loan application processing pipeline</p>
+                        <p class="text-gray-600">Current breakdown of all application statuses</p>
                     </div>
                     <div class="flex items-center space-x-3">
                         <button class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-red-600/25">Live View</button>
-                        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Export</button>
+                        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Refresh</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Pie Chart -->
+                    <div class="h-80">
+                        <canvas id="statusPieChart"></canvas>
+                    </div>
+                    <!-- Bar Chart -->
+                    <div class="h-80">
+                        <canvas id="statusBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity and Status Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-7 gap-6 mb-8">
+            <!-- Application Status List -->
+            <div class="lg:col-span-5 bg-white rounded-lg shadow-sm p-8 border border-gray-100">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Application Status Overview</h3>
+                        <p class="text-gray-600">Detailed breakdown with progress indicators</p>
                     </div>
                 </div>
                 <div class="space-y-4">
@@ -153,6 +193,7 @@
                                     @elseif($status === 'rejected') bg-red-500
                                     @elseif($status === 'under_review') bg-yellow-500
                                     @elseif($status === 'submitted') bg-blue-500
+                                    @elseif($status === 'disbursed') bg-purple-500
                                     @else bg-gray-500
                                     @endif">
                                 </div>
@@ -165,6 +206,7 @@
                                         @elseif($status === 'rejected') bg-red-500
                                         @elseif($status === 'under_review') bg-yellow-500
                                         @elseif($status === 'submitted') bg-blue-500
+                                        @elseif($status === 'disbursed') bg-purple-500
                                         @else bg-gray-500
                                         @endif" 
                                         style="width: {{ $totalApplications > 0 ? ($count / $totalApplications) * 100 : 0 }}%">
@@ -178,7 +220,7 @@
             </div>
 
             <!-- Recent Activity Feed -->
-            <div class="lg:col-span-2 bg-white rounded-3xl shadow-sm p-6 border border-gray-100">
+            <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-xl font-bold text-gray-900">Live Activity</h3>
                     <div class="flex items-center space-x-2">
@@ -207,7 +249,7 @@
 
         <!-- Pending Lender Approvals -->
         @if($pendingLenders > 0)
-            <div class="mb-8 bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="mb-8 bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                     <div class="flex items-center justify-between">
                         <div>
@@ -228,7 +270,7 @@
                                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Contact Details</th>
                                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Registration Date</th>
                                 <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">License</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                                <!-- <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th> -->
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
@@ -264,7 +306,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-6 whitespace-nowrap">
+                                    <!-- <td class="px-6 py-6 whitespace-nowrap">
                                         <div class="flex items-center space-x-2">
                                             <button wire:click="approveLender({{ $lender->id }})" 
                                                 class="bg-green-600 text-white px-4 py-2 rounded-xl font-medium text-sm hover:bg-green-700 transition-colors">
@@ -275,7 +317,7 @@
                                                 Reject
                                             </button>
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             @endforeach
                         </tbody>
@@ -285,7 +327,7 @@
         @endif
 
         <!-- Recent Applications Table -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex items-center justify-between">
                     <div>
@@ -311,7 +353,7 @@
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Lender</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                            <!-- <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
@@ -346,6 +388,7 @@
                                         @elseif($application->status === 'rejected') bg-red-100 text-red-800 border border-red-200
                                         @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800 border border-yellow-200
                                         @elseif($application->status === 'submitted') bg-blue-100 text-blue-800 border border-blue-200
+                                        @elseif($application->status === 'disbursed') bg-purple-100 text-purple-800 border border-purple-200
                                         @else bg-gray-100 text-gray-800 border border-gray-200
                                         @endif">
                                         @if($application->status === 'approved')
@@ -356,6 +399,10 @@
                                             <svg class="w-3 h-3 mr-1.5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
+                                        @elseif($application->status === 'disbursed')
+                                            <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                            </svg>
                                         @endif
                                         {{ ucfirst(str_replace('_', ' ', $application->status)) }}
                                     </span>
@@ -364,7 +411,7 @@
                                     <div class="text-sm font-medium text-gray-900">{{ $application->created_at->format('M d, Y') }}</div>
                                     <div class="text-xs text-gray-500">{{ $application->created_at->format('g:i A') }}</div>
                                 </td>
-                                <td class="px-6 py-6 whitespace-nowrap">
+                                <!-- <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
                                         <button class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,12 +425,12 @@
                                             </svg>
                                         </button>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="6" class="px-8 py-12 text-center">
-                                    <div class="w-20 h-20 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                                    <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                                         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                         </svg>
@@ -399,5 +446,287 @@
         </div>
     </div>
 </div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Monthly Trends Chart
+    const monthlyTrendsCtx = document.getElementById('monthlyTrendsChart').getContext('2d');
+    const monthlyTrendsChart = new Chart(monthlyTrendsCtx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($monthlyLabels) !!},
+            datasets: [
+                {
+                    label: 'Total Applications',
+                    data: {!! json_encode($monthlyApplications) !!},
+                    borderColor: 'rgb(239, 68, 68)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: 'rgb(239, 68, 68)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                },
+                {
+                    label: 'Approved',
+                    data: {!! json_encode($monthlyApproved) !!},
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: 'rgb(34, 197, 94)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                },
+                {
+                    label: 'Rejected',
+                    data: {!! json_encode($monthlyRejected) !!},
+                    borderColor: 'rgb(156, 163, 175)',
+                    backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: 'rgb(156, 163, 175)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                },
+                {
+                    label: 'Disbursed',
+                    data: {!! json_encode($monthlyDisbursed) !!},
+                    borderColor: 'rgb(147, 51, 234)',
+                    backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: 'rgb(147, 51, 234)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        color: '#6B7280'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(156, 163, 175, 0.2)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        color: '#6B7280'
+                    }
+                }
+            }
+        }
+    });
+
+    // Status Pie Chart
+    const statusPieCtx = document.getElementById('statusPieChart').getContext('2d');
+    const statusPieChart = new Chart(statusPieCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($statusLabels) !!},
+            datasets: [{
+                data: {!! json_encode($statusData) !!},
+                backgroundColor: [
+                    'rgb(59, 130, 246)',   // submitted - blue
+                    'rgb(239, 68, 68)',    // under_review - red  
+                    'rgb(34, 197, 94)',    // approved - green
+                    'rgb(156, 163, 175)',  // rejected - gray
+                    'rgb(147, 51, 234)'    // disbursed - purple
+                ],
+                borderWidth: 0,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        padding: 15
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            const percentage = ((context.parsed / {!! $totalApplications !!}) * 100).toFixed(1);
+                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Status Bar Chart
+    const statusBarCtx = document.getElementById('statusBarChart').getContext('2d');
+    const statusBarChart = new Chart(statusBarCtx, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($statusLabels) !!},
+            datasets: [{
+                label: 'Applications',
+                data: {!! json_encode($statusData) !!},
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.8)',   // submitted - blue
+                    'rgba(239, 68, 68, 0.8)',    // under_review - red  
+                    'rgba(34, 197, 94, 0.8)',    // approved - green
+                    'rgba(156, 163, 175, 0.8)',  // rejected - gray
+                    'rgba(147, 51, 234, 0.8)'    // disbursed - purple
+                ],
+                borderColor: [
+                    'rgb(59, 130, 246)',   
+                    'rgb(239, 68, 68)',    
+                    'rgb(34, 197, 94)',    
+                    'rgb(156, 163, 175)',  
+                    'rgb(147, 51, 234)'    
+                ],
+                borderWidth: 2,
+                borderRadius: 8,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            const percentage = ((context.parsed.y / {!! $totalApplications !!}) * 100).toFixed(1);
+                            return context.label + ': ' + context.parsed.y + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        color: '#6B7280'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(156, 163, 175, 0.2)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        color: '#6B7280'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
 
 </div>

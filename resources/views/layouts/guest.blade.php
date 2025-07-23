@@ -56,5 +56,23 @@
             return emailRegex.test(email);
         }
     </script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we need to redirect to OTP after successful login
+    @if(Session::has('otp_redirect_needed'))
+        @if(Session::has('otp_user_id'))
+            console.log('Redirecting to OTP verification...');
+            window.location.href = '{{ route("otp.show") }}';
+        @endif
+        {{ Session::forget('otp_redirect_needed') }}
+    @endif
+});
+</script>
+
+
+
 </body>
 </html>

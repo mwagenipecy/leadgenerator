@@ -1,11 +1,5 @@
 <x-guest-layout>
     <x-authentication-card>
-      
-
-      
-
-
-
          <!-- Header -->
          <div class="text-center">
             <!-- Logo -->
@@ -36,7 +30,7 @@
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address
+                        Email or Phone Number 
                     </label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -46,10 +40,10 @@
                         </div>
                         <input 
                             id="email" 
-                            name="email" 
-                            type="email" 
-                            autocomplete="email" 
-                            :value="old('email')"
+                            name="login" 
+                            type="text" 
+                            autocomplete="login" 
+                            :value="old('login')"
                             required 
                             class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Enter your email"
@@ -165,7 +159,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Don't have an account? 
-                    <a href="#" class="font-medium text-brand-red hover:text-red-700 transition-colors">
+                    <a href="{{ route('user.register') }}" class="font-medium text-brand-red hover:text-red-700 transition-colors">
                         Sign up here
                     </a>
                 </p>
@@ -181,12 +175,6 @@
                 <span>Your data is protected with 256-bit SSL encryption</span>
             </div>
         </div>
-
-
-
-
-
-
 
     </x-authentication-card>
 </x-guest-layout>

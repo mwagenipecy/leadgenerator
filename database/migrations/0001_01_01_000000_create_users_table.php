@@ -28,13 +28,11 @@ return new class extends Migration
 
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phone')->unique()->nullable();
             $table->string('nida_number')->unique()->nullable();
             $table->timestamp('nida_verified_at')->nullable();
             $table->enum('verification_status', ['pending', 'verified', 'failed'])->default('pending');
             $table->date('date_of_birth')->nullable();
-
-
 
             $table->integer('role_level')->default(1);
             $table->json('permissions_cache')->nullable(); // Cache computed permissions

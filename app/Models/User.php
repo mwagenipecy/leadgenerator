@@ -81,6 +81,34 @@ class User extends Authenticatable
     }
 
 
+
+    public function otps()
+    {
+        return $this->hasMany(UserOtp::class);
+    }
+
+    /**
+     * Get the latest valid OTP for the user.
+     */
+    public function latestValidOtp()
+    {
+        return $this->otps()
+                    ->valid()
+                    ->latest()
+                    ->first();
+    }
+
+    /**
+     * Check if user has a valid OTP
+     */
+    public function hasValidOtp(): bool
+    {
+        return $this->otps()->valid()->exists();
+    }
+
+
+
+
     public function nidaVerification()
     {
         return $this->hasOne(NidaVerification::class);

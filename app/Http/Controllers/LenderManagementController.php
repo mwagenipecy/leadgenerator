@@ -10,4 +10,11 @@ class LenderManagementController extends Controller
 
         return view('pages.lenderManagement.index');
     }
+
+    public function viewLender($lender){
+
+        return view('pages.lenderManagement.viewLender', [
+            'lender' => $lender
+        ]);
+    }
 }

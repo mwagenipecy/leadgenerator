@@ -8,6 +8,7 @@ use App\Models\Lender;
 use App\Models\Application;
 use App\Models\LoanProduct;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AdminDashboard extends Component
 {
@@ -26,10 +27,20 @@ class AdminDashboard extends Component
     public $approvedApplications;
     public $rejectedApplications;
     public $conversionRate;
+    
+    // Chart data properties
+    public $monthlyLabels;
+    public $monthlyApplications;
+    public $monthlyApproved;
+    public $monthlyRejected;
+    public $monthlyDisbursed;
+    public $statusLabels;
+    public $statusData;
 
     public function mount()
     {
         $this->loadDashboardData();
+        $this->loadChartData();
     }
 
     public function loadDashboardData()
@@ -109,6 +120,59 @@ class AdminDashboard extends Component
         ]);
     }
 
+    public function loadChartData()
+    {
+        // Get current year for monthly trends
+        $currentYear = now()->year;
+        
+        // Generate monthly labels
+        $this->monthlyLabels = collect(range(1, 12))->map(function ($month) {
+            return Carbon::create(null, $month, 1)->format('M');
+        })->toArray();
+
+        // Monthly applications trend data
+        $monthlyStats = collect(range(1, 12))->map(function ($month) use ($currentYear) {
+            $startOfMonth = Carbon::create($currentYear, $month, 1)->startOfMonth();
+            $endOfMonth = Carbon::create($currentYear, $month, 1)->endOfMonth();
+
+            return [
+                'month' => $month,
+                'total' => Application::whereBetween('created_at', [$startOfMonth, $endOfMonth])->count(),
+                'approved' => Application::where('status', 'approved')
+                    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count(),
+                'rejected' => Application::where('status', 'rejected')
+                    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count(),
+                'disbursed' => Application::where('status', 'disbursed')
+                    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count(),
+            ];
+        });
+
+        $this->monthlyApplications = $monthlyStats->pluck('total')->toArray();
+        $this->monthlyApproved = $monthlyStats->pluck('approved')->toArray();
+        $this->monthlyRejected = $monthlyStats->pluck('rejected')->toArray();
+        $this->monthlyDisbursed = $monthlyStats->pluck('disbursed')->toArray();
+
+        // Status distribution data
+        $statusCounts = Application::select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+
+        // Define all possible statuses
+        $allStatuses = ['submitted', 'under_review', 'approved', 'rejected', 'disbursed'];
+        
+        $this->statusLabels = [];
+        $this->statusData = [];
+
+        foreach ($allStatuses as $status) {
+            $count = $statusCounts->get($status)?->count ?? 0;
+            if ($count > 0) { // Only include statuses with data
+                $this->statusLabels[] = ucfirst(str_replace('_', ' ', $status));
+                $this->statusData[] = $count;
+            }
+        }
+    }
+
     public function approveLender($lenderId)
     {
         $lender = Lender::find($lenderId);
@@ -119,6 +183,7 @@ class AdminDashboard extends Component
         ]);
         
         $this->loadDashboardData();
+        $this->loadChartData();
         session()->flash('message', 'Lender approved successfully!');
     }
 
@@ -131,6 +196,7 @@ class AdminDashboard extends Component
         ]);
         
         $this->loadDashboardData();
+        $this->loadChartData();
         session()->flash('message', 'Lender rejected.');
     }
 
@@ -140,7 +206,14 @@ class AdminDashboard extends Component
         $lender->update(['status' => 'suspended']);
         
         $this->loadDashboardData();
+        $this->loadChartData();
         session()->flash('message', 'Lender suspended.');
+    }
+
+    public function refreshCharts()
+    {
+        $this->loadChartData();
+        $this->dispatch('refreshCharts');
     }
 
     public function render()

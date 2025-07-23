@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Integration;
@@ -51,7 +52,10 @@ class IntegrationManagement extends Component
     public $custom_headers = [];
 
     // Testing
-    public $test_application_id = '';
+
+    #[Validate('required|string')]
+    public  $test_application_id = '';
+
     public $test_result = null;
 
     // Filters
