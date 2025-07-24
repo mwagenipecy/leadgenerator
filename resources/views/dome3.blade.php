@@ -1,757 +1,727 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Generator - Hero Section</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-   
-   
-    <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-   <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'brand-red': '#C40F12',
-                    },
-                    fontFamily: {
-                        'inter': ['Inter', 'sans-serif'],
-                        'poppins': ['Poppins', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Desktop diagonal effects */
-        @media (min-width: 768px) {
-            .diagonal-split {
-                clip-path: polygon(0 0, 65% 0, 50% 100%, 0 100%);
-            }
-            .diagonal-content {
-                clip-path: polygon(45% 0, 100% 0, 100% 100%, 60% 100%);
-            }
-        }
-        
-        /* Mobile - no diagonal, simple layout */
-        @media (max-width: 767px) {
-            .diagonal-split {
-                clip-path: none;
-                background: #1f2937 !important; /* Simple gray background */
-            }
-            .diagonal-content {
-                clip-path: none;
-                background: #f9fafb !important; /* Simple light background */
-            }
-            .mobile-simple {
-                background: none !important;
-            }
-        }
-        
-        .floating-animation {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-    </style>
-</head>
-<body class="bg-white text-gray-900 font-inter overflow-x-hidden">
-    <!-- Navigation -->
-    <nav class="bg-white/95 backdrop-blur-md py-4 sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="flex justify-between items-center">
-                <div class="text-xl lg:text-2xl font-bold text-black font-poppins">
-                    Lead<span class="text-brand-red">Generator</span>
+<div class="min-h-screen bg-gray-50">
+    <div class="p-4 sm:p-6 lg:p-8">
+        <!-- Mobile-First Header -->
+        <div class="mb-6 sm:mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2">My Loan Dashboard</h1>
+                    <p class="text-gray-600 text-sm sm:text-base lg:text-lg">Track your loan applications and manage your borrowing journey</p>
                 </div>
-                
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
-                    <a href="#about" class="text-gray-600 hover:text-brand-red transition-colors font-medium">About</a>
-                    <a href="#eligibility" class="text-gray-600 hover:text-brand-red transition-colors font-medium">Eligibility</a>
-                    <a href="#process" class="text-gray-600 hover:text-brand-red transition-colors font-medium">Process</a>
-                    <button class="bg-brand-red text-white px-6 py-2 rounded-md text-sm hover:bg-red-700 transition-all font-semibold">
-                        Get Started
-                    </button>
-                </div>
-                
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden p-2" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- Mobile Navigation -->
-            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-100">
-                <div class="space-y-3 pt-4">
-                    <a href="#about" class="block text-gray-600 hover:text-brand-red transition-colors font-medium">About</a>
-                    <a href="#eligibility" class="block text-gray-600 hover:text-brand-red transition-colors font-medium">Eligibility</a>
-                    <a href="#process" class="block text-gray-600 hover:text-brand-red transition-colors font-medium">Process</a>
-                    <button class="w-full text-left bg-brand-red text-white px-6 py-2 rounded-md text-sm hover:bg-red-700 transition-all font-semibold">
-                        Get Started
+                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                    <!-- NIDA Status Badge -->
+                    <div class="flex items-center space-x-2 bg-{{ $nidaVerificationStatus === 'verified' ? 'green' : 'red' }}-50 px-3 py-2 rounded-full">
+                        <div class="w-2 h-2 bg-{{ $nidaVerificationStatus === 'verified' ? 'green' : 'red' }}-500 rounded-full animate-pulse"></div>
+                        <span class="text-xs sm:text-sm font-medium text-{{ $nidaVerificationStatus === 'verified' ? 'green' : 'red' }}-700">
+                            {{ $nidaVerificationStatus === 'verified' ? 'NIDA Verified' : 'Verification Pending' }}
+                        </span>
+                    </div>
+                    <!-- Apply Button -->
+                    <button wire:click="applyForLoan" class="w-full sm:w-auto bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg text-sm sm:text-base">
+                        Apply for Loan
                     </button>
                 </div>
             </div>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center overflow-hidden">
-        <!-- Background Container - Hidden on mobile -->
-        <div class="absolute inset-0 hidden md:block">
-            <!-- Left Side - Text Background with Diagonal -->
-            <div class="diagonal-split absolute inset-0 bg-gradient-to-br from-black via-gray-800 to-brand-red"></div>
-            <!-- Right Side - Visual Background -->
-            <div class="diagonal-content absolute inset-0 bg-gradient-to-l from-gray-50 via-white to-transparent"></div>
-        </div>
+        <!-- Flash Messages -->
+        @if (session()->has('message'))
+            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center space-x-3">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span class="text-sm">{{ session('message') }}</span>
+            </div>
+        @endif
 
-        <!-- Content Container -->
-        <div class="relative z-10 w-full">
-            <div class="max-w-7xl mx-auto px-4 lg:px-8">
-                <!-- Mobile Layout - Simple Stacked -->
-                <div class="block md:hidden">
-                    <!-- Mobile Text Section -->
-                    <div class="bg-gray-800 text-white px-6 py-12 rounded-t-xl">
-                        <div class="text-center">
-                            <span class="inline-block bg-red-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
-                                Available Now
-
-
-                            </span>
-                            <h1 class="text-3xl font-bold font-poppins leading-tight mb-4">
-                                Get Your Perfect <span class="text-brand-red">Loan</span>
-                            </h1>
-                            <p class="text-lg text-gray-200 mb-2">
-                                Employment Status Doesn't Matter
-                            </p>
-                            <p class="text-gray-300 mb-8 leading-relaxed">
-                                Our verified lenders are ready to help you achieve your financial goals.
-                            </p>
-                            <div class="space-y-4">
-                                <button class="w-full bg-white text-black px-8 py-4 rounded-md text-lg font-semibold hover:bg-gray-100 transition-all">
-                                    Apply Now
-                                </button>
-                                <button class="w-full border-2 border-white/50 text-white px-8 py-4 rounded-md text-lg font-semibold hover:bg-white/10 transition-all">
-                                    Learn More
-                                </button>
-                            </div>
-                        </div>
+        <!-- Key Performance Metrics - Mobile Responsive Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <!-- Total Applications Card -->
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-black rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
                     </div>
-
-                    <!-- Mobile Visual Section -->
-                    <div class="bg-gray-50 px-6 py-12 rounded-b-xl">
-                        <div class="text-center">
-                            <!-- Simple Mobile Visual -->
-                            <div class="w-48 h-48 mx-auto rounded-full bg-white border-4 border-gray-200 flex items-center justify-center shadow-lg">
-                                <svg class="w-20 h-20 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                            </div>
-                            
-                            <!-- Simple Features -->
-                            <div class="mt-8 grid grid-cols-2 gap-4 max-w-xs mx-auto">
-                                <div class="text-center">
-                                    <div class="w-12 h-12 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-2">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-600">NIDA Verified</span>
-                                </div>
-                                <div class="text-center">
-                                    <div class="w-12 h-12 bg-black rounded-full flex items-center justify-center mx-auto mb-2">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-600">Fast Approval</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="text-right">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">Total Applications</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-black">{{ $totalApplications }}</p>
                     </div>
                 </div>
-
-                <!-- Desktop Layout - Diagonal Design -->
-                <div class="hidden md:grid grid-cols-2 gap-16 items-center min-h-screen py-20">
-                    
-                    <!-- Left Side - Text Content -->
-                    <div class="text-white pr-16">
-                        <!-- Badge -->
-                        <div class="mb-8">
-                            <span class="inline-block bg-red-600 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium uppercase tracking-wider border border-white/30">
-                                Available Now
-                            </span>
-                        </div>
-                        
-                        <!-- Main Headline -->
-                        <h1 class="font-bold font-poppins leading-tight mb-8">
-                            <span class="block text-5xl xl:text-6xl">
-                                Get Your
-                            </span>
-                            <span class="block text-5xl xl:text-6xl">
-                                Perfect <span class="text-red-600">Loan</span>
-                            </span>
-                            <span class="block text-2xl xl:text-3xl font-light text-gray-200 mt-2">
-                                Employment Status Doesn't Matter
-                            </span>
-                        </h1>
-                        
-                        <!-- Description -->
-                        <p class="text-lg xl:text-xl text-gray-200 mb-10 leading-relaxed max-w-lg">
-                            Whether you're employed, self-employed, or between jobs, 
-                            our verified lenders understand your unique situation and 
-                            are ready to help you achieve your financial goals.
-                        </p>
-                        
-                        <!-- Call to Action Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <button class="bg-white text-black px-8 py-4 rounded-md text-lg font-semibold hover:bg-gray-100 transition-all duration-300 flex items-center justify-center group">
-                                Apply Now
-                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                </svg>
-                            </button>
-                            <button class="border-2 border-white/50 text-white px-8 py-4 rounded-md text-lg font-semibold hover:bg-white/10 hover:border-white transition-all duration-300">
-                                Learn More
-                            </button>
-                        </div>
-                        
-                        <!-- Features List -->
-                        <div class="mt-12 grid grid-cols-2 gap-4 max-w-lg">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-sm text-gray-200">NIDA Verified</span>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-sm text-gray-200">Fast Approval</span>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-sm text-gray-200">Secure Platform</span>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-sm text-gray-200">Trusted Lenders</span>
-                            </div>
-                        </div>
+                <div class="flex items-center justify-between text-xs sm:text-sm">
+                    <div class="flex items-center space-x-1 text-red-600">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="font-semibold">{{ $pendingApplications }} pending</span>
                     </div>
-
-                    <!-- Right Side - Visual Content -->
-                    <div class="flex items-center justify-end">
-                        <div class="relative">
-                            <!-- Main Circle -->
-                            <div class="w-96 h-96 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 border-4 border-white shadow-2xl flex items-center justify-center">
-                                <!-- User Avatar -->
-                                <div class="w-48 h-48 rounded-full bg-white border-4 border-gray-200 flex items-center justify-center shadow-lg">
-                                    <svg class="w-24 h-24 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            
-                            <!-- Floating Elements -->
-                            <div class="absolute -top-6 -right-6 w-16 h-16 bg-brand-red rounded-xl flex items-center justify-center shadow-lg floating-animation">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                                </svg>
-                            </div>
-                            
-                            <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-black rounded-xl flex items-center justify-center shadow-lg floating-animation" style="animation-delay: 1s;">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-
-                            <div class="absolute top-8 -left-8 w-12 h-12 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center shadow-md floating-animation" style="animation-delay: 2s;">
-                                <svg class="w-6 h-6 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                </svg>
-                            </div>
-
-                            <div class="absolute bottom-16 right-12 w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center shadow-md floating-animation" style="animation-delay: 0.5s;">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-
-                            <!-- Stats Cards -->
-                            <div class="absolute -top-12 left-8 bg-white border-2 border-gray-200 rounded-lg p-3 text-center shadow-lg">
-                                <div class="text-lg font-bold text-black">50+</div>
-                                <div class="text-xs text-gray-600">Lenders</div>
-                            </div>
-                            
-                            <div class="absolute bottom-8 right-8 bg-white border-2 border-gray-200 rounded-lg p-3 text-center shadow-lg">
-                                <div class="text-lg font-bold text-black">98%</div>
-                                <div class="text-xs text-gray-600">Success</div>
-                            </div>
-                        </div>
-                    </div>
+                    <span class="text-gray-500">{{ $approvedApplications }} approved</span>
                 </div>
             </div>
-        </div>
-    </section>
 
-
-
-    <section id="about" class="py-16 md:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <!-- Section Header -->
-            <div class="text-center mb-12 md:mb-16">
-                <div class="mb-4">
-                    <span class="inline-block bg-brand-red/10 text-brand-red px-4 py-2 rounded-full text-sm font-medium uppercase tracking-wider">
-                        About LeadGenerator
-                    </span>
+            <!-- Approved Amount Card -->
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-red-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">Approved Amount</p>
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600">
+                            @if($totalApprovedAmount >= 1000000)
+                                TSh {{ number_format($totalApprovedAmount/1000000, 1) }}M
+                            @else
+                                TSh {{ number_format($totalApprovedAmount/1000) }}K
+                            @endif
+                        </p>
+                    </div>
                 </div>
-                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold font-poppins text-black leading-tight mb-6">
-                    Your Financial Partner
-                    <span class="block text-brand-red">For Every Situation</span>
-                </h2>
-                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                    We believe everyone deserves access to financial opportunities, regardless of their employment status or traditional banking relationships.
-                </p>
+                <div class="flex items-center justify-between text-xs sm:text-sm">
+                    <div class="flex items-center space-x-1 text-green-600">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span class="font-semibold">{{ $approvedApplications }} loans</span>
+                    </div>
+                    <span class="text-gray-500">approved</span>
+                </div>
             </div>
 
-            <!-- Main Content Grid -->
-            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                <!-- Left Side - Content -->
-                <div class="space-y-8">
-                    <!-- Mission Statement -->
-                    <div>
-                        <h3 class="text-2xl md:text-3xl font-semibold font-poppins text-black mb-4">
-                            Our Mission
-                        </h3>
-                        <p class="text-gray-600 leading-relaxed mb-6">
-                            Traditional banking often leaves many people behind. We're changing that by connecting borrowers with lenders who understand diverse financial situations and evaluate applications based on your unique circumstances, not just employment status.
-                        </p>
-                        <p class="text-gray-600 leading-relaxed">
-                            Through our secure, NIDA-verified platform, we make the loan application process transparent, fast, and accessible to everyone.
-                        </p>
+            <!-- Credit Score Card -->
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-{{ $this->getCreditScoreColor() }}-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
                     </div>
-
-                    <!-- Key Features -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-semibold font-poppins text-black">Why Choose Us?</h4>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-start space-x-4">
-                                <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-6 h-6 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold text-black mb-2">Inclusive Access</h5>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        No employment requirements. We serve employed, self-employed, and non-employed individuals.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start space-x-4">
-                                <div class="w-12 h-12 bg-black/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold text-black mb-2">NIDA Verification</h5>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        Secure identity verification through NIDA integration for maximum trust and security.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start space-x-4">
-                                <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-6 h-6 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold text-black mb-2">Smart Matching</h5>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        AI-powered system matches you with the most suitable lenders based on your profile.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start space-x-4">
-                                <div class="w-12 h-12 bg-black/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold text-black mb-2">Fast Processing</h5>
-                                    <p class="text-gray-600 text-sm leading-relaxed">
-                                        Get matched with lenders and receive approval decisions within 24 hours.
-                                    </p>
-                                </div>
-                            </div>
+                    <div class="text-right">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">Credit Score</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-black">{{ $creditScore ?? 'N/A' }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between text-xs sm:text-sm">
+                    @if($creditScore)
+                        <div class="flex items-center space-x-1 text-{{ $this->getCreditScoreColor() }}-600">
+                            <div class="w-2 h-2 sm:w-3 sm:h-3 bg-{{ $this->getCreditScoreColor() }}-500 rounded-full"></div>
+                            <span class="font-semibold">{{ $this->getCreditScoreLabel() }}</span>
                         </div>
-                    </div>
+                        <span class="text-gray-500">rating</span>
+                    @else
+                        <span class="text-gray-500 text-xs">No credit data</span>
+                    @endif
+                </div>
+            </div>
 
-                    <!-- CTA -->
-                    <div class="pt-4">
-                        <button class="bg-brand-red text-white px-8 py-3 rounded-md font-semibold hover:bg-red-700 transition-all duration-300 flex items-center group">
-                            Start Your Application
-                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            <!-- Outstanding Balance Card -->
+            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-black rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                        </svg>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">Outstanding Balance</p>
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-black">
+                            @if($outstandingBalance >= 1000000)
+                                TSh {{ number_format($outstandingBalance/1000000, 1) }}M
+                            @else
+                                TSh {{ number_format($outstandingBalance/1000) }}K
+                            @endif
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between text-xs sm:text-sm">
+                    @if($nextPaymentDue)
+                        <div class="flex items-center space-x-1 text-red-600">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
+                            <span class="font-semibold">{{ $nextPaymentDue->diffForHumans() }}</span>
+                        </div>
+                        <span class="text-gray-500">next payment</span>
+                    @else
+                        <span class="text-gray-500 text-xs">No active loans</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid - Mobile Responsive -->
+        <div class="grid grid-cols-1 lg:grid-cols-7 gap-6 mb-6 sm:mb-8">
+            <!-- Application Status Distribution -->
+            <div class="lg:col-span-4 bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8 border border-gray-100">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-2">Application Status</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">Track the progress of all your loan applications</p>
+                    </div>
+                </div>
+                
+                @if(array_sum($applicationsByStatus) > 0)
+                    <div class="space-y-3 sm:space-y-4">
+                        @foreach($applicationsByStatus as $status => $count)
+                            <div class="flex items-center justify-between p-3 sm:p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 rounded-full 
+                                        @if($status === 'approved') bg-green-500
+                                        @elseif($status === 'rejected') bg-red-500
+                                        @elseif($status === 'under_review') bg-yellow-500
+                                        @elseif($status === 'submitted') bg-blue-500
+                                        @elseif($status === 'disbursed') bg-red-600
+                                        @elseif($status === 'cancelled') bg-gray-500
+                                        @else bg-gray-400
+                                        @endif">
+                                    </div>
+                                    <span class="text-sm font-semibold text-black">{{ ucfirst(str_replace('_', ' ', $status)) }}</span>
+                                </div>
+                                <div class="flex items-center space-x-3 sm:space-x-4">
+                                    <div class="w-20 sm:w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="h-2 rounded-full 
+                                            @if($status === 'approved') bg-green-500
+                                            @elseif($status === 'rejected') bg-red-500
+                                            @elseif($status === 'under_review') bg-yellow-500
+                                            @elseif($status === 'submitted') bg-blue-500
+                                            @elseif($status === 'disbursed') bg-red-600
+                                            @elseif($status === 'cancelled') bg-gray-500
+                                            @else bg-gray-400
+                                            @endif" 
+                                            style="width: {{ $totalApplications > 0 ? ($count / $totalApplications) * 100 : 0 }}%">
+                                        </div>
+                                    </div>
+                                    <span class="text-sm font-bold text-black w-6 sm:w-8 text-right">{{ $count }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8 sm:py-12">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-black mb-2">No Applications Yet</h4>
+                        <p class="text-gray-500 mb-4 text-sm sm:text-base">Start your borrowing journey by applying for your first loan.</p>
+                        <button wire:click="applyForLoan" class="bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors text-sm sm:text-base">
+                            Apply for Loan
+                        </button>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Recent Activity Feed -->
+            <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100">
+                <div class="flex items-center justify-between mb-4 sm:mb-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-black">Recent Activity</h3>
+                </div>
+                <div class="space-y-3 sm:space-y-4 max-h-64 sm:max-h-80 overflow-y-auto">
+                    @forelse($recentActivity as $activity)
+                        <div class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-{{ $activity['color'] }}-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <div class="w-2 h-2 sm:w-3 sm:h-3 bg-{{ $activity['color'] }}-500 rounded-full"></div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-black">{{ $activity['message'] }}</p>
+                                <p class="text-xs text-gray-600 mt-1 break-words">{{ $activity['details'] }}</p>
+                                <p class="text-xs text-gray-400 mt-2">{{ $activity['time'] }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-8">
+                            <p class="text-gray-500 text-sm">No recent activity</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <!-- My Applications Table - Mobile Responsive -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6 sm:mb-8">
+            <div class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-b border-gray-100 bg-gray-50">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-1">My Loan Applications</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">Track the status and details of your loan applications</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button wire:click="applyForLoan" class="bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg text-sm sm:text-base">
+                            New Application
                         </button>
                     </div>
                 </div>
-
-                <!-- Right Side - Visual/Stats -->
-                <div class="space-y-8">
-                    <!-- Main Visual Card -->
-                    <div class="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl p-8 shadow-lg">
-                        <div class="text-center mb-8">
-                            <div class="w-20 h-20 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-10 h-10 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
-                                </svg>
-                            </div>
-                            <h4 class="text-xl font-semibold font-poppins text-black mb-2">Platform Statistics</h4>
-                            <p class="text-gray-600 text-sm">Real numbers from our community</p>
-                        </div>
-
-                        <!-- Stats Grid -->
-                        <div class="grid grid-cols-2 gap-6">
-                            <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                                <div class="text-2xl md:text-3xl font-bold text-brand-red mb-1">2,500+</div>
-                                <div class="text-sm text-gray-600">Successful</div>
-                                <div class="text-sm text-gray-600">Applications</div>
-                            </div>
-                            <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                                <div class="text-2xl md:text-3xl font-bold text-black mb-1">50+</div>
-                                <div class="text-sm text-gray-600">Verified</div>
-                                <div class="text-sm text-gray-600">Lenders</div>
-                            </div>
-                            <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                                <div class="text-2xl md:text-3xl font-bold text-brand-red mb-1">98%</div>
-                                <div class="text-sm text-gray-600">Success</div>
-                                <div class="text-sm text-gray-600">Rate</div>
-                            </div>
-                            <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                                <div class="text-2xl md:text-3xl font-bold text-black mb-1">24hrs</div>
-                                <div class="text-sm text-gray-600">Average</div>
-                                <div class="text-sm text-gray-600">Approval</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Trust Indicators -->
-                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                        <h4 class="text-lg font-semibold font-poppins text-black mb-6 text-center">Trusted & Secure</h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center">
-                                <div class="w-12 h-12 bg-black/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-sm font-medium text-black">SSL Encrypted</div>
-                                <div class="text-xs text-gray-500">Bank-level security</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                                    <svg class="w-6 h-6 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-sm font-medium text-black">NIDA Verified</div>
-                                <div class="text-xs text-gray-500">Identity protection</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="w-12 h-12 bg-black/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-sm font-medium text-black">24/7 Support</div>
-                                <div class="text-xs text-gray-500">Always here to help</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                                    <svg class="w-6 h-6 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                    </svg>
-                                </div>
-                                <div class="text-sm font-medium text-black">Privacy Protected</div>
-                                <div class="text-xs text-gray-500">Data never shared</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> 
-    </section>
-
-
-
-
-
-    <!-- Process Section -->
-    <section id="process" class=" md:py-10 bg-white">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-           
-
-        
-
-            <!-- Mobile Steps -->
-            <div class="md:hidden space-y-2">
-                
-                <!-- Step 1 Mobile -->
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-brand-red rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold">1</span>
-                    </div>
-                    <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Register</h3>
-                        <p class="text-sm text-gray-600">Create account & verify with NIDA</p>
-                    </div>
-                </div>
-
-                <!-- Step 2 Mobile -->
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-brand-red rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold">2</span>
-                    </div>
-                    <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Apply</h3>
-                        <p class="text-sm text-gray-600">Fill form & upload documents</p>
-                    </div>
-                </div>
-
-                <!-- Step 3 Mobile -->
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-brand-red rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold">3</span>
-                    </div>
-                    <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Match</h3>
-                        <p class="text-sm text-gray-600">We find best lenders for you</p>
-                    </div>
-                </div>
-
-                <!-- Step 4 Mobile -->
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-brand-red rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold">4</span>
-                    </div>
-                    <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Get Funded</h3>
-                        <p class="text-sm text-gray-600">Choose lender & receive money</p>
-                    </div>
-                </div>
-
             </div>
 
-            <!-- Why Choose Us -->
-            <div class="mt-4 md:mt-20">
-                <div class="bg-gray-50 rounded-2xl p-8 md:p-12">
-                    <h3 class="text-2xl md:text-3xl font-semibold font-poppins text-black text-center mb-8 md:mb-12">
-                        Why Choose Us
-                    </h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        
-                        <!-- Fast -->
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+            <!-- Mobile Applications View -->
+            <div class="block sm:hidden">
+                @forelse($myApplications as $application)
+                    <div class="border-b border-gray-100 p-4 hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-bold text-black">TSh {{ number_format($application->requested_amount) }}</span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold 
+                                    @if($application->status === 'approved') bg-green-100 text-green-800
+                                    @elseif($application->status === 'rejected') bg-red-100 text-red-800
+                                    @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800
+                                    @elseif($application->status === 'submitted') bg-blue-100 text-blue-800
+                                    @elseif($application->status === 'disbursed') bg-red-100 text-red-800
+                                    @else bg-gray-100 text-gray-800
+                                    @endif">
+                                    {{ ucfirst(str_replace('_', ' ', $application->status)) }}
+                                </span>
                             </div>
-                            <h4 class="text-lg font-semibold text-black mb-3">Fast</h4>
-                            <p class="text-gray-600 text-sm">Complete in 30 minutes</p>
-                        </div>
-
-                        <!-- Secure -->
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-black/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
+                            <div class="flex items-center space-x-2">
+                                <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </button>
+                                @if(in_array($application->status, ['submitted', 'under_review']))
+                                    <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                @endif
                             </div>
-                            <h4 class="text-lg font-semibold text-black mb-3">Secure</h4>
-                            <p class="text-gray-600 text-sm">NIDA verified protection</p>
                         </div>
-
-                        <!-- Transparent -->
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                </svg>
+                        <div class="space-y-2 text-xs text-gray-600">
+                            <div class="flex justify-between">
+                                <span>Application #:</span>
+                                <span class="font-medium text-blue-600">{{ $application->application_number }}</span>
                             </div>
-                            <h4 class="text-lg font-semibold text-black mb-3">Transparent</h4>
-                            <p class="text-gray-600 text-sm">No hidden fees</p>
+                            <div class="flex justify-between">
+                                <span>Tenure:</span>
+                                <span>{{ $application->requested_tenure_months }} months</span>
+                            </div>
+                            @if($application->lender)
+                                <div class="flex justify-between">
+                                    <span>Lender:</span>
+                                    <span>{{ $application->lender->company_name }}</span>
+                                </div>
+                            @endif
+                            @if($application->loanProduct)
+                                <div class="flex justify-between">
+                                    <span>Product:</span>
+                                    <span>{{ $application->loanProduct->name }}</span>
+                                </div>
+                            @endif
+                            <div class="flex justify-between">
+                                <span>Applied:</span>
+                                <span>{{ $application->created_at->format('M d, Y') }}</span>
+                            </div>
                         </div>
-
                     </div>
-                </div>
+                @empty
+                    <div class="p-8 text-center">
+                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-black mb-2">No Applications Found</h4>
+                        <p class="text-gray-500 mb-4 text-sm">You haven't submitted any loan applications yet.</p>
+                        <button wire:click="applyForLoan" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                            Apply for Your First Loan
+                        </button>
+                    </div>
+                @endforelse
             </div>
 
-           
-        </div>
-    </section>
-
-
-
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <!-- Main Footer Content -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                
-                <!-- Brand Section -->
-                <div class="md:col-span-1">
-                    <div class="text-2xl font-bold font-poppins mb-4">
-                        Lead<span class="text-brand-red">Generator</span>
-                    </div>
-                    <p class="text-gray-300 text-sm leading-relaxed mb-4">
-                        Connecting borrowers with verified lenders. Loans for everyone, regardless of employment status.
-                    </p>
-                    <div class="flex space-x-4">
-                        <!-- Social Icons -->
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-red transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-red transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-brand-red transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="font-semibold font-poppins text-lg mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-300 hover:text-white transition-colors text-sm">Home</a></li>
-                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors text-sm">About Us</a></li>
-                        <li><a href="#eligibility" class="text-gray-300 hover:text-white transition-colors text-sm">Eligibility</a></li>
-                        <li><a href="#process" class="text-gray-300 hover:text-white transition-colors text-sm">How It Works</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors text-sm">Lenders</a></li>
-                    </ul>
-                </div>
-
-                <!-- Support -->
-                <div>
-                    <h4 class="font-semibold font-poppins text-lg mb-4">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors text-sm">Help Center</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors text-sm">Contact Us</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors text-sm">Live Chat</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors text-sm">FAQs</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors text-sm">Status</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact -->
-                <div>
-                    <h4 class="font-semibold font-poppins text-lg mb-4">Contact</h4>
-                    <div class="space-y-3">
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                            <span class="text-gray-300 text-sm">+255 123 456 789</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                            <span class="text-gray-300 text-sm">info@leadgenerator.com</span>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <svg class="w-5 h-5 text-brand-red mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <span class="text-gray-300 text-sm">Dar es Salaam, Tanzania</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Bottom Footer -->
-            <div class="border-t border-gray-800 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <div class="text-gray-400 text-sm mb-4 md:mb-0">
-                        © 2025 LeadGenerator. All rights reserved.
-                    </div>
-                    <div class="flex flex-wrap gap-6">
-                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
-                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
-                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</a>
-                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Compliance</a>
-                    </div>
-                </div>
+            <!-- Desktop Applications Table -->
+            <div class="hidden sm:block overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        @forelse($myApplications as $application)
+                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div>
+                                        <div class="text-sm font-bold text-black">TSh {{ number_format($application->requested_amount) }}</div>
+                                        <div class="text-xs text-gray-500">{{ $application->requested_tenure_months }} months tenure</div>
+                                        <div class="text-xs text-red-600 font-medium mt-1">#{{ $application->application_number }}</div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($application->lender)
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                                                <span class="text-white text-xs font-bold">{{ substr($application->lender->company_name, 0, 2) }}</span>
+                                            </div>
+                                            <div class="ml-3">
+                                                <div class="text-sm text-black font-medium">{{ $application->lender->company_name }}</div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-gray-400">Pending Assignment</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($application->loanProduct)
+                                        <div class="text-sm text-black font-medium">{{ $application->loanProduct->name }}</div>
+                                        <div class="text-xs text-gray-500">{{ $application->loanProduct->interest_rate_min }}% - {{ $application->loanProduct->interest_rate_max }}%</div>
+                                    @else
+                                        <span class="text-xs text-gray-400">General Application</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold 
+                                        @if($application->status === 'approved') bg-green-100 text-green-800 border border-green-200
+                                        @elseif($application->status === 'rejected') bg-red-100 text-red-800 border border-red-200
+                                        @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800 border border-yellow-200
+                                        @elseif($application->status === 'submitted') bg-blue-100 text-blue-800 border border-blue-200
+                                        @elseif($application->status === 'disbursed') bg-red-100 text-red-800 border border-red-200
+                                        @else bg-gray-100 text-gray-800 border border-gray-200
+                                        @endif">
+                                        @if($application->status === 'approved')
+                                            <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        @elseif($application->status === 'under_review')
+                                            <svg class="w-3 h-3 mr-1.5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        @elseif($application->status === 'submitted')
+                                            <svg class="w-3 h-3 mr-1.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                            </svg>
+                                        @endif
+                                        {{ ucfirst(str_replace('_', ' ', $application->status)) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-black">{{ $application->created_at->format('M d, Y') }}</div>
+                                    <div class="text-xs text-gray-500">{{ $application->created_at->format('g:i A') }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center space-x-2">
+                                        <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </button>
+                                        @if(in_array($application->status, ['submitted', 'under_review']))
+                                            <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-8 py-12 text-center">
+                                    <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-black mb-2">No Applications Found</h4>
+                                    <p class="text-gray-500 mb-4">You haven't submitted any loan applications yet.</p>
+                                    <button wire:click="applyForLoan" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                                        Apply for Your First Loan
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
-    </footer>
 
+        <!-- Available Loan Products - Table View -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-b border-gray-100 bg-gray-50">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-1">Available Loan Products</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">Explore loan products that match your profile</p>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Mobile Product List -->
+            <div class="block sm:hidden">
+                @forelse($availableLoanProducts as $product)
+                    <div class="border-b border-gray-100 p-4 hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                                    <span class="text-white text-xs font-bold">{{ substr($product->name, 0, 2) }}</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-black">{{ $product->name }}</h4>
+                                    <p class="text-xs text-gray-500">{{ $product->lender->company_name }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button wire:click="viewProductDetails({{ $product->id }})" class="text-red-600 hover:text-red-700 p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </button>
+                                <button wire:click="applyForLoan({{ $product->id }})" class="bg-red-600 text-white px-3 py-1 rounded text-xs font-semibold hover:bg-red-700 transition-colors">
+                                    Apply
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-1 text-xs text-gray-600">
+                            <div class="flex justify-between">
+                                <span>Amount:</span>
+                                <span class="font-medium">TSh {{ number_format($product->min_amount/1000) }}K - 
+                                    @if($product->max_amount >= 1000000){{ number_format($product->max_amount/1000000, 1) }}M
+                                    @else{{ number_format($product->max_amount/1000) }}K@endif
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Interest:</span>
+                                <span class="font-medium text-red-600">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-8 text-center">
+                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-black mb-2">No Products Available</h4>
+                        <p class="text-gray-500 text-sm">No loan products are currently available for your profile.</p>
+                    </div>
+                @endforelse
+            </div>
 
-    <!-- JavaScript for Mobile Menu -->
-    <script>
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('hidden');
-        }
+            <!-- Desktop Product Table -->
+            <div class="hidden sm:block overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Product</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Lender</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Amount Range</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Interest Rate</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Tenure</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-black uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        @forelse($availableLoanProducts as $product)
+                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <span class="text-white text-xs font-bold">{{ substr($product->name, 0, 2) }}</span>
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-bold text-black">{{ $product->name }}</div>
+                                            @if($product->promotional_tag)
+                                                <span class="text-xs font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full">{{ $product->promotional_tag }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-black">{{ $product->lender->company_name }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-semibold text-black">
+                                        TSh {{ number_format($product->min_amount/1000) }}K - 
+                                        @if($product->max_amount >= 1000000)
+                                            {{ number_format($product->max_amount/1000000, 1) }}M
+                                        @else
+                                            {{ number_format($product->max_amount/1000) }}K
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-semibold text-red-600">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</div>
+                                    <div class="text-xs text-gray-500">{{ ucfirst($product->interest_type) }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-black">{{ $product->min_tenure_months }} - {{ $product->max_tenure_months }} months</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <button wire:click="viewProductDetails({{ $product->id }})" class="text-black hover:text-red-600 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="View Details">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </button>
+                                        <button wire:click="applyForLoan({{ $product->id }})" class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors text-sm">
+                                            Apply Now
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-8 py-12 text-center">
+                                    <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-black mb-2">No Products Available</h4>
+                                    <p class="text-gray-500">No loan products are currently available for your profile.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuButton = event.target.closest('button');
-            
-            if (!mobileMenu.contains(event.target) && !menuButton) {
-                mobileMenu.classList.add('hidden');
-            }
-        });
-    </script>
-</body>
-</html>
+    <!-- Product Details Modal -->
+    @if($showProductModal && $selectedProduct)
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-sm font-bold">{{ substr($selectedProduct->name, 0, 2) }}</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-black">{{ $selectedProduct->name }}</h3>
+                            <p class="text-sm text-gray-600">{{ $selectedProduct->lender->company_name }}</p>
+                        </div>
+                    </div>
+                    <button wire:click="closeProductModal" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Product Details -->
+                <div class="space-y-4">
+                    <!-- Amount Range -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-semibold text-black mb-2">Loan Amount</h4>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Range:</span>
+                            <span class="text-sm font-bold text-black">
+                                TSh {{ number_format($selectedProduct->min_amount/1000) }}K - 
+                                @if($selectedProduct->max_amount >= 1000000)
+                                    {{ number_format($selectedProduct->max_amount/1000000, 1) }}M
+                                @else
+                                    {{ number_format($selectedProduct->max_amount/1000) }}K
+                                @endif
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Interest Rate -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-semibold text-black mb-2">Interest Rate</h4>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-600">Rate:</span>
+                            <span class="text-sm font-bold text-red-600">{{ $selectedProduct->interest_rate_min }}% - {{ $selectedProduct->interest_rate_max }}%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Type:</span>
+                            <span class="text-sm font-medium text-black">{{ ucfirst($selectedProduct->interest_type) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Tenure -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-semibold text-black mb-2">Loan Tenure</h4>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Duration:</span>
+                            <span class="text-sm font-bold text-black">{{ $selectedProduct->min_tenure_months }} - {{ $selectedProduct->max_tenure_months }} months</span>
+                        </div>
+                    </div>
+
+                    <!-- DSR & Credit Score -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-black mb-2">Max DSR</h4>
+                            <div class="text-center">
+                                <span class="text-lg font-bold text-red-600">{{ $selectedProduct->minimum_dsr ?? 'N/A' }}%</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-black mb-2">Min Credit Score</h4>
+                            <div class="text-center">
+                                <span class="text-lg font-bold text-black">{{ $selectedProduct->min_credit_score ?? 'No requirement' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Processing Time -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-semibold text-black mb-2">Processing Timeline</h4>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-600">Approval:</span>
+                            <span class="text-sm font-medium text-black">{{ $selectedProduct->approval_time_days }} days</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Disbursement:</span>
+                            <span class="text-sm font-medium text-black">{{ $selectedProduct->disbursement_time_days }} days</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Features -->
+                    @if($selectedProduct->promotional_tag)
+                        <div class="bg-red-50 rounded-lg p-4 border border-red-200">
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span class="text-sm font-semibold text-red-700">{{ $selectedProduct->promotional_tag }}</span>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-3 mt-6">
+                    <button wire:click="closeProductModal" class="flex-1 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                        Close
+                    </button>
+                    <button wire:click="applyForLoan({{ $selectedProduct->id }})" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold">
+                        Apply Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Withdraw Application Modal -->
+    @if($showWithdrawModal)
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-black">Withdraw Application</h3>
+                </div>
+                <p class="text-gray-600 mb-6">Are you sure you want to withdraw application "{{ $selectedApplicationNumber }}"? This action cannot be undone.</p>
+                <div class="flex justify-end space-x-3">
+                    <button wire:click="closeWithdrawModal" class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                        Cancel
+                    </button>
+                    <button wire:click="withdrawApplication" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        Withdraw Application
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>

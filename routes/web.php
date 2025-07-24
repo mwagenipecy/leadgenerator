@@ -243,7 +243,13 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     Route::get('lenders/{lender}/dashboard', [LenderManagementController::class,'viewLender'])->name('lender.dashboard');
 
     // Loan product management
-    Route::get('loan-product',[LoanProductManagementController::class,'index'])->name('loan.product.index');
+    Route::get('loan-product/list',[LoanProductManagementController::class,'index'])->name('loan.product.index');
+    Route::get('loan-product/create',[LoanProductManagementController::class,'createProduct'])->name('loan-products.create');
+    Route::get('loan-product/{id}/show',[LoanProductManagementController::class,'showProduct'])->name('loan-products.show');
+    Route::get('loan-product/{id}/edit',[LoanProductManagementController::class,'editProduct'])->name('loan-products.edit');
+
+    
+    
 
 
     // LOAN APPLICATION MANAGEMENT 

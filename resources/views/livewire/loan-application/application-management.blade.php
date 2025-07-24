@@ -10,7 +10,7 @@
                     <p class="text-gray-600 text-lg">Track and manage your loan applications</p>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button wire:click="startNewApplication" class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-8 py-3 rounded-xl font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
+                    <button wire:click="startNewApplication" class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-8 py-3 rounded-lg font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
@@ -22,7 +22,7 @@
 
         <!-- Flash Messages -->
         @if (session()->has('message'))
-            <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl" role="alert">
+            <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg" role="alert">
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -33,7 +33,7 @@
         @endif
 
         @if (session()->has('error'))
-            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl" role="alert">
+            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -44,7 +44,7 @@
         @endif
 
         <!-- Search and Filters -->
-        <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-6">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 mb-6">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
                 <!-- Search -->
                 <div class="flex-1 max-w-md">
@@ -54,13 +54,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
-                        <input wire:model.live.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search applications...">
+                        <input wire:model.live.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search applications...">
                     </div>
                 </div>
 
                 <!-- Filters -->
                 <div class="flex items-center space-x-4">
-                    <select wire:model.live.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                    <select wire:model.live.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                         <option value="all">All Status</option>
                         <option value="draft">Draft</option>
                         <option value="submitted">Submitted</option>
@@ -77,7 +77,7 @@
         <!-- Applications List -->
         <div class="space-y-6">
             @forelse($applications as $application)
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
                     <!-- Application Header -->
                     <div class="p-6 border-b border-gray-100">
                         <div class="flex items-center justify-between">
@@ -164,7 +164,7 @@
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
-                                <button wire:click="viewApplication({{ $application->id }})" class="text-blue-600 hover:text-blue-800 p-2 rounded-xl hover:bg-blue-50 transition-all duration-200" title="View Details">
+                                <button wire:click="viewApplication({{ $application->id }})" class="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50 transition-all duration-200" title="View Details">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -172,7 +172,7 @@
                                 </button>
 
                                 @if(in_array($application->status, ['draft']))
-                                    <button wire:click="editApplication({{ $application->id }})" class="text-gray-600 hover:text-gray-800 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200" title="Edit">
+                                    <button wire:click="editApplication({{ $application->id }})" class="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="Edit">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
@@ -180,7 +180,7 @@
                                 @endif
 
                                 @if($application->status === 'submitted' && !$application->lender_id)
-                                    <button wire:click="viewMatchingProducts({{ $application->id }})" class="text-green-600 hover:text-green-800 p-2 rounded-xl hover:bg-green-50 transition-all duration-200" title="View Matching Products">
+                                    <button wire:click="viewMatchingProducts({{ $application->id }})" class="text-green-600 hover:text-green-800 p-2 rounded-lg hover:bg-green-50 transition-all duration-200" title="View Matching Products">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
@@ -190,7 +190,7 @@
                                 @if(in_array($application->status, ['draft', 'submitted']))
                                     <button wire:click="cancelApplication({{ $application->id }})" 
                                             wire:confirm="Are you sure you want to cancel this application?"
-                                            class="text-red-600 hover:text-red-800 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" title="Cancel">
+                                            class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50 transition-all duration-200" title="Cancel">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
@@ -220,15 +220,15 @@
                     </div>
                 </div>
             @empty
-                <div class="bg-white rounded-3xl shadow-sm p-12 text-center border border-gray-100">
-                    <div class="w-20 h-20 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <div class="bg-white rounded-lg shadow-sm p-12 text-center border border-gray-100">
+                    <div class="w-20 h-20 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg">
                         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">No applications found</h3>
                     <p class="text-gray-500 mb-6">Start your loan application journey today. Check your eligibility first!</p>
-                    <button wire:click="startNewApplication" class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-8 py-3 rounded-xl font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25">
+                    <button wire:click="startNewApplication" class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-8 py-3 rounded-lg font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25">
                         Start Application
                     </button>
                 </div>
@@ -246,7 +246,7 @@
                     <p class="text-gray-600 text-lg">Check your eligibility and find matching lenders before applying</p>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200" title="Back to List">
+                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="Back to List">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -276,7 +276,7 @@
         <!-- Pre-qualification Form -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Left Column - Input Form -->
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-brand-red to-brand-dark-red text-white">
                     <h3 class="text-xl font-bold mb-2">Your Financial Information</h3>
                     <p class="text-red-100 text-sm">Fill in your details to check eligibility</p>
@@ -294,7 +294,7 @@
                                    type="number" 
                                    step="1000" 
                                    min="1000" 
-                                   class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50"
+                                   class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50"
                                    placeholder="50,000">
                         </div>
                         @error('prequalify_amount') 
@@ -308,7 +308,7 @@
                             Loan Period (Months) *
                         </label>
                         <select wire:model.live.live="prequalify_tenure" 
-                                class="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50">
+                                class="w-full px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50">
                             <option value="">Select period</option>
                             <option value="6">6 months</option>
                             <option value="12">12 months</option>
@@ -338,7 +338,7 @@
                                    type="number" 
                                    step="1000" 
                                    min="0" 
-                                   class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50"
+                                   class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50"
                                    placeholder="500,000">
                         </div>
                         @error('prequalify_monthly_income') 
@@ -358,7 +358,7 @@
                                    type="number" 
                                    step="1000" 
                                    min="0" 
-                                   class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50"
+                                   class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50"
                                    placeholder="0">
                         </div>
                         @error('prequalify_existing_loans') 
@@ -370,7 +370,7 @@
                     <!-- Calculate Button -->
                     <div class="pt-4">
                         <button wire:click="calculateDSR" 
-                                class="w-full bg-gradient-to-r from-brand-red to-brand-dark-red text-white py-4 px-6 rounded-xl font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center justify-center">
+                                class="w-full bg-gradient-to-r from-brand-red to-brand-dark-red text-white py-4 px-6 rounded-lg font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                             </svg>
@@ -384,7 +384,7 @@
             <div class="space-y-6">
                 <!-- DSR Calculator Result -->
                 @if($calculated_dsr > 0)
-                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50">
                             <h3 class="text-xl font-bold text-gray-900 mb-2">Your Debt Service Ratio (DSR)</h3>
                             <p class="text-gray-600 text-sm">This measures your ability to service the loan</p>
@@ -425,7 +425,7 @@
                             </div>
 
                             <!-- DSR Breakdown -->
-                            <div class="bg-gray-50 rounded-xl p-4 space-y-3">
+                            <div class="bg-gray-50 rounded-lg p-4 space-y-3">
                                 <h4 class="font-bold text-gray-700 text-sm">Calculation Breakdown:</h4>
                                 @php
                                     $estimatedPayment = $prequalify_amount > 0 && $prequalify_tenure > 0 ? 
@@ -460,7 +460,7 @@
 
                 <!-- Eligibility Message -->
                 @if($dsr_message)
-                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6">
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
@@ -485,7 +485,7 @@
                 @endif
 
                 <!-- DSR Guidelines -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
                         <h3 class="text-lg font-bold text-gray-900">DSR Guidelines</h3>
                     </div>
@@ -528,18 +528,18 @@
                         </div>
                         <div class="flex items-center space-x-3">
                             <button wire:click="selectAllEligibleLenders" 
-                                    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-xl font-medium hover:bg-blue-200 transition-colors text-sm">
+                                    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-blue-200 transition-colors text-sm">
                                 Select All Eligible
                             </button>
                             <button wire:click="clearSelectedLenders" 
-                                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors text-sm">
+                                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm">
                                 Clear Selection
                             </button>
                         </div>
                     </div>
                     
                     @if(!empty($selectedLenders))
-                        <div class="mt-4 p-4 bg-green-50 rounded-xl">
+                        <div class="mt-4 p-4 bg-green-50 rounded-lg">
                             <p class="text-sm text-green-700 font-medium">
                                 {{ count($selectedLenders) }} lender(s) selected for application
                             </p>
@@ -555,7 +555,7 @@
                             $isEligible = $result['eligible'];
                         @endphp
                         
-                        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 
                                     {{ $isSelected ? 'ring-2 ring-brand-red' : '' }}
                                     {{ !$isEligible ? 'opacity-75' : '' }}">
                             
@@ -640,7 +640,7 @@
 
                                     <!-- Eligibility Status -->
                                     @if($isEligible)
-                                        <div class="bg-green-50 rounded-xl p-4">
+                                        <div class="bg-green-50 rounded-lg p-4">
                                             <div class="flex items-center space-x-2">
                                                 <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -649,7 +649,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        <div class="bg-red-50 rounded-xl p-4">
+                                        <div class="bg-red-50 rounded-lg p-4">
                                             <div class="flex items-center space-x-2">
                                                 <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -685,7 +685,7 @@
                 @if($can_proceed && !empty($selectedLenders))
                     <div class="mt-8 text-center">
                         <button wire:click="proceedToApplication" 
-                                class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-12 py-4 rounded-xl font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center mx-auto">
+                                class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-12 py-4 rounded-lg font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center mx-auto">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>
@@ -723,14 +723,14 @@
                 </div>
                 <div class="flex items-center space-x-3">
                     @if($currentStep === 'create')
-                        <button wire:click="backToPreQualification" class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
+                        <button wire:click="backToPreQualification" class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                             </svg>
                             Back to Pre-qualification
                         </button>
                     @endif
-                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200" title="Back to List">
+                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="Back to List">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -766,7 +766,7 @@
             @endif
 
             <!-- Progress Steps -->
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
                 <div class="flex items-center justify-between">
                     @for($i = 1; $i <= 6; $i++)
                         <div class="flex items-center {{ $i < 6 ? 'flex-1' : '' }}">
@@ -804,7 +804,7 @@
         </div>
 
         <!-- Form Content -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <form wire:submit="saveApplication">
                 <!-- Step 1: Loan Details -->
                 @if($currentFormStep === 1)
@@ -840,14 +840,14 @@
                                     <div class="relative">
                                         <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
                                         <input wire:model.live="requested_amount" type="number" step="1000" min="1000" 
-                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold"
+                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold"
                                                placeholder="50,000">
                                     </div>
                                     @error('requested_amount') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Loan Period (Months) *</label>
-                                    <select wire:model.live="requested_tenure_months" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
+                                    <select wire:model.live="requested_tenure_months" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold">
                                         <option value="">Select period</option>
                                         <option value="6">6 months</option>
                                         <option value="12">12 months</option>
@@ -867,7 +867,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Loan Purpose</label>
-                                <select wire:model.live="loan_purpose" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                <select wire:model.live="loan_purpose" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                     <option value="">Select purpose</option>
                                     <option value="business">Business Investment</option>
                                     <option value="education">Education</option>
@@ -907,7 +907,7 @@
                                         </div>
                                     </div>
                                     @if($newDSR > 40)
-                                        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
+                                        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                                             <p class="text-sm text-yellow-800">
                                                 ⚠️ Your DSR may be too high for some lenders. Consider reducing the loan amount or extending the period.
                                             </p>
@@ -935,17 +935,17 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
-                                        <input wire:model.live="first_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="first_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('first_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                                        <input wire:model.live="middle_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="middle_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('middle_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
-                                        <input wire:model.live="last_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="last_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('last_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -957,12 +957,12 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth *</label>
-                                        <input wire:model.live="date_of_birth" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="date_of_birth" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('date_of_birth') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
-                                        <select wire:model.live="gender" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <select wire:model.live="gender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             <option value="">Select gender</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
@@ -972,7 +972,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Marital Status *</label>
-                                        <select wire:model.live="marital_status" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <select wire:model.live="marital_status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             <option value="">Select status</option>
                                             @foreach($maritalStatuses as $key => $status)
                                                 <option value="{{ $key }}">{{ $status }}</option>
@@ -989,17 +989,17 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">National ID *</label>
-                                        <input wire:model.live="national_id" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="national_id" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('national_id') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
-                                        <input wire:model.live="phone_number" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="phone_number" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('phone_number') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                                        <input wire:model.live="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('email') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -1024,29 +1024,29 @@
                                 <div class="space-y-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
-                                        <textarea wire:model.live="current_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your current street address"></textarea>
+                                        <textarea wire:model.live="current_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your current street address"></textarea>
                                         @error('current_address') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
-                                            <input wire:model.live="current_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="current_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('current_city') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Region *</label>
-                                            <input wire:model.live="current_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="current_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('current_region') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                                            <input wire:model.live="current_postal_code" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="current_postal_code" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('current_postal_code') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Years at Current Address *</label>
-                                        <input wire:model.live="years_at_current_address" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="years_at_current_address" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         @error('years_at_current_address') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -1066,21 +1066,21 @@
                                     <div class="space-y-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
-                                            <textarea wire:model.live="permanent_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your permanent address"></textarea>
+                                            <textarea wire:model.live="permanent_address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Enter your permanent address"></textarea>
                                         </div>
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
-                                                <input wire:model.live="permanent_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="permanent_city" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
-                                                <input wire:model.live="permanent_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="permanent_region" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                     </div>
                                 @else
-                                    <div class="bg-white rounded-xl p-4 border border-green-200">
+                                    <div class="bg-white rounded-lg p-4 border border-green-200">
                                         <p class="text-sm text-green-700">
                                             ✓ Permanent address will be the same as your current address
                                         </p>
@@ -1106,7 +1106,7 @@
                                 <h3 class="text-lg font-bold text-gray-900 mb-4">Employment Status</h3>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Current Employment Status *</label>
-                                    <select wire:model.live="employment_status" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                    <select wire:model.live="employment_status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         <option value="">Select employment status</option>
                                         <option value="employed">Employed</option>
                                         <option value="self_employed">Self Employed</option>
@@ -1126,19 +1126,19 @@
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Employer Name *</label>
-                                                <input wire:model.live="employer_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="employer_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 @error('employer_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
-                                                <input wire:model.live="job_title" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="job_title" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 @error('job_title') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Employment Sector</label>
-                                                <select wire:model.live="employment_sector" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <select wire:model.live="employment_sector" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                     <option value="">Select sector</option>
                                                     @foreach($employmentSectors as $key => $sector)
                                                         <option value="{{ $key }}">{{ $sector }}</option>
@@ -1147,7 +1147,7 @@
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Months with Current Employer</label>
-                                                <input wire:model.live="months_with_current_employer" type="number" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="months_with_current_employer" type="number" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                     </div>
@@ -1162,12 +1162,12 @@
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
-                                                <input wire:model.live="business_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="business_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 @error('business_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Business Type *</label>
-                                                <select wire:model.live="business_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <select wire:model.live="business_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                     <option value="">Select business type</option>
                                                     @foreach($businessTypes as $key => $type)
                                                         <option value="{{ $key }}">{{ $type }}</option>
@@ -1179,16 +1179,16 @@
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
-                                                <input wire:model.live="business_registration_number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="business_registration_number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Years in Business</label>
-                                                <input wire:model.live="years_in_business" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="years_in_business" type="number" min="0" max="50" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Business Address</label>
-                                            <textarea wire:model.live="business_address" rows="2" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red"></textarea>
+                                            <textarea wire:model.live="business_address" rows="2" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -1204,7 +1204,7 @@
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Salary (TSh) *</label>
                                                 <div class="relative">
                                                     <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                    <input wire:model.live="monthly_salary" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                    <input wire:model.live="monthly_salary" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 </div>
                                                 @error('monthly_salary') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
@@ -1215,7 +1215,7 @@
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Business Income (TSh) *</label>
                                                 <div class="relative">
                                                     <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                    <input wire:model.live="monthly_business_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                    <input wire:model.live="monthly_business_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 </div>
                                                 @error('monthly_business_income') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                             </div>
@@ -1225,7 +1225,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Other Monthly Income (TSh)</label>
                                             <div class="relative">
                                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                <input wire:model.live="other_monthly_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="other_monthly_income" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             <p class="text-sm text-gray-500 mt-1">Rental income, investments, etc.</p>
                                         </div>
@@ -1236,7 +1236,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Expenses (TSh) *</label>
                                             <div class="relative">
                                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                <input wire:model.live="monthly_expenses" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="monthly_expenses" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                             @error('monthly_expenses') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
@@ -1244,14 +1244,14 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Existing Loan Payments (TSh)</label>
                                             <div class="relative">
                                                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                                <input wire:model.live="existing_loan_payments" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                <input wire:model.live="existing_loan_payments" type="number" step="1000" min="0" class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Display calculated total income -->
                                     @if($total_monthly_income > 0)
-                                        <div class="bg-white rounded-xl p-4 border border-yellow-200">
+                                        <div class="bg-white rounded-lg p-4 border border-yellow-200">
                                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                 <div>
                                                     <p class="text-sm text-yellow-700">Total Monthly Income:</p>
@@ -1308,7 +1308,7 @@
                             wire:model.live="bank_name" 
                             type="text" 
                             placeholder="Enter your bank name"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('bank_name') border-red-300 @enderror"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('bank_name') border-red-300 @enderror"
                         >
                         @error('bank_name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -1324,7 +1324,7 @@
                             wire:model.live="account_number" 
                             type="text" 
                             placeholder="Enter your account number"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_number') border-red-300 @enderror"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_number') border-red-300 @enderror"
                         >
                         @error('account_number')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -1340,7 +1340,7 @@
                             wire:model.live="account_name" 
                             type="text" 
                             placeholder="Enter account holder name"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_name') border-red-300 @enderror"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_name') border-red-300 @enderror"
                         >
                         @error('account_name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -1354,7 +1354,7 @@
                         </label>
                         <select 
                             wire:model.live="account_type" 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_type') border-red-300 @enderror"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('account_type') border-red-300 @enderror"
                         >
                             <option value="">Select account type</option>
                             <option value="savings">Savings Account</option>
@@ -1391,7 +1391,7 @@
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Credit Score (if known)</label>
-                                        <input wire:model.live="credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        <input wire:model.live="credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         <p class="text-sm text-gray-500 mt-1">Leave empty if you don't know your credit score</p>
                                     </div>
                                     <div class="flex items-center pt-8">
@@ -1423,12 +1423,12 @@
                                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Contact Name *</label>
-                                            <input wire:model.live="emergency_contact_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="emergency_contact_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('emergency_contact_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Relationship *</label>
-                                            <select wire:model.live="emergency_contact_relationship" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <select wire:model.live="emergency_contact_relationship" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                                 <option value="">Select relationship</option>
                                                 <option value="spouse">Spouse</option>
                                                 <option value="parent">Parent</option>
@@ -1444,12 +1444,12 @@
                                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
-                                            <input wire:model.live="emergency_contact_phone" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="emergency_contact_phone" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                             @error('emergency_contact_phone') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                                            <input wire:model.live="emergency_contact_address" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                            <input wire:model.live="emergency_contact_address" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         </div>
                                     </div>
                                 </div>
@@ -1460,7 +1460,7 @@
                                 <h3 class="text-lg font-bold text-gray-900 mb-4">Disbursement Preference</h3>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Disbursement Method</label>
-                                    <select wire:model.live="preferred_disbursement_method" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                    <select wire:model.live="preferred_disbursement_method" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                                         <option value="bank_transfer">Bank Transfer</option>
                                         <option value="mobile_money">Mobile Money</option>
                                         <option value="cash">Cash Pickup</option>
@@ -1490,7 +1490,7 @@
                             
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 @foreach($requiredDocuments as $key => $name)
-                                    <div class="border border-gray-200 rounded-xl p-6 bg-white">
+                                    <div class="border border-gray-200 rounded-lg p-6 bg-white">
                                         <div class="flex items-start space-x-4">
                                             <div class="flex-shrink-0">
                                                 @if(isset($uploadedDocuments[$key]))
@@ -1589,7 +1589,7 @@
                                 @endforeach
                             </div>
                             
-                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                                 <div class="flex items-start space-x-3">
                                     <svg class="w-5 h-5 text-yellow-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
@@ -1609,7 +1609,7 @@
                             </div>
 
                             <!-- Application Summary -->
-                            <div class="mt-8 bg-white border border-gray-200 rounded-xl p-6">
+                            <div class="mt-8 bg-white border border-gray-200 rounded-lg p-6">
                                 <h4 class="text-lg font-bold text-gray-900 mb-4">Application Summary</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                                     <div>
@@ -1667,14 +1667,14 @@
                         <!-- Previous Button -->
                         <div>
                             @if($currentFormStep > 1)
-                                <button type="button" wire:click="previousStep" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-colors flex items-center">
+                                <button type="button" wire:click="previousStep" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                     </svg>
                                     Previous Step
                                 </button>
                             @else
-                                <button type="button" wire:click="backToPreQualification" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-colors flex items-center">
+                                <button type="button" wire:click="backToPreQualification" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                     </svg>
@@ -1747,14 +1747,14 @@
                         <div class="flex items-center space-x-3">
                             @if($currentFormStep < 6)
                                 <!-- Save Draft Button -->
-                                <button type="button" wire:click="saveApplication(false)" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-colors flex items-center">
+                                <button type="button" wire:click="saveApplication(false)" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"/>
                                     </svg>
                                     Save Draft
                                 </button>
                                 <!-- Next Step Button -->
-                                <button type="button" wire:click="nextStep" class="bg-brand-red text-white px-6 py-3 rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
+                                <button type="button" wire:click="nextStep" class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
                                     Next Step
                                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -1769,7 +1769,7 @@
                                 @endphp
 
                                 <!-- Save Draft Button -->
-                                <button type="button" wire:click="saveApplication(false)" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-colors flex items-center">
+                                <button type="button" wire:click="saveApplication(false)" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"/>
                                     </svg>
@@ -1778,7 +1778,7 @@
 
                                 <!-- Submit Application Button -->
                                 @if($canSubmit)
-                                    <button type="button" wire:click="saveApplication(true)" class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-8 py-3 rounded-xl font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
+                                    <button type="button" wire:click="saveApplication(true)" class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-8 py-3 rounded-lg font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                                         </svg>
@@ -1833,14 +1833,14 @@
                 </div>
                 <div class="flex items-center space-x-3">
                     @if(in_array($selectedApplication->status, ['draft']))
-                        <button wire:click="editApplication({{ $selectedApplication->id }})" class="bg-brand-red text-white px-6 py-3 rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
+                        <button wire:click="editApplication({{ $selectedApplication->id }})" class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                             </svg>
                             Edit Application
                         </button>
                     @endif
-                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200" title="Back to List">
+                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="Back to List">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -1854,7 +1854,7 @@
             <!-- Left Column - Application Information -->
             <div class="lg:col-span-2 space-y-8">
                 <!-- Loan Details -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
                         <div class="flex items-center justify-between">
                             <h3 class="text-xl font-bold text-gray-900">Loan Details</h3>
@@ -1898,7 +1898,7 @@
                                     ($monthlyRate * pow(1 + $monthlyRate, $selectedApplication->requested_tenure_months)) / 
                                     (pow(1 + $monthlyRate, $selectedApplication->requested_tenure_months) - 1);
                             @endphp
-                            <div class="mt-6 bg-blue-50 rounded-xl p-4">
+                            <div class="mt-6 bg-blue-50 rounded-lg p-4">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <p class="text-sm text-blue-700">Estimated Monthly Payment</p>
@@ -1919,7 +1919,7 @@
                 </div>
 
                 <!-- Personal Information -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
                         <h3 class="text-xl font-bold text-gray-900">Personal Information</h3>
                     </div>
@@ -1963,7 +1963,7 @@
                 </div>
 
                 <!-- Address Information -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50">
                         <h3 class="text-xl font-bold text-gray-900">Address Information</h3>
                     </div>
@@ -2002,7 +2002,7 @@
                 </div>
 
                 <!-- Employment Information -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-yellow-50 to-orange-50">
                         <h3 class="text-xl font-bold text-gray-900">Employment & Financial Information</h3>
                     </div>
@@ -2059,7 +2059,7 @@
                         </div>
 
                         <!-- Financial Summary -->
-                        <div class="mt-6 bg-gray-50 rounded-xl p-6">
+                        <div class="mt-6 bg-gray-50 rounded-lg p-6">
                             <h4 class="text-lg font-bold text-gray-900 mb-4">Financial Summary</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div>
@@ -2086,7 +2086,7 @@
 
                         <!-- Bank Information -->
                         @if($selectedApplication->bank_name)
-                            <div class="mt-6 bg-blue-50 rounded-xl p-4">
+                            <div class="mt-6 bg-blue-50 rounded-lg p-4">
                                 <h4 class="text-sm font-semibold text-gray-700 mb-2">Bank Information</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
@@ -2105,7 +2105,7 @@
 
                         <!-- Credit Information -->
                         @if($selectedApplication->credit_score || $selectedApplication->has_bad_credit_history)
-                            <div class="mt-6 bg-red-50 rounded-xl p-4">
+                            <div class="mt-6 bg-red-50 rounded-lg p-4">
                                 <h4 class="text-sm font-semibold text-gray-700 mb-2">Credit Information</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     @if($selectedApplication->credit_score)
@@ -2128,7 +2128,7 @@
 
                 <!-- Emergency Contact -->
                 @if($selectedApplication->emergency_contact_name)
-                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-red-50 to-pink-50">
                             <h3 class="text-xl font-bold text-gray-900">Emergency Contact</h3>
                         </div>
@@ -2155,7 +2155,7 @@
 
                 <!-- Documents -->
                 @if($selectedApplication->documents && $selectedApplication->documents->count() > 0)
-                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-blue-50">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-xl font-bold text-gray-900">Uploaded Documents</h3>
@@ -2165,7 +2165,7 @@
                         <div class="p-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @foreach($selectedApplication->documents as $document)
-                                    <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition-colors">
+                                    <div class="flex items-center justify-between bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
                                         <div class="flex items-center space-x-3">
                                             @if(in_array(strtolower($document->file_type), ['jpg', 'jpeg', 'png']))
                                                 <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2211,7 +2211,7 @@
             <!-- Right Column - Status & Actions -->
             <div class="lg:col-span-1 space-y-6">
                 <!-- Status Card -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden sticky top-6">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-brand-red to-brand-dark-red text-white">
                         <h3 class="text-xl font-bold">Application Status</h3>
                     </div>
@@ -2388,7 +2388,7 @@
                         @if($selectedApplication->lender)
                             <div class="mt-6 pt-6 border-t border-gray-200">
                                 <h4 class="text-sm font-semibold text-gray-700 mb-3">Lender Details</h4>
-                                <div class="bg-blue-50 rounded-xl p-4">
+                                <div class="bg-blue-50 rounded-lg p-4">
                                     <p class="text-gray-900 font-medium">{{ $selectedApplication->lender->company_name }}</p>
                                     @if($selectedApplication->loanProduct)
                                         <p class="text-sm text-blue-600 font-medium">{{ $selectedApplication->loanProduct->name }}</p>
@@ -2414,7 +2414,7 @@
                         @if($selectedApplication->status === 'rejected' && $selectedApplication->rejection_reasons)
                             <div class="mt-6 pt-6 border-t border-gray-200">
                                 <h4 class="text-sm font-semibold text-gray-700 mb-3">Rejection Reasons</h4>
-                                <div class="bg-red-50 rounded-xl p-4">
+                                <div class="bg-red-50 rounded-lg p-4">
                                     @php
                                         $reasons = is_string($selectedApplication->rejection_reasons) 
                                             ? json_decode($selectedApplication->rejection_reasons, true) 
@@ -2440,7 +2440,7 @@
                         @if($selectedApplication->notes)
                             <div class="mt-6 pt-6 border-t border-gray-200">
                                 <h4 class="text-sm font-semibold text-gray-700 mb-3">Additional Notes</h4>
-                                <div class="bg-gray-50 rounded-xl p-4">
+                                <div class="bg-gray-50 rounded-lg p-4">
                                     <p class="text-sm text-gray-700">{{ $selectedApplication->notes }}</p>
                                 </div>
                             </div>
@@ -2449,7 +2449,7 @@
                         <!-- Actions -->
                         <div class="mt-6 space-y-3">
                             @if($selectedApplication->status === 'submitted' && !$selectedApplication->lender_id)
-                                <button wire:click="viewMatchingProducts({{ $selectedApplication->id }})" class="w-full bg-green-100 text-green-700 py-3 px-4 rounded-xl font-semibold hover:bg-green-200 transition-colors flex items-center justify-center">
+                                <button wire:click="viewMatchingProducts({{ $selectedApplication->id }})" class="w-full bg-green-100 text-green-700 py-3 px-4 rounded-lg font-semibold hover:bg-green-200 transition-colors flex items-center justify-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
@@ -2458,7 +2458,7 @@
                             @endif
                             
                             @if($selectedApplication->status === 'draft')
-                                <button wire:click="editApplication({{ $selectedApplication->id }})" class="w-full bg-blue-100 text-blue-700 py-3 px-4 rounded-xl font-semibold hover:bg-blue-200 transition-colors flex items-center justify-center">
+                                <button wire:click="editApplication({{ $selectedApplication->id }})" class="w-full bg-blue-100 text-blue-700 py-3 px-4 rounded-lg font-semibold hover:bg-blue-200 transition-colors flex items-center justify-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
@@ -2469,7 +2469,7 @@
                             @if(in_array($selectedApplication->status, ['draft', 'submitted']))
                                 <button wire:click="cancelApplication({{ $selectedApplication->id }})" 
                                         wire:confirm="Are you sure you want to cancel this application? This action cannot be undone."
-                                        class="w-full bg-red-100 text-red-700 py-3 px-4 rounded-xl font-semibold hover:bg-red-200 transition-colors flex items-center justify-center">
+                                        class="w-full bg-red-100 text-red-700 py-3 px-4 rounded-lg font-semibold hover:bg-red-200 transition-colors flex items-center justify-center">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
@@ -2478,7 +2478,7 @@
                             @endif
 
                             <!-- Print/Download Application -->
-                            <button onclick="window.print()" class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors flex items-center justify-center">
+                            <button onclick="window.print()" class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center justify-center">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                                 </svg>
@@ -2489,7 +2489,7 @@
                 </div>
 
                 <!-- Quick Stats -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-indigo-50">
                         <h3 class="text-lg font-bold text-gray-900">Quick Stats</h3>
                     </div>
@@ -2537,7 +2537,7 @@
                 </div>
 
                 <!-- Help & Support -->
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
                         <h3 class="text-lg font-bold text-gray-900">Need Help?</h3>
                     </div>
@@ -2549,13 +2549,13 @@
                             <p class="text-sm text-gray-600 mb-4">Have questions about your application? We're here to help!</p>
                             
                             <div class="space-y-2">
-                                <a href="tel:+255123456789" class="block w-full bg-green-100 text-green-700 py-2 px-4 rounded-xl font-medium hover:bg-green-200 transition-colors text-sm">
+                                <a href="tel:+255123456789" class="block w-full bg-green-100 text-green-700 py-2 px-4 rounded-lg font-medium hover:bg-green-200 transition-colors text-sm">
                                     📞 Call Support
                                 </a>
-                                <a href="mailto:support@loanplatform.com" class="block w-full bg-blue-100 text-blue-700 py-2 px-4 rounded-xl font-medium hover:bg-blue-200 transition-colors text-sm">
+                                <a href="mailto:support@loanplatform.com" class="block w-full bg-blue-100 text-blue-700 py-2 px-4 rounded-lg font-medium hover:bg-blue-200 transition-colors text-sm">
                                     ✉️ Email Support
                                 </a>
-                                <!-- <button class="w-full bg-purple-100 text-purple-700 py-2 px-4 rounded-xl font-medium hover:bg-purple-200 transition-colors text-sm">
+                                <!-- <button class="w-full bg-purple-100 text-purple-700 py-2 px-4 rounded-lg font-medium hover:bg-purple-200 transition-colors text-sm">
                                     💬 Live Chat
                                 </button> -->
                             </div>
@@ -2586,13 +2586,13 @@
                 </div>
                 <div class="flex items-center space-x-3">
                     <button wire:click="viewApplication({{ $selectedApplication->id }})" 
-                            class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
+                            class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                         </svg>
                         Back to Application
                     </button>
-                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200" title="Back to List">
+                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="Back to List">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -2649,7 +2649,7 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <!-- Sort Options -->
-                        <select class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                        <select class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                             <option value="eligibility">Best Match</option>
                             <option value="interest_rate">Lowest Interest Rate</option>
                             <option value="processing_time">Fastest Processing</option>
@@ -2657,7 +2657,7 @@
                         </select>
                         
                         <!-- View Toggle -->
-                        <div class="flex items-center bg-gray-100 rounded-xl p-1">
+                        <div class="flex items-center bg-gray-100 rounded-lg p-1">
                             <button class="px-3 py-1 bg-white rounded-lg shadow-sm text-sm">Grid</button>
                             <button class="px-3 py-1 text-gray-600 text-sm">List</button>
                         </div>
@@ -2673,7 +2673,7 @@
                         $isEligible = $eligibilityScore >= 70;
                     @endphp
                     
-                    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 
                                 {{ $isTopMatch ? 'ring-2 ring-brand-red' : '' }}
                                 {{ !$isEligible ? 'opacity-75' : '' }}">
                         
@@ -2917,7 +2917,7 @@
                             <div class="mt-6 pt-6 border-t border-gray-200">
                                 @if($isEligible)
                                     <button wire:click="applyToProduct({{ $product['product_id'] }})" 
-                                            class="w-full {{ $isTopMatch ? 'bg-gradient-to-r from-brand-red to-brand-dark-red' : 'bg-blue-600 hover:bg-blue-700' }} text-white py-3 px-4 rounded-xl font-bold transition-all duration-200 shadow-lg flex items-center justify-center">
+                                            class="w-full {{ $isTopMatch ? 'bg-gradient-to-r from-brand-red to-brand-dark-red' : 'bg-blue-600 hover:bg-blue-700' }} text-white py-3 px-4 rounded-lg font-bold transition-all duration-200 shadow-lg flex items-center justify-center">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                                         </svg>
@@ -2927,7 +2927,7 @@
                                         @endif
                                     </button>
                                 @else
-                                    <button disabled class="w-full bg-gray-300 text-gray-500 py-3 px-4 rounded-xl font-bold cursor-not-allowed flex items-center justify-center">
+                                    <button disabled class="w-full bg-gray-300 text-gray-500 py-3 px-4 rounded-lg font-bold cursor-not-allowed flex items-center justify-center">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
                                         </svg>
@@ -2962,7 +2962,7 @@
                         <p class="text-gray-600 mb-4">Increase your chances of approval by applying to multiple eligible lenders simultaneously.</p>
                         
                         <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                            <button class="bg-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-purple-700 transition-colors flex items-center">
+                            <button class="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-700 transition-colors flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                                 </svg>
@@ -2976,8 +2976,8 @@
 
         @else
         <!-- No Matching Products -->
-        <div class="col-span-full bg-white rounded-3xl shadow-sm p-12 text-center border border-gray-100">
-                <div class="w-20 h-20 bg-gradient-to-br from-gray-400 to-gray-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+        <div class="col-span-full bg-white rounded-lg shadow-sm p-12 text-center border border-gray-100">
+                <div class="w-20 h-20 bg-gradient-to-br from-gray-400 to-gray-600 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
@@ -3008,13 +3008,13 @@
                 </div>
                 <div class="flex items-center space-x-3">
                     <button wire:click="backToPreQualification" 
-                            class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
+                            class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                         </svg>
                         Back to Pre-qualification
                     </button>
-                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-xl hover:bg-gray-100 transition-all duration-200" title="Back to List">
+                    <button wire:click="backToList" class="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="Back to List">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -3068,14 +3068,14 @@
                 <div class="flex flex-wrap items-center gap-3">
                     <!-- Quick Selection Buttons -->
                     <button wire:click="selectAllEligibleLenders" 
-                            class="bg-blue-100 text-blue-700 px-4 py-2 rounded-xl font-medium hover:bg-blue-200 transition-colors text-sm flex items-center">
+                            class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-blue-200 transition-colors text-sm flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         Select All Eligible
                     </button>
                     <button wire:click="clearSelectedLenders" 
-                            class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors text-sm flex items-center">
+                            class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -3083,7 +3083,7 @@
                     </button>
                     
                     <!-- Sort Options -->
-                    <select class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                    <select class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
                         <option value="dsr">Best DSR Match</option>
                         <option value="rate">Lowest Interest Rate</option>
                         <option value="speed">Fastest Processing</option>
@@ -3094,7 +3094,7 @@
             
             <!-- Selected Lenders Summary -->
             @if(!empty($selectedLenders))
-                <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-blue-800">
@@ -3117,7 +3117,7 @@
                         </div>
                         @if(count($selectedLenders) > 0)
                             <button wire:click="proceedToApplication" 
-                                    class="bg-blue-600 text-white px-4 py-2 rounded-xl font-medium hover:bg-blue-700 transition-colors text-sm">
+                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
                                 Proceed with Selected
                             </button>
                         @endif
@@ -3127,7 +3127,7 @@
         </div>
 
         <!-- Lenders Comparison Table -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6">
             <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-indigo-50">
                 <h3 class="text-xl font-bold text-gray-900">Lender Comparison</h3>
                 <p class="text-sm text-gray-600 mt-1">Compare key features across all available lenders</p>
@@ -3231,7 +3231,7 @@
                         $isEligible = $result['eligible'] ?? true;
                         $isTopMatch = $index === 0;
                     @endphp
-                    <div class="border border-gray-200 rounded-xl p-4 {{ $isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : '' }} {{ !$isEligible ? 'opacity-60' : '' }}">
+                    <div class="border border-gray-200 rounded-lg p-4 {{ $isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : '' }} {{ !$isEligible ? 'opacity-60' : '' }}">
                         <div class="flex items-start justify-between mb-3">
                             <div class="flex-1">
                                 <div class="flex items-center space-x-2 mb-1">
@@ -3296,7 +3296,7 @@
         </div>
 
         <!-- Selection Strategy Guide -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6">
             <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-yellow-50 to-orange-50">
                 <h3 class="text-xl font-bold text-gray-900">Selection Strategy Guide</h3>
                 <p class="text-sm text-gray-600 mt-1">Tips to help you choose the right lenders</p>
@@ -3344,7 +3344,7 @@
                 </div>
 
                 <!-- Key Considerations -->
-                <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
                     <h5 class="font-semibold text-gray-900 mb-3">Key Considerations:</h5>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div class="space-y-2">
@@ -3382,7 +3382,7 @@
 
         <!-- Proceed to Application -->
         @if(!empty($selectedLenders))
-            <div class="bg-gradient-to-r from-brand-red to-brand-dark-red rounded-3xl shadow-lg p-8 text-white text-center">
+            <div class="bg-gradient-to-r from-brand-red to-brand-dark-red rounded-lg shadow-lg p-8 text-white text-center">
                 <div class="max-w-2xl mx-auto">
                     <h3 class="text-2xl font-bold mb-2">Ready to Proceed?</h3>
                     <p class="text-red-100 mb-6">
@@ -3403,21 +3403,21 @@
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <button wire:click="proceedToApplication" 
-                                class="bg-white text-brand-red px-8 py-3 rounded-xl font-bold hover:bg-gray-50 transition-all duration-200 shadow-lg flex items-center justify-center">
+                                class="bg-white text-brand-red px-8 py-3 rounded-lg font-bold hover:bg-gray-50 transition-all duration-200 shadow-lg flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>
                             Continue to Application
                         </button>
                         <button wire:click="clearSelectedLenders" 
-                                class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-xl font-bold hover:bg-white hover:text-brand-red transition-all duration-200">
+                                class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold hover:bg-white hover:text-brand-red transition-all duration-200">
                             Change Selection
                         </button>
                     </div>
                 </div>
             </div>
         @else
-            <div class="bg-yellow-50 border border-yellow-200 rounded-3xl p-8 text-center">
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
                 <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
@@ -3426,7 +3426,7 @@
                 <h3 class="text-xl font-bold text-yellow-900 mb-2">No Lenders Selected</h3>
                 <p class="text-yellow-800 mb-4">Please select at least one lender to proceed with your application.</p>
                 <button wire:click="selectAllEligibleLenders" 
-                        class="bg-yellow-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-yellow-700 transition-colors">
+                        class="bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-700 transition-colors">
                     Select All Eligible Lenders
                 </button>
             </div>
@@ -3555,13 +3555,13 @@
                 <p class="text-green-800 mb-4">Our loan experts are here to help you make the best decision for your financial situation.</p>
                 
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="tel:+255123456789" class="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center justify-center">
+                    <a href="tel:+255123456789" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                         </svg>
                         Call Us Now
                     </a>
-                    <button class="bg-white text-green-700 border border-green-300 px-6 py-3 rounded-xl font-semibold hover:bg-green-50 transition-colors flex items-center justify-center">
+                    <button class="bg-white text-green-700 border border-green-300 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors flex items-center justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                         </svg>
