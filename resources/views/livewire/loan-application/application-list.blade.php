@@ -1,5 +1,4 @@
 <div>
-
 {{-- SECTION 1: HEADER AND STATS --}}
 <div class="min-h-screen bg-gray-50">
     {{-- Header Section --}}
@@ -2145,11 +2144,6 @@
 
 
                 @endif 
-
-
-
-                
-
 
             </div>
         </div>

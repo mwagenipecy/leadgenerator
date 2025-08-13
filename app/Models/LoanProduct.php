@@ -330,4 +330,79 @@ class LoanProduct extends Model
             'other' => 'Other'
         ];
     }
+
+
+    public static function getLoanCategories(): array
+    {
+        return [
+            'personal' => 'Personal Loan',
+            'business' => 'Business Loan',
+            'auto' => 'Auto Loan',
+            'home' => 'Home Loan',
+            'education' => 'Education Loan',
+            'agriculture' => 'Agriculture Loan',
+            'emergency' => 'Emergency Loan',
+            'debt_consolidation' => 'Debt Consolidation'
+        ];
+    }
+
+    public static function getLoanTypes(): array
+    {
+        return [
+            'secured' => 'Secured Loan',
+            'unsecured' => 'Unsecured Loan'
+        ];
+    }
+
+
+
+    public function checkEligibility(UserProfile $profile, float $requestedAmount, int $requestedTenure): array
+    {
+        $issues = [];
+        $score = 100;
+
+        // Amount check
+        if ($requestedAmount < $this->min_amount || $requestedAmount > $this->max_amount) {
+            $issues[] = "Amount not in range: TSh " . number_format($this->min_amount) . " - " . number_format($this->max_amount);
+            $score -= 30;
+        }
+
+        // Tenure check
+        if ($requestedTenure < $this->min_tenure_months || $requestedTenure > $this->max_tenure_months) {
+            $issues[] = "Tenure not in range: {$this->min_tenure_months} - {$this->max_tenure_months} months";
+            $score -= 20;
+        }
+
+        // Income check
+        if ($profile->total_monthly_income < $this->min_monthly_income) {
+            $issues[] = "Minimum income requirement: TSh " . number_format($this->min_monthly_income);
+            $score -= 25;
+        }
+
+        // DSR check
+        $monthlyPayment = $this->calculateMonthlyPayment($requestedAmount, $requestedTenure);
+        $dsr = $profile->calculateDSR($monthlyPayment);
+        if ($dsr > $this->maximum_dsr) {
+          //  $issues[] = "DSR too high: {$dsr}% (max: {$this->maximum_dsr}%)";
+          //  $score -= 20;
+        }
+
+        // Age check (if date of birth is available)
+        if ($profile->date_of_birth) {
+            $age = $profile->date_of_birth->age;
+            if ($age < $this->min_age || $age > $this->max_age) {
+               // $issues[] = "Age requirement: {$this->min_age} - {$this->max_age} years";
+               // $score -= 15;
+            }
+        }
+
+        return [
+            'eligible' => $score >= 70  , //&& empty($issues),
+            'score' => max(0, $score),
+            'issues' => $issues,
+            'monthly_payment' => $monthlyPayment,
+            'dsr' => $dsr
+        ];
+    }
+    
 }

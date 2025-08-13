@@ -394,4 +394,10 @@ public function clearPermissionsCache(): void
 
 
 
+public function profile()
+{
+    return $this->hasOne(UserProfile::class);
+}
+
+
 }

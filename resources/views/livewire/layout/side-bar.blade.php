@@ -57,6 +57,17 @@
 
             @if(auth()->user()->role=='borrower')
             <!-- Loan Applications -->
+            <a href="{{ route('loan-application.profile') }}" class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('loan-application.profile*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg">
+                <svg class="mr-4 h-5 w-5 {{ request()->routeIs('loan-application.*') ? '' : 'group-hover:text-brand-red' }} transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span class="truncate flex-1"> User Profile </span>
+               
+             
+            </a>
+
+
+
             <a href="{{ route('user.loan.application') }}" class="group flex items-center px-5 py-4 text-sm font-medium {{ request()->routeIs('user.loan.*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg">
                 <svg class="mr-4 h-5 w-5 {{ request()->routeIs('user.loan.*') ? '' : 'group-hover:text-brand-red' }} transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>

@@ -1,5 +1,5 @@
         <x-app-layout>
    
- <livewire:loan-application.application-management />
+ <livewire:loan-application.loan-applications-list />
  
 </x-app-layout>

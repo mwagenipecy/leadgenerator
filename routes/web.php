@@ -255,7 +255,14 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     // LOAN APPLICATION MANAGEMENT 
     Route::get('loanApplication',[LoanApplicationController::class,'index'])->name('user.loan.application');
     Route::get('application-list',[LoanApplicationController::class,'applicationList'])->name('application.list');
+    Route::get('application/{id}/view',[LoanApplicationController::class,'applicationView'])->name('loan-applications.view');
 
+    Route::group(['prefix'=> 'application'], function () {
+
+        Route::get('create',[LoanApplicationController::class,'createApplication'])->name('loan-application.create');
+        Route::get('profile',[LoanApplicationController::class,'updateProfile'])->name('loan-application.profile');
+        Route::get('completed',[LoanApplicationController::class,'completedApplications'])->name('loan-application.completed');
+    });
 
 
 

@@ -1,7 +1,7 @@
 <div>
 <div class="w-full">
     {{-- LIST VIEW --}}
-      @if($currentStep === 'list')
+     @if($currentStep === 'list')
         <!-- Page Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
@@ -237,7 +237,8 @@
 
 
 
-        @elseif($currentStep === 'prequalify')
+     @elseif($currentStep === 'prequalify')
+
         <!-- Pre-qualification Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
@@ -703,8 +704,8 @@
         @endif
 
 
-            {{-- CREATE/EDIT APPLICATION FORM --}}
-       @elseif(in_array($currentStep, ['create', 'edit']))
+  {{-- CREATE/EDIT APPLICATION FORM --}}
+     @elseif(in_array($currentStep, ['create', 'edit']))
         <!-- Form Header with Progress -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
@@ -1807,7 +1808,8 @@
 
 
         {{-- VIEW APPLICATION DETAILS --}}
-    @elseif($currentStep === 'view' && $selectedApplication)
+   
+     @elseif($currentStep === 'view' && $selectedApplication)
         <!-- View Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
@@ -2571,7 +2573,7 @@
 
 
         {{-- MATCHING PRODUCTS VIEW --}}
-    @elseif($currentStep === 'products' && $selectedApplication)
+     @elseif($currentStep === 'products' && $selectedApplication)
         <!-- Products Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
@@ -2993,7 +2995,7 @@
        
 
     {{-- LENDER SELECTION VIEW --}}
-    @elseif($currentStep === 'lender_selection' && $selectedApplication)
+     @elseif($currentStep === 'lender_selection' && $selectedApplication)
         <!-- Lender Selection Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-6">
@@ -3572,10 +3574,6 @@
         </div>
 
      @endif    
-
-
-            
-    
 
 </div>
 </div>
