@@ -9,6 +9,9 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class LenderManagement extends Component
@@ -62,11 +65,17 @@ class LenderManagement extends Component
     // Component state
     public $showAddForm = false;
     public $showViewModal = false;
+    public $showPasswordConfirmModal = false;
     public $selectedLender = null;
     public $search = '';
-    public $statusFilter = ''; // Fixed: empty string instead of 'all'
+    public $statusFilter = '';
     public $regionFilter = '';
     public $rejection_reason = '';
+    public $confirmAction = '';
+    public $confirmLenderId = null;
+    public $currentPassword = '';
+    public $passwordConfirmTitle = '';
+    public $passwordConfirmMessage = '';
 
     // Fixed: Match database enum values exactly
     public $lender_status = [
@@ -81,6 +90,13 @@ class LenderManagement extends Component
     public function mount()
     {
         
+    }
+
+    public function passwordConfirmationRules()
+    {
+        return [
+            'currentPassword' => 'required|string|min:1',
+        ];
     }
 
     public function render()
@@ -131,41 +147,62 @@ class LenderManagement extends Component
     {
         $this->validate();
 
-        // Handle file uploads
-        $documents = [];
-        
-        if ($this->business_license) {
-            $documents['business_license'] = $this->business_license->store('lender-documents', 'public');
-        }
-        
-        if ($this->tax_certificate) {
-            $documents['tax_certificate'] = $this->tax_certificate->store('lender-documents', 'public');
-        }
-        
-        if ($this->bank_statement) {
-            $documents['bank_statement'] = $this->bank_statement->store('lender-documents', 'public');
-        }
+        try {
+            DB::transaction(function () {
+                // Handle file uploads
+                $documents = [];
+                
+                if ($this->business_license) {
+                    $documents['business_license'] = $this->business_license->store('lender-documents', 'public');
+                }
+                
+                if ($this->tax_certificate) {
+                    $documents['tax_certificate'] = $this->tax_certificate->store('lender-documents', 'public');
+                }
+                
+                if ($this->bank_statement) {
+                    $documents['bank_statement'] = $this->bank_statement->store('lender-documents', 'public');
+                }
 
-        // Create lender
-        Lender::create([
-            'company_name' => $this->company_name,
-            'license_number' => $this->license_number,
-            'contact_person' => $this->contact_person,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'address' => $this->address,
-            'city' => $this->city,
-            'region' => $this->region,
-            'postal_code' => $this->postal_code,
-            'website' => $this->website,
-            'description' => $this->description,
-            'documents' => $documents,
-            'status' => 'pending'
-        ]);
+                // Create lender
+                $lender = Lender::create([
+                    'company_name' => $this->company_name,
+                    'license_number' => $this->license_number,
+                    'contact_person' => $this->contact_person,
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                    'address' => $this->address,
+                    'city' => $this->city,
+                    'region' => $this->region,
+                    'postal_code' => $this->postal_code,
+                    'website' => $this->website,
+                    'description' => $this->description,
+                    'documents' => $documents,
+                    'status' => 'pending'
+                ]);
 
-        $this->hideAddLenderForm();
-        session()->flash('message', 'Lender application submitted successfully!');
-        $this->resetPage();
+                Log::info('Lender application created', [
+                    'lender_id' => $lender->id,
+                    'company_name' => $lender->company_name,
+                    'created_by' => auth()->id()
+                ]);
+            });
+
+            $this->hideAddLenderForm();
+            session()->flash('message', 'Lender application submitted successfully!');
+            $this->resetPage();
+
+        } catch (\Exception $e) {
+            Log::error('Failed to create lender application', [
+                'error' => $e->getMessage(),
+                'data' => [
+                    'company_name' => $this->company_name,
+                    'email' => $this->email
+                ]
+            ]);
+            
+            session()->flash('error', 'Failed to submit lender application. Please try again.');
+        }
     }
 
     public function viewLender($id)
@@ -180,6 +217,17 @@ class LenderManagement extends Component
         $this->selectedLender = null;
     }
 
+    public function closePasswordConfirmModal()
+    {
+        $this->showPasswordConfirmModal = false;
+        $this->confirmAction = '';
+        $this->confirmLenderId = null;
+        $this->currentPassword = '';
+        $this->passwordConfirmTitle = '';
+        $this->passwordConfirmMessage = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
     // New method to redirect to lender dashboard
     public function viewLenderDashboard($id)
     {
@@ -191,10 +239,29 @@ class LenderManagement extends Component
         $lender = Lender::findOrFail($id);
         
         if ($lender->isPending()) {
-            // Create user account
-            $user = $lender->createUserAccount(auth()->id());
-            
-            session()->flash('message', 'Lender approved successfully! User account created.');
+            try {
+                DB::transaction(function () use ($lender) {
+                    // Create user account
+                    $user = $lender->createUserAccount(auth()->id());
+                    
+                    Log::info('Lender approved and user account created', [
+                        'lender_id' => $lender->id,
+                        'user_id' => $user->id,
+                        'approved_by' => auth()->id()
+                    ]);
+                });
+                
+                session()->flash('message', 'Lender approved successfully! User account created.');
+                
+            } catch (\Exception $e) {
+                Log::error('Failed to approve lender', [
+                    'lender_id' => $id,
+                    'error' => $e->getMessage(),
+                    'approved_by' => auth()->id()
+                ]);
+                
+                session()->flash('error', 'Failed to approve lender. Please try again.');
+            }
         }
     }
 
@@ -205,69 +272,193 @@ class LenderManagement extends Component
             return;
         }
 
-        $lender = Lender::findOrFail($id);
-        
-        if ($lender->isPending()) {
-            $lender->update([
-                'status' => 'rejected',
-                'rejection_reason' => $this->rejection_reason
+        try {
+            $lender = Lender::findOrFail($id);
+            
+            if ($lender->isPending()) {
+                $lender->update([
+                    'status' => 'rejected',
+                    'rejection_reason' => $this->rejection_reason
+                ]);
+                
+                Log::info('Lender application rejected', [
+                    'lender_id' => $id,
+                    'rejection_reason' => $this->rejection_reason,
+                    'rejected_by' => auth()->id()
+                ]);
+                
+                $this->rejection_reason = '';
+                session()->flash('message', 'Lender application rejected.');
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Failed to reject lender', [
+                'lender_id' => $id,
+                'error' => $e->getMessage(),
+                'rejected_by' => auth()->id()
             ]);
             
-            $this->rejection_reason = '';
-            session()->flash('message', 'Lender application rejected.');
+            session()->flash('error', 'Failed to reject lender. Please try again.');
         }
     }
 
-    public function suspendLender($id)
+    // Critical actions that require password confirmation
+    public function confirmSuspendLender($id)
+    {
+        $lender = Lender::findOrFail($id);
+        
+        if (!$lender->isApproved()) {
+            session()->flash('error', 'Only approved lenders can be suspended.');
+            return;
+        }
+
+        $this->confirmLenderId = $id;
+        $this->confirmAction = 'suspendLender';
+        $this->passwordConfirmTitle = 'Confirm Lender Suspension';
+        $this->passwordConfirmMessage = 'Are you sure you want to suspend this lender? This will also deactivate their user account and is a critical action.';
+        $this->showPasswordConfirmModal = true;
+        $this->currentPassword = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    public function confirmDeleteLender($id)
+    {
+        $this->confirmLenderId = $id;
+        $this->confirmAction = 'deleteLender';
+        $this->passwordConfirmTitle = 'Confirm Lender Deletion';
+        $this->passwordConfirmMessage = 'Are you sure you want to permanently delete this lender? This action will delete all associated data and cannot be undone. This is an extremely critical action.';
+        $this->showPasswordConfirmModal = true;
+        $this->currentPassword = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    public function executeConfirmedAction()
+    {
+        try {
+            $this->validate($this->passwordConfirmationRules());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return;
+        }
+
+        // Verify current user's password
+        if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+            $this->addError('currentPassword', 'The password is incorrect.');
+            return;
+        }
+
+        try {
+            if ($this->confirmAction === 'suspendLender') {
+                $this->performSuspendLender($this->confirmLenderId);
+            } elseif ($this->confirmAction === 'deleteLender') {
+                $this->performDeleteLender($this->confirmLenderId);
+            }
+
+            $this->closePasswordConfirmModal();
+            
+        } catch (\Exception $e) {
+            Log::error('Failed to execute confirmed action', [
+                'action' => $this->confirmAction,
+                'lender_id' => $this->confirmLenderId,
+                'error' => $e->getMessage(),
+                'executed_by' => auth()->id()
+            ]);
+            
+            session()->flash('error', 'Failed to execute action. Please try again.');
+        }
+    }
+
+    private function performSuspendLender($id)
     {
         $lender = Lender::findOrFail($id);
         
         if ($lender->isApproved()) {
             $lender->update(['status' => 'suspended']);
             
-            // Optionally suspend the user account too
+            // Suspend the user account too
             if ($lender->user) {
                 $lender->user->update(['is_active' => false]);
             }
+            
+            Log::info('Lender suspended with password confirmation', [
+                'lender_id' => $id,
+                'suspended_by' => auth()->id()
+            ]);
             
             session()->flash('message', 'Lender suspended successfully.');
         }
     }
 
-    public function reactivateLender($id)
+    private function performDeleteLender($id)
     {
         $lender = Lender::findOrFail($id);
         
-        if ($lender->isSuspended()) {
-            $lender->update(['status' => 'approved']);
-            
-            // Reactivate user account
-            if ($lender->user) {
-                $lender->user->update(['is_active' => true]);
+        DB::transaction(function () use ($lender) {
+            // Delete uploaded documents
+            if ($lender->documents) {
+                foreach ($lender->documents as $document) {
+                    Storage::disk('public')->delete($document);
+                }
             }
             
-            session()->flash('message', 'Lender reactivated successfully.');
+            // Delete associated user if exists
+            if ($lender->user) {
+                $lender->user->delete();
+            }
+            
+            $lender->delete();
+            
+            Log::info('Lender deleted with password confirmation', [
+                'deleted_lender_id' => $lender->id,
+                'deleted_lender_name' => $lender->company_name,
+                'deleted_by' => auth()->id()
+            ]);
+        });
+        
+        session()->flash('message', 'Lender deleted successfully.');
+    }
+
+    public function suspendLender($id)
+    {
+        // This method now calls password confirmation
+        $this->confirmSuspendLender($id);
+    }
+
+    public function reactivateLender($id)
+    {
+        try {
+            $lender = Lender::findOrFail($id);
+            
+            if ($lender->isSuspended()) {
+                $lender->update(['status' => 'approved']);
+                
+                // Reactivate user account
+                if ($lender->user) {
+                    $lender->user->update(['is_active' => true]);
+                }
+                
+                Log::info('Lender reactivated', [
+                    'lender_id' => $id,
+                    'reactivated_by' => auth()->id()
+                ]);
+                
+                session()->flash('message', 'Lender reactivated successfully.');
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Failed to reactivate lender', [
+                'lender_id' => $id,
+                'error' => $e->getMessage(),
+                'reactivated_by' => auth()->id()
+            ]);
+            
+            session()->flash('error', 'Failed to reactivate lender. Please try again.');
         }
     }
 
     public function deleteLender($id)
     {
-        $lender = Lender::findOrFail($id);
-        
-        // Delete uploaded documents
-        if ($lender->documents) {
-            foreach ($lender->documents as $document) {
-                Storage::disk('public')->delete($document);
-            }
-        }
-        
-        // Delete associated user if exists
-        if ($lender->user) {
-            $lender->user->delete();
-        }
-        
-        $lender->delete();
-        session()->flash('message', 'Lender deleted successfully.');
+        // This method now calls password confirmation
+        $this->confirmDeleteLender($id);
     }
 
     private function resetForm()

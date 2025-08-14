@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -11,6 +12,7 @@ use App\Models\Application;
 use App\Services\IntegrationService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class IntegrationManagement extends Component
 {
@@ -28,6 +30,7 @@ class IntegrationManagement extends Component
     public $api_name = '';
     public $description = '';
     public $webhook_url = '';
+    public $action_on = '';
     public $http_method = 'POST';
     public $auth_type = 'basic';
     public $auth_username = '';
@@ -41,6 +44,8 @@ class IntegrationManagement extends Component
     public $content_type = 'application/json';
     public $is_active = true;
 
+    public $applicationStatus = ['approved', 'disbursed'];
+
     // Field Mappings
     public $field_mappings = [];
     public $available_fields = [];
@@ -52,15 +57,19 @@ class IntegrationManagement extends Component
     public $custom_headers = [];
 
     // Testing
-
     #[Validate('required|string')]
-    public  $test_application_id = '';
+    public $test_application_id;
 
     public $test_result = null;
 
     // Filters
     public $search = '';
     public $status_filter = '';
+
+    // Password confirmation properties
+    public $show = false;
+    public $integrationId = null;
+    public $password = '';
 
     protected $paginationTheme = 'tailwind';
 
@@ -106,6 +115,16 @@ class IntegrationManagement extends Component
             'timeout_seconds' => 'required|integer|min:5|max:300',
             'retry_attempts' => 'required|integer|min:0|max:10',
             'content_type' => 'required|string',
+            'action_on' => 'required|string',
+            'password' => 'required|string', // For deletion confirmation
+        ];
+    }
+
+    protected function messages()
+    {
+        return [
+            'action_on.required' => 'Please select an action status.',
+            'password.required' => 'Password is required for this action.',
         ];
     }
 
@@ -164,6 +183,7 @@ class IntegrationManagement extends Component
         $this->verify_ssl = $integration->verify_ssl;
         $this->content_type = $integration->content_type;
         $this->is_active = $integration->is_active;
+        $this->action_on = $integration->action_on;
         
         $this->field_mappings = $integration->field_mappings ?? [];
         $this->trigger_conditions = $integration->trigger_conditions ?? [];
@@ -174,7 +194,10 @@ class IntegrationManagement extends Component
 
     public function createIntegration()
     {
-        $this->validate();
+        // Exclude password from validation for create
+        $rules = $this->rules();
+        unset($rules['password']);
+        $this->validate($rules);
 
         $data = $this->getFormData();
         $data['user_id'] = Auth::id();
@@ -188,7 +211,10 @@ class IntegrationManagement extends Component
 
     public function updateIntegration()
     {
-        $this->validate();
+        // Exclude password from validation for update
+        $rules = $this->rules();
+        unset($rules['password']);
+        $this->validate($rules);
 
         $data = $this->getFormData();
         
@@ -249,6 +275,7 @@ class IntegrationManagement extends Component
             'verify_ssl' => $this->verify_ssl,
             'content_type' => $this->content_type,
             'is_active' => $this->is_active,
+            'action_on' => $this->action_on,
         ];
     }
 
@@ -287,6 +314,13 @@ class IntegrationManagement extends Component
 
     public function testIntegration()
     {
+        // Only validate test_application_id for testing
+        $this->validate([
+            'test_application_id' => 'required|string'
+        ]);
+
+        DB::beginTransaction();
+
         try {
             $integrationService = new IntegrationService();
             
@@ -303,8 +337,11 @@ class IntegrationManagement extends Component
                 'request_payload' => $log->request_payload,
             ];
 
+            DB::commit();
+
             session()->flash('message', 'Integration test completed!');
         } catch (\Exception $e) {
+            DB::rollBack();
             $this->test_result = [
                 'success' => false,
                 'error_message' => $e->getMessage(),
@@ -323,7 +360,32 @@ class IntegrationManagement extends Component
 
     public function deleteIntegration($integrationId)
     {
-        Integration::find($integrationId)->delete();
+        $this->integrationId = $integrationId;
+        $this->password = ''; // Reset password field
+        $this->resetValidation(['password']); // Reset password validation
+        $this->show = true;
+    }
+
+    public function confirm()
+    {
+        // Only validate password for confirmation
+        $this->validate([
+            'password' => 'required|string'
+        ]);
+
+        if (!Hash::check($this->password, Auth::user()->password)) {
+            $this->addError('password', 'Incorrect password.');
+            return;
+        }
+
+        $this->show = false;
+        
+        Integration::find($this->integrationId)->delete();
+        
+        // Reset form fields
+        $this->password = '';
+        $this->integrationId = null;
+        
         session()->flash('message', 'Integration deleted successfully!');
     }
 
@@ -333,7 +395,7 @@ class IntegrationManagement extends Component
             'name', 'api_name', 'description', 'webhook_url', 'http_method',
             'auth_type', 'auth_username', 'auth_password', 'auth_token',
             'api_key_header', 'api_key_value', 'timeout_seconds', 'retry_attempts',
-            'verify_ssl', 'content_type', 'is_active'
+            'verify_ssl', 'content_type', 'is_active', 'action_on'
         ]);
         
         $this->selectedIntegration = null;
@@ -359,7 +421,7 @@ class IntegrationManagement extends Component
 
         $integrations = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        $recentApplications = Application::where('user_id', Auth::id())
+        $recentApplications = Application::where('lender_id', auth()->user()->lender_id)
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get(['id', 'application_number', 'first_name', 'last_name', 'status']);

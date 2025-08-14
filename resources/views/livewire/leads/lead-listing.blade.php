@@ -1,5 +1,4 @@
 <div>
-<div>
     {{-- Header Section --}}
     <div class="bg-white border-b border-gray-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,6 +45,29 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {{-- Flash Messages --}}
+        @if (session()->has('success'))
+            <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl" role="alert">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+
+        @if (session()->has('error'))
+            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl" role="alert">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    {{ session('error') }}
+                </div>
+            </div>
+        @endif
+
         {{-- Dashboard Stats Cards --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
@@ -271,10 +293,146 @@
         @if($viewMode === 'grid')
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($leads as $lead)
-                    <livewire:leads.components.lead-card 
-                        :lead="$lead" 
-                        :isAvailable="$leadTypeFilter === 'available'" 
-                        :key="'lead-card-' . $lead->id . '-' . ($leadTypeFilter === 'available' ? 'available' : 'booked')" />
+                    @php
+                        $application = $leadTypeFilter === 'available' ? $lead : $lead->application;
+                        $isAvailable = $leadTypeFilter === 'available';
+                        $submission = $leadTypeFilter === 'booked' ? $lead : null;
+                    @endphp
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden">
+                        <!-- Card Header -->
+                        <div class="p-6 pb-4">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br {{ $isAvailable ? 'from-red-400 to-red-600' : 'from-gray-400 to-gray-600' }} flex items-center justify-center {{ $isAvailable ? 'blur-sm' : '' }}">
+                                        <span class="text-lg font-bold text-white">
+                                            {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-black {{ $isAvailable ? 'blur-sm' : '' }}">
+                                            @if($isAvailable)
+                                                {{ substr($application->first_name, 0, 1) }}*** {{ substr($application->last_name, 0, 1) }}***
+                                            @else
+                                                {{ $application->first_name }} {{ $application->last_name }}
+                                            @endif
+                                        </h3>
+                                        <p class="text-sm text-gray-600">{{ $application->application_number }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col items-end space-y-2">
+                                    @if(!$isAvailable && $submission)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            @switch($submission->status)
+                                                @case('submitted') bg-red-100 text-red-800 @break
+                                                @case('approved') bg-green-100 text-green-800 @break
+                                                @case('rejected') bg-gray-100 text-gray-800 @break
+                                                @default bg-gray-100 text-gray-800
+                                            @endswitch">
+                                            {{ ucwords(str_replace('_', ' ', $submission->status)) }}
+                                        </span>
+                                    @endif
+                                    
+                                    @if($isAvailable)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                            Available
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Key Metrics Grid -->
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                    <div class="text-xs text-gray-500 mb-1">Loan Amount</div>
+                                    <div class="text-sm font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
+                                        @if($isAvailable)
+                                        TSh {{ number_format($application->requested_amount/1000) }}K
+                                        @else
+                                            TSh {{ number_format($application->requested_amount/1000) }}K
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                    <div class="text-xs text-gray-500 mb-1">Monthly Income</div>
+                                    <div class="text-sm font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
+                                        @if($isAvailable)
+                                        TSh {{ number_format(($application->total_monthly_income ?? 0)/1000) }}K
+                                        @else
+                                            TSh {{ number_format(($application->total_monthly_income ?? 0)/1000) }}K
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Info -->
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">CRB Score:</span>
+                                    @if($application->credit_score && !$isAvailable)
+                                        <span class="font-medium {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-red-600') }}">
+                                            {{ $application->credit_score }}
+                                        </span>
+                                    @elseif($isAvailable)
+                                    <span class="font-medium {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-red-600') }}">
+                                            {{ $application->credit_score }}
+                                        </span>
+                                        
+                                     
+                                    @endif
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Tenure:</span>
+                                    <span class="font-medium">{{ $application->requested_tenure_months }} months</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Product:</span>
+                                    <span class="font-medium text-xs">{{ $application->loanProduct->name ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Applied:</span>
+                                    <span class="font-medium text-xs">{{ $application->created_at->format('M d, Y') }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Actions -->
+                        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
+                            @if($isAvailable)
+                                <div class="flex justify-center">
+                                    <button wire:click="openBookingModal({{ $application->id }})" 
+                                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-all duration-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                        </svg>
+                                        Book Lead 
+                                    </button>
+                                </div>
+                            @else
+                                <div class="flex items-center justify-between">
+                                    <div class="text-xs text-gray-500">
+
+                                        Booked: {{ $submission->booked_at ? $submission->booked_at->format('M d, Y') : 'N/A' }}
+
+                                    </div>
+                                    
+                                    <div class="flex items-center space-x-2">
+                                        @if($submission->status === 'submitted')
+                                            <button wire:click="cancelBooking({{ $submission->id }})" 
+                                                    wire:confirm="Are you sure you want to cancel this booking?"
+                                                    class="text-red-600 hover:text-red-800 text-xs font-medium transition-colors">
+                                                Cancel
+                                            </button>
+                                        @endif
+                                        
+                                        <a href="{{ route('view.loan.details',$submission->id) }}" class="text-black hover:text-gray-700 text-xs font-medium transition-colors">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 @empty
                     <div class="col-span-full">
                         <div class="text-center py-12">
@@ -294,7 +452,7 @@
                 @endforelse
             </div>
         @else
-            {{-- Table view implementation would go here --}}
+            {{-- TABLE VIEW --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -315,7 +473,7 @@
                                 <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors" 
                                     wire:click="sortBy('requested_amount')">
                                     <div class="flex items-center space-x-1">
-                                        <span>Amount</span>
+                                        <span>Loan Amount</span>
                                         @if($sortBy === 'requested_amount')
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $sortDirection === 'asc' ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' }}"/>
@@ -323,6 +481,7 @@
                                         @endif
                                     </div>
                                 </th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monthly Income</th>
                                 <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors" 
                                     wire:click="sortBy('credit_score')">
                                     <div class="flex items-center space-x-1">
@@ -347,6 +506,7 @@
                                 @php
                                     $application = $leadTypeFilter === 'available' ? $lead : $lead->application;
                                     $isAvailable = $leadTypeFilter === 'available';
+                                    $submission = $leadTypeFilter === 'booked' ? $lead : null;
                                 @endphp
                                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -356,7 +516,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
-                                                <div class="h-10 w-10 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-red-400 to-red-600 blur-sm' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
+                                                <div class="h-10 w-10 rounded-full bg-gradient-to-br {{ $isAvailable ? 'from-red-400 to-red-600 blur-sm' : 'from-gray-400 to-gray-600' }} flex items-center justify-center">
                                                     <span class="text-sm font-bold text-white">
                                                         {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                                                     </span>
@@ -381,23 +541,36 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-bold text-black {{ $isAvailable ? 'blur-sm' : '' }}">
+                                        <div class="text-sm font-bold text-black {{ $isAvailable ? '' : '' }}">
                                             @if($isAvailable)
-                                                TSh ***,***
+                                            TSh {{ number_format($application->requested_amount) }}
                                             @else
                                                 TSh {{ number_format($application->requested_amount) }}
                                             @endif
                                         </div>
+                                        <div class="text-xs text-gray-500">Requested</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($application->credit_score)
+                                        <div class="text-sm font-bold text-black {{ $isAvailable ? '' : '' }}">
+                                            @if($isAvailable)
+                                            TSh {{ number_format($application->total_monthly_income ?? 0) }}
+                                            @else
+                                                TSh {{ number_format($application->total_monthly_income ?? 0) }}
+                                            @endif
+                                        </div>
+                                        <div class="text-xs text-gray-500">Monthly</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($application->credit_score && !$isAvailable)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                 {{ $application->credit_score >= 650 ? 'bg-green-100 text-green-800' : 
                                                    ($application->credit_score >= 550 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                                 {{ $application->credit_score }}
                                             </span>
+                                        @elseif($isAvailable)
+                                            <span class="text-gray-400 text-sm "> {{ $application->credit_score }}</span>
                                         @else
-                                            <span class="text-gray-400 text-sm">N/A</span>
+                                            <span class="text-gray-400 text-sm">{{ $application->credit_score }}</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -406,13 +579,13 @@
                                     @if($leadTypeFilter === 'booked')
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                @switch($lead->status)
+                                                @switch($submission->status)
                                                     @case('submitted') bg-red-100 text-red-800 @break
                                                     @case('approved') bg-green-100 text-green-800 @break
                                                     @case('rejected') bg-gray-100 text-gray-800 @break
                                                     @default bg-gray-100 text-gray-800
                                                 @endswitch">
-                                                {{ ucwords(str_replace('_', ' ', $lead->status)) }}
+                                                {{ ucwords(str_replace('_', ' ', $submission->status)) }}
                                             </span>
                                         </td>
                                     @endif
@@ -421,16 +594,40 @@
                                         <div class="text-xs text-gray-500">{{ $application->created_at->diffForHumans() }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <livewire:leads.components.lead-card 
-                                            :lead="$lead" 
-                                            :isAvailable="$isAvailable" 
-                                            :key="'table-lead-card-' . $lead->id . '-' . ($isAvailable ? 'available' : 'booked')" 
-                                            view="table" />
+                                        @if($isAvailable)
+                                            <button wire:click="openBookingModal({{ $application->id }})" 
+                                                    class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-medium hover:bg-red-700 transition-all duration-200">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                                </svg>
+                                                Book
+                                            </button>
+                                        @else
+                                            <div class="flex items-center space-x-2">
+                                                @if($submission->status === 'submitted')
+                                                    <button wire:click="cancelBooking({{ $submission->id }})" 
+                                                            wire:confirm="Are you sure you want to cancel this booking?"
+                                                            class="text-red-600 hover:text-red-800 p-1.5 rounded-lg hover:bg-red-50 transition-all duration-200"
+                                                            title="Cancel Booking">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                        </svg>
+                                                    </button>
+                                                @endif
+                                                
+                                                <a  href="{{ route('view.loan.details', $submission->id) }}"  class="text-black hover:text-gray-700 p-1.5 rounded-lg hover:bg-gray-50 transition-all duration-200"
+                                                        title="View Details">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="{{ $leadTypeFilter === 'booked' ? '8' : '7' }}" class="px-6 py-12 text-center">
+                                    <td colspan="{{ $leadTypeFilter === 'booked' ? '9' : '8' }}" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center">
                                             <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
@@ -458,5 +655,88 @@
             {{ $leads->links() }}
         </div>
     </div>
-</div>
+
+    {{-- Booking Confirmation Modal --}}
+    @if($showBookingModal && $selectedLead)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" wire:click="closeBookingModal"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left flex-1">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Confirm Lead Booking
+                            </h3>
+                            <div class="mt-4 space-y-4">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="text-xs font-medium text-gray-500">Application #</label>
+                                            <p class="text-sm font-bold text-black">{{ $selectedLead->application_number }}</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-medium text-gray-500">Loan Amount</label>
+                                            <p class="text-sm font-bold text-black ">TSh  {{  number_format($selectedLead->requested_amount,2) }} </p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-medium text-gray-500">Applicant</label>
+                                            <p class="text-sm font-bold text-black blur-sm">{{ substr($selectedLead->first_name, 0, 1) }}*** {{ substr($selectedLead->last_name, 0, 1) }}***</p>
+                                        </div>
+                                        <div>
+                                            <label class="text-xs font-medium text-gray-500">Product</label>
+                                            <p class="text-sm font-bold text-black">{{ $selectedLead->loanProduct->name ?? 'N/A' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <!-- <div class="flex items-center">
+                                        <svg class="h-5 w-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                        </svg>
+                                        <div>
+                                            <p class="text-sm font-medium text-red-800">Booking Fee</p>
+                                            <p class="text-lg font-bold text-red-900">TSh {{ number_format($bookingFee) }}</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+
+                                <div class="text-sm text-gray-600">
+                                    <p>By booking this lead, you agree to:</p>
+                                    <ul class="mt-2 space-y-1 text-xs">
+                                        <!-- <li>• Pay the booking fee of TSh {{ number_format($bookingFee) }}</li> -->
+                                        <li>• Gain access to complete applicant details</li>
+                                        <li>• Process the application within 7 business days</li>
+                                        <li>• Comply with lead management terms and conditions</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                        <button wire:click="confirmBooking" 
+                                type="button" 
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            Confirm Booking
+                        </button>
+                        <button wire:click="closeBookingModal" 
+                                type="button" 
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    
 </div>

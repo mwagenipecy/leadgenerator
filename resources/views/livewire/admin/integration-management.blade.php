@@ -1,5 +1,4 @@
 <div>
-<div>
     <div class="p-8">
         <!-- Page Header -->
         <div class="mb-8">
@@ -151,7 +150,7 @@
                                     </button>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
-                                @if($integration->logs()->latest()->first())
+                                    @if($integration->logs()->latest()->first())
                                         <div class="text-sm font-medium text-gray-900">{{ $integration->logs()->latest()->first()->created_at->format('M d, Y') }}</div>
                                         <div class="text-xs text-gray-500">{{ $integration->logs()->latest()->first()->created_at->format('g:i A') }}</div>
                                     @else
@@ -174,15 +173,14 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
                                         </button>
-                                        <!-- <button wire:click="openEditModal({{ $integration->id }})" 
+                                        <button wire:click="openEditModal({{ $integration->id }})" 
                                             class="text-yellow-600 hover:text-yellow-700 p-2 rounded-lg hover:bg-yellow-50 transition-all duration-200"
                                             title="Edit Integration">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
-                                        </button> -->
+                                        </button>
                                         <button wire:click="deleteIntegration({{ $integration->id }})" 
-                                            onclick="return confirm('Are you sure you want to delete this integration? This action cannot be undone.')"
                                             class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
                                             title="Delete Integration">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,6 +333,21 @@
                         </div>
                     </div>
 
+                    <!-- Action Trigger -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Activation Trigger</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Trigger on Status *</label>
+                            <select wire:model="action_on" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <option value="">Select action status</option>
+                                @foreach ($applicationStatus as $status)
+                                    <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                                @endforeach
+                            </select>
+                            @error('action_on') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
                     <!-- Field Mappings -->
                     <div class="border-t pt-6">
                         <div class="flex items-center justify-between mb-4">
@@ -416,6 +429,72 @@
         </div>
     @endif
 
+    <!-- Edit Integration Modal -->
+    @if($showEditModal && $selectedIntegration)
+        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showEditModal', false)">
+            <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-lg bg-white">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">Edit Integration: {{ $selectedIntegration->name }}</h3>
+                    <button wire:click="$set('showEditModal', false)" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <form wire:submit.prevent="updateIntegration" class="space-y-6">
+                    <!-- Same form structure as create modal, but with update action -->
+                    <!-- Basic Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Integration Name *</label>
+                            <input wire:model.live="name" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">API Name *</label>
+                            <input wire:model="api_name" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            @error('api_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea wire:model="description" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Action Trigger -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Activation Trigger</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Trigger on Status *</label>
+                            <select wire:model="action_on" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <option value="">Select action status</option>
+                                @foreach ($applicationStatus as $status)
+                                    <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                                @endforeach
+                            </select>
+                            @error('action_on') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-4 pt-6 border-t">
+                        <button type="button" wire:click="$set('showEditModal', false)" 
+                            class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                            class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                            Update Integration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+
     <!-- Test Integration Modal -->
     @if($showTestModal && $selectedIntegration)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showTestModal', false)">
@@ -429,88 +508,85 @@
                     </button>
                 </div>
 
-                <div class="space-y-6">
+                <form wire:submit.prevent="testIntegration" class="space-y-6">
                     <!-- Test Configuration -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Test with Application (Optional)</label>
-                        <select required wire:model="test_application_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            <option value="">Use sample data</option>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Test with Application *</label>
+                        <select wire:model="test_application_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <option value="">Select an application</option>
                             @foreach($recentApplications as $app)
                                 <option value="{{ $app->id }}">{{ $app->application_number }} - {{ $app->first_name }} {{ $app->last_name }}</option>
                             @endforeach
                         </select>
-
-                        @error('test_application_id') 
-                            <span class="text-red-500 text-xs">{{ $message }}</span>
-                        @enderror
+                        @error('test_application_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Test Button -->
                     <div class="text-center">
-                        <button wire:click="testIntegration" 
-                            class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        <button type="submit" 
+                            class="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                             Test Integration
                         </button>
                     </div>
+                </form>
 
-                    <!-- Test Results -->
-                    @if($test_result)
-                        <div class="bg-gray-50 rounded-2xl p-6">
-                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Test Results</h4>
-                            
-                            <!-- Status -->
-                            <div class="mb-4">
-                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold
-                                    {{ $test_result['success'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    @if($test_result['success'])
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                        </svg>
-                                        Success
-                                    @else
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                        Failed
-                                    @endif
-                                </span>
-                                @if(isset($test_result['response_status']))
-                                    <span class="ml-2 text-sm text-gray-600">HTTP {{ $test_result['response_status'] }}</span>
+                <!-- Test Results -->
+                @if($test_result)
+                    <div class="bg-gray-50 rounded-2xl p-6 mt-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Test Results</h4>
+                        
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold
+                                {{ $test_result['success'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                @if($test_result['success'])
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Success
+                                @else
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                    Failed
                                 @endif
-                                @if(isset($test_result['response_time']))
-                                    <span class="ml-2 text-sm text-gray-600">{{ number_format($test_result['response_time'], 2) }}ms</span>
-                                @endif
-                            </div>
-
-                            <!-- Response -->
-                            @if(isset($test_result['response_body']))
-                                <div class="mb-4">
-                                    <h5 class="text-sm font-medium text-gray-700 mb-2">Response Body:</h5>
-                                    <pre class="bg-white border rounded-lg p-3 text-xs overflow-x-auto">{{ $test_result['response_body'] }}</pre>
-                                </div>
+                            </span>
+                            @if(isset($test_result['response_status']))
+                                <span class="ml-2 text-sm text-gray-600">HTTP {{ $test_result['response_status'] }}</span>
                             @endif
-
-                            <!-- Request Payload -->
-                            @if(isset($test_result['request_payload']))
-                                <div class="mb-4">
-                                    <h5 class="text-sm font-medium text-gray-700 mb-2">Request Payload:</h5>
-                                    <pre class="bg-white border rounded-lg p-3 text-xs overflow-x-auto">{{ json_encode($test_result['request_payload'], JSON_PRETTY_PRINT) }}</pre>
-                                </div>
-                            @endif
-
-                            <!-- Error -->
-                            @if(isset($test_result['error_message']))
-                                <div class="mb-4">
-                                    <h5 class="text-sm font-medium text-red-700 mb-2">Error Message:</h5>
-                                    <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">{{ $test_result['error_message'] }}</div>
-                                </div>
+                            @if(isset($test_result['response_time']))
+                                <span class="ml-2 text-sm text-gray-600">{{ number_format($test_result['response_time'], 2) }}ms</span>
                             @endif
                         </div>
-                    @endif
-                </div>
+
+                        <!-- Response -->
+                        @if(isset($test_result['response_body']))
+                            <div class="mb-4">
+                                <h5 class="text-sm font-medium text-gray-700 mb-2">Response Body:</h5>
+                                <pre class="bg-white border rounded-lg p-3 text-xs overflow-x-auto">{{ $test_result['response_body'] }}</pre>
+                            </div>
+                        @endif
+
+                        <!-- Request Payload -->
+                        @if(isset($test_result['request_payload']))
+                            <div class="mb-4">
+                                <h5 class="text-sm font-medium text-gray-700 mb-2">Request Payload:</h5>
+                                <pre class="bg-white border rounded-lg p-3 text-xs overflow-x-auto">{{ json_encode($test_result['request_payload'], JSON_PRETTY_PRINT) }}</pre>
+                            </div>
+                        @endif
+
+                        <!-- Error -->
+                        @if(isset($test_result['error_message']))
+                            <div class="mb-4">
+                                <h5 class="text-sm font-medium text-red-700 mb-2">Error Message:</h5>
+                                <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">{{ $test_result['error_message'] }}</div>
+                            </div>
+                        @endif
+                    </div>
+                @endif
 
                 <!-- Close Button -->
                 <div class="flex justify-end pt-6 border-t">
@@ -605,6 +681,45 @@
             </div>
         </div>
     @endif
-</div>
 
- </div>
+    <!-- Password Confirmation Modal -->
+    @if($show)
+        <div x-data="{ show: @entangle('show') }" 
+             x-show="show" 
+             class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+             x-cloak>
+            <div class="bg-white w-full max-w-md p-6 rounded shadow-lg relative">
+                <h2 class="text-lg font-bold text-black mb-4">Confirm Password</h2>
+                
+                <p class="text-sm text-gray-700 mb-4">Please enter your password to continue with the deletion.</p>
+
+                <form wire:submit.prevent="confirm">
+                    <div class="mb-4">
+                        <input 
+                            type="password" 
+                            wire:model="password"
+                            placeholder="Password"
+                            class="w-full px-4 py-2 border border-red-500 rounded focus:outline-none focus:ring-2 focus:ring-red-600 text-black"
+                        >
+                        @error('password') 
+                            <span class="text-sm text-red-600">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" 
+                                wire:click="$set('show', false)" 
+                                class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">
+                            Cancel
+                        </button>
+
+                        <button type="submit" 
+                                class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            Confirm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+</div>

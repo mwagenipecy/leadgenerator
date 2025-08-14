@@ -2130,7 +2130,7 @@
                   @endphp
 
 
-{{ $applicationId }}
+                {{ $applicationId }}
 
                 <livewire:credit-info-component  :applicationId="$applicationId" />
 

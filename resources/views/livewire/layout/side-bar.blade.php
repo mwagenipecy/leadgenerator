@@ -276,7 +276,7 @@
         <div class="my-6 sm:my-8 border-t border-gray-700"></div>
 
         <!-- Support Section - Mobile Optimized -->
-        <div class="bg-gradient-to-br from-brand-red/10 via-brand-dark-red/5 to-transparent rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-brand-red/20">
+        <!-- <div class="bg-gradient-to-br from-brand-red/10 via-brand-dark-red/5 to-transparent rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-brand-red/20">
             <div class="flex items-start space-x-3 sm:space-x-4">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-red/20 rounded-lg sm:rounded-xl flex items-center justify-center border border-brand-red/30 flex-shrink-0">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -291,10 +291,10 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- User Profile Section - Enhanced Mobile -->
-        <div class="mt-4 sm:mt-6 px-2">
+        <!-- <div class="mt-4 sm:mt-6 px-2">
             <div class="bg-sidebar-gray rounded-xl sm:rounded-2xl p-3 sm:p-4 hover:bg-gray-800 transition-colors duration-200 cursor-pointer">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
@@ -309,6 +309,6 @@
                     </svg>
                 </div>
             </div>
-        </div>
+        </div> -->
     </nav>
 </div>

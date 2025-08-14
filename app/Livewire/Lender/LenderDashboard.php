@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Lender;
 
+use App\Models\ApplicationLenderSubmission;
 use Livewire\Component;
 use App\Models\Application;
 use App\Models\LoanProduct;
@@ -47,12 +48,17 @@ class LenderDashboard extends Component
         $this->newApplications = Application::where('lender_id', $lender->id)
             ->where('status', 'submitted')
             ->count();
-        $this->pendingApplications = Application::where('lender_id', $lender->id)
-            ->where('status', 'under_review')
+        $this->pendingApplications = ApplicationLenderSubmission::where('lender_id', $lender->id)
+            ->where('status', 'submitted')
             ->count();
+
+
+
+
         $this->approvedApplications = Application::where('lender_id', $lender->id)
             ->where('status', 'approved')
             ->count();
+            
         $this->rejectedApplications = Application::where('lender_id', $lender->id)
             ->where('status', 'rejected')
             ->count();

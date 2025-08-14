@@ -99,7 +99,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                         </svg>
-                        <span class="text-sm font-semibold">+8.2%</span>
+                        <!-- <span class="text-sm font-semibold">+8.2%</span> -->
                     </div>
                     <span class="text-sm text-gray-500">this month</span>
                 </div>
@@ -123,9 +123,9 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                         </svg>
-                        <span class="text-sm font-semibold">+15.3%</span>
+                        <!-- <span class="text-sm font-semibold">+15.3%</span> -->
                     </div>
-                    <span class="text-sm text-gray-500">vs last month</span>
+                    <span class="text-sm text-gray-500"> month</span>
                 </div>
             </div>
         </div>
@@ -157,8 +157,8 @@
                         <p class="text-gray-600">Current breakdown of all application statuses</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-red-600/25">Live View</button>
-                        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Refresh</button>
+                        <!-- <button class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-red-600/25">Live View</button>
+                        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Refresh</button> -->
                     </div>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -335,12 +335,12 @@
                         <p class="text-gray-600">Latest loan applications and their processing status</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                        <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
                             Filter
                         </button>
                         <button class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
                             View All Applications
-                        </button>
+                        </button> -->
                     </div>
                 </div>
             </div>

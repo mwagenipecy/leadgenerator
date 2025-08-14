@@ -27,6 +27,13 @@ class BillingManagement extends Component
     public $filterDateTo = '';
     public $search = '';
 
+    public $showApplicationModal = false;
+    public $selectedApplication = null;
+
+    // View Bill Details
+    public $showBillDetailsModal = false;
+    public $selectedBillForView = null;
+
     // Bill Creation
     public $selectedApplications = [];
     public $showBillModal = false;
@@ -45,6 +52,9 @@ class BillingManagement extends Component
     public $selectAll = false;
     public $bulkAction = '';
 
+    // Lender Statistics
+    public $lenderStats = [];
+
     protected $rules = [
         'paymentAmount' => 'required|numeric|min:0.01',
         'paymentMethod' => 'required|string',
@@ -56,6 +66,67 @@ class BillingManagement extends Component
     public function mount()
     {
         $this->paymentDate = now()->format('Y-m-d');
+        $this->calculateLenderStats();
+    }
+
+    public function updatedFilterLender()
+    {
+        $this->calculateLenderStats();
+        $this->resetPage();
+    }
+
+    public function updatedFilterStatus()
+    {
+        $this->calculateLenderStats();
+        $this->resetPage();
+    }
+
+    public function updatedFilterDateFrom()
+    {
+        $this->calculateLenderStats();
+        $this->resetPage();
+    }
+
+    public function updatedFilterDateTo()
+    {
+        $this->calculateLenderStats();
+        $this->resetPage();
+    }
+
+    public function calculateLenderStats()
+    {
+        $query = CommissionBill::query();
+
+        // Apply filters
+        if ($this->filterLender !== 'all') {
+            $query->where('lender_id', $this->filterLender);
+        }
+
+        if ($this->filterStatus !== 'all') {
+            $query->where('status', $this->filterStatus);
+        }
+
+        if ($this->filterDateFrom) {
+            $query->whereDate('created_at', '>=', $this->filterDateFrom);
+        }
+
+        if ($this->filterDateTo) {
+            $query->whereDate('created_at', '<=', $this->filterDateTo);
+        }
+
+        $bills = $query->get();
+
+        $this->lenderStats = [
+            'total_bills' => $bills->count(),
+            'total_amount' => $bills->sum('total_amount'),
+            'paid_amount' => $bills->where('status', 'paid')->sum('total_amount'),
+            'pending_amount' => $bills->whereIn('status', ['pending', 'sent'])->sum('total_amount'),
+            'overdue_amount' => $bills->where('status', 'overdue')->sum('total_amount'),
+            'partial_payments' => $bills->sum('total_paid'),
+            'outstanding_balance' => $bills->sum(function($bill) {
+                return $bill->total_amount - $bill->total_paid;
+            })
+        ];
     }
 
     public function updatedSelectAll()
@@ -77,13 +148,13 @@ class BillingManagement extends Component
     {
         $this->activeTab = $tab;
         $this->resetPage();
+        $this->calculateLenderStats();
     }
 
     public function getFilteredApplications()
     {
         $query = Application::with(['lender', 'user'])
             ->where('booking_status', 'booked');
-           // ->where('status', 'approved');
 
         if ($this->search) {
             $query->where(function ($q) {
@@ -153,6 +224,12 @@ class BillingManagement extends Component
         $this->showBillModal = true;
     }
 
+    public function createSingleBill($applicationId)
+    {
+        $this->selectedApplications = [$applicationId];
+        $this->showBillModal = true;
+    }
+
     public function generateBills()
     {
         DB::beginTransaction();
@@ -197,6 +274,7 @@ class BillingManagement extends Component
             $this->showBillModal = false;
             $this->billNotes = '';
             $this->selectAll = false;
+            $this->calculateLenderStats();
 
             session()->flash('message', "Successfully created {$billsCreated} commission bills.");
 
@@ -294,6 +372,7 @@ class BillingManagement extends Component
             DB::commit();
 
             $this->resetPaymentForm();
+            $this->calculateLenderStats();
             session()->flash('message', 'Payment recorded successfully.');
 
         } catch (\Exception $e) {
@@ -331,10 +410,137 @@ class BillingManagement extends Component
         $this->bulkAction = '';
     }
 
+    // Modal methods
+    public function viewApplication($applicationId)
+    {
+        $this->selectedApplication = Application::with([
+            'lender', 
+            'user', 
+            'documents',
+            'commissionBills.payments',
+        ])->findOrFail($applicationId);
+        
+        $this->showApplicationModal = true;
+    }
+
+    public function viewApplicationBill($applicationId)
+    {
+        $bill = CommissionBill::where('application_id', $applicationId)->first();
+        
+        if ($bill) {
+            $this->viewBillDetails($bill->id);
+        } else {
+            session()->flash('error', 'No commission bill found for this application.');
+        }
+    }
+
+    public function closeApplicationModal()
+    {
+        $this->showApplicationModal = false;
+        $this->selectedApplication = null;
+    }
+
+    public function viewBillDetails($billId)
+    {
+        $this->selectedBillForView = CommissionBill::with([
+            'application', 
+            'lender', 
+            'payments' => function($query) {
+                $query->latest();
+            },
+            'createdBy'
+        ])->findOrFail($billId);
+        
+        $this->showBillDetailsModal = true;
+    }
+
+    public function closeBillDetailsModal()
+    {
+        $this->showBillDetailsModal = false;
+        $this->selectedBillForView = null;
+    }
+
+    public function downloadBillPdf($billId)
+    {
+        try {
+            $bill = CommissionBill::with(['application', 'lender', 'payments'])->findOrFail($billId);
+            session()->flash('message', 'Bill PDF download initiated.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error generating PDF: ' . $e->getMessage());
+        }
+    }
+
+    public function sendBillNotification($billId)
+    {
+        try {
+            $bill = CommissionBill::with(['application', 'lender'])->findOrFail($billId);
+            
+            $bill->update([
+                'status' => 'sent',
+                'sent_at' => now(),
+                'sent_by' => Auth::id()
+            ]);
+            
+            $this->calculateLenderStats();
+            session()->flash('message', 'Bill notification sent successfully.');
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error sending notification: ' . $e->getMessage());
+        }
+    }
+
+    public function markBillOverdue($billId)
+    {
+        try {
+            $bill = CommissionBill::findOrFail($billId);
+            
+            if ($bill->status !== 'paid') {
+                $bill->update(['status' => 'overdue']);
+                $this->calculateLenderStats();
+                session()->flash('message', 'Bill marked as overdue.');
+            } else {
+                session()->flash('error', 'Cannot mark paid bill as overdue.');
+            }
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error updating bill status: ' . $e->getMessage());
+        }
+    }
+
+    public function cancelBill($billId)
+    {
+        try {
+            $bill = CommissionBill::findOrFail($billId);
+            
+            if ($bill->status === 'paid') {
+                session()->flash('error', 'Cannot cancel a paid bill.');
+                return;
+            }
+            
+            if ($bill->payments()->count() > 0) {
+                session()->flash('error', 'Cannot cancel a bill with recorded payments.');
+                return;
+            }
+            
+            $bill->update([
+                'status' => 'cancelled',
+                'cancelled_at' => now(),
+                'cancelled_by' => Auth::id()
+            ]);
+            
+            $this->calculateLenderStats();
+            session()->flash('message', 'Bill cancelled successfully.');
+            
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error cancelling bill: ' . $e->getMessage());
+        }
+    }
+
     public function render()
     {
         $data = [
             'lenders' => Lender::where('status', 'approved')->get(),
+            'lenderStats' => $this->lenderStats,
         ];
 
         if ($this->activeTab === 'applications') {
@@ -345,193 +551,4 @@ class BillingManagement extends Component
 
         return view('livewire.admin.billing-management', $data);
     }
-
-
-
-    public $showApplicationModal = false;
-public $selectedApplication = null;
-
-// View Bill Details
-public $showBillDetailsModal = false;
-public $selectedBillForView = null;
-
-/**
- * Open application details modal
- */
-public function viewApplication($applicationId)
-{
-    $this->selectedApplication = Application::with([
-        'lender', 
-        'user', 
-        'documents',
-        'commissionBills.payments',
-       
-    ])->findOrFail($applicationId);
-    
-    $this->showApplicationModal = true;
-}
-
-
-public function viewApplicationBill($applicationId)
-{
-    $bill = CommissionBill::where('application_id', $applicationId)->first();
-    
-    if ($bill) {
-        $this->viewBillDetails($bill->id);
-    } else {
-        session()->flash('error', 'No commission bill found for this application.');
-    }
-}
-
-/**
- * Close application modal
- */
-public function closeApplicationModal()
-{
-    $this->showApplicationModal = false;
-    $this->selectedApplication = null;
-}
-
-/**
- * Open bill details modal
- */
-public function viewBillDetails($billId)
-{
-    $this->selectedBillForView = CommissionBill::with([
-        'application', 
-        'lender', 
-        'payments' => function($query) {
-            $query->latest();
-        },
-        'createdBy'
-    ])->findOrFail($billId);
-    
-    $this->showBillDetailsModal = true;
-}
-
-/**
- * Close bill details modal
- */
-public function closeBillDetailsModal()
-{
-    $this->showBillDetailsModal = false;
-    $this->selectedBillForView = null;
-}
-
-/**
- * Download bill as PDF
- */
-public function downloadBillPdf($billId)
-{
-    try {
-        $bill = CommissionBill::with(['application', 'lender', 'payments'])->findOrFail($billId);
-        
-        // Generate PDF using your preferred PDF library (e.g., DomPDF, wkhtmltopdf)
-        // This is a placeholder - implement based on your PDF generation preference
-        
-        session()->flash('message', 'Bill PDF download initiated.');
-        
-    } catch (\Exception $e) {
-        session()->flash('error', 'Error generating PDF: ' . $e->getMessage());
-    }
-}
-
-/**
- * Send bill notification
- */
-public function sendBillNotification($billId)
-{
-    try {
-        $bill = CommissionBill::with(['application', 'lender'])->findOrFail($billId);
-        
-        // Send notification logic here
-        // This could be email, SMS, or both based on your notification preferences
-        
-        $bill->update([
-            'status' => 'sent',
-            'sent_at' => now(),
-            'sent_by' => Auth::id()
-        ]);
-        
-        session()->flash('message', 'Bill notification sent successfully.');
-        
-    } catch (\Exception $e) {
-        session()->flash('error', 'Error sending notification: ' . $e->getMessage());
-    }
-}
-
-/**
- * Mark bill as overdue manually
- */
-public function markBillOverdue($billId)
-{
-    try {
-        $bill = CommissionBill::findOrFail($billId);
-        
-        if ($bill->status !== 'paid') {
-            $bill->update(['status' => 'overdue']);
-            session()->flash('message', 'Bill marked as overdue.');
-        } else {
-            session()->flash('error', 'Cannot mark paid bill as overdue.');
-        }
-        
-    } catch (\Exception $e) {
-        session()->flash('error', 'Error updating bill status: ' . $e->getMessage());
-    }
-}
-
-/**
- * Cancel/void a bill
- */
-public function cancelBill($billId)
-{
-    try {
-        $bill = CommissionBill::findOrFail($billId);
-        
-        if ($bill->status === 'paid') {
-            session()->flash('error', 'Cannot cancel a paid bill.');
-            return;
-        }
-        
-        if ($bill->payments()->count() > 0) {
-            session()->flash('error', 'Cannot cancel a bill with recorded payments.');
-            return;
-        }
-        
-        $bill->update([
-            'status' => 'cancelled',
-            'cancelled_at' => now(),
-            'cancelled_by' => Auth::id()
-        ]);
-        
-        session()->flash('message', 'Bill cancelled successfully.');
-        
-    } catch (\Exception $e) {
-        session()->flash('error', 'Error cancelling bill: ' . $e->getMessage());
-    }
-}
-
-/**
- * Generate bill preview before creation
- */
-public function previewBill($applicationId)
-{
-    try {
-        $application = Application::with('lender')->findOrFail($applicationId);
-        $commissionData = $this->calculateCommission($application);
-        
-        return [
-            'application' => $application,
-            'commission_data' => $commissionData,
-            'due_date' => now()->addDays($this->getPaymentDueDays())->format('M d, Y')
-        ];
-        
-    } catch (\Exception $e) {
-        session()->flash('error', 'Error generating preview: ' . $e->getMessage());
-        return null;
-    }
-}
-
-
-
 }

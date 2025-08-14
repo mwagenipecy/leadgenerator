@@ -17,7 +17,6 @@ class LeadManagementContainer extends Component
         'leadBooked' => 'handleLeadBooked',
         'leadProcessed' => 'handleLeadProcessed'
     ];
-
     public function mount()
     {
         // Ensure user is a lender

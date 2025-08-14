@@ -46,7 +46,7 @@ class CreditInfoService
             
 
 
-            if (!$existingRequest) { 
+            if ($existingRequest) { 
                 
                 // remove ! after testing 
                 // Update current request with existing data

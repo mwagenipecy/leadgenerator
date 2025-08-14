@@ -8,6 +8,8 @@ use App\Models\Application;
 use App\Models\ApplicationLenderSubmission;
 use App\Models\LoanProduct;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LeadListing extends Component
 {
@@ -75,12 +77,13 @@ class LeadListing extends Component
 
     public function confirmBooking()
     {
-
         if (!$this->selectedLead) {
             return;
         }
 
         try {
+            DB::beginTransaction();
+
             // Create the booking submission
             $submission = ApplicationLenderSubmission::create([
                 'application_id' => $this->selectedLead->id,
@@ -96,6 +99,8 @@ class LeadListing extends Component
                 'booking_status' => 'booked'
             ]);
 
+            DB::commit();
+
             // Close modal
             $this->closeBookingModal();
 
@@ -106,6 +111,12 @@ class LeadListing extends Component
             $this->dispatch('leadBooked');
             
         } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Lead booking failed', [
+                'lead_id' => $this->selectedLead->id,
+                'lender_id' => Auth::user()->lender_id,
+                'error' => $e->getMessage()
+            ]);
             
             session()->flash('error', 'Failed to book lead. Please try again.');
         }
@@ -114,6 +125,8 @@ class LeadListing extends Component
     public function cancelBooking($submissionId)
     {
         try {
+            DB::beginTransaction();
+
             $submission = ApplicationLenderSubmission::where('id', $submissionId)
                 ->where('lender_id', Auth::user()->lender_id)
                 ->first();
@@ -141,10 +154,18 @@ class LeadListing extends Component
                 ]);
             }
 
+            DB::commit();
+
             session()->flash('success', 'Booking cancelled successfully. This lead will be available to other lenders.');
             $this->dispatch('leadProcessed');
 
         } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Booking cancellation failed', [
+                'submission_id' => $submissionId,
+                'error' => $e->getMessage()
+            ]);
+            
             session()->flash('error', 'Failed to cancel booking. Please try again.');
         }
     }
@@ -238,8 +259,8 @@ class LeadListing extends Component
     private function getBookedLeads()
     {
         $query = ApplicationLenderSubmission::with(['application.loanProduct', 'application.user', 'lender'])
-            ->where('lender_id', Auth::user()->lender_id)
-            ->whereNotIn('status', ['cancelled']);
+            ->where('application_lender_submissions.lender_id', Auth::user()->lender_id)
+            ->where('application_lender_submissions.status', 'approved');
 
         // Status filter for booked leads
         if ($this->statusFilter !== 'all') {
@@ -251,6 +272,20 @@ class LeadListing extends Component
 
         return $query->paginate(20);
     }
+
+
+    public function viewLead($selected){
+
+      //  dd($selected);
+
+        $this->dispatch('viewLead', [
+            'leadId' => $selected["application_id"],
+            'isAvailable' => true
+        ]);
+    }
+
+
+
 
     private function applyFilters($query)
     {
@@ -300,8 +335,22 @@ class LeadListing extends Component
             $query->where('created_at', '>=', $this->getDateRangeStart());
         }
 
+        // Amount range filter for booked leads
+        if ($this->amountRange !== 'all') {
+            [$min, $max] = $this->getAmountRange();
+            $query->whereHas('application', function ($q) use ($min, $max) {
+                $q->whereBetween('requested_amount', [$min, $max]);
+            });
+        }
+
         // Sorting
-        $query->orderBy($this->sortBy, $this->sortDirection);
+        if ($this->sortBy === 'requested_amount' || $this->sortBy === 'credit_score') {
+            $query->join('applications', 'application_lender_submissions.application_id', '=', 'applications.id')
+                  ->orderBy('applications.' . $this->sortBy, $this->sortDirection)
+                  ->select('application_lender_submissions.*');
+        } else {
+            $query->orderBy($this->sortBy, $this->sortDirection);
+        }
     }
 
     public function getStatsProperty()
@@ -329,7 +378,6 @@ class LeadListing extends Component
                 ->where('status', 'rejected')->count(),
             'total_value' => ApplicationLenderSubmission::where('application_lender_submissions.lender_id', $lenderId)
                 ->where('application_lender_submissions.status', 'approved')
-                ->whereHas('application')
                 ->join('applications', 'application_lender_submissions.application_id', '=', 'applications.id')
                 ->sum('applications.requested_amount'),
         ];

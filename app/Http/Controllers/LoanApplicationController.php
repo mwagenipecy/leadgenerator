@@ -19,7 +19,9 @@ class LoanApplicationController extends Controller
 
     public function applicationView($id){
 
+
         return view('pages.application.application-view', ['application' => Application::find($id)]);
+        
     }
 
 

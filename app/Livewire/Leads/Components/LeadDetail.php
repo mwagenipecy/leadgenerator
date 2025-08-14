@@ -15,6 +15,7 @@ class LeadDetail extends Component
     public $isAvailable;
     public $lead;
     public $application;
+    public $activeTab = 'overview';
     
     // Form fields for processing
     public $leadNotes = '';
@@ -25,7 +26,7 @@ class LeadDetail extends Component
     public function mount($leadId, $isAvailable = true)
     {
         $this->leadId = $leadId;
-        $this->isAvailable = $isAvailable;
+        $this->isAvailable = false ; // $isAvailable;
         $this->loadLead();
     }
 
@@ -43,6 +44,11 @@ class LeadDetail extends Component
         }
         
         $this->application = $this->isAvailable ? $this->lead : $this->lead->application;
+    }
+
+    public function switchTab($tabName)
+    {
+        $this->activeTab = $tabName;
     }
 
     public function bookLead()

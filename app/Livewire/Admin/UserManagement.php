@@ -10,7 +10,7 @@ use App\Models\Lender;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;   // Add this
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log; 
 use App\Models\Permission; 
 
@@ -25,7 +25,13 @@ class UserManagement extends Component
     public $showCreateUserModal = false;
     public $showEditUserModal = false;
     public $showCreateLenderModal = false;
+    public $showPasswordConfirmModal = false;
     public $selectedUser = null;
+    public $confirmAction = '';
+    public $confirmUserId = null;
+    public $currentPassword = '';
+    public $passwordConfirmTitle = '';
+    public $passwordConfirmMessage = '';
 
     // Create User Properties
     public $name = '';
@@ -73,23 +79,36 @@ class UserManagement extends Component
     public $totalBorrowers;
     public $totalAdmins;
     public $recentUsers;
-    public $availableLenders, $roles=[];
+    public $availableLenders;
+    public $roles = [];
 
     protected $paginationTheme = 'tailwind';
+
+    protected $listeners = [
+        'confirmDeleteUser' => 'confirmDeleteUser',
+        'confirmToggleStatus' => 'confirmToggleStatus'
+    ];
 
     public function mount()
     {
         $this->loadStats();
-        $this->roles=Role::get();
+        $this->roles = Role::get();
         $this->availableLenders = Lender::where('status', 'approved')->get();
+    }
+
+    public function passwordConfirmationRules()
+    {
+        return [
+            'currentPassword' => 'required|string|min:1',
+        ];
     }
 
     public function loadStats()
     {
         $this->totalUsers = User::count();
         $this->totalLenders = User::where('role', 'lender')->count();
-        $this->totalBorrowers = User::where('role', 'user')->count();
-        $this->totalAdmins = User::where('role', 'admin')->count();
+        $this->totalBorrowers = User::where('role', 'borrower')->count();
+        $this->totalAdmins = User::where('role', 'Super_admin')->count();
         $this->recentUsers = User::with('lender')->latest()->limit(5)->get();
     }
 
@@ -143,8 +162,6 @@ class UserManagement extends Component
         ];
     }
 
-  
-
     public function openCreateUserModal()
     {
         $this->resetValidation();
@@ -152,11 +169,22 @@ class UserManagement extends Component
         $this->showCreateUserModal = true;
     }
 
- 
+    public function closeCreateUserModal()
+    {
+        $this->showCreateUserModal = false;
+        $this->resetValidation();
+        $this->resetCreateUserForm();
+    }
 
     public function openEditUserModal($userId)
     {
         $this->selectedUser = User::with('lender')->find($userId);
+        
+        if (!$this->selectedUser) {
+            session()->flash('error', 'User not found.');
+            return;
+        }
+
         $this->resetValidation();
         
         $this->edit_name = $this->selectedUser->name;
@@ -166,17 +194,33 @@ class UserManagement extends Component
         $this->edit_last_name = $this->selectedUser->last_name;
         $this->edit_phone = $this->selectedUser->phone;
         $this->edit_nida_number = $this->selectedUser->nida_number;
-        $this->edit_date_of_birth = $this->selectedUser->date_of_birth?->format('Y-m-d');
+        $this->edit_date_of_birth = $this->selectedUser->date_of_birth
+        ? (new \DateTime($this->selectedUser->date_of_birth))->format('Y-m-d')
+        : null;
+        
         $this->edit_is_active = $this->selectedUser->is_active;
         $this->edit_selected_lender_id = $this->selectedUser->lender_id ?? '';
         
         $this->showEditUserModal = true;
     }
 
+    public function closeEditUserModal()
+    {
+        $this->showEditUserModal = false;
+        $this->selectedUser = null;
+        $this->resetValidation();
+        $this->resetEditUserForm();
+    }
+
     public function createUser()
     {
-        $this->validate();
-    
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Validation errors will be automatically displayed
+            return;
+        }
+
         try {
             DB::transaction(function () {
                 // Create user data
@@ -184,49 +228,68 @@ class UserManagement extends Component
                     'name' => $this->name,
                     'email' => $this->email,
                     'password' => Hash::make($this->password),
-                    'role' => $this->role, // Keep for legacy compatibility
+                    'role' => $this->role,
                     'first_name' => $this->first_name,
                     'last_name' => $this->last_name,
                     'phone' => $this->phone,
                     'nida_number' => $this->nida_number,
                     'date_of_birth' => $this->date_of_birth,
                     'is_active' => $this->is_active,
-                    'email_verified_at' => now(), // Auto-verify admin created users
+                    'email_verified_at' => now(),
                 ];
-    
+
                 // Add lender association if selected and role is appropriate
-                if ($this->selected_lender_id && in_array($this->role, ['lender', 'borrower'])) {
+                if ($this->selected_lender_id && in_array($this->role, ['lender', 'user'])) {
                     $userData['lender_id'] = $this->selected_lender_id;
                 }
-    
+
                 // Create the user
                 $user = User::create($userData);
-    
+
                 // Assign role using the new role system
                 $this->assignRoleToUser($user, $this->role);
-    
-                $this->loadStats();
-                $this->resetCreateUserForm();
-                $this->showCreateUserModal = false;
-                session()->flash('message', 'User created successfully with role assigned!');
+
+                Log::info('User created successfully', [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'role' => $this->role,
+                    'created_by' => auth()->id()
+                ]);
             });
+
+            $this->loadStats();
+            $this->closeCreateUserModal();
+            
+            session()->flash('message', 'User created successfully!');
+            
         } catch (\Exception $e) {
-            \Log::error('User creation failed: ' . $e->getMessage());
+            Log::error('User creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_data' => [
+                    'email' => $this->email,
+                    'role' => $this->role
+                ]
+            ]);
+            
             session()->flash('error', 'Failed to create user. Please try again.');
         }
     }
-    
-    // Update your updateUser() method
+
     public function updateUser()
     {
-        $this->validate($this->editRules());
-    
+        try {
+            $this->validate($this->editRules());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return;
+        }
+
         try {
             DB::transaction(function () {
                 $userData = [
                     'name' => $this->edit_name,
                     'email' => $this->edit_email,
-                    'role' => $this->edit_role, // Keep for legacy compatibility
+                    'role' => $this->edit_role,
                     'first_name' => $this->edit_first_name,
                     'last_name' => $this->edit_last_name,
                     'phone' => $this->edit_phone,
@@ -234,53 +297,56 @@ class UserManagement extends Component
                     'date_of_birth' => $this->edit_date_of_birth,
                     'is_active' => $this->edit_is_active,
                 ];
-    
+
                 // Handle lender association
-                if ($this->edit_selected_lender_id && in_array($this->edit_role, ['lender', 'borrower'])) {
+                if ($this->edit_selected_lender_id && in_array($this->edit_role, ['lender', 'user'])) {
                     $userData['lender_id'] = $this->edit_selected_lender_id;
                 } else {
                     $userData['lender_id'] = null;
                 }
-    
+
                 // Update user data
                 $this->selectedUser->update($userData);
-    
+
                 // Update role assignment if role changed
-                $currentPrimaryRole = $this->selectedUser->getPrimaryRole();
-                if (!$currentPrimaryRole || $currentPrimaryRole->name !== $this->edit_role) {
+                if ($this->selectedUser->role !== $this->edit_role) {
                     $this->updateUserRole($this->selectedUser, $this->edit_role);
                 }
-    
-                $this->loadStats();
-                $this->showEditUserModal = false;
-                session()->flash('message', 'User updated successfully with role updated!');
+
+                Log::info('User updated successfully', [
+                    'user_id' => $this->selectedUser->id,
+                    'updated_by' => auth()->id(),
+                    'changes' => $userData
+                ]);
             });
+
+            $this->loadStats();
+            $this->closeEditUserModal();
+            
+            session()->flash('message', 'User updated successfully!');
+            
         } catch (\Exception $e) {
-            \Log::error('User update failed: ' . $e->getMessage());
+            Log::error('User update failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => $this->selectedUser?->id
+            ]);
+            
             session()->flash('error', 'Failed to update user. Please try again.');
         }
     }
-    
-    // Add this helper method to assign roles
+
     private function assignRoleToUser($user, $roleName)
     {
-        // Find the role
         $role = Role::where('name', $roleName)->first();
         
         if (!$role) {
             throw new \Exception("Role '{$roleName}' not found.");
         }
-    
-        // Check if current user can assign this role
-        // if (auth()->user()->role_level <= $role->level) {
-        //     throw new \Exception('You cannot assign a role equal or higher than your own.');
-        // }
-    
-        // Assign the role
+
         if (method_exists($user, 'assignRole')) {
             $user->assignRole($role, auth()->user());
         } else {
-            // Fallback: direct database insertion
             $user->roles()->syncWithoutDetaching([
                 $role->id => [
                     'assigned_at' => now(),
@@ -290,39 +356,29 @@ class UserManagement extends Component
                 ]
             ]);
             
-            // Update role level manually
-            $user->update(['role_level' => $role->level]);
+            $user->update(['role_level' => $role->level ?? 1]);
         }
-    
-        \Log::info('Role assigned to user', [
+
+        Log::info('Role assigned to user', [
             'user_id' => $user->id,
             'role' => $roleName,
             'assigned_by' => auth()->id()
         ]);
     }
-    
-    // Add this helper method to update user roles
+
     private function updateUserRole($user, $newRoleName)
     {
-        // Find the new role
         $newRole = Role::where('name', $newRoleName)->first();
         
         if (!$newRole) {
             throw new \Exception("Role '{$newRoleName}' not found.");
         }
-    
-        // Check permissions
-        if (auth()->user()->role_level <= $newRole->level) {
-            throw new \Exception('You cannot assign a role equal or higher than your own.');
-        }
-    
-        // Remove all current roles and assign new one
+
         $user->roles()->detach();
         
         if (method_exists($user, 'assignRole')) {
             $user->assignRole($newRole, auth()->user());
         } else {
-            // Fallback
             $user->roles()->attach($newRole->id, [
                 'assigned_at' => now(),
                 'assigned_by' => auth()->id(),
@@ -330,47 +386,168 @@ class UserManagement extends Component
                 'updated_at' => now(),
             ]);
             
-            $user->update(['role_level' => $newRole->level]);
+            $user->update(['role_level' => $newRole->level ?? 1]);
         }
-    
-        \Log::info('User role updated', [
+
+        Log::info('User role updated', [
             'user_id' => $user->id,
             'new_role' => $newRoleName,
             'updated_by' => auth()->id()
         ]);
     }
 
-
-
-  
-
-    public function toggleUserStatus($userId)
+    public function confirmToggleStatus($userId)
     {
         $user = User::find($userId);
-        $user->update(['is_active' => !$user->is_active]);
         
-        $this->loadStats();
-        session()->flash('message', 'User status updated successfully!');
+        if (!$user) {
+            session()->flash('error', 'User not found.');
+            return;
+        }
+
+        if ($userId === Auth::id()) {
+            session()->flash('error', 'You cannot change your own status!');
+            return;
+        }
+
+        $this->confirmUserId = $userId;
+        $this->confirmAction = 'toggleStatus';
+        $this->passwordConfirmTitle = 'Confirm Status Change';
+        $this->passwordConfirmMessage = "Are you sure you want to " . ($user->is_active ? 'deactivate' : 'activate') . " this user? This is a critical action.";
+        $this->showPasswordConfirmModal = true;
+        $this->currentPassword = '';
+        $this->resetValidation(['currentPassword']);
     }
 
-    public function deleteUser($userId)
+    public function confirmDeleteUser($userId)
     {
         if ($userId === Auth::id()) {
             session()->flash('error', 'You cannot delete your own account!');
             return;
         }
 
+        $this->confirmUserId = $userId;
+        $this->confirmAction = 'deleteUser';
+        $this->passwordConfirmTitle = 'Confirm User Deletion';
+        $this->passwordConfirmMessage = 'Are you sure you want to permanently delete this user? This action cannot be undone and is extremely critical.';
+        $this->showPasswordConfirmModal = true;
+        $this->currentPassword = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    public function closePasswordConfirmModal()
+    {
+        $this->showPasswordConfirmModal = false;
+        $this->confirmAction = '';
+        $this->confirmUserId = null;
+        $this->currentPassword = '';
+        $this->passwordConfirmTitle = '';
+        $this->passwordConfirmMessage = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    public function executeConfirmedAction()
+    {
+        try {
+            $this->validate($this->passwordConfirmationRules());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return;
+        }
+
+        // Verify current user's password
+        if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+            $this->addError('currentPassword', 'The password is incorrect.');
+            return;
+        }
+
+        try {
+            if ($this->confirmAction === 'toggleStatus') {
+                $this->performToggleUserStatus($this->confirmUserId);
+            } elseif ($this->confirmAction === 'deleteUser') {
+                $this->performDeleteUser($this->confirmUserId);
+            }
+
+            $this->closePasswordConfirmModal();
+            
+        } catch (\Exception $e) {
+            Log::error('Failed to execute confirmed action', [
+                'action' => $this->confirmAction,
+                'user_id' => $this->confirmUserId,
+                'error' => $e->getMessage(),
+                'executed_by' => auth()->id()
+            ]);
+            
+            session()->flash('error', 'Failed to execute action. Please try again.');
+        }
+    }
+
+    private function performToggleUserStatus($userId)
+    {
         $user = User::find($userId);
         
-        // If user is a lender, also handle lender record
-        if ($user->role === 'lender' && $user->lender) {
-            $user->lender->delete();
+        if (!$user) {
+            session()->flash('error', 'User not found.');
+            return;
         }
+
+        $oldStatus = $user->is_active;
+        $user->update(['is_active' => !$user->is_active]);
         
-        $user->delete();
+        $this->loadStats();
+        
+        $status = $user->is_active ? 'activated' : 'deactivated';
+        session()->flash('message', "User {$status} successfully!");
+        
+        Log::info('User status changed with password confirmation', [
+            'user_id' => $userId,
+            'old_status' => $oldStatus,
+            'new_status' => $user->is_active,
+            'changed_by' => auth()->id()
+        ]);
+    }
+
+    private function performDeleteUser($userId)
+    {
+        $user = User::find($userId);
+        
+        if (!$user) {
+            session()->flash('error', 'User not found.');
+            return;
+        }
+
+        DB::transaction(function () use ($user) {
+            // If user is a lender, also handle lender record
+            if ($user->role === 'lender' && $user->lender) {
+                $user->lender->delete();
+            }
+            
+            // Detach roles
+            $user->roles()->detach();
+            
+            // Delete user
+            $user->delete();
+            
+            Log::info('User deleted with password confirmation', [
+                'deleted_user_id' => $user->id,
+                'deleted_user_email' => $user->email,
+                'deleted_by' => auth()->id()
+            ]);
+        });
         
         $this->loadStats();
         session()->flash('message', 'User deleted successfully!');
+    }
+
+    public function toggleUserStatus($userId)
+    {
+        // This method is now called through password confirmation
+        $this->confirmToggleStatus($userId);
+    }
+
+    public function deleteUser($userId)
+    {
+        // This method is now called through password confirmation
+        $this->confirmDeleteUser($userId);
     }
 
     public function resetCreateUserForm()
@@ -384,32 +561,46 @@ class UserManagement extends Component
         $this->is_active = true;
     }
 
+    public function resetEditUserForm()
+    {
+        $this->reset([
+            'edit_name', 'edit_email', 'edit_role', 'edit_first_name', 
+            'edit_last_name', 'edit_phone', 'edit_nida_number', 
+            'edit_date_of_birth', 'edit_is_active', 'edit_selected_lender_id'
+        ]);
+    }
+
     public function render()
     {
-        $query = User::
-            when($this->search, function ($q) {
-                $q->where(function ($query) {
-                    $query->where('name', 'like', '%' . $this->search . '%')
-                          ->orWhere('email', 'like', '%' . $this->search . '%')
-                          ->orWhere('first_name', 'like', '%' . $this->search . '%')
-                          ->orWhere('last_name', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->roleFilter, function ($q) {
-                $q->where('role', $this->roleFilter);
-            })
-            ->when($this->statusFilter, function ($q) {
-                if ($this->statusFilter === 'active') {
-                    $q->where('is_active', true);
-                } elseif ($this->statusFilter === 'inactive') {
-                    $q->where('is_active', false);
-                }
-            })
-            ->when($this->lenderFilter, function ($q) {
-                $q->where('lender_id', $this->lenderFilter);
-            });
+        $query = User::query();
 
-        $users = $query->orderBy('created_at', 'desc')->paginate(10);
+        // Apply filters
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->search . '%')
+                  ->orWhere('email', 'like', '%' . $this->search . '%')
+                  ->orWhere('first_name', 'like', '%' . $this->search . '%')
+                  ->orWhere('last_name', 'like', '%' . $this->search . '%');
+            });
+        }
+
+        if ($this->roleFilter) {
+            $query->where('role', $this->roleFilter);
+        }
+
+        if ($this->statusFilter) {
+            if ($this->statusFilter === 'active') {
+                $query->where('is_active', true);
+            } elseif ($this->statusFilter === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        if ($this->lenderFilter) {
+            $query->where('lender_id', $this->lenderFilter);
+        }
+
+        $users = $query->with('lender')->orderBy('created_at', 'desc')->paginate(10);
 
         return view('livewire.admin.user-management', [
             'users' => $users,

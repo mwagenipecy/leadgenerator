@@ -41,8 +41,8 @@ class OtpService
 
             Log::info('OTP record created', [
                 'user_id' => $user->id,
-                'otp_id' => $otp->id,
-                'otp_code' => $otpCode,
+                //'otp_id' => $otp->id,
+                //'otp_code' => $otpCode,
                 'expires_at' => $otp->expires_at
             ]);
 
@@ -72,9 +72,7 @@ class OtpService
                         'host' => config('mail.mailers.smtp.host')
                     ]
                 ]);
-                
-                // Still return true since OTP was created in database
-                // User can still use resend functionality
+       
                 return true;
             }
 
@@ -114,7 +112,7 @@ class OtpService
             if ($existingOtp) {
                 Log::warning('OTP exists but invalid', [
                     'user_id' => $user->id,
-                    'provided_otp' => $otpCode,
+                   // 'provided_otp' => $otpCode,
                     'is_used' => $existingOtp->is_used,
                     'is_expired' => $existingOtp->isExpired(),
                     'expires_at' => $existingOtp->expires_at
@@ -196,4 +194,6 @@ class OtpService
         return UserOtp::where('expires_at', '<', Carbon::now())
                      ->delete();
     }
+
+    
 }

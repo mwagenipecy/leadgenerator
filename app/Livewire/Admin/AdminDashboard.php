@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\NidaVerification;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Lender;
@@ -88,36 +89,75 @@ class AdminDashboard extends Component
             ->sum('requested_amount') * 0.015;
 
         // Recent activity simulation
-        $this->recentActivity = collect([
-            [
+        $activities = [];
+
+        // Get recent lender approvals
+        $recentLenders = Lender::where('status', 'approved')
+            //->where('updated_at', '>=', Carbon::now()->subWeek())
+            ->orderBy('updated_at', 'desc')
+            ->limit(2)
+            ->get();
+        
+        foreach ($recentLenders as $lender) {
+            $activities[] = [
                 'type' => 'lender_approved',
                 'message' => 'New lender approved',
-                'details' => 'KCB Bank Tanzania approved',
-                'time' => '5 minutes ago',
+                'details' => $lender->company_name . ' approved',
+                'time' => $lender->approved_at->diffForHumans(),
                 'color' => 'green'
-            ],
-            [
+            ];
+        }
+        
+        // Get recent applications
+        $recentApplications = Application::where('created_at', '>=', Carbon::now()->subDay())
+            ->orderBy('created_at', 'desc')
+            ->limit(2)
+            ->get();
+        
+        foreach ($recentApplications as $application) {
+            $activities[] = [
                 'type' => 'application_submitted',
                 'message' => 'New application received',
-                'details' => 'John Doe submitted loan application',
-                'time' => '12 minutes ago',
+                'details' => $application->first_name . ' ' . $application->last_name . ' submitted loan application',
+                'time' => $application->created_at->diffForHumans(),
                 'color' => 'brand-red'
-            ],
-            [
+            ];
+        }
+        
+        // Get recent approved applications
+        $approvedApplications = Application::where('status', 'approved')
+            ->where('approved_at', '>=', Carbon::now()->subDay())
+            ->orderBy('approved_at', 'desc')
+            ->limit(2)
+            ->get();
+        
+        foreach ($approvedApplications as $application) {
+            $activities[] = [
                 'type' => 'application_approved',
                 'message' => 'Application approved',
-                'details' => 'Maria Johnson - TZS 5,000,000',
-                'time' => '1 hour ago',
+                'details' => $application->first_name . ' ' . $application->last_name . ' - TZS ' . number_format($application->requested_amount),
+                'time' => $application->approved_at->diffForHumans(),
                 'color' => 'blue'
-            ],
-            [
+            ];
+        }
+        
+        // Add system update if NIDA verifications happened
+        $nidaCount = NidaVerification::where('verified_at', '>=', Carbon::now()->subHours(6))->count();
+        if ($nidaCount > 0) {
+            $activities[] = [
                 'type' => 'system_update',
                 'message' => 'System maintenance',
                 'details' => 'NIDA integration updated',
                 'time' => '3 hours ago',
                 'color' => 'purple'
-            ],
-        ]);
+            ];
+        }
+
+        
+        
+        $this->recentActivity = collect($activities);
+
+
     }
 
     public function loadChartData()

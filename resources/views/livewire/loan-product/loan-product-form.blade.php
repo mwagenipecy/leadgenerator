@@ -96,13 +96,16 @@
                                     </label>
                                 </div>
                             </div>
+
+
+
                         </div>
 
                         <!-- Loan Type & Promotional Tag -->
                         <div class="flex space-x-4">
                             <div class="w-1/2">
-                                <label class="block text-sm font-medium text-black mb-2">Loan Type *</label>
-                                <select wire:model.live="loan_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-red-600">
+                                <label class="block text-sm font-medium text-black mb-2">Loan Category *</label>
+                                <select wire:model.live="loan_category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-red-600">
                                     <option value="">Select Loan Type</option>
                                     <option value="personal">Personal Loan</option>
                                     <option value="business">Business Loan</option>
@@ -110,7 +113,7 @@
                                     <option value="auto">Auto Loan</option>
                                     <option value="student">Student Loan</option>
                                 </select>
-                                @error('loan_type') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                @error('loan_category') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="w-1/2">
@@ -119,7 +122,31 @@
                                 @error('promotional_tag') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
                                 <p class="text-sm text-gray-500 mt-1">This will appear as a badge on your product card</p>
                             </div>
+
+
+                            
                         </div>
+
+
+
+                        <div>
+                                <label class="block text-sm font-medium text-black mb-2">Loan Type </label>
+                                <div class="flex items-center space-x-4 pt-3">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input wire:model.live="loan_type" type="radio" value="unsecured" class="text-red-600 focus:ring-red-600">
+                                        <span class="ml-2 text-sm font-medium text-black">Unsecured</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input wire:model.live="loan_type" type="radio" value="secured" class="text-red-600 focus:ring-red-600">
+                                        <span class="ml-2 text-sm font-medium text-black">Secured</span>
+                                    </label>
+                                </div>
+
+                                @error('loan_type') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+
+
+                            </div>
+
 
                         <!-- Description -->
                         <div>

@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\LenderManagementController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductManagementController;
@@ -250,8 +251,6 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
     
     
-
-
     // LOAN APPLICATION MANAGEMENT 
     Route::get('loanApplication',[LoanApplicationController::class,'index'])->name('user.loan.application');
     Route::get('application-list',[LoanApplicationController::class,'applicationList'])->name('application.list');
@@ -263,6 +262,10 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
         Route::get('profile',[LoanApplicationController::class,'updateProfile'])->name('loan-application.profile');
         Route::get('completed',[LoanApplicationController::class,'completedApplications'])->name('loan-application.completed');
     });
+
+
+    /// VIEW LEAD MAGEMENT 
+    Route::get('view-loan-details/{id}',[LeadController::class,'viewLead'])->name('view.loan.details');
 
 
 

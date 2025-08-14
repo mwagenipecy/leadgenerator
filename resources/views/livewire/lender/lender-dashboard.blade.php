@@ -320,9 +320,9 @@
                         <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                             Filter
                         </button> -->
-                        <button class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                        <a  href="{{ route('application.list') }}" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
                             View All Applications
-                        </button>
+                        </a>
                         
                     </div>
                 </div>

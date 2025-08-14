@@ -67,6 +67,9 @@ class LoanProductForm extends Component
     #[Rule('required|integer|min:18|max:100')]
     public $min_age = 18;
 
+    #[Rule('required|string')]
+    public $loan_category;
+
     #[Rule('required|integer|gte:min_age|max:100')]
     public $max_age = 65;
 
@@ -193,7 +196,8 @@ class LoanProductForm extends Component
                     'name' => 'required|string',
                     'description' => 'nullable|string',
                     'promotional_tag' => 'nullable|string',
-                    'loan_type' => 'required|string'
+                    'loan_type' => 'required|string',
+                    'loan_category'=>'required|string',
                 ]);
                 break;
             case 2:
@@ -325,7 +329,8 @@ class LoanProductForm extends Component
         $this->name = $product->name;
         $this->description = $product->description;
         $this->promotional_tag = $product->promotional_tag;
-        $this->loan_type = $product->loan_type ?? 'personal';
+        $this->loan_type = $product->loan_type ?? 'secured';
+        $this->loan_category = $product->loan_category ?? 'personal';
         
         // Amount & Terms
         $this->min_amount = $product->min_amount;
@@ -384,6 +389,7 @@ class LoanProductForm extends Component
             'description' => $this->description,
             'promotional_tag' => $this->promotional_tag,
             'loan_type' => $this->loan_type,
+            'loan_category' => $this->loan_category,
             'min_amount' => $this->min_amount,
             'max_amount' => $this->max_amount,
             'min_tenure_months' => $this->min_tenure_months,

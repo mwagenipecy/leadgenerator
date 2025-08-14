@@ -23,7 +23,7 @@
                 <p class="text-gray-500 text-sm">Created {{ $product->created_at->diffForHumans() }}</p>
             </div>
             <div class="flex items-center space-x-3">
-                <button wire:click="editProduct" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg flex items-center">
+                <button wire:click="editProduct" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-sm flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
@@ -39,9 +39,9 @@
     </div>
 
     <!-- Application Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Total Applications -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Total Applications</p>
@@ -56,7 +56,7 @@
         </div>
 
         <!-- Approved Applications -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Approved</p>
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Success Rate -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Success Rate</p>
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Total Disbursed -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <!-- <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Total Disbursed</p>
@@ -98,7 +98,7 @@
                     </svg>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Main Content Area -->
@@ -142,15 +142,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-2">Amount Range</h4>
-                            <p class="text-lg font-bold text-red-600">{{ $product->amount_range }}</p>
+                            <p class="text-sm font-bold text-red-600">{{ $product->amount_range }}</p>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-2">Interest Rate</h4>
-                            <p class="text-lg font-bold text-red-600">{{ $product->interest_range }}</p>
+                            <p class="text-sm font-bold text-red-600">{{ $product->interest_range }}</p>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-2">Tenure</h4>
-                            <p class="text-lg font-bold text-black">{{ $product->tenure_range }}</p>
+                            <p class="text-sm font-bold text-black">{{ $product->tenure_range }}</p>
                         </div>
                     </div>
                 </div>
@@ -194,6 +194,19 @@
                             <p class="text-gray-600 font-medium">Minimum: {{ $product->min_credit_score }}</p>
                         </div>
                         @endif
+
+
+                        @if($product->minimum_dsr)
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-sm font-semibold text-black mb-3">Maximum DSR </h4>
+                            <p class="text-gray-600 font-medium">Less or Equal: {{ $product->minimum_dsr }}</p>
+                        </div>
+                        @endif
+
+
+
+
+
                     </div>
                 </div>
             </div>
@@ -240,7 +253,7 @@
                                     </div>
                                 @endif
                             @else
-                                <p class="text-green-600 font-medium">Not Required</p>
+                                <p class="text-gray-600  text-sm  font-medium">Not Required</p>
                             @endif
                         </div>
 
@@ -250,7 +263,7 @@
                                 <p class="text-red-600 font-medium">Required</p>
                                 <p class="text-sm text-gray-600 mt-1">Minimum: {{ $product->min_guarantors }} guarantor(s)</p>
                             @else
-                                <p class="text-green-600 font-medium">Not Required</p>
+                                <p class="text-gray-600 text-sm  font-medium">Not Required</p>
                             @endif
                         </div>
                     </div>
@@ -321,14 +334,14 @@
                             <span class="text-sm text-gray-600">Success Rate</span>
                             <span class="text-sm font-bold text-red-600">{{ $performanceMetrics['success_rate'] }}%</span>
                         </div>
-                        <div class="flex justify-between items-center">
+                        <!-- <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-600">Avg. Amount</span>
                             <span class="text-sm font-bold text-black">TSh {{ number_format($performanceMetrics['average_amount']) }}</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-600">Total Volume</span>
                             <span class="text-sm font-bold text-black">TSh {{ number_format($performanceMetrics['total_volume']) }}</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -347,13 +360,13 @@
                         <span class="text-sm text-gray-600">Disbursement Time</span>
                         <span class="text-sm font-bold text-black">{{ $product->disbursement_time_days }} days</span>
                     </div>
-                    <div class="flex justify-between items-center">
+                    <!-- <div class="flex justify-between items-center">
                         <span class="text-sm text-gray-600">Avg. Processing</span>
                         <span class="text-sm font-bold text-red-600">{{ $applicationStats['average_processing_time'] }} days</span>
-                    </div>
+                    </div> -->
                     @if($product->auto_approval_eligible)
                     <div class="pt-3 border-t border-gray-200">
-                        <div class="flex items-center text-green-600">
+                        <div class="flex items-center text-red-600">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>

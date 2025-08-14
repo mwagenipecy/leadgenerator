@@ -3,13 +3,13 @@
     <!-- Header with Back Button -->
     <div class="flex items-center justify-between mb-8">
         <div class="flex items-center space-x-4">
-            <button wire:click="backToList" 
+            <a href="{{ route('application.list') }}" 
                     class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
                 Back to Leads
-            </button>
+            </a>
             <div>
                 <h1 class="text-2xl font-bold text-black">Lead Details</h1>
                 <p class="text-sm text-gray-600">{{ $application->application_number }}</p>
@@ -104,9 +104,9 @@
             <!-- Key Metrics -->
             <div class="grid grid-cols-3 gap-6 text-center">
                 <div class="p-4 bg-red-50 rounded-lg">
-                    <div class="text-2xl font-bold text-red-600 {{ $isAvailable ? 'blur-sm' : '' }}">
+                    <div class="text-2xl font-bold text-red-600 {{ $isAvailable ? '-sm' : '' }}">
                         @if($isAvailable)
-                            TSh *.* M
+                        TSh {{ number_format($application->requested_amount/1000000, 1) }}M
                         @else
                             TSh {{ number_format($application->requested_amount/1000000, 1) }}M
                         @endif
@@ -114,9 +114,9 @@
                     <div class="text-sm text-red-700">Requested Amount</div>
                 </div>
                 <div class="p-4 bg-gray-50 rounded-lg">
-                    <div class="text-2xl font-bold text-black {{ $isAvailable ? 'blur-sm' : '' }}">
+                    <div class="text-2xl font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
                         @if($isAvailable)
-                            TSh ***K
+                        TSh {{ number_format($application->total_monthly_income/1000, 0) }}K
                         @else
                             TSh {{ number_format($application->total_monthly_income/1000, 0) }}K
                         @endif
@@ -133,139 +133,68 @@
         </div>
     </div>
 
-    <!-- Detailed Information -->
+    <!-- Tabbed Content -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <!-- Tab Navigation -->
+        <div class="border-b border-gray-200">
+            <nav class="flex space-x-8 px-6" aria-label="Tabs">
+                <button wire:click="switchTab('overview')" 
+                        class="@if($activeTab == 'overview') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                    Overview
+                </button>
+                <button wire:click="switchTab('personal')" 
+                        class="@if($activeTab == 'personal') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                    Personal Details
+                </button>
+                <button wire:click="switchTab('financial')" 
+                        class="@if($activeTab == 'financial') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                    Financial Information
+                </button>
+                <button wire:click="switchTab('employment')" 
+                        class="@if($activeTab == 'employment') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                    Employment
+                </button>
+                <button wire:click="switchTab('documents')" 
+                        class="@if($activeTab == 'documents') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                    Documents
+                    <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ $application->documents->count() ?? 0 }}</span>
+                </button>
+                <button wire:click="switchTab('history')" 
+                        class="@if($activeTab == 'history') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                    Timeline
+                </button>
+                <button wire:click="switchTab('creditReport')" 
+                        class="@if($activeTab == 'creditReport') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                    CRB Report
+                </button>
+
+                <button wire:click="switchTab('statementAnalyser')" 
+                        class="@if($activeTab == 'statementAnalyser') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                   Statement Analyser
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
         <div class="p-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Loan Details -->
-                <div>
-                    <h3 class="text-lg font-semibold text-black mb-4">Loan Application Details</h3>
-                    <div class="bg-gray-50 rounded-lg p-6 space-y-4">
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Application Number</span>
-                            <span class="text-sm font-bold text-black">{{ $application->application_number }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Loan Product</span>
-                            <span class="text-sm font-bold text-black">{{ $application->loanProduct->name ?? 'N/A' }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Requested Amount</span>
-                            <span class="text-sm font-bold text-black {{ $isAvailable ? 'blur-sm' : '' }}">
-                                @if($isAvailable)
-                                    TSh ***,***
-                                @else
-                                    TSh {{ number_format($application->requested_amount) }}
-                                @endif
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Tenure</span>
-                            <span class="text-sm font-bold text-black">{{ $application->requested_tenure_months }} months</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Purpose</span>
-                            <span class="text-sm font-bold text-black">{{ ucwords(str_replace('_', ' ', $application->loan_purpose ?? 'N/A')) }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3">
-                            <span class="text-sm font-medium text-gray-600">Application Date</span>
-                            <span class="text-sm font-bold text-black">{{ $application->created_at->format('M d, Y H:i') }}</span>
-                        </div>
-                    </div>
-                </div>
+            @if($activeTab == 'overview')
+                <livewire:leads.components.lead-overview :application="$application" :isAvailable="$isAvailable" />
+            @elseif($activeTab == 'personal')
+                <livewire:leads.components.lead-personal :application="$application" :isAvailable="$isAvailable" />
+            @elseif($activeTab == 'financial')
+                <livewire:leads.components.lead-financial :application="$application" :isAvailable="$isAvailable" />
+            @elseif($activeTab == 'employment')
+                <livewire:leads.components.lead-employment :application="$application" :isAvailable="$isAvailable" />
+            @elseif($activeTab == 'documents')
+                <livewire:leads.components.lead-documents :application="$application" :isAvailable="$isAvailable" />
+            @elseif($activeTab == 'history')
+                <livewire:leads.components.lead-timeline :application="$application" :lead="$lead" :isAvailable="$isAvailable" />
+            @elseif($activeTab == 'creditReport')
+                <livewire:credit-info-component  :applicationId="$application->id" :isAvailable="$isAvailable" />
+          @elseif($activeTab == 'statementAnalyser')
+          <livewire:component.transaction-analysis-component />
 
-                <!-- Financial Profile -->
-                <div>
-                    <h3 class="text-lg font-semibold text-black mb-4">Financial Profile</h3>
-                    <div class="bg-gray-50 rounded-lg p-6 space-y-4">
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Monthly Income</span>
-                            <span class="text-sm font-bold text-black {{ $isAvailable ? 'blur-sm' : '' }}">
-                                @if($isAvailable)
-                                    TSh ***,***
-                                @else
-                                    TSh {{ number_format($application->total_monthly_income) }}
-                                @endif
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Employment Status</span>
-                            <span class="text-sm font-bold text-black {{ $isAvailable ? 'blur-sm' : '' }}">
-                                @if($isAvailable)
-                                    {{ substr($application->employment_status, 0, 3) }}***
-                                @else
-                                    {{ ucwords(str_replace('_', ' ', $application->employment_status)) }}
-                                @endif
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">DSR</span>
-                            @if($application->debt_to_income_ratio && !$isAvailable)
-                                <span class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
-                                    {{ number_format($application->debt_to_income_ratio, 1) }}%
-                                </span>
-                            @else
-                                <span class="text-sm text-gray-400 {{ $isAvailable ? 'blur-sm' : '' }}">
-                                    {{ $isAvailable ? '**.*%' : 'N/A' }}
-                                </span>
-                            @endif
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-600">Credit Score</span>
-                            <span class="text-sm font-bold text-black">{{ $application->credit_score ?? 'N/A' }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3">
-                            <span class="text-sm font-medium text-gray-600">Bank</span>
-                            <span class="text-sm font-bold text-black {{ $isAvailable ? 'blur-sm' : '' }}">
-                                @if($isAvailable)
-                                    ***Bank
-                                @else
-                                    {{ $application->bank_name ?? 'N/A' }}
-                                @endif
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Information -->
-            <div class="mt-8">
-                <h3 class="text-lg font-semibold text-black mb-4">Additional Information</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="font-medium text-black mb-2">Contact Information</h4>
-                        <div class="space-y-2 text-sm">
-                            <div><span class="text-gray-600">Address:</span> 
-                                <span class="font-medium text-black {{ $isAvailable ? 'blur-sm' : '' }}">
-                                    @if($isAvailable)
-                                        ***Address
-                                    @else
-                                        {{ $application->current_address ?? 'N/A' }}
-                                    @endif
-                                </span>
-                            </div>
-                            <div><span class="text-gray-600">City:</span> 
-                                <span class="font-medium text-black {{ $isAvailable ? 'blur-sm' : '' }}">
-                                    @if($isAvailable)
-                                        ***City
-                                    @else
-                                        {{ $application->current_city ?? 'N/A' }}
-                                    @endif
-                                </span>
-                            </div>
-                            <div><span class="text-gray-600">Region:</span> 
-                                <span class="font-medium text-black {{ $isAvailable ? 'blur-sm' : '' }}">
-                                    @if($isAvailable)
-                                        ***Region
-                                    @else
-                                        {{ $application->current_region ?? 'N/A' }}
-                                    @endif
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 
@@ -337,99 +266,5 @@
             </div>
         </div>
     @endif
-
-    <!-- Lead History Section for Booked Leads -->
-    @if(!$isAvailable)
-        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 class="text-lg font-semibold text-black mb-4">Lead Timeline</h3>
-            
-            <div class="flow-root">
-                <ul class="-mb-8">
-                    <li>
-                        <div class="relative pb-8">
-                            <div class="relative flex space-x-3">
-                                <div>
-                                    <span class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
-                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div class="min-w-0 flex-1 pt-1.5">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Application submitted</p>
-                                        <p class="text-xs text-gray-400">{{ $application->created_at->format('M d, Y H:i') }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            @if($lead->submitted_at)
-                                <div class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"></div>
-                            @endif
-                        </div>
-                    </li>
-
-                    @if($lead->submitted_at)
-                        <li>
-                            <div class="relative pb-8">
-                                <div class="relative flex space-x-3">
-                                    <div>
-                                        <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
-                                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                            </svg>
-                                        </span>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1.5">
-                                        <div>
-                                            <p class="text-sm text-gray-500">Lead booked by {{ Auth::user()->lender->company_name }}</p>
-                                            <p class="text-xs text-gray-400">{{ $lead->submitted_at }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                @if($lead->decision_at)
-                                    <div class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"></div>
-                                @endif
-                            </div>
-                        </li>
-                    @endif
-
-                    @if($lead->decision_at)
-                        <li>
-                            <div class="relative">
-                                <div class="relative flex space-x-3">
-                                    <div>
-                                        <span class="h-8 w-8 rounded-full {{ $lead->status === 'approved' ? 'bg-green-500' : 'bg-gray-500' }} flex items-center justify-center ring-8 ring-white">
-                                            @if($lead->status === 'approved')
-                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                </svg>
-                                            @endif
-                                        </span>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1.5">
-                                        <div>
-                                            <p class="text-sm text-gray-500">Lead {{ $lead->status }}</p>
-                                            <p class="text-xs text-gray-400">{{ $lead->decision_at }}</p>
-                                            @if($lead->status === 'approved' && $lead->offer_summary)
-                                                <p class="text-xs text-green-600 mt-1">{{ $lead->offer_summary }}</p>
-                                            @endif
-                                            @if($lead->status === 'rejected' && $lead->rejection_reason)
-                                                <p class="text-xs text-red-600 mt-1">{{ $lead->rejection_reason }}</p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-    @endif
 </div>
-
 </div>

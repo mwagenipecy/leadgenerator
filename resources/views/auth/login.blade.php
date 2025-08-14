@@ -46,7 +46,7 @@
                             :value="old('login')"
                             required 
                             class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
-                            placeholder="Enter your email"
+                            placeholder="Enter your email / Phone Number"
                         >
                     </div>
                 </div>

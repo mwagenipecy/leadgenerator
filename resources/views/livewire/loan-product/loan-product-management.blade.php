@@ -11,7 +11,7 @@
                     <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                     <span class="text-sm font-medium text-red-700">{{ $stats['active'] ?? 0 }} Active Products</span>
                 </div>
-                <button wire:click="showCreateForm" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg">
+                <button wire:click="showCreateForm" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-sm">
                     + Create Product
                 </button>
             </div>
@@ -44,7 +44,7 @@
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <!-- Total Products -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Total Products</p>
@@ -59,7 +59,7 @@
         </div>
 
         <!-- Active Products -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Active Products</p>
@@ -74,22 +74,27 @@
         </div>
 
         <!-- Inactive Products -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Inactive Products</p>
                     <p class="text-3xl font-bold text-gray-500">{{ $stats['inactive'] ?? 0 }}</p>
                 </div>
                 <div class="w-12 h-12 bg-gray-400 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636"/>
+                   
+
+
+                    <svg  class="w-6 h-6 text-white"  data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
                     </svg>
+
+
                 </div>
             </div>
         </div>
 
         <!-- Total Applications -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-sm transition-all duration-300">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Total Applications</p>
@@ -137,7 +142,7 @@
     </div>
 
     <!-- Products Table -->
-    <div class="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden mb-8">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-8">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead class="bg-gray-50">
