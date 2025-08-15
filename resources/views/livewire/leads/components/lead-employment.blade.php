@@ -232,71 +232,7 @@
 
 <!-- Employment Verification Status -->
 <div class="mt-8">
-    <h3 class="text-lg font-semibold text-black mb-4">Verification Status</h3>
-    <div class="bg-gray-50 rounded-lg p-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="text-center">
-                <div class="text-2xl font-bold text-yellow-600 mb-2">
-                    @if($application->employment_verified)
-                        <svg class="w-8 h-8 mx-auto text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    @else
-                        <svg class="w-8 h-8 mx-auto text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    @endif
-                </div>
-                <p class="text-sm font-medium text-gray-700">Employment</p>
-                <p class="text-xs text-gray-500">
-                    {{ $application->employment_verified ? 'Verified' : 'Pending' }}
-                </p>
-            </div>
-            
-            <div class="text-center">
-                <div class="text-2xl font-bold text-yellow-600 mb-2">
-                    @if($application->income_verified)
-                        <svg class="w-8 h-8 mx-auto text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    @else
-                        <svg class="w-8 h-8 mx-auto text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    @endif
-                </div>
-                <p class="text-sm font-medium text-gray-700">Income</p>
-                <p class="text-xs text-gray-500">
-                    {{ $application->income_verified ? 'Verified' : 'Pending' }}
-                </p>
-            </div>
-            
-            <div class="text-center">
-                <div class="text-2xl font-bold text-yellow-600 mb-2">
-                    @if($application->reference_verified)
-                        <svg class="w-8 h-8 mx-auto text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    @else
-                        <svg class="w-8 h-8 mx-auto text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    @endif
-                </div>
-                <p class="text-sm font-medium text-gray-700">References</p>
-                <p class="text-xs text-gray-500">
-                    {{ $application->reference_verified ? 'Verified' : 'Pending' }}
-                </p>
-            </div>
-        </div>
-        
-        @if($application->employment_verification_notes)
-            <div class="mt-6 pt-6 border-t border-gray-200">
-                <h4 class="text-sm font-medium text-gray-700 mb-2">Verification Notes</h4>
-                <p class="text-sm text-gray-600">{{ $application->employment_verification_notes }}</p>
-            </div>
-        @endif
-    </div>
+    
 </div>
 
 </div>

@@ -38,12 +38,15 @@ class LeadDetail extends Component
                 ->where('status', 'submitted')
                 ->find($this->leadId);
         } else {
+            
             $this->lead = ApplicationLenderSubmission::with(['application.loanProduct', 'application.user', 'lender'])
                 ->where('lender_id', Auth::user()->lender_id)
                 ->find($this->leadId);
         }
         
         $this->application = $this->isAvailable ? $this->lead : $this->lead->application;
+
+       // dd($this->application);
     }
 
     public function switchTab($tabName)
@@ -131,9 +134,9 @@ class LeadDetail extends Component
 
     public function processLead($decision)
     {
-        if ($this->isAvailable) {
-            return;
-        }
+        // if ($this->isAvailable) {
+        //     return;
+        // }
 
         try {
             DB::beginTransaction();
@@ -152,7 +155,7 @@ class LeadDetail extends Component
 
             if ($decision === 'approve') {
                 $submission->update([
-                    'status' => 'approved',
+                    // 'status' => 'approved',
                     'decision_at' => now(),
                     'offered_amount' => $this->offerAmount,
                     'offered_interest_rate' => $this->offerInterestRate,
@@ -182,6 +185,22 @@ class LeadDetail extends Component
                     ]
                 ]);
 
+                ApplicationLenderSubmission::where('application_id', $submission->application_id)
+                    ->where('status', 'withdrawn')
+                    ->update([
+                        'status' => 'submitted',
+                    ]);
+
+
+
+                    // $submission->application->update([
+                    //     'status' => 'submitted',
+                    //     'notes' => $this->leadNotes,
+                    //     'lender_id' => null,
+                    //     'booking_status' => 'unbooked',
+                    // ]);
+
+
                 // Return to market for other lenders
                 $submission->application->update([
                     'booking_status' => 'unbooked',
@@ -190,6 +209,14 @@ class LeadDetail extends Component
                     'reviewed_at' => null,
                     'reviewed_by' => null
                 ]);
+            }elseif($decision =='disbursed'){
+
+                $submission->application->update([
+                    'status' => 'disbursed',
+                    'approved_at' => now(),
+                    'notes' => $this->leadNotes
+                ]);
+                
             }
 
             DB::commit();
@@ -202,6 +229,8 @@ class LeadDetail extends Component
             $this->resetForm();
             $this->dispatch('leadProcessed');
             $this->dispatch('backToList');
+
+            return redirect()->route('application.list');
 
         } catch (\Exception $e) {
             DB::rollBack();

@@ -34,7 +34,7 @@
         @endif
 
         <!-- Key Performance Metrics - Mobile Responsive Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <!-- Total Applications Card -->
             <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between mb-4">
@@ -116,38 +116,7 @@
             </div>
 
             <!-- Outstanding Balance Card -->
-            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-black rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                        </svg>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-xs sm:text-sm font-medium text-gray-500">Outstanding Balance</p>
-                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-black">
-                            @if($outstandingBalance >= 1000000)
-                                TSh {{ number_format($outstandingBalance/1000000, 1) }}M
-                            @else
-                                TSh {{ number_format($outstandingBalance/1000) }}K
-                            @endif
-                        </p>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between text-xs sm:text-sm">
-                    @if($nextPaymentDue)
-                        <div class="flex items-center space-x-1 text-red-600">
-                            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span class="font-semibold">{{ $nextPaymentDue->diffForHumans() }}</span>
-                        </div>
-                        <span class="text-gray-500">next payment</span>
-                    @else
-                        <span class="text-gray-500 text-xs">No active loans</span>
-                    @endif
-                </div>
-            </div>
+          
         </div>
 
         <!-- Main Content Grid - Mobile Responsive -->
@@ -210,7 +179,7 @@
                             Apply for Loan
                         </button>
                     </div>
-                @endif
+                @endif 
             </div>
 
             <!-- Recent Activity Feed -->
@@ -274,18 +243,18 @@
                                 </span>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-1">
+                                <!-- <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
-                                </button>
+                                </button> -->
                                 @if(in_array($application->status, ['submitted', 'under_review']))
-                                    <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-1">
+                                    <!-- <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
-                                    </button>
+                                    </button> -->
                                 @endif
                             </div>
                         </div>
@@ -337,7 +306,14 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider"># </th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Lender</th>
+
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Type </th>
+
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Status</th>
+
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Date</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
@@ -403,18 +379,18 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
-                                        <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
+                                        <!-- <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
-                                        </button>
+                                        </button> -->
                                         @if(in_array($application->status, ['submitted', 'under_review']))
-                                            <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
+                                            <!-- <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                 </svg>
-                                            </button>
+                                            </button> -->
                                         @endif
                                     </div>
                                 </td>

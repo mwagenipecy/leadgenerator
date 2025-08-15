@@ -1,11 +1,13 @@
+<div>
+
 <div class="max-w-7xl mx-auto p-6">
     <!-- Header -->
     <div class="bg-white shadow rounded-lg p-6 mb-6">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold text-gray-900">Credit Information Requests</h1>
-            <button wire:click="toggleManualForm" 
+            <button wire:click="toggleRequestForm" 
                     class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium">
-                {{ $showManualForm ? 'Cancel' : 'Manual Check' }}
+                {{ $showRequestForm ? 'Cancel' : 'Request New Report' }}
             </button>
         </div>
 
@@ -22,64 +24,36 @@
             </div>
         @endif
 
-        <!-- Manual Form -->
-        @if($showManualForm)
+        <!-- New Report Request Form -->
+        @if($showRequestForm)
             <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Manual Credit Check</h3>
-                <form wire:submit.prevent="checkCreditInfo">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">National ID</label>
-                            <input type="text" wire:model="national_id" 
-                                   class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('national_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                            <input type="text" wire:model="first_name" 
-                                   class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('first_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                            <input type="text" wire:model="last_name" 
-                                   class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('last_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-                            <input type="date" wire:model="date_of_birth" 
-                                   class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('date_of_birth') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="text" wire:model="phone_number" 
-                                   class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('phone_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Loan Application (Optional)</label>
-                            <select wire:model="loan_id" 
-                                    class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="">Select Application</option>
-                                @foreach($applications as $app)
-                                    <option value="{{ $app->id }}">{{ $app->application_number }} - {{ $app->first_name }} {{ $app->last_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Request New Credit Report</h3>
+                <form wire:submit.prevent="requestNewReport">
+                    <div class="max-w-md">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Default Application</label>
+                        @php
+                            $defaultApplication = $applications->first();
+                        @endphp
+                        @if($defaultApplication)
+                            <div class="w-full border border-gray-300 rounded-md bg-gray-100 p-3 text-gray-700">
+                                {{ $defaultApplication->application_number }} - {{ $defaultApplication->first_name }} {{ $defaultApplication->last_name }}
+                            </div>
+                            <!-- Hidden input to store the default application ID -->
+                            <input type="hidden" wire:model="application_id" value="{{ $defaultApplication->id }}">
+                        @else
+                            <div class="w-full border border-red-300 rounded-md bg-red-50 p-3 text-red-700">
+                                No applications available
+                            </div>
+                        @endif
+                        @error('application_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     
                     <div class="mt-4">
                         <button type="submit" 
                                 wire:loading.attr="disabled"
-                                class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50">
-                            <span wire:loading.remove>Check Credit Info</span>
+                                @if(!$defaultApplication) disabled @endif
+                                class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading.remove>Generate Report</span>
                             <span wire:loading>Processing...</span>
                         </button>
                     </div>
@@ -87,36 +61,6 @@
             </div>
         @endif
 
-        <!-- Filters -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                <input type="text" wire:model="search" placeholder="National ID, Name, Application..." 
-                       class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select wire:model="statusFilter" 
-                        class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">All Statuses</option>
-                    <option value="pending">Pending</option>
-                    <option value="success">Success</option>
-                    <option value="failed">Failed</option>
-                </select>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Loan Application</label>
-                <select wire:model="selectedLoanId" 
-                        class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">All Applications</option>
-                    @foreach($applications as $app)
-                        <option value="{{ $app->id }}">{{ $app->application_number }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
     </div>
 
     <!-- Results Table -->
@@ -159,10 +103,10 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div>
                                     <div class="text-sm font-medium text-gray-900">
-                                        {{ $request->application_number ?? 'Manual Check' }}
+                                        {{ $request->application_number ?? 'N/A' }}
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                        ID: {{ $extract['NationalId']['_value'] ?? $request->national_id }}
+                                        ID: {{ isset($extract['NationalId']['_value']) ? $extract['NationalId']['_value'] : $request->national_id }}
                                     </div>
                                     <div class="text-sm text-gray-500">
                                         {{ $request->created_at->format('M d, Y H:i') }}
@@ -181,7 +125,7 @@
                                         {{ $request->full_name }}
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                        DOB: {{ $request->date_of_birth ?->format('M d, Y') }}
+                                        DOB: {{ $request->date_of_birth ? $request->date_of_birth->format('M d, Y') : 'N/A' }}
                                     </div>
                                     <div class="text-sm text-gray-500">
                                         {{ $request->phone_number ?? "N/A" }}
@@ -199,26 +143,24 @@
                                     <div class="space-y-1">
                                         <div class="text-sm">
                                             <span class="font-medium">CIP Score:</span> 
-                                            <span class="px-2 py-1 text-xs rounded-full {{ $extract['CIPScore']['_value'] == 999 ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-800' }}">
-                                                {{ $extract['CIPScore']['_value'] }} ({{ $extract['CIPGrade']['_value'] }})
-                                            </span>
+                                            <span class="text-gray-900 font-semibold">{{ $extract['CIPScore']['_value'] }}</span>
+                                            <span class="text-gray-500">({{ $extract['CIPGrade']['_value'] }})</span>
                                         </div>
                                         <div class="text-sm">
                                             <span class="font-medium">Mobile Score:</span> 
-                                            <span class="px-2 py-1 text-xs rounded-full {{ $extract['MobileScore']['_value'] == 999 ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-800' }}">
-                                                {{ $extract['MobileScore']['_value'] }} ({{ $extract['MobileGrade']['_value'] }})
-                                            </span>
+                                            <span class="text-gray-900 font-semibold">{{ $extract['MobileScore']['_value'] }}</span>
+                                            <span class="text-gray-500">({{ $extract['MobileGrade']['_value'] }})</span>
                                         </div>
                                         <div class="text-sm">
                                             <span class="font-medium">Decision:</span> 
-                                            <span class="px-2 py-1 text-xs rounded-full {{ $extract['Decision']['_value'] === 'Approve' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            <span class="font-semibold {{ $extract['Decision']['_value'] === 'Approve' ? 'text-green-700' : 'text-red-700' }}">
                                                 {{ $extract['Decision']['_value'] }}
                                             </span>
                                         </div>
                                         @if($generalInfo && isset($generalInfo['BrokenRules']))
                                             <div class="text-sm">
                                                 <span class="font-medium">Broken Rules:</span> 
-                                                <span class="text-{{ $generalInfo['BrokenRules']['_value'] > 0 ? 'red' : 'green' }}-600">
+                                                <span class="{{ $generalInfo['BrokenRules']['_value'] > 0 ? 'text-red-700' : 'text-green-700' }} font-semibold">
                                                     {{ $generalInfo['BrokenRules']['_value'] }}
                                                 </span>
                                             </div>
@@ -234,25 +176,25 @@
                                     <div class="space-y-1 text-sm">
                                         <div>
                                             <span class="font-medium">Total Balance:</span> 
-                                            <span class="text-blue-600">
+                                            <span class="text-gray-900 font-semibold">
                                                 TZS {{ number_format($currentContracts['Total']['Balance']['_value']) }}
                                             </span>
                                         </div>
                                         <div>
                                             <span class="font-medium">At Risk:</span> 
-                                            <span class="text-red-600">
+                                            <span class="text-red-700 font-semibold">
                                                 TZS {{ number_format($currentContracts['Total']['BalanceAtRisk']['_value']) }}
                                             </span>
                                         </div>
                                         <div>
                                             <span class="font-medium">Contracts:</span> 
-                                            <span class="text-green-600">{{ $currentContracts['Total']['Positive']['_value'] }}</span> / 
-                                            <span class="text-red-600">{{ $currentContracts['Total']['Negative']['_value'] }}</span>
+                                            <span class="text-green-700 font-semibold">{{ $currentContracts['Total']['Positive']['_value'] }}</span> / 
+                                            <span class="text-red-700 font-semibold">{{ $currentContracts['Total']['Negative']['_value'] }}</span>
                                         </div>
                                         @if($pastDueInfo)
                                             <div>
                                                 <span class="font-medium">Past Due:</span> 
-                                                <span class="text-orange-600">
+                                                <span class="text-orange-700 font-semibold">
                                                     TZS {{ number_format($pastDueInfo['TotalCurrentPastDue']['_value']) }}
                                                 </span>
                                             </div>
@@ -265,17 +207,11 @@
                             
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($request->status === 'success')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Success
-                                    </span>
+                                    <span class="text-green-700 font-semibold">Success</span>
                                 @elseif($request->status === 'failed')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                        Failed
-                                    </span>
+                                    <span class="text-red-700 font-semibold">Failed</span>
                                 @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        Pending
-                                    </span>
+                                    <span class="text-yellow-700 font-semibold">Pending</span>
                                 @endif
                                 
                                 @if($request->error_message)
@@ -337,10 +273,15 @@
             $scoringAnalysis = $creditData['scoring_analysis'] ?? null;
             $generalInfo = $creditData['general_information'] ?? null;
             $strategy = $creditData['strategy'] ?? null;
+            
+            // Get the primary credit score (CIP Score)
+            $creditScore = isset($extract['CIPScore']['_value']) ? $extract['CIPScore']['_value'] : 0;
+            $creditGrade = isset($extract['CIPGrade']['_value']) ? $extract['CIPGrade']['_value'] : 'N/A';
+            $decision = isset($extract['Decision']['_value']) ? $extract['Decision']['_value'] : 'Unknown';
         @endphp
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white max-h-screen overflow-y-auto">
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-gray-900">Credit Information Details</h3>
                     <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,305 +290,494 @@
                     </button>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Basic Information -->
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="font-semibold text-gray-900 mb-3">Basic Information</h4>
-                        <div class="space-y-2 text-sm">
-                            <div><span class="font-medium">Name:</span> {{ $selectedRequest->full_name }}</div>
-                            <div><span class="font-medium">National ID:</span> {{ $extract['NationalId']['_value'] ?? $selectedRequest->national_id }}</div>
-                            @if($extract && isset($extract['MobilePhone']))
-                                <div><span class="font-medium">Mobile:</span> {{ $extract['MobilePhone']['_value'] }}</div>
-                            @endif
-                            <div><span class="font-medium">DOB:</span> {{ $selectedRequest->date_of_birth ?->format('M d, Y') }}</div>
-                            <div><span class="font-medium">Status:</span> 
-                                <span class="px-2 py-1 text-xs rounded-full {{ $selectedRequest->status === 'success' ? 'bg-green-100 text-green-800' : ($selectedRequest->status === 'failed' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                                    {{ ucfirst($selectedRequest->status) }}
-                                </span>
+                @if($selectedRequest->isSuccessful() && $extract)
+                    <!-- Improved Credit Score Gauge -->
+                    <div class="flex justify-center mb-8">
+                        <div class="bg-gradient-to-br from-white to-gray-50  ">
+                            
+                            
+            <!-- Semi-circular Gauge Container -->
+                            <div class="relative mx-auto" style="width: 320px; height: 200px;">
+                                <svg width="320" height="200" viewBox="0 0 320 200" class="mx-auto">
+                                    <!-- Gauge Background -->
+                                    <defs>
+                                        <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#f3f4f6;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#e5e7eb;stop-opacity:1" />
+                                        </linearGradient>
+                                        
+                                        <!-- Shadows for depth -->
+                                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                                            <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#00000020"/>
+                                        </filter>
+                                    </defs>
+                                    
+                                    <!-- Background Arc -->
+                                    <path d="M 50 170 A 110 110 0 0 1 270 170" 
+                                          stroke="url(#backgroundGradient)" 
+                                          stroke-width="20" 
+                                          fill="none" 
+                                          filter="url(#shadow)"/>
+                                    
+                                    <!-- Score Segments with Proper Color Distribution -->
+                                    @php
+                                        // Define score ranges and their corresponding angles
+                                        $maxScore = 999;
+                                        $segments = [
+                                            ['min' => 0, 'max' => 299, 'color' => '#dc2626', 'label' => 'Poor'],
+                                            ['min' => 300, 'max' => 549, 'color' => '#ea580c', 'label' => 'Fair'], 
+                                            ['min' => 550, 'max' => 699, 'color' => '#fbbf24', 'label' => 'Good'],
+                                            ['min' => 700, 'max' => 999, 'color' => '#16a34a', 'label' => 'Excellent']
+                                        ];
+                                        
+                                        $totalAngle = 180; // Semi-circle
+                                        $radius = 110;
+                                        $centerX = 160;
+                                        $centerY = 170;
+                                    @endphp
+                                    
+                                    @foreach($segments as $segment)
+                                        @php
+                                            $startAngle = ($segment['min'] / $maxScore) * $totalAngle;
+                                            $endAngle = ($segment['max'] / $maxScore) * $totalAngle;
+                                            
+                                            // Convert to radians and calculate coordinates
+                                            $startRad = ($startAngle - 90) * pi() / 180;
+                                            $endRad = ($endAngle - 90) * pi() / 180;
+                                            
+                                            $startX = $centerX + $radius * cos($startRad);
+                                            $startY = $centerY + $radius * sin($startRad);
+                                            $endX = $centerX + $radius * cos($endRad);
+                                            $endY = $centerY + $radius * sin($endRad);
+                                            
+                                            $largeArcFlag = ($endAngle - $startAngle) > 90 ? 1 : 0;
+                                        @endphp
+                                        
+                                        <path d="M {{ $startX }} {{ $startY }} A {{ $radius }} {{ $radius }} 0 {{ $largeArcFlag }} 1 {{ $endX }} {{ $endY }}" 
+                                              stroke="{{ $segment['color'] }}" 
+                                              stroke-width="18" 
+                                              fill="none" 
+                                              stroke-linecap="round"
+                                              opacity="0.9"/>
+                                    @endforeach
+                                    
+                                    <!-- Score Needle -->
+                                    @php
+                                        $scoreAngle = ($creditScore / $maxScore) * $totalAngle;
+                                        $needleRad = ($scoreAngle - 90) * pi() / 180;
+                                        $needleLength = 90;
+                                        $needleX = $centerX + $needleLength * cos($needleRad);
+                                        $needleY = $centerY + $needleLength * sin($needleRad);
+                                    @endphp
+                                    
+                                    <!-- Needle with gradient -->
+                                    <defs>
+                                        <linearGradient id="needleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#1f2937;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                    
+                                    <line x1="{{ $centerX }}" y1="{{ $centerY }}" 
+                                          x2="{{ $needleX }}" y2="{{ $needleY }}" 
+                                          stroke="url(#needleGradient)" 
+                                          stroke-width="4" 
+                                          stroke-linecap="round"
+                                          filter="url(#shadow)"/>
+                                    
+                                    <!-- Center dot -->
+                                    <circle cx="{{ $centerX }}" cy="{{ $centerY }}" r="8" 
+                                            fill="url(#needleGradient)" 
+                                            filter="url(#shadow)"/>
+                                    
+                                    <!-- Score Labels -->
+                                    <text x="60" y="185" text-anchor="middle" fill="#6b7280" font-size="11" font-weight="500">Poor</text>
+                                    <text x="120" y="110" text-anchor="middle" fill="#6b7280" font-size="11" font-weight="500">Fair</text>
+                                    <text x="200" y="110" text-anchor="middle" fill="#6b7280" font-size="11" font-weight="500">Good</text>
+                                    <text x="260" y="185" text-anchor="middle" fill="#6b7280" font-size="11" font-weight="500">Excellent</text>
+                                    
+                                    <!-- Score Range Labels -->
+                                    <text x="60" y="195" text-anchor="middle" fill="#9ca3af" font-size="9">0-299</text>
+                                    <text x="120" y="100" text-anchor="middle" fill="#9ca3af" font-size="9">300-549</text>
+                                    <text x="200" y="100" text-anchor="middle" fill="#9ca3af" font-size="9">550-699</text>
+                                    <text x="260" y="195" text-anchor="middle" fill="#9ca3af" font-size="9">700-999</text>
+                                </svg>
                             </div>
-                            @if($selectedRequest->application)
-                                <div><span class="font-medium">Application:</span> {{ $selectedRequest->application->application_number }}</div>
-                            @endif
-                            @if($generalInfo)
-                                <div><span class="font-medium">Request Date:</span> {{ \Carbon\Carbon::parse($generalInfo['RequestDate']['_value'])->format('M d, Y H:i') }}</div>
-                                @if(isset($generalInfo['ReferenceNumber']))
-                                    <div><span class="font-medium">Reference:</span> {{ $generalInfo['ReferenceNumber']['_value'] ?: 'N/A' }}</div>
+                            
+                            <!-- Score Display -->
+                            <div class="text-center mt-4">
+                                <div class="text-5xl font-bold text-gray-900 mb-2">{{ $creditScore }}</div>
+                                <div class="text-lg font-medium text-gray-600 mb-1">Grade: {{ $creditGrade }}</div>
+                                <div class="text-sm px-4 py-2 rounded-full inline-block
+                                    @if($decision === 'Approve') bg-green-100 text-green-800 @else bg-red-100 text-red-800 @endif">
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                
+                <!-- Information Rows -->
+                <div class="space-y-6">
+                    <!-- Basic Information Row -->
+                    <div class="border border-gray-200 rounded-lg">
+                        <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                            <h4 class="font-bold text-gray-900">Basic Information</h4>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-500">Name</span>
+                                    <div class="text-sm text-gray-900">{{ $selectedRequest->full_name }}</div>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-500">National ID</span>
+                                    <div class="text-sm text-gray-900">{{ isset($extract['NationalId']['_value']) ? $extract['NationalId']['_value'] : $selectedRequest->national_id }}</div>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-500">Date of Birth</span>
+                                    <div class="text-sm text-gray-900">{{ $selectedRequest->date_of_birth ? $selectedRequest->date_of_birth->format('M d, Y') : 'N/A' }}</div>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-500">Status</span>
+                                    <div class="text-sm font-semibold {{ $selectedRequest->status === 'success' ? 'text-green-700' : ($selectedRequest->status === 'failed' ? 'text-red-700' : 'text-yellow-700') }}">
+                                        {{ ucfirst($selectedRequest->status) }}
+                                    </div>
+                                </div>
+                                @if($extract && isset($extract['MobilePhone']))
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-500">Mobile Phone</span>
+                                        <div class="text-sm text-gray-900">{{ $extract['MobilePhone']['_value'] }}</div>
+                                    </div>
                                 @endif
-                            @endif
+                                @if($selectedRequest->application)
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-500">Application</span>
+                                        <div class="text-sm text-gray-900">{{ $selectedRequest->application->application_number }}</div>
+                                    </div>
+                                @endif
+                                @if($generalInfo && isset($generalInfo['ReferenceNumber']))
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-500">Reference</span>
+                                        <div class="text-sm text-gray-900">{{ $generalInfo['ReferenceNumber']['_value'] ?: 'N/A' }}</div>
+                                    </div>
+                                @endif
+                                @if($generalInfo)
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-500">Request Date</span>
+                                        <div class="text-sm text-gray-900">{{ \Carbon\Carbon::parse($generalInfo['RequestDate']['_value'])->format('M d, Y H:i') }}</div>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
 
                     @if($selectedRequest->isSuccessful() && $extract)
-                        <!-- Credit Scores & Decision -->
-                        <div class="bg-blue-50 rounded-lg p-4">
-                            <h4 class="font-semibold text-gray-900 mb-3">Credit Analysis</h4>
-                            <div class="space-y-2 text-sm">
-                                <div><span class="font-medium">CIP Score:</span> 
-                                    <span class="px-2 py-1 text-xs rounded-full {{ $extract['CIPScore']['_value'] == 999 ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-800' }}">
-                                        {{ $extract['CIPScore']['_value'] }} ({{ $extract['CIPGrade']['_value'] }})
-                                    </span>
-                                </div>
-                                <div><span class="font-medium">Mobile Score:</span> 
-                                    <span class="px-2 py-1 text-xs rounded-full {{ $extract['MobileScore']['_value'] == 999 ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-800' }}">
-                                        {{ $extract['MobileScore']['_value'] }} ({{ $extract['MobileGrade']['_value'] }})
-                                    </span>
-                                </div>
-                                <div><span class="font-medium">Final Decision:</span> 
-                                    <span class="px-2 py-1 text-xs rounded-full {{ $extract['Decision']['_value'] === 'Approve' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $extract['Decision']['_value'] }}
-                                    </span>
-                                </div>
-                                @if($generalInfo)
-                                    <div><span class="font-medium">Recommended Decision:</span> 
-                                        <span class="px-2 py-1 text-xs rounded-full {{ $generalInfo['RecommendedDecision']['_value'] === 'Approve' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                            {{ $generalInfo['RecommendedDecision']['_value'] }}
-                                        </span>
+                        <!-- Credit Analysis Row -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                <h4 class="font-bold text-gray-900">Credit Analysis</h4>
+                            </div>
+                            <div class="p-6">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-500">CIP Score</span>
+                                        <div class="text-sm text-gray-900 font-semibold">{{ $extract['CIPScore']['_value'] }} ({{ $extract['CIPGrade']['_value'] }})</div>
                                     </div>
-                                    <div><span class="font-medium">Broken Rules:</span> 
-                                        <span class="px-2 py-1 text-xs rounded-full {{ $generalInfo['BrokenRules']['_value'] > 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
-                                            {{ $generalInfo['BrokenRules']['_value'] }}
-                                        </span>
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-500">Mobile Score</span>
+                                        <div class="text-sm text-gray-900 font-semibold">{{ $extract['MobileScore']['_value'] }} ({{ $extract['MobileGrade']['_value'] }})</div>
                                     </div>
-                                @endif
-                                @if($creditData)
-                                    <div><span class="font-medium">Hit Count:</span> {{ $creditData['hit_count'] }}</div>
-                                    <div><span class="font-medium">Currency:</span> {{ $creditData['currency']['_value'] }}</div>
-                                @endif
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-500">Final Decision</span>
+                                        <div class="text-sm font-bold {{ $decision === 'Approve' ? 'text-green-700' : 'text-red-700' }}">{{ $decision }}</div>
+                                    </div>
+                                    @if($generalInfo)
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Recommended Decision</span>
+                                            <div class="text-sm font-bold {{ $generalInfo['RecommendedDecision']['_value'] === 'Approve' ? 'text-green-700' : 'text-red-700' }}">{{ $generalInfo['RecommendedDecision']['_value'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Broken Rules</span>
+                                            <div class="text-sm font-bold {{ $generalInfo['BrokenRules']['_value'] > 0 ? 'text-red-700' : 'text-green-700' }}">{{ $generalInfo['BrokenRules']['_value'] }}</div>
+                                        </div>
+                                    @endif
+                                    @if($creditData)
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Hit Count</span>
+                                            <div class="text-sm text-gray-900">{{ $creditData['hit_count'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Currency</span>
+                                            <div class="text-sm text-gray-900">{{ $creditData['currency']['_value'] }}</div>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Current Contracts Summary -->
+                        <!-- Current Contracts Row -->
                         @if($currentContracts)
-                            <div class="bg-green-50 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-3">Current Contracts</h4>
-                                <div class="space-y-3 text-sm">
-                                    <!-- Total Summary -->
-                                    <div class="border-b pb-2">
-                                        <div class="font-medium text-gray-800 mb-1">Total Portfolio</div>
-                                        <div><span class="font-medium">Balance:</span> TZS {{ number_format($currentContracts['Total']['Balance']['_value']) }}</div>
-                                        <div><span class="font-medium">At Risk:</span> <span class="text-red-600">TZS {{ number_format($currentContracts['Total']['BalanceAtRisk']['_value']) }}</span></div>
-                                        <div><span class="font-medium">Positive:</span> <span class="text-green-600">{{ $currentContracts['Total']['Positive']['_value'] }}</span></div>
-                                        <div><span class="font-medium">Negative:</span> <span class="text-red-600">{{ $currentContracts['Total']['Negative']['_value'] }}</span></div>
-                                    </div>
-                                    
-                                    <!-- Banking -->
-                                    <div class="border-b pb-2">
-                                        <div class="font-medium text-gray-800 mb-1">Banking</div>
-                                        <div><span class="font-medium">Balance:</span> TZS {{ number_format($currentContracts['CurrentBanking']['Balance']['_value']) }}</div>
-                                        <div><span class="font-medium">At Risk:</span> TZS {{ number_format($currentContracts['CurrentBanking']['BalanceAtRisk']['_value']) }}</div>
-                                        <div><span class="font-medium">Positive:</span> {{ $currentContracts['CurrentBanking']['Positive']['_value'] }} | <span class="font-medium">Negative:</span> {{ $currentContracts['CurrentBanking']['Negative']['_value'] }}</div>
-                                    </div>
-                                    
-                                    <!-- Non-Banking -->
-                                    <div>
-                                        <div class="font-medium text-gray-800 mb-1">Non-Banking</div>
-                                        <div><span class="font-medium">Balance:</span> TZS {{ number_format($currentContracts['CurrentNonBanking']['Balance']['_value']) }}</div>
-                                        <div><span class="font-medium">At Risk:</span> TZS {{ number_format($currentContracts['CurrentNonBanking']['BalanceAtRisk']['_value']) }}</div>
-                                        <div><span class="font-medium">Positive:</span> {{ $currentContracts['CurrentNonBanking']['Positive']['_value'] }} | <span class="font-medium">Negative:</span> {{ $currentContracts['CurrentNonBanking']['Negative']['_value'] }}</div>
+                            <div class="border border-gray-200 rounded-lg">
+                                <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                    <h4 class="font-bold text-gray-900">Current Contracts</h4>
+                                </div>
+                                <div class="p-6">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Total Balance</span>
+                                            <div class="text-sm text-gray-900 font-semibold">TZS {{ number_format($currentContracts['Total']['Balance']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Balance At Risk</span>
+                                            <div class="text-sm text-red-700 font-semibold">TZS {{ number_format($currentContracts['Total']['BalanceAtRisk']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Positive Contracts</span>
+                                            <div class="text-sm text-green-700 font-semibold">{{ $currentContracts['Total']['Positive']['_value'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Negative Contracts</span>
+                                            <div class="text-sm text-red-700 font-semibold">{{ $currentContracts['Total']['Negative']['_value'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Banking Balance</span>
+                                            <div class="text-sm text-gray-900">TZS {{ number_format($currentContracts['CurrentBanking']['Balance']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Banking At Risk</span>
+                                            <div class="text-sm text-gray-900">TZS {{ number_format($currentContracts['CurrentBanking']['BalanceAtRisk']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Non-Banking Balance</span>
+                                            <div class="text-sm text-gray-900">TZS {{ number_format($currentContracts['CurrentNonBanking']['Balance']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Non-Banking At Risk</span>
+                                            <div class="text-sm text-gray-900">TZS {{ number_format($currentContracts['CurrentNonBanking']['BalanceAtRisk']['_value']) }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         @endif
 
-                        <!-- Past Due Information -->
+                        <!-- Past Due Information Row -->
                         @if($pastDueInfo)
-                            <div class="bg-orange-50 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-3">Past Due Analysis</h4>
-                                <div class="space-y-2 text-sm">
-                                    <div><span class="font-medium">Current Past Due:</span> <span class="text-orange-600">TZS {{ number_format($pastDueInfo['TotalCurrentPastDue']['_value']) }}</span></div>
-                                    <div><span class="font-medium">Current Days Past Due:</span> {{ $pastDueInfo['TotalCurrentDaysPastDue']['_value'] }} days</div>
-                                    <div><span class="font-medium">Worst Current Past Due:</span> <span class="text-red-600">TZS {{ number_format($pastDueInfo['WorstCurrentPastDue']['_value']) }}</span></div>
-                                    <div><span class="font-medium">Worst Current Days:</span> {{ $pastDueInfo['WorstCurrentDaysPastDue']['_value'] }} days</div>
-                                    <div><span class="font-medium">Worst Last 12M:</span> TZS {{ number_format($pastDueInfo['WorstPastDueLast12Months']['_value']) }}</div>
-                                    <div><span class="font-medium">Worst Days Last 12M:</span> {{ $pastDueInfo['WorstPastDueDaysLast12Months']['_value'] }} days</div>
-                                    <div><span class="font-medium">Months w/o Arrears:</span> {{ $pastDueInfo['MonthsWithoutArrearsLast12Months']['_value'] }}/{{ $pastDueInfo['TotalMonthsWithHistoryLast12Months']['_value'] }}</div>
+                            <div class="border border-gray-200 rounded-lg">
+                                <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                    <h4 class="font-bold text-gray-900">Past Due Analysis</h4>
+                                </div>
+                                <div class="p-6">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Current Past Due</span>
+                                            <div class="text-sm text-red-700 font-semibold">TZS {{ number_format($pastDueInfo['TotalCurrentPastDue']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Current Days Past Due</span>
+                                            <div class="text-sm text-gray-900">{{ $pastDueInfo['TotalCurrentDaysPastDue']['_value'] }} days</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Worst Current Past Due</span>
+                                            <div class="text-sm text-red-700 font-semibold">TZS {{ number_format($pastDueInfo['WorstCurrentPastDue']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Worst Current Days</span>
+                                            <div class="text-sm text-gray-900">{{ $pastDueInfo['WorstCurrentDaysPastDue']['_value'] }} days</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Worst Last 12M</span>
+                                            <div class="text-sm text-gray-900">TZS {{ number_format($pastDueInfo['WorstPastDueLast12Months']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Worst Days Last 12M</span>
+                                            <div class="text-sm text-gray-900">{{ $pastDueInfo['WorstPastDueDaysLast12Months']['_value'] }} days</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Months w/o Arrears</span>
+                                            <div class="text-sm text-gray-900">{{ $pastDueInfo['MonthsWithoutArrearsLast12Months']['_value'] }}/{{ $pastDueInfo['TotalMonthsWithHistoryLast12Months']['_value'] }}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endif
 
-                        <!-- Repayment Information -->
+                        <!-- Repayment Information Row -->
                         @if($repaymentInfo)
-                            <div class="bg-purple-50 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-3">Repayment Information</h4>
-                                <div class="space-y-2 text-sm">
-                                    <div><span class="font-medium">Total Monthly Payment:</span> TZS {{ number_format($repaymentInfo['TotalMonthlyPayment']['_value']) }}</div>
-                                    <div><span class="font-medium">Closed Contracts:</span> {{ $repaymentInfo['ClosedContracts']['_value'] }}</div>
+                            <div class="border border-gray-200 rounded-lg">
+                                <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                    <h4 class="font-bold text-gray-900">Repayment Information</h4>
+                                </div>
+                                <div class="p-6">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Total Monthly Payment</span>
+                                            <div class="text-sm text-gray-900 font-semibold">TZS {{ number_format($repaymentInfo['TotalMonthlyPayment']['_value']) }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Closed Contracts</span>
+                                            <div class="text-sm text-gray-900">{{ $repaymentInfo['ClosedContracts']['_value'] }}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endif
 
-                        <!-- Inquiries Analysis -->
+                        <!-- Inquiries Analysis Row -->
                         @if($inquiriesAnalysis)
-                            <div class="bg-yellow-50 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-3">Credit Inquiries</h4>
-                                <div class="space-y-2 text-sm">
-                                    <div><span class="font-medium">Last 7 Days:</span> {{ $inquiriesAnalysis['TotalLast7Days']['_value'] }}</div>
-                                    <div><span class="font-medium">Non-Banking Last Month:</span> {{ $inquiriesAnalysis['NonBankingLast1Month']['_value'] }}</div>
-                                    @if(isset($inquiriesAnalysis['Conclusion']) && $inquiriesAnalysis['Conclusion']['_value'])
-                                        <div><span class="font-medium">Conclusion:</span> {{ $inquiriesAnalysis['Conclusion']['_value'] }}</div>
-                                    @endif
+                            <div class="border border-gray-200 rounded-lg">
+                                <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                    <h4 class="font-bold text-gray-900">Credit Inquiries</h4>
+                                </div>
+                                <div class="p-6">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Last 7 Days</span>
+                                            <div class="text-sm text-gray-900">{{ $inquiriesAnalysis['TotalLast7Days']['_value'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Non-Banking Last Month</span>
+                                            <div class="text-sm text-gray-900">{{ $inquiriesAnalysis['NonBankingLast1Month']['_value'] }}</div>
+                                        </div>
+                                        @if(isset($inquiriesAnalysis['Conclusion']) && $inquiriesAnalysis['Conclusion']['_value'])
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-500">Conclusion</span>
+                                                <div class="text-sm text-gray-900">{{ $inquiriesAnalysis['Conclusion']['_value'] }}</div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endif
 
-                        <!-- Strategy Information -->
+                        <!-- Strategy Information Row -->
                         @if($strategy)
-                            <div class="bg-indigo-50 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-3">Strategy Applied</h4>
-                                <div class="space-y-2 text-sm">
-                                    <div><span class="font-medium">Strategy Name:</span> {{ $strategy['Name']['_value'] }}</div>
-                                    <div><span class="font-medium">Bee Strategy:</span> {{ $strategy['BeeStrategy']['_value'] }}</div>
-                                    <div><span class="font-medium">Template:</span> {{ $strategy['TemplateName']['_value'] }}</div>
-                                    <div><span class="font-medium">Strategy ID:</span> {{ Str::limit($strategy['Id']['_value'], 20) }}...</div>
+                            <div class="border border-gray-200 rounded-lg">
+                                <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                    <h4 class="font-bold text-gray-900">Strategy Applied</h4>
+                                </div>
+                                <div class="p-6">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Strategy Name</span>
+                                            <div class="text-sm text-gray-900">{{ $strategy['Name']['_value'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Bee Strategy</span>
+                                            <div class="text-sm text-gray-900">{{ $strategy['BeeStrategy']['_value'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Template</span>
+                                            <div class="text-sm text-gray-900">{{ $strategy['TemplateName']['_value'] }}</div>
+                                        </div>
+                                        <div>
+                                            <span class="text-sm font-medium text-gray-500">Strategy ID</span>
+                                            <div class="text-sm text-gray-900">{{ Str::limit($strategy['Id']['_value'], 20) }}...</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endif
 
-                        <!-- Risk Parameters Summary -->
+                        <!-- Risk Assessment Parameters Row -->
                         @if($extract)
-                            <div class="bg-red-50 rounded-lg p-4 md:col-span-2 lg:col-span-3">
-                                <h4 class="font-semibold text-gray-900 mb-3">Risk Assessment Parameters</h4>
-                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-sm">
-                                    @if(isset($extract['SCR2Result']))
-                                        <div class="bg-white rounded p-2">
-                                            <div class="font-medium">SCR2 (Score)</div>
-                                            <div>Result: {{ $extract['SCR2Result']['_value'] }}</div>
-                                            <div>Parameter: {{ $extract['SCR2Parameter']['_value'] }}</div>
-                                            <div>Value: {{ $extract['SCR2Value']['_value'] }}</div>
-                                        </div>
-                                    @endif
-                                    
-                                    @if(isset($extract['INQ2Result']))
-                                        <div class="bg-white rounded p-2">
-                                            <div class="font-medium">INQ2 (Inquiries)</div>
-                                            <div>Result: {{ $extract['INQ2Result']['_value'] }}</div>
-                                            <div>Parameter: {{ $extract['INQ2Parameter']['_value'] }}</div>
-                                            <div>Value: {{ $extract['INQ2Value']['_value'] }}</div>
-                                        </div>
-                                    @endif
-                                    
-                                    @if(isset($extract['RSK3Result']))
-                                        <div class="bg-white rounded p-2">
-                                            <div class="font-medium">RSK3 (Risk)</div>
-                                            <div>Result: {{ $extract['RSK3Result']['_value'] }}</div>
-                                            <div>Parameter: {{ $extract['RSK3Parameter']['_value'] }}</div>
-                                        </div>
-                                    @endif
-                                    
-                                    @if(isset($extract['RSK6Result']))
-                                        <div class="bg-white rounded p-2">
-                                            <div class="font-medium">RSK6 (Risk)</div>
-                                            <div>Result: {{ $extract['RSK6Result']['_value'] }}</div>
-                                            <div>Parameter: {{ $extract['RSK6Parameter']['_value'] }}</div>
-                                            <div>Value: {{ $extract['RSK6Value']['_value'] }}</div>
-                                        </div>
-                                    @endif
-                                    
-                                    @if(isset($extract['CST2Result']))
-                                        <div class="bg-white rounded p-2">
-                                            <div class="font-medium">CST2 (Cost)</div>
-                                            <div>Result: {{ $extract['CST2Result']['_value'] }}</div>
-                                            <div>Parameter: {{ number_format($extract['CST2Parameter']['_value']) }}</div>
-                                            <div>Value: {{ $extract['CST2Value']['_value'] }}</div>
-                                        </div>
-                                    @endif
-                                    
-                                    @if(isset($extract['CST3Result']))
-                                        <div class="bg-white rounded p-2">
-                                            <div class="font-medium">CST3 (Cost)</div>
-                                            <div>Result: {{ $extract['CST3Result']['_value'] }}</div>
-                                            <div>Parameter: {{ number_format($extract['CST3Parameter']['_value']) }}</div>
-                                            <div>Value: {{ $extract['CST3Value']['_value'] }}</div>
-                                        </div>
-                                    @endif
+                            <div class="border border-gray-200 rounded-lg">
+                                <div class="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                                    <h4 class="font-bold text-gray-900">Risk Assessment Parameters</h4>
+                                </div>
+                                <div class="p-6">
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                        @if(isset($extract['SCR2Result']))
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-500">SCR2 (Score)</span>
+                                                <div class="text-sm text-gray-900">
+                                                    <div>Result: {{ $extract['SCR2Result']['_value'] }}</div>
+                                                    <div>Parameter: {{ $extract['SCR2Parameter']['_value'] }}</div>
+                                                    <div>Value: {{ $extract['SCR2Value']['_value'] }}</div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        
+                                        @if(isset($extract['INQ2Result']))
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-500">INQ2 (Inquiries)</span>
+                                                <div class="text-sm text-gray-900">
+                                                    <div>Result: {{ $extract['INQ2Result']['_value'] }}</div>
+                                                    <div>Parameter: {{ $extract['INQ2Parameter']['_value'] }}</div>
+                                                    <div>Value: {{ $extract['INQ2Value']['_value'] }}</div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        
+                                        @if(isset($extract['RSK3Result']))
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-500">RSK3 (Risk)</span>
+                                                <div class="text-sm text-gray-900">
+                                                    <div>Result: {{ $extract['RSK3Result']['_value'] }}</div>
+                                                    <div>Parameter: {{ $extract['RSK3Parameter']['_value'] }}</div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        
+                                        @if(isset($extract['RSK6Result']))
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-500">RSK6 (Risk)</span>
+                                                <div class="text-sm text-gray-900">
+                                                    <div>Result: {{ $extract['RSK6Result']['_value'] }}</div>
+                                                    <div>Parameter: {{ $extract['RSK6Parameter']['_value'] }}</div>
+                                                    <div>Value: {{ $extract['RSK6Value']['_value'] }}</div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        
+                                        @if(isset($extract['CST2Result']))
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-500">CST2 (Cost)</span>
+                                                <div class="text-sm text-gray-900">
+                                                    <div>Result: {{ $extract['CST2Result']['_value'] }}</div>
+                                                    <div>Parameter: {{ number_format($extract['CST2Parameter']['_value']) }}</div>
+                                                    <div>Value: {{ $extract['CST2Value']['_value'] }}</div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        
+                                        @if(isset($extract['CST3Result']))
+                                            <div>
+                                                <span class="text-sm font-medium text-gray-500">CST3 (Cost)</span>
+                                                <div class="text-sm text-gray-900">
+                                                    <div>Result: {{ $extract['CST3Result']['_value'] }}</div>
+                                                    <div>Parameter: {{ number_format($extract['CST3Parameter']['_value']) }}</div>
+                                                    <div>Value: {{ $extract['CST3Value']['_value'] }}</div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endif
+
+                        <!-- Technical Details Row -->
+                      
                     @endif
 
                     @if($selectedRequest->error_message)
-                        <!-- Error Information -->
-                        <div class="bg-red-50 rounded-lg p-4 md:col-span-2 lg:col-span-3">
-                            <h4 class="font-semibold text-red-900 mb-3">Error Details</h4>
-                            <p class="text-sm text-red-700">{{ $selectedRequest->error_message }}</p>
+                        <!-- Error Information Row -->
+                        <div class="border border-red-200 rounded-lg">
+                            <div class="bg-red-50 px-6 py-3 border-b border-red-200">
+                                <h4 class="font-bold text-red-900">Error Details</h4>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-sm text-red-700">{{ $selectedRequest->error_message }}</p>
+                            </div>
                         </div>
                     @endif
                 </div>
 
-                <!-- Additional Details Section -->
-                @if($selectedRequest->isSuccessful() && $extract)
-                    <div class="mt-6 bg-gray-50 rounded-lg p-4">
-                        <h4 class="font-semibold text-gray-900 mb-3">Technical Details</h4>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-sm">
-                            <div><span class="font-medium">Message ID:</span> {{ Str::limit($creditData['message_id']['_value'], 20) }}...</div>
-                            <div><span class="font-medium">Timestamp:</span> {{ \Carbon\Carbon::parse($creditData['timestamp']['_value'])->format('M d, Y H:i:s') }}</div>
-                            @if(isset($extract['APD1DPD']))
-                                <div><span class="font-medium">APD1DPD:</span> {{ $extract['APD1DPD']['_value'] }}</div>
-                            @endif
-                            @if(isset($extract['MobileTotalBalance']))
-                                <div><span class="font-medium">Mobile Total Balance:</span> TZS {{ number_format($extract['MobileTotalBalance']['_value']) }}</div>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-
-                <!-- JSON Data Buttons -->
-                <div class="mt-6 flex space-x-3">
-                    @if($selectedRequest->request_payload)
-                        <button wire:click="viewJson({{ json_encode($selectedRequest->request_payload) }}, 'Request Payload')" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm">
-                            View Request JSON
-                        </button>
-                    @endif
-                    
-                    @if($selectedRequest->response_payload)
-                        <button wire:click="viewJson({{ json_encode($selectedRequest->response_payload) }}, 'Response Payload')" 
-                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm">
-                            View Response JSON
-                        </button>
-                    @endif
-
-                    @if($creditData)
-                        <button wire:click="viewJson({{ json_encode($creditData) }}, 'Credit Data Extract')" 
-                                class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm">
-                            View Credit Data
-                        </button>
-                    @endif
-                </div>
+             
             </div>
         </div>
     @endif
 
-    <!-- JSON Modal -->
-    @if($showJsonModal)
-        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold text-gray-900">{{ $jsonTitle }}</h3>
-                    <button wire:click="closeJsonModal" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="bg-gray-900 rounded-lg p-4 overflow-auto max-h-96">
-                    <pre class="text-green-400 text-sm whitespace-pre-wrap">{{ $jsonData }}</pre>
-                </div>
-                
-                <div class="mt-4 flex justify-end space-x-2">
-                    <button onclick="navigator.clipboard.writeText(this.parentElement.previousElementSibling.querySelector('pre').textContent)" 
-                            class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm">
-                        Copy to Clipboard
-                    </button>
-                    <button wire:click="closeJsonModal"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endif
 
     <!-- Loading Overlay -->
     @if($isLoading)
@@ -659,4 +789,83 @@
             </div>
         </div>
     @endif
+</div>
+
+<script>
+    function copyJsonToClipboard(button) {
+        try {
+            const preElement = button.closest('.relative').querySelector('pre');
+            if (preElement) {
+                const textToCopy = preElement.textContent || preElement.innerText;
+                
+                // Modern browsers
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(textToCopy).then(function() {
+                        showCopyFeedback(button);
+                    }).catch(function(err) {
+                        console.error('Could not copy text: ', err);
+                        fallbackCopyTextToClipboard(textToCopy, button);
+                    });
+                } else {
+                    // Fallback for older browsers
+                    fallbackCopyTextToClipboard(textToCopy, button);
+                }
+            }
+        } catch (err) {
+            console.error('Copy failed: ', err);
+        }
+    }
+
+    function fallbackCopyTextToClipboard(text, button) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.top = "-9999px";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                showCopyFeedback(button);
+            }
+        } catch (err) {
+            console.error('Fallback copy failed: ', err);
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    function showCopyFeedback(button) {
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('bg-green-600');
+        button.classList.remove('bg-gray-600');
+        
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.classList.remove('bg-green-600');
+            button.classList.add('bg-gray-600');
+        }, 2000);
+    }
+
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Any additional initialization code can go here
+        console.log('Credit Info Component loaded successfully');
+    });
+
+    // Livewire hook for after updates
+    document.addEventListener('livewire:load', function () {
+        // Component loaded
+    });
+
+    document.addEventListener('livewire:update', function () {
+        // Component updated
+    });
+</script>
+
+
 </div>

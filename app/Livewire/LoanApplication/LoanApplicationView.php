@@ -3,6 +3,7 @@
 namespace App\Livewire\LoanApplication;
 
 use App\Models\Application;
+use App\Models\ApplicationLenderSubmission;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -100,6 +101,9 @@ class LoanApplicationView extends Component
                 'cancelled_at' => now(),
                 'cancellation_reason' => 'Cancelled by user'
             ]);
+
+            ApplicationLenderSubmission::where('application_id', $this->application->id)
+                ->update(['status' => 'cancelled']);
             
             $this->closeCancelModal();
             $this->showToastMessage('Application cancelled successfully!');

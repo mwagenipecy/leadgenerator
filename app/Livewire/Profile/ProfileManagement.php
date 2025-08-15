@@ -21,8 +21,8 @@ class ProfileManagement extends Component
     #[Rule('nullable|string|max:255')]
     public $middle_name = '';
 
-    #[Rule('required|date|before:today')]
-    public $date_of_birth = '';
+    #[Rule('nullable|date|before:today')]
+    public $date_of_birth = null;
 
     #[Rule('required|in:male,female,other')]
     public $gender = '';
@@ -145,7 +145,7 @@ class ProfileManagement extends Component
         $this->national_id = $user->nida_number ?? '';
         $this->email = $user->email ?? '';
         $this->phone_number = $user->phone ?? '';
-        $this->date_of_birth = $user->date_of_birth ?? '';
+        $this->date_of_birth = $user->date_of_birth ?? null;
 
         // Load profile data if exists
         if ($this->profile->exists) {
@@ -281,7 +281,7 @@ class ProfileManagement extends Component
             case 'personal':
                 $this->validate([
                     'middle_name' => 'nullable|string|max:255',
-                    'date_of_birth' => 'required|date|before:today',
+                    'date_of_birth' => 'nullable|date|before:today',
                     'gender' => 'required|in:male,female,other',
                     'marital_status' => 'required|string',
                     'phone_number' => 'required|string|min:10|max:20',
@@ -319,6 +319,12 @@ class ProfileManagement extends Component
 
     private function getProfileData(): array
     {
+        // Handle empty string dates - convert to null
+        $dateOfBirth = $this->date_of_birth;
+        if (empty($dateOfBirth) || $dateOfBirth === '') {
+            $dateOfBirth = null;
+        }
+
         return [
             // Store read-only fields for reference, but they come from users table
             'first_name' => $this->first_name,
@@ -326,7 +332,7 @@ class ProfileManagement extends Component
             'national_id' => $this->national_id,
             'email' => $this->email,
             'phone_number' => $this->phone_number,
-            'date_of_birth' => $this->date_of_birth,
+            'date_of_birth' => $dateOfBirth,
             
             // Editable profile fields
             'middle_name' => $this->middle_name,

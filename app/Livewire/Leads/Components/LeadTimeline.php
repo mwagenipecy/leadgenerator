@@ -15,6 +15,7 @@ class LeadTimeline extends Component
     public function mount($application, $lead = null, $isAvailable = false)
     {
         $this->application = $application;
+
         $this->lead = $lead;
         $this->isAvailable = $isAvailable;
     }

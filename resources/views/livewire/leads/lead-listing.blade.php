@@ -412,7 +412,7 @@
                                 <div class="flex items-center justify-between">
                                     <div class="text-xs text-gray-500">
 
-                                        Booked: {{ $submission->booked_at ? $submission->booked_at->format('M d, Y') : 'N/A' }}
+                                        Booked: {{ $submission->booked_at ? $submission->booked_at : 'N/A' }}
 
                                     </div>
                                     

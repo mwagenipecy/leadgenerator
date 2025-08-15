@@ -59,7 +59,7 @@ class CompleteLoanApplication extends Component
         // Prepare application data (copy from profile for backup)
         $this->prepareApplicationData();
         
-        // Set required documents based on employment status
+        // Set required documents based on employment status and selected lenders
         $this->setRequiredDocuments();
     }
 
@@ -76,7 +76,7 @@ class CompleteLoanApplication extends Component
         $this->applicationData = [
             // Loan Details (from pre-qualification)
             'loan_category' => $this->prequalificationData['loan_category'],
-            'loan_type' => $this->prequalificationData['loan_type'],
+            'loan_type' => $this->prequalificationData['loan_type'] ?? 'unsecured',
             'requested_amount' => $this->prequalificationData['requested_amount'],
             'requested_tenure_months' => $this->prequalificationData['requested_tenure'],
             'loan_purpose' => 'General purpose', // Can be updated if needed
@@ -144,7 +144,7 @@ class CompleteLoanApplication extends Component
             'preferred_disbursement_method' => $this->userProfile->preferred_disbursement_method,
             
             // Calculated values
-            'debt_to_income_ratio' => $this->prequalificationData['calculated_dsr'],
+            'debt_to_income_ratio' => $this->prequalificationData['calculated_dsr'] ?? 0,
             'use_profile_data' => true,
             'profile_overrides' => [],
             
@@ -158,63 +158,177 @@ class CompleteLoanApplication extends Component
 
     private function setRequiredDocuments()
     {
+        // Base required documents
         $this->requiredDocuments = [
             'national_id' => [
                 'name' => 'National ID',
                 'description' => 'Clear photo of both sides of your National ID',
                 'required' => true,
-                'uploaded' => false
+                'uploaded' => false,
+                'requested_by' => ['All Lenders']
             ]
         ];
 
+        // Get all selected products to aggregate document requirements
+        $selectedProducts = collect($this->prequalificationData['selected_product_details'] ?? []);
+
+        // Collect all unique document requirements from selected lenders
+        $allRequiredDocs = [];
+        $lenderDocRequirements = [];
+
+        foreach ($selectedProducts as $product) {
+            $lenderName = $product['lender_name'];
+            $requiredDocs = $product['required_documents'] ?? [];
+            
+            foreach ($requiredDocs as $docType) {
+                $normalizedDocType = $this->normalizeDocumentType($docType);
+                
+                if (!isset($allRequiredDocs[$normalizedDocType])) {
+                    $allRequiredDocs[$normalizedDocType] = [
+                        'name' => $this->getDocumentDisplayName($normalizedDocType),
+                        'description' => $this->getDocumentDescription($normalizedDocType),
+                        'required' => true,
+                        'uploaded' => false,
+                        'requested_by' => []
+                    ];
+                }
+                
+                if (!in_array($lenderName, $allRequiredDocs[$normalizedDocType]['requested_by'])) {
+                    $allRequiredDocs[$normalizedDocType]['requested_by'][] = $lenderName;
+                }
+            }
+        }
+
         // Employment-specific documents
         if ($this->userProfile->employment_status === 'employed') {
-            $this->requiredDocuments['salary_slip'] = [
-                'name' => 'Salary Slip',
-                'description' => 'Most recent 3 months salary slips',
-                'required' => true,
-                'uploaded' => false
+            $employmentDocs = [
+                'salary_slip' => [
+                    'name' => 'Salary Slip',
+                    'description' => 'Most recent 3 months salary slips',
+                    'required' => true,
+                    'uploaded' => false,
+                    'requested_by' => []
+                ],
+                'employment_letter' => [
+                    'name' => 'Employment Letter',
+                    'description' => 'Employment confirmation letter from your employer',
+                    'required' => false,
+                    'uploaded' => false,
+                    'requested_by' => []
+                ]
             ];
-            $this->requiredDocuments['employment_letter'] = [
-                'name' => 'Employment Letter',
-                'description' => 'Employment confirmation letter from your employer',
-                'required' => false,
-                'uploaded' => false
-            ];
+
+            foreach ($employmentDocs as $docType => $docInfo) {
+                if (!isset($allRequiredDocs[$docType])) {
+                    $allRequiredDocs[$docType] = $docInfo;
+                }
+            }
         }
 
         if ($this->userProfile->employment_status === 'self_employed') {
-            $this->requiredDocuments['business_license'] = [
-                'name' => 'Business License',
-                'description' => 'Valid business license or registration certificate',
-                'required' => true,
-                'uploaded' => false
+            $businessDocs = [
+                'business_license' => [
+                    'name' => 'Business License',
+                    'description' => 'Valid business license or registration certificate',
+                    'required' => true,
+                    'uploaded' => false,
+                    'requested_by' => []
+                ],
+                'tax_certificate' => [
+                    'name' => 'Tax Certificate',
+                    'description' => 'Tax compliance certificate or recent tax returns',
+                    'required' => false,
+                    'uploaded' => false,
+                    'requested_by' => []
+                ]
             ];
-            $this->requiredDocuments['tax_certificate'] = [
-                'name' => 'Tax Certificate',
-                'description' => 'Tax compliance certificate or recent tax returns',
-                'required' => false,
-                'uploaded' => false
-            ];
+
+            foreach ($businessDocs as $docType => $docInfo) {
+                if (!isset($allRequiredDocs[$docType])) {
+                    $allRequiredDocs[$docType] = $docInfo;
+                }
+            }
         }
 
         // Bank statement (always required)
-        $this->requiredDocuments['bank_statement'] = [
-            'name' => 'Bank Statement',
-            'description' => 'Last 6 months bank statements',
-            'required' => true,
-            'uploaded' => false
-        ];
+        if (!isset($allRequiredDocs['bank_statement'])) {
+            $allRequiredDocs['bank_statement'] = [
+                'name' => 'Bank Statement',
+                'description' => 'Last 6 months bank statements',
+                'required' => true,
+                'uploaded' => false,
+                'requested_by' => []
+            ];
+        }
 
-        // Collateral documents (if secured loan)
-        if ($this->prequalificationData['loan_type'] === 'secured') {
-            $this->requiredDocuments['collateral_documents'] = [
+        // Collateral documents (if any secured loan)
+        $hasSecuredLoan = $selectedProducts->contains('is_secured', true);
+        if ($hasSecuredLoan) {
+            $allRequiredDocs['collateral_documents'] = [
                 'name' => 'Collateral Documents',
                 'description' => 'Property title, vehicle logbook, or other collateral documents',
                 'required' => true,
-                'uploaded' => false
+                'uploaded' => false,
+                'requested_by' => $selectedProducts->where('is_secured', true)->pluck('lender_name')->unique()->toArray()
             ];
         }
+
+        // Merge with existing required documents
+        $this->requiredDocuments = array_merge($this->requiredDocuments, $allRequiredDocs);
+    }
+
+    private function normalizeDocumentType($docType)
+    {
+        $normalizedTypes = [
+            'salary slip' => 'salary_slip',
+            'payslip' => 'salary_slip',
+            'pay slip' => 'salary_slip',
+            'bank statement' => 'bank_statement',
+            'bank statements' => 'bank_statement',
+            'employment letter' => 'employment_letter',
+            'employment certificate' => 'employment_letter',
+            'business license' => 'business_license',
+            'business registration' => 'business_license',
+            'tax certificate' => 'tax_certificate',
+            'tax clearance' => 'tax_certificate',
+            'national id' => 'national_id',
+            'id copy' => 'national_id',
+            'collateral' => 'collateral_documents',
+            'security documents' => 'collateral_documents',
+        ];
+
+        $lowercaseDoc = strtolower(trim($docType));
+        return $normalizedTypes[$lowercaseDoc] ?? str_replace(' ', '_', $lowercaseDoc);
+    }
+
+    private function getDocumentDisplayName($docType)
+    {
+        $displayNames = [
+            'salary_slip' => 'Salary Slip',
+            'bank_statement' => 'Bank Statement',
+            'employment_letter' => 'Employment Letter',
+            'business_license' => 'Business License',
+            'tax_certificate' => 'Tax Certificate',
+            'national_id' => 'National ID',
+            'collateral_documents' => 'Collateral Documents',
+        ];
+
+        return $displayNames[$docType] ?? ucwords(str_replace('_', ' ', $docType));
+    }
+
+    private function getDocumentDescription($docType)
+    {
+        $descriptions = [
+            'salary_slip' => 'Most recent 3 months salary slips',
+            'bank_statement' => 'Last 6 months bank statements',
+            'employment_letter' => 'Employment confirmation letter from your employer',
+            'business_license' => 'Valid business license or registration certificate',
+            'tax_certificate' => 'Tax compliance certificate or recent tax returns',
+            'national_id' => 'Clear photo of both sides of your National ID',
+            'collateral_documents' => 'Property title, vehicle logbook, or other collateral documents',
+        ];
+
+        return $descriptions[$docType] ?? 'Required document for loan application';
     }
 
     public function uploadDocument($documentType)
@@ -310,11 +424,9 @@ class CompleteLoanApplication extends Component
             $this->currentStep++;
         }
 
-        if($this->currentStep==3){
-
+        if($this->currentStep == 3){
             $this->submitApplication();
         }
-        
     }
 
     public function previousStep()
@@ -411,33 +523,30 @@ class CompleteLoanApplication extends Component
                 ]);
             }
 
-            // Create lender submissions
-            foreach ($this->prequalificationData['selected_lenders'] as $lenderId) {
-                // Find matching product for this lender
-                $matchingProduct = collect($this->prequalificationData['matching_products'])
-                    ->where('lender_id', $lenderId)
-                    ->first();
-
+            // Create lender submissions based on selected products
+            $selectedProducts = collect($this->prequalificationData['selected_product_details'] ?? []);
+            
+            foreach ($selectedProducts as $product) {
                 $submission = ApplicationLenderSubmission::create([
                     'user_id' => Auth::id(),
                     'application_id' => $this->finalApplication->id,
-                    'lender_id' => $lenderId,
-                    'loan_product_id' => $matchingProduct['product_id'] ?? null,
+                    'lender_id' => $product['lender_id'],
+                    'loan_product_id' => $product['product_id'],
                     'status' => 'submitted',
                     'submitted_at' => now(),
                     'submission_data' => [
                         'requested_amount' => $this->applicationData['requested_amount'],
                         'requested_tenure' => $this->applicationData['requested_tenure_months'],
-                        'estimated_monthly_payment' => $matchingProduct['monthly_payment'] ?? 0,
+                        'estimated_monthly_payment' => $product['monthly_payment'] ?? 0,
                         'calculated_dsr' => $this->applicationData['debt_to_income_ratio'],
-                        'prequalification_score' => $matchingProduct['eligibility_score'] ?? 0,
-                        'submission_reference' => 'APP-' . $this->finalApplication->application_number . '-' . $lenderId,
+                        'prequalification_score' => $product['eligibility_score'] ?? 0,
+                        'submission_reference' => 'APP-' . $this->finalApplication->application_number . '-' . $product['lender_id'],
                     ],
                 ]);
 
                 $this->submissionResults[] = [
-                    'lender_name' => $matchingProduct['lender_name'] ?? 'Unknown Lender',
-                    'product_name' => $matchingProduct['product_name'] ?? 'Unknown Product',
+                    'lender_name' => $product['lender_name'] ?? 'Unknown Lender',
+                    'product_name' => $product['product_name'] ?? 'Unknown Product',
                     'status' => 'submitted',
                     'submission_id' => $submission->id,
                     'reference' => $submission->submission_data['submission_reference'],
@@ -450,12 +559,10 @@ class CompleteLoanApplication extends Component
             session()->forget('prequalification_data');
 
             $this->currentStep = 3;
-            session()->flash('success', 'Application submitted successfully to ' . count($this->prequalificationData['selected_lenders']) . ' lenders!');
+            session()->flash('success', 'Application submitted successfully to ' . count($selectedProducts) . ' lenders!');
 
         } catch (\Exception $e) {
             DB::rollBack();
-
-            dd($e->getMessage());
             session()->flash('error', 'Error submitting application. Please try again.');
             \Log::error('Application submission error: ' . $e->getMessage());
         }
@@ -465,20 +572,17 @@ class CompleteLoanApplication extends Component
 
     private function getSelectedLenders()
     {
-        return collect($this->prequalificationData['matching_products'] ?? [])
-            ->whereIn('lender_id', $this->prequalificationData['selected_lenders'] ?? [])
-            ->values()
-            ->toArray();
+        return collect($this->prequalificationData['selected_product_details'] ?? []);
     }
 
     private function getEstimatedProcessingTime()
     {
         $selectedLenders = $this->getSelectedLenders();
-        if (empty($selectedLenders)) {
+        if ($selectedLenders->isEmpty()) {
             return '5-7 days';
         }
 
-        $avgDays = collect($selectedLenders)->avg('approval_time_days');
+        $avgDays = $selectedLenders->avg('approval_time_days');
         return ceil($avgDays) . ' days';
     }
 
@@ -500,5 +604,24 @@ class CompleteLoanApplication extends Component
     public function viewApplications()
     {
         return redirect()->route('user.loan.application');
+    }
+
+    public function getDocumentRequestedBy($documentType)
+    {
+        $requestedBy = $this->requiredDocuments[$documentType]['requested_by'] ?? [];
+        
+        if (empty($requestedBy)) {
+            return 'General requirement';
+        }
+        
+        if (count($requestedBy) === 1) {
+            return $requestedBy[0];
+        }
+        
+        if (count($requestedBy) === count($this->getSelectedLenders())) {
+            return 'All selected lenders';
+        }
+        
+        return implode(', ', array_slice($requestedBy, 0, 2)) . (count($requestedBy) > 2 ? ' and ' . (count($requestedBy) - 2) . ' more' : '');
     }
 }

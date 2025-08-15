@@ -344,26 +344,10 @@
                                         </button>
 
                                         <!-- Edit Button (Draft only) -->
-                                        @if($application->status === 'draft')
-                                            <button wire:click="editApplication({{ $application->id }})" 
-                                                    class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-50 transition-colors" 
-                                                    title="Edit Application">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                </svg>
-                                            </button>
-                                        @endif
+                                     
 
                                         <!-- Lender Selection (Submitted without lender) -->
-                                        @if($application->status === 'submitted' && !$application->lender_id)
-                                            <button wire:click="selectLenders({{ $application->id }})" 
-                                                   class="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50 transition-colors" 
-                                                   title="Choose Lender">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                            </button>
-                                        @endif
+                                      
 
                                         <!-- Download PDF -->
                                         <button wire:click="downloadApplication({{ $application->id }})" 
@@ -375,24 +359,10 @@
                                         </button>
 
                                         <!-- Copy Application Number -->
-                                        <button wire:click="copyApplicationNumber('{{ $application->application_number }}')" 
-                                                class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-50 transition-colors" 
-                                                title="Copy Application Number">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                                            </svg>
-                                        </button>
+                                 
 
                                         <!-- Cancel Button -->
-                                        @if(in_array($application->status, ['draft', 'submitted']))
-                                            <button wire:click="showCancelConfirmation({{ $application->id }})" 
-                                                    class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors" 
-                                                    title="Cancel Application">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                </svg>
-                                            </button>
-                                        @endif
+                                        
 
                                         <!-- Delete Button (Draft only) -->
                                         @if($application->status === 'draft')

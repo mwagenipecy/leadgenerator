@@ -85,6 +85,8 @@
                                 <p class="text-xs text-gray-400">{{ number_format($document->file_size / 1024, 1) }} KB</p>
                             </div>
                         </div>
+
+
                         
                         <div class="mt-4 space-y-3">
                             <!-- Document Status -->
@@ -124,37 +126,7 @@
             </div>
             
             <!-- Document Summary -->
-            <div class="mt-8 bg-gray-50 rounded-lg p-6">
-                <h4 class="text-lg font-medium text-black mb-4">Document Summary</h4>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    @php
-                        $totalDocs = $application->documents->count();
-                        $verifiedDocs = $application->documents->where('verification_status', 'verified')->count();
-                        $pendingDocs = $application->documents->where('verification_status', 'pending')->count();
-                        $rejectedDocs = $application->documents->where('verification_status', 'rejected')->count();
-                    @endphp
-                    
-                    <div class="bg-white rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-black">{{ $totalDocs }}</div>
-                        <div class="text-sm text-gray-600">Total Documents</div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-green-600">{{ $verifiedDocs }}</div>
-                        <div class="text-sm text-gray-600">Verified</div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-yellow-600">{{ $pendingDocs }}</div>
-                        <div class="text-sm text-gray-600">Pending</div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-4 text-center">
-                        <div class="text-2xl font-bold text-red-600">{{ $rejectedDocs }}</div>
-                        <div class="text-sm text-gray-600">Rejected</div>
-                    </div>
-                </div>
-            </div>
+          
         @else
             <!-- No documents state -->
             <div class="text-center py-12">

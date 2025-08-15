@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Leads;
 
+use App\Models\CommissionBill;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Application;
@@ -77,50 +78,498 @@ class LeadListing extends Component
 
     public function confirmBooking()
     {
+        // Early validation
         if (!$this->selectedLead) {
+            session()->flash('error', 'No lead selected for booking.');
             return;
         }
+    
+        if (!$this->bookingFee || $this->bookingFee <= 0) {
+            session()->flash('error', 'Invalid booking fee amount.');
+            return;
+        }
+    
+        $currentLenderId = Auth::user()->lender_id;
+        $applicationId = $this->selectedLead->id;
 
+
+    
+        if (!$currentLenderId) {
+            session()->flash('error', 'User is not associated with a lender.');
+            return;
+        }
+    
         try {
             DB::beginTransaction();
+    
+            // Check if submission exists and is in correct status
+            $currentSubmission = ApplicationLenderSubmission::where('application_id', $applicationId)
+                ->where('lender_id', $currentLenderId)
+                ->where('status', 'submitted')
+                ->first();
 
-            // Create the booking submission
-            $submission = ApplicationLenderSubmission::create([
-                'application_id' => $this->selectedLead->id,
-                'lender_id' => Auth::user()->lender_id,
-                'status' => 'submitted',
-                'booking_fee' => $this->bookingFee,
-                'booked_at' => now(),
-                'notes' => 'Lead booked via portal'
-            ]);
 
+    
+            if (!$currentSubmission) {
+                throw new \Exception('No valid submission found for this lender and application.');
+            }
+    
+            // Check if lead is already booked
+            if ($this->selectedLead->booking_status === 'booked') {
+                throw new \Exception('This lead has already been booked.');
+            }
+    
+            // Update current lender's submission to approved
+            $updatedRows = ApplicationLenderSubmission::where('application_id', $applicationId)
+                ->where('lender_id', $currentLenderId)
+                ->where('status', 'submitted')
+                ->update([
+                    'status' => 'approved',
+                    'booking_fee' => $this->bookingFee,
+                    'booked_at' => now(),
+                    'notes' => 'Lead booked via portal',
+                    'updated_at' => now()
+                ]);
+    
+            if ($updatedRows === 0) {
+                throw new \Exception('Failed to update submission status. The submission may have been modified by another process.');
+            }
+    
+            // Withdraw other lenders' submissions
+            $withdrawnCount = ApplicationLenderSubmission::where('application_id', $applicationId)
+                ->where('lender_id', '!=', $currentLenderId)
+                ->where('status', 'submitted')
+                ->update([
+                    'status' => 'withdrawn',
+                    'booking_fee' => 0,
+                    'booked_at' => now(),
+                    'notes' => 'Lead booked by another lender via portal',
+                    'updated_at' => now()
+                ]);
+    
             // Update application booking status
-            $this->selectedLead->update([
-                'booking_status' => 'booked'
+            $applicationUpdated = $this->selectedLead->update([
+                'booking_status' => 'booked',
+                'lender_id' => $currentLenderId,
+                'status'=>'under_review',
+                'loan_product_id' => $currentSubmission->loan_product_id,
+                'booked_at' => now(),
+                'updated_at' => now()
             ]);
-
+    
+            if (!$applicationUpdated) {
+                throw new \Exception('Failed to update application booking status.');
+            }
+    
+            // Generate commission bill
+            $this->generateCommissionBill($this->selectedLead);
+    
+            // Log successful booking
+            Log::info('Lead booking successful', [
+                'lead_id' => $applicationId,
+                'lender_id' => $currentLenderId,
+                'booking_fee' => $this->bookingFee,
+                'withdrawn_submissions' => $withdrawnCount,
+                'loan_product_id' => $currentSubmission->loan_product_id
+            ]);
+    
             DB::commit();
-
-            // Close modal
+    
+            // Close modal and show success message
             $this->closeBookingModal();
-
-            // Show success message
-            session()->flash('success', 'Lead successfully booked! You will be charged TSh ' . number_format($this->bookingFee) . ' for this booking.');
+            
+            session()->flash('success', sprintf(
+                'Lead successfully booked! You will be charged TSh %s for this booking. %d other submission(s) have been withdrawn.',
+                number_format($this->bookingFee),
+                $withdrawnCount
+            ));
             
             // Refresh the leads list
             $this->dispatch('leadBooked');
             
         } catch (\Exception $e) {
             DB::rollBack();
+
+            dd($e->getMessage());
+            
+            // Enhanced error logging
             Log::error('Lead booking failed', [
-                'lead_id' => $this->selectedLead->id,
-                'lender_id' => Auth::user()->lender_id,
-                'error' => $e->getMessage()
+                'lead_id' => $applicationId,
+                'lender_id' => $currentLenderId,
+                'booking_fee' => $this->bookingFee ?? 'not_set',
+                'error_message' => $e->getMessage(),
+                'error_trace' => $e->getTraceAsString(),
+                'user_id' => Auth::id(),
+                'timestamp' => now()
             ]);
             
-            session()->flash('error', 'Failed to book lead. Please try again.');
+            // User-friendly error message
+            $errorMessage = 'Failed to book lead. ';
+            
+            if (str_contains($e->getMessage(), 'already been booked')) {
+                $errorMessage .= 'This lead has already been booked by another lender.';
+            } elseif (str_contains($e->getMessage(), 'No valid submission')) {
+                $errorMessage .= 'Your submission for this lead was not found or is no longer valid.';
+            } elseif (str_contains($e->getMessage(), 'modified by another process')) {
+                $errorMessage .= 'The lead status was changed while you were booking. Please refresh and try again.';
+            } else {
+                $errorMessage .= 'Please try again or contact support if the problem persists.';
+            }
+            
+            session()->flash('error', $errorMessage);
         }
     }
+    
+    /**
+     * Helper method to validate booking prerequisites
+     */
+    private function validateBookingPrerequisites(): array
+    {
+        $errors = [];
+        
+        if (!$this->selectedLead) {
+            $errors[] = 'No lead selected for booking.';
+        }
+        
+        if (!$this->bookingFee || $this->bookingFee <= 0) {
+            $errors[] = 'Invalid booking fee amount.';
+        }
+        
+        if (!Auth::user()->lender_id) {
+            $errors[] = 'User is not associated with a lender.';
+        }
+        
+        if ($this->selectedLead && $this->selectedLead->booking_status === 'booked') {
+            $errors[] = 'This lead has already been booked.';
+        }
+        
+        return $errors;
+    }
+    
+    /**
+     * Alternative version using the validation helper
+     */
+    public function confirmBookingWithValidation()
+    {
+        // Validate prerequisites
+        $validationErrors = $this->validateBookingPrerequisites();
+        
+        if (!empty($validationErrors)) {
+            session()->flash('error', implode(' ', $validationErrors));
+            return;
+        }
+        
+        $currentLenderId = Auth::user()->lender_id;
+        $applicationId = $this->selectedLead->id;
+        
+        try {
+            DB::beginTransaction();
+            
+            // Rest of the booking logic here...
+            $this->executeBookingTransaction($currentLenderId, $applicationId);
+            
+            DB::commit();
+            $this->handleBookingSuccess();
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->handleBookingError($e, $applicationId, $currentLenderId);
+        }
+    }
+    
+    /**
+     * Execute the main booking transaction
+     */
+    private function executeBookingTransaction(int $currentLenderId, int $applicationId): void
+    {
+        // Get and validate current submission
+        $currentSubmission = $this->getCurrentSubmission($applicationId, $currentLenderId);
+        
+        // Update current lender's submission
+        $this->approveCurrentSubmission($applicationId, $currentLenderId);
+        
+        // Withdraw other submissions
+        $withdrawnCount = $this->withdrawOtherSubmissions($applicationId, $currentLenderId);
+        
+        // Update application
+        $this->updateApplicationBookingStatus($currentSubmission, $currentLenderId);
+        
+        // Generate commission bill
+        $this->generateCommissionBill($this->selectedLead);
+        
+        // Log success
+        $this->logBookingSuccess($applicationId, $currentLenderId, $withdrawnCount, $currentSubmission);
+    }
+    
+    /**
+     * Get current submission with validation
+     */
+    private function getCurrentSubmission(int $applicationId, int $currentLenderId): ApplicationLenderSubmission
+    {
+        $submission = ApplicationLenderSubmission::where('application_id', $applicationId)
+            ->where('lender_id', $currentLenderId)
+            ->where('status', 'submitted')
+            ->first();
+            
+        if (!$submission) {
+            throw new \Exception('No valid submission found for this lender and application.');
+        }
+        
+        return $submission;
+    }
+    
+    /**
+     * Approve current lender's submission
+     */
+    private function approveCurrentSubmission(int $applicationId, int $currentLenderId): void
+    {
+        $updatedRows = ApplicationLenderSubmission::where('application_id', $applicationId)
+            ->where('lender_id', $currentLenderId)
+            ->where('status', 'submitted')
+            ->update([
+                'status' => 'approved',
+                'booking_fee' => $this->bookingFee,
+                'booked_at' => now(),
+                'notes' => 'Lead booked via portal',
+                'updated_at' => now()
+            ]);
+    
+        if ($updatedRows === 0) {
+            throw new \Exception('Failed to update submission status. The submission may have been modified.');
+        }
+    }
+    
+    /**
+     * Withdraw other lenders' submissions
+     */
+    private function withdrawOtherSubmissions(int $applicationId, int $currentLenderId): int
+    {
+        return ApplicationLenderSubmission::where('application_id', $applicationId)
+            ->where('lender_id', '!=', $currentLenderId)
+            ->where('status', 'submitted')
+            ->update([
+                'status' => 'withdrawn',
+                'booking_fee' => 0,
+                'withdrawn_at' => now(),
+                'notes' => 'Lead booked by another lender via portal',
+                'updated_at' => now()
+            ]);
+    }
+    
+    /**
+     * Update application booking status
+     */
+    private function updateApplicationBookingStatus(ApplicationLenderSubmission $submission, int $currentLenderId): void
+    {
+        $updated = $this->selectedLead->update([
+            'booking_status' => 'booked',
+            'lender_id' => $currentLenderId,
+            'loan_product_id' => $submission->loan_product_id,
+            'booked_at' => now(),
+            'updated_at' => now()
+        ]);
+    
+        if (!$updated) {
+            throw new \Exception('Failed to update application booking status.');
+        }
+    }
+    
+    /**
+     * Handle successful booking
+     */
+    private function handleBookingSuccess(): void
+    {
+        $this->closeBookingModal();
+        
+        session()->flash('success', sprintf(
+            'Lead successfully booked! You will be charged TSh %s for this booking.',
+            number_format($this->bookingFee)
+        ));
+        
+        $this->dispatch('leadBooked');
+    }
+    
+    /**
+     * Handle booking errors
+     */
+    private function handleBookingError(\Exception $e, int $applicationId, int $currentLenderId): void
+    {
+        Log::error('Lead booking failed', [
+            'lead_id' => $applicationId,
+            'lender_id' => $currentLenderId,
+            'booking_fee' => $this->bookingFee ?? 'not_set',
+            'error_message' => $e->getMessage(),
+            'user_id' => Auth::id(),
+            'timestamp' => now()
+        ]);
+        
+        session()->flash('error', $this->getErrorMessage($e));
+    }
+    
+    /**
+     * Get user-friendly error message
+     */
+    private function getErrorMessage(\Exception $e): string
+    {
+        $message = $e->getMessage();
+        
+        if (str_contains($message, 'already been booked')) {
+            return 'This lead has already been booked by another lender.';
+        }
+        
+        if (str_contains($message, 'No valid submission')) {
+            return 'Your submission for this lead was not found or is no longer valid.';
+        }
+        
+        if (str_contains($message, 'modified')) {
+            return 'The lead status was changed while you were booking. Please refresh and try again.';
+        }
+        
+        return 'Failed to book lead. Please try again or contact support if the problem persists.';
+    }
+    
+    /**
+     * Log successful booking
+     */
+    private function logBookingSuccess(int $applicationId, int $currentLenderId, int $withdrawnCount, ApplicationLenderSubmission $submission): void
+    {
+        Log::info('Lead booking successful', [
+            'lead_id' => $applicationId,
+            'lender_id' => $currentLenderId,
+            'booking_fee' => $this->bookingFee,
+            'withdrawn_submissions' => $withdrawnCount,
+            'loan_product_id' => $submission->loan_product_id,
+            'user_id' => Auth::id(),
+            'timestamp' => now()
+        ]);
+    }
+
+
+
+    /**
+ * Generate commission bill for the booked application
+ */
+private function generateCommissionBill(Application $application)
+{
+    try {
+        // Check if commission bill already exists for this application
+        $existingBill = CommissionBill::where('application_id', $application->id)->first();
+        
+        if ($existingBill) {
+            Log::info('Commission bill already exists for application', [
+                'application_id' => $application->id,
+                'bill_id' => $existingBill->id
+            ]);
+            return $existingBill;
+        }
+
+
+
+        // Calculate commission based on application details
+        $commissionData = $this->calculateCommission($application);
+
+
+        
+
+        // Create commission bill
+        $bill = CommissionBill::create([
+            'application_id' => $application->id,
+            'lender_id' => $application->lender_id,
+            'bill_number' => $this->generateBillNumber(),
+            'commission_amount' => $commissionData['total_amount'],
+            'total_amount' => $commissionData['total_amount'],
+
+            'commission_rate' => $commissionData['commission_rate'],
+            'base_amount' => $commissionData['base_amount'],
+            'tax_amount' => $commissionData['tax_amount'],
+            'status' => 'pending',
+            'due_date' => now()->addDays(30), // 30 days from booking
+            'created_by' => Auth::id(),
+            'loan_amount' => $application->requested_amount,
+            'generated_at' => now(),
+            'description' => "Commission for application {$application->application_number}",
+            // 'metadata' => [
+            //     'application_number' => $application->application_number,
+            //     'loan_amount' => $application->requested_amount,
+            //     'applicant_name' => $application->first_name . ' ' . $application->last_name,
+            //     'generated_via' => 'booking_process'
+            // ]
+        ]);
+
+
+
+        Log::info('Commission bill generated', [
+            'application_id' => $application->id,
+            'bill_id' => $bill->id,
+            'amount' => $bill->amount
+        ]);
+
+        return $bill;
+
+    } catch (\Exception $e) {
+        Log::error('Failed to generate commission bill', [
+            'application_id' => $application->id,
+            'error' => $e->getMessage()
+        ]);
+        
+        // Don't throw exception here as booking should still succeed
+        // even if bill generation fails
+    }
+}
+
+
+
+
+
+private function calculateCommission(Application $application)
+{
+    // Get commission rate from system settings or lender configuration
+    $commissionRate = $application->lender->commission_rate ?? 0.05; // Default 5%
+    
+    $baseAmount = $application->requested_amount;
+    $commissionAmount = $baseAmount * $commissionRate;
+    
+    // Calculate tax (e.g., VAT)
+    $taxRate = config('billing.tax_rate', 0.18); // 18% VAT
+    $taxAmount = $commissionAmount * $taxRate;
+    
+    $totalAmount = $commissionAmount + $taxAmount;
+
+    return [
+        'base_amount' => $baseAmount,
+        'commission_rate' => $commissionRate,
+        'commission_amount' => $commissionAmount,
+        'tax_amount' => $taxAmount,
+        'total_amount' => $totalAmount,
+        'currency' => 'TSh'
+    ];
+}
+
+/**
+ * Generate unique bill number
+ */
+private function generateBillNumber()
+{
+    $prefix = 'BILL';
+    $year = date('Y');
+    $month = date('m');
+    
+    // Get the last bill number for this month
+    $lastBill = CommissionBill::where('bill_number', 'like', "{$prefix}-{$year}{$month}-%")
+        ->orderBy('bill_number', 'desc')
+        ->first();
+    
+    if ($lastBill) {
+        $lastNumber = (int) substr($lastBill->bill_number, -4);
+        $newNumber = $lastNumber + 1;
+    } else {
+        $newNumber = 1;
+    }
+    
+    return sprintf('%s-%s%s-%04d', $prefix, $year, $month, $newNumber);
+}
+
+
 
     public function cancelBooking($submissionId)
     {
@@ -247,7 +696,7 @@ class LeadListing extends Component
                 $subquery->select('application_id')
                     ->from('application_lender_submissions')
                     ->where('lender_id', Auth::user()->lender_id)
-                    ->whereIn('status', ['rejected', 'cancelled']);
+                    ->where('status', 'submitted');
             });
 
         // Apply filters
@@ -259,17 +708,19 @@ class LeadListing extends Component
     private function getBookedLeads()
     {
         $query = ApplicationLenderSubmission::with(['application.loanProduct', 'application.user', 'lender'])
-            ->where('application_lender_submissions.lender_id', Auth::user()->lender_id)
-            ->where('application_lender_submissions.status', 'approved');
-
+              ->where('application_lender_submissions.status', 'approved')
+            ->whereHas('application', function($subquery) {
+                $subquery->where('lender_id', Auth::user()->lender_id);
+            });
+    
         // Status filter for booked leads
         if ($this->statusFilter !== 'all') {
             $query->where('status', $this->statusFilter);
         }
-
+    
         // Apply other filters
         $this->applyFiltersToBookedLeads($query);
-
+    
         return $query->paginate(20);
     }
 
@@ -356,7 +807,9 @@ class LeadListing extends Component
     public function getStatsProperty()
     {
         $lenderId = Auth::user()->lender_id;
+
         
+      
         return [
             'available_leads' => Application::where('booking_status', 'unbooked')
                 ->where('status', 'submitted')
@@ -364,22 +817,30 @@ class LeadListing extends Component
                     $subquery->select('application_id')
                         ->from('application_lender_submissions')
                         ->where('lender_id', $lenderId)
-                        ->whereIn('status', ['rejected', 'cancelled']);
+                        ->whereIn('status', ['submitted']);
                 })
                 ->count(),
+
             'my_leads' => ApplicationLenderSubmission::where('lender_id', $lenderId)
-                ->whereNotIn('status', ['cancelled'])
+                ->where('status', 'approved')
                 ->count(),
-            'pending_review' => ApplicationLenderSubmission::where('lender_id', $lenderId)
-                ->where('status', 'submitted')->count(),
+
+            'pending_review' => Application::where('lender_id', $lenderId)
+                ->where('status', 'under_review')->count(),
+
+
             'approved' => ApplicationLenderSubmission::where('lender_id', $lenderId)
                 ->where('status', 'approved')->count(),
             'rejected' => ApplicationLenderSubmission::where('lender_id', $lenderId)
                 ->where('status', 'rejected')->count(),
-            'total_value' => ApplicationLenderSubmission::where('application_lender_submissions.lender_id', $lenderId)
-                ->where('application_lender_submissions.status', 'approved')
-                ->join('applications', 'application_lender_submissions.application_id', '=', 'applications.id')
-                ->sum('applications.requested_amount'),
+            'total_value' =>Application::where('lender_id', $lenderId)
+                ->where('status', 'approved')
+                ->sum('requested_amount'),
+            
+            // ApplicationLenderSubmission::where('application_lender_submissions.lender_id', $lenderId)
+            //     ->where('application_lender_submissions.status', 'approved')
+            //     ->join('applications', 'application_lender_submissions.application_id', '=', 'applications.id')
+            //     ->sum('applications.requested_amount'),
         ];
     }
 

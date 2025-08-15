@@ -22,14 +22,17 @@
                     Available Lead
                 </span>
             @else
+
+
+            
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium
-                    @switch($lead->status)
-                        @case('submitted') bg-red-100 text-red-800 @break
+                    @switch($this->application->status)
+                        @case('under_review') bg-red-100 text-red-800 @break
                         @case('approved') bg-green-100 text-green-800 @break
                         @case('rejected') bg-gray-100 text-gray-800 @break
                         @default bg-gray-100 text-gray-800
                     @endswitch">
-                    {{ ucwords(str_replace('_', ' ', $lead->status)) }}
+                    {{ ucwords(str_replace('_', ' ', $this->application->status)) }}
                 </span>
             @endif
 
@@ -44,7 +47,7 @@
                         Book This Lead
                     </button>
                 @else
-                    @if($lead->status === 'submitted')
+                    @if($this->application->status === 'under_review')
                         <button wire:click="processLead('approve')" 
                                 class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,6 +63,22 @@
                             Reject
                         </button>
                     @endif
+
+
+                    @if($this->application->status === 'approved')
+
+                    <button wire:click="processLead('disbursed')" 
+                                class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Disburse
+                    </button>
+
+                    @endif 
+
+
+
                 @endif
             </div>
         </div>
@@ -106,9 +125,9 @@
                 <div class="p-4 bg-red-50 rounded-lg">
                     <div class="text-2xl font-bold text-red-600 {{ $isAvailable ? '-sm' : '' }}">
                         @if($isAvailable)
-                        TSh {{ number_format($application->requested_amount/1000000, 1) }}M
+                        TSh {{ number_format($application->requested_amount, 1) }}
                         @else
-                            TSh {{ number_format($application->requested_amount/1000000, 1) }}M
+                            TSh {{ number_format($application->requested_amount, 1) }}M
                         @endif
                     </div>
                     <div class="text-sm text-red-700">Requested Amount</div>

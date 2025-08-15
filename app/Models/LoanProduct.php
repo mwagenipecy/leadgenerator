@@ -396,6 +396,7 @@ class LoanProduct extends Model
             }
         }
 
+
         return [
             'eligible' => $score >= 70  , //&& empty($issues),
             'score' => max(0, $score),

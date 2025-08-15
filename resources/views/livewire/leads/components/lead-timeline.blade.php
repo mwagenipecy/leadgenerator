@@ -72,6 +72,8 @@
                                         <div>
                                             <p class="text-sm font-medium text-black">Lead booked</p>
                                             @if($lead->lender)
+
+    
                                                 <p class="text-xs text-gray-600">by {{ $lead->lender->company_name }}</p>
                                             @endif
                                             <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($lead->submitted_at)->format('M d, Y H:i') }}</p>
@@ -113,54 +115,7 @@
                         </li>
                     @endif
 
-                    <!-- Lead Decision (if applicable) -->
-                    @if($lead && $lead->decision_at)
-                        <li>
-                            <div class="relative pb-8">
-                                <div class="relative flex space-x-3">
-                                    <div>
-                                        <span class="h-8 w-8 rounded-full {{ $lead->status === 'approved' ? 'bg-green-500' : 'bg-gray-500' }} flex items-center justify-center ring-8 ring-white">
-                                            @if($lead->status === 'approved')
-                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                            @else
-                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                </svg>
-                                            @endif
-                                        </span>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1.5">
-                                        <div>
-                                            <p class="text-sm font-medium text-black">Lead {{ $lead->status }}</p>
-                                            @if($lead->status === 'approved' && ($lead->offered_amount || $lead->offered_interest_rate))
-                                                <div class="mt-1 text-xs text-green-600">
-                                                    @if($lead->offered_amount)
-                                                        <p>Offered Amount: TSh {{ number_format($lead->offered_amount) }}</p>
-                                                    @endif
-                                                    @if($lead->offered_interest_rate)
-                                                        <p>Interest Rate: {{ $lead->offered_interest_rate }}%</p>
-                                                    @endif
-                                                    @if($lead->offered_tenure_months)
-                                                        <p>Tenure: {{ $lead->offered_tenure_months }} months</p>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                            @if($lead->status === 'rejected' && $lead->rejection_reason)
-                                                <p class="mt-1 text-xs text-red-600">Reason: {{ $lead->rejection_reason }}</p>
-                                            @endif
-                                            <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($lead->decision_at)->format('M d, Y H:i') }}</p>
-                                            <p class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($lead->decision_at)->diffForHumans() }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                @if($application->approved_at || $application->disbursed_at)
-                                    <div class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"></div>
-                                @endif
-                            </div>
-                        </li>
-                    @endif
+                   
 
                     <!-- Application Approved -->
                     @if($application->approved_at)

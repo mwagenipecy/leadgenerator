@@ -92,7 +92,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-bold text-gray-900 mb-2">Upload Required Documents</h2>
-                            <p class="text-gray-600">Please upload clear, readable copies of the required documents</p>
+                            <p class="text-gray-600">Please upload clear, readable copies of the required documents for all selected lenders</p>
                         </div>
                         <div class="text-center">
                             <div class="text-2xl font-bold text-blue-600">{{ number_format($this->calculateRequiredDocumentsProgress()) }}%</div>
@@ -122,6 +122,32 @@
                                 <p class="text-xs text-gray-600">Processing Time</p>
                                 <p class="text-sm font-bold text-gray-900">{{ $estimatedProcessingTime }}</p>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Selected Lenders Info -->
+                    <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-100 mb-8">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Selected Lenders & Products</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @foreach($selectedLenders as $lender)
+                                <div class="bg-white rounded-lg p-4 border border-indigo-200">
+                                    <div class="flex items-center space-x-3 mb-2">
+                                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-2 0H7m5 0v-9a2 2 0 00-2-2v0a2 2 0 00-2 2v9m4 0V9a2 2 0 012-2v0a2 2 0 012 2v16"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-gray-900">{{ $lender['lender_name'] ?? 'Unknown Lender' }}</p>
+                                            <p class="text-sm text-gray-600">{{ $lender['product_name'] ?? 'Product' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-500">
+                                        Interest: {{ $lender['interest_rate_min'] ?? 'N/A' }}% - {{ $lender['interest_rate_max'] ?? 'N/A' }}% | 
+                                        Monthly: TSh {{ number_format($lender['monthly_payment'] ?? 0) }}
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -156,7 +182,12 @@
                                             @endif
                                         </div>
                                         
-                                        <p class="text-sm text-gray-600 mb-4">{{ $document['description'] }}</p>
+                                        <p class="text-sm text-gray-600 mb-2">{{ $document['description'] }}</p>
+                                        
+                                        <!-- Show which lenders require this document -->
+                                        <div class="text-xs text-blue-600 mb-3">
+                                            <span class="font-medium">Requested by:</span> {{ $this->getDocumentRequestedBy($type) }}
+                                        </div>
                                         
                                         @if($document['uploaded'])
                                             <div class="bg-white rounded-lg p-3 border border-green-200 mb-3">
@@ -202,6 +233,19 @@
                                 </div>
                             </div>
                         @endforeach
+                    </div>
+
+                    <!-- Document Upload Summary -->
+                    <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-medium text-blue-900">Document Requirements Aggregated</p>
+                                <p class="text-xs text-blue-700">We've combined all document requirements from your selected lenders to ensure you only upload each document once.</p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Next Step Button -->
@@ -352,11 +396,19 @@
                                     <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
                                         <div>
                                             <p class="text-gray-600">Interest Rate</p>
-                                            <p class="font-medium">{{ $lender['interest_rate'] ?? 'N/A' }}%</p>
+                                            <p class="font-medium">{{ $lender['interest_rate_min'] ?? 'N/A' }}% - {{ $lender['interest_rate_max'] ?? 'N/A' }}%</p>
                                         </div>
                                         <div>
                                             <p class="text-gray-600">Monthly Payment</p>
                                             <p class="font-medium">TSh {{ number_format($lender['monthly_payment'] ?? 0) }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-600">Processing Time</p>
+                                            <p class="font-medium">{{ $lender['approval_time_days'] ?? 'N/A' }} days</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-600">Eligibility Score</p>
+                                            <p class="font-medium">{{ number_format($lender['eligibility_score'] ?? 0, 1) }}%</p>
                                         </div>
                                     </div>
                                 </div>
@@ -379,6 +431,7 @@
                                         <div>
                                             <p class="font-semibold text-gray-900">{{ $requiredDocuments[$type]['name'] }}</p>
                                             <p class="text-sm text-gray-600">{{ $document['name'] }}</p>
+                                            <p class="text-xs text-gray-500">{{ $this->getDocumentRequestedBy($type) }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -392,8 +445,12 @@
                             ← Back to Documents
                         </button>
                         
-                        <button wire:click="nextStep" class="bg-brand-red text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors">
-                            Submit Application →
+                        <button wire:click="nextStep" 
+                                wire:loading.attr="disabled"
+                                wire:target="nextStep"
+                                class="bg-brand-red text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading.remove wire:target="nextStep">Submit Application →</span>
+                            <span wire:loading wire:target="nextStep">Submitting...</span>
                         </button>
                     </div>
                 </div>
@@ -422,19 +479,23 @@
                             <h3 class="text-lg font-bold text-gray-900 mb-4">Application Details</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="bg-white rounded-lg p-4">
-                                <p class="text-sm text-gray-600">Loan Amount</p>
-                                <p class="font-semibold text-gray-900">TSh {{ number_format($finalApplication->requested_amount) }}</p>
-                            </div>
-                            <div class="bg-white rounded-lg p-4">
-                                <p class="text-sm text-gray-600">Loan Type</p>
-                                <p class="font-semibold text-gray-900">{{ ucwords($finalApplication->loan_type) }}</p>
-                            </div>
-                            <div class="bg-white rounded-lg p-4">
-                                <p class="text-sm text-gray-600">Submitted At</p>
-                                <p class="font-semibold text-gray-900">{{ $finalApplication->submitted_at->format('M d, Y H:i') }}</p>
+                                    <p class="text-sm text-gray-600">Application Number</p>
+                                    <p class="font-semibold text-gray-900">{{ $finalApplication->application_number ?? 'Generated' }}</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-4">
+                                    <p class="text-sm text-gray-600">Loan Amount</p>
+                                    <p class="font-semibold text-gray-900">TSh {{ number_format($finalApplication->requested_amount) }}</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-4">
+                                    <p class="text-sm text-gray-600">Loan Type</p>
+                                    <p class="font-semibold text-gray-900">{{ ucwords($finalApplication->loan_type) }}</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-4">
+                                    <p class="text-sm text-gray-600">Submitted At</p>
+                                    <p class="font-semibold text-gray-900">{{ $finalApplication->submitted_at->format('M d, Y H:i') }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endif
 
                     <!-- Submission Results -->
@@ -449,7 +510,10 @@
                                             <p class="text-sm text-gray-600">{{ $result['product_name'] }}</p>
                                             <p class="text-xs text-gray-500 mt-1">Ref: {{ $result['reference'] }}</p>
                                         </div>
-                                        <div class="text-sm font-medium text-green-600">
+                                        <div class="text-sm font-medium text-green-600 flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
                                             {{ ucfirst($result['status']) }}
                                         </div>
                                     </div>
@@ -458,17 +522,50 @@
                         </div>
                     @endif
 
+                    <!-- Next Steps Information -->
+                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-6 border border-yellow-100 mb-6">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">What Happens Next?</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-yellow-800">1</span>
+                                </div>
+                                <p class="text-sm text-gray-700">Lenders will review your application and documents within their processing timeframes.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-yellow-800">2</span>
+                                </div>
+                                <p class="text-sm text-gray-700">You'll receive notifications about application status updates via SMS and email.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-yellow-800">3</span>
+                                </div>
+                                <p class="text-sm text-gray-700">Approved offers will be available in your dashboard for comparison and acceptance.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-yellow-800">4</span>
+                                </div>
+                                <p class="text-sm text-gray-700">Choose the best offer and complete the final steps for loan disbursement.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Action Buttons -->
-                    <div class="flex justify-center mt-8">
+                    <div class="flex justify-center space-x-4 mt-8">
                         <button wire:click="viewApplications"
                                 class="bg-brand-red text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors">
                             View My Applications
                         </button>
+                        <a href="{{ route('dashboard') }}" 
+                           class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                            Go to Dashboard
+                        </a>
                     </div>
                 </div>
             </div>
         @endif
     </div>
 </div>
-
-

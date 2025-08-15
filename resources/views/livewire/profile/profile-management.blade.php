@@ -129,7 +129,7 @@
                                                 </svg>
                                             </div>
                                             <span class="text-xs font-medium px-2 py-1 rounded-full {{ $isComplete ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600' }}">
-                                                {{ $isComplete ? 'Complete' : 'Pending' }}
+                                                <!-- {{ $isComplete ? 'Complete' : 'Pending' }} -->
                                             </span>
                                         </div>
                                         <h3 class="font-bold text-gray-900 mb-1">{{ $section['name'] }}</h3>

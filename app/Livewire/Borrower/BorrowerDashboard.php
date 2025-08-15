@@ -358,7 +358,7 @@ class BorrowerDashboard extends Component
         if ($productId) {
             return redirect()->route('loan.apply', ['product' => $productId]);
         }
-        return redirect()->route('loan.apply');
+        return redirect('application/create');
     }
 
     public function viewApplication($applicationId)
