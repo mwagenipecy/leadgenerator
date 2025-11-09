@@ -23,6 +23,8 @@
             </div>
         </div>
 
+        
+
         <!-- Flash Messages -->
         @if (session()->has('message'))
             <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center space-x-3">
@@ -99,11 +101,26 @@
                     </div>
                     <div class="text-right">
                         <p class="text-xs sm:text-sm font-medium text-gray-500">Credit Score</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-black">{{ $creditScore ?? 'N/A' }}</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-black">
+                            @php
+                                // Ensure creditScore is displayed as a number, not an array
+                                if (is_array($creditScore)) {
+                                    $creditScore = $creditScore['_value'] ?? ($creditScore[0] ?? 'N/A');
+                                }
+                                echo is_numeric($creditScore) ? number_format((float)$creditScore, 0) : ($creditScore ?? 'N/A');
+                            @endphp
+                        </p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between text-xs sm:text-sm">
-                    @if($creditScore)
+                    @php
+                        // Ensure creditScore is numeric for the color/label methods
+                        $numericCreditScore = is_array($creditScore) 
+                            ? ($creditScore['_value'] ?? ($creditScore[0] ?? null))
+                            : $creditScore;
+                        $numericCreditScore = is_numeric($numericCreditScore) ? (float)$numericCreditScore : null;
+                    @endphp
+                    @if($numericCreditScore)
                         <div class="flex items-center space-x-1 text-{{ $this->getCreditScoreColor() }}-600">
                             <div class="w-2 h-2 sm:w-3 sm:h-3 bg-{{ $this->getCreditScoreColor() }}-500 rounded-full"></div>
                             <span class="font-semibold">{{ $this->getCreditScoreLabel() }}</span>

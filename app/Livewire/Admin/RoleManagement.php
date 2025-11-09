@@ -48,10 +48,10 @@ class RoleManagement extends Component
 
     // Permission management
     public $selectedPermissions = [];
-    public $availablePermissions = [];
-    public $permissionsByCategory = [];
+    // Don't store as Livewire properties to avoid serialization issues
+    // Load them in render() or methods when needed
 
-    // Role users
+    // Role users - store as array to avoid serialization issues
     public $roleUsers = [];
 
     // Stats
@@ -66,7 +66,7 @@ class RoleManagement extends Component
     {
         $this->checkPermissions();
         $this->loadStats();
-        $this->loadPermissions();
+        // Don't load permissions here - load them in render() to avoid serialization issues
     }
 
     protected function checkPermissions()
@@ -84,14 +84,14 @@ class RoleManagement extends Component
         $this->totalActiveRoles = Role::where('is_active', true)->count();
     }
 
-    public function loadPermissions()
+    // Helper method to get permissions (not stored as property)
+    protected function getPermissionsByCategory()
     {
-        $this->availablePermissions = Permission::where('is_active', true)
+        return Permission::where('is_active', true)
             ->orderBy('category')
             ->orderBy('display_name')
-            ->get();
-
-        $this->permissionsByCategory = $this->availablePermissions->groupBy('category');
+            ->get()
+            ->groupBy('category');
     }
 
     // Create Role Methods
@@ -213,7 +213,9 @@ class RoleManagement extends Component
         $this->selectedRole->update($updateData);
 
         // Update role levels for users with this role
-        $this->selectedRole->users()->each(function ($user) {
+        // Get user IDs first to avoid loading full user models
+        $userIds = $this->selectedRole->users()->pluck('id');
+        User::whereIn('id', $userIds)->get()->each(function ($user) {
             $user->updateRoleLevel();
         });
 
@@ -274,14 +276,16 @@ class RoleManagement extends Component
             return;
         }
 
-        $this->selectedRole = Role::with('permissions')->findOrFail($roleId);
+        // Load role - don't eager load relationships to avoid serialization issues
+        $this->selectedRole = Role::findOrFail($roleId);
 
         if (auth()->user()->role_level <= $this->selectedRole->level) {
             session()->flash('error', 'You cannot manage permissions for a role with level equal or higher than your own.');
             return;
         }
 
-        $this->selectedPermissions = $this->selectedRole->permissions->pluck('id')->toArray();
+        // Get permission IDs without loading the full relationship
+        $this->selectedPermissions = $this->selectedRole->permissions()->pluck('permissions.id')->toArray();
         $this->showManagePermissionsModal = true;
     }
 
@@ -296,10 +300,14 @@ class RoleManagement extends Component
             $this->selectedRole->permissions()->sync($this->selectedPermissions);
 
             // Clear permissions cache for all users with this role
-            $this->selectedRole->users()->update([
-                'permissions_cache' => null,
-                'permissions_updated_at' => null
-            ]);
+            // Use direct update on user_ids to avoid loading user models
+            $userIds = $this->selectedRole->users()->pluck('id');
+            if ($userIds->isNotEmpty()) {
+                User::whereIn('id', $userIds)->update([
+                    'permissions_cache' => null,
+                    'permissions_updated_at' => null
+                ]);
+            }
         });
 
         $this->showManagePermissionsModal = false;
@@ -314,11 +322,20 @@ class RoleManagement extends Component
             return;
         }
 
-        $this->selectedRole = Role::with(['users' => function ($query) {
-            $query->with('lender');
-        }])->findOrFail($roleId);
+        // Load role without nested relationships to avoid serialization issues
+        $this->selectedRole = Role::findOrFail($roleId);
+        
+        // Load users and convert to array to avoid Collection serialization issues
+        $users = $this->selectedRole->users()->get();
+        $this->roleUsers = $users->map(function($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name ?? $user->email,
+                'email' => $user->email,
+                'role' => $user->role,
+            ];
+        })->toArray();
 
-        $this->roleUsers = $this->selectedRole->users;
         $this->showRoleUsersModal = true;
     }
 
@@ -338,9 +355,17 @@ class RoleManagement extends Component
 
         $user->removeRole($this->selectedRole);
         
-        // Refresh the role users list
-        $this->selectedRole->load('users');
-        $this->roleUsers = $this->selectedRole->users;
+        // Refresh the role users list - convert to array to avoid serialization issues
+        $this->selectedRole->refresh();
+        $users = $this->selectedRole->users()->get();
+        $this->roleUsers = $users->map(function($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name ?? $user->email,
+                'email' => $user->email,
+                'role' => $user->role,
+            ];
+        })->toArray();
 
         session()->flash('message', 'User removed from role successfully!');
     }
@@ -395,43 +420,59 @@ class RoleManagement extends Component
 
     public function render()
     {
-        $query = Role::with(['permissions', 'users'])
-            ->when($this->search, function ($q) {
-                $q->where('display_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
-            })
-            ->when($this->statusFilter, function ($q) {
-                if ($this->statusFilter === 'active') {
-                    $q->where('is_active', true);
-                } elseif ($this->statusFilter === 'inactive') {
-                    $q->where('is_active', false);
-                } elseif ($this->statusFilter === 'system') {
-                    $q->where('is_system_role', true);
-                } elseif ($this->statusFilter === 'custom') {
-                    $q->where('is_system_role', false);
-                }
-            })
-            ->when($this->levelFilter, function ($q) {
-                if ($this->levelFilter === 'high') {
-                    $q->where('level', '>=', 80);
-                } elseif ($this->levelFilter === 'medium') {
-                    $q->whereBetween('level', [50, 79]);
-                } elseif ($this->levelFilter === 'low') {
-                    $q->where('level', '<', 50);
-                }
-            });
+        try {
+            $query = Role::query()
+                ->when($this->search, function ($q) {
+                    $q->where('display_name', 'like', '%' . $this->search . '%')
+                      ->orWhere('name', 'like', '%' . $this->search . '%')
+                      ->orWhere('description', 'like', '%' . $this->search . '%');
+                })
+                ->when($this->statusFilter, function ($q) {
+                    if ($this->statusFilter === 'active') {
+                        $q->where('is_active', true);
+                    } elseif ($this->statusFilter === 'inactive') {
+                        $q->where('is_active', false);
+                    } elseif ($this->statusFilter === 'system') {
+                        $q->where('is_system_role', true);
+                    } elseif ($this->statusFilter === 'custom') {
+                        $q->where('is_system_role', false);
+                    }
+                })
+                ->when($this->levelFilter, function ($q) {
+                    if ($this->levelFilter === 'high') {
+                        $q->where('level', '>=', 80);
+                    } elseif ($this->levelFilter === 'medium') {
+                        $q->whereBetween('level', [50, 79]);
+                    } elseif ($this->levelFilter === 'low') {
+                        $q->where('level', '<', 50);
+                    }
+                });
 
-        // Filter based on user's role level - users can only see roles below their level
-        // if (!auth()->user()->hasRole('super_admin')) {
-        //     $query->where('level', '<', auth()->user()->role_level);
-        // }
+            // Load counts only (avoid loading full relationships to prevent serialization issues)
+            $roles = $query->withCount(['users', 'permissions'])
+                ->orderBy('level', 'desc')
+                ->paginate(12);
 
-        $roles = $query->orderBy('level', 'desc')->paginate(12) ; //->paginate(12);
+            // Load permissions only when rendering (not stored as property)
+            $permissionsByCategory = $this->getPermissionsByCategory();
 
-        return view('livewire.admin.role-management', [
-            'roles' => $roles,
-            'permissionsByCategory' => $this->permissionsByCategory,
-        ]);
+            return view('livewire.admin.role-management', [
+                'roles' => $roles,
+                'permissionsByCategory' => $permissionsByCategory,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('RoleManagement render error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Return empty permissions on error
+            $permissionsByCategory = collect();
+            
+            return view('livewire.admin.role-management', [
+                'roles' => Role::query()->paginate(12),
+                'permissionsByCategory' => $permissionsByCategory,
+            ]);
+        }
     }
 }

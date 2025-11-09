@@ -82,8 +82,12 @@
                         </h1>
                     </div>
                     
-                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">Create Your Account</h2>
-                    <p class="text-gray-600">Sign up to start generating quality leads</p>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $type === 'company' ? 'Register Your Company' : 'Create Your Account' }}</h2>
+                    <p class="text-gray-600">{{ $type === 'company' ? 'Company onboarding to connect with borrowers' : 'Sign up to start generating quality leads' }}</p>
+                    <div class="mt-6 inline-flex bg-gray-100 p-1 rounded-lg">
+                        <button type="button" wire:click="$set('type','individual')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='individual' ? 'bg-white shadow text-black' : 'text-gray-600' }}">Individual</button>
+                        <button type="button" wire:click="$set('type','company')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">Company</button>
+                    </div>
                 </div>
 
                 <!-- Registration Form -->
@@ -189,6 +193,7 @@
                 @enderror
             </div>
             
+            @if($type === 'individual')
             <div>
                 <label for="nida_number" class="block text-sm font-medium text-gray-700 mb-1.5">
                     NIDA Number *
@@ -213,9 +218,37 @@
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            @else
+            <div>
+                <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">Company Name *</label>
+                <input id="company_name" wire:model.live="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-red-500 ring-1 ring-red-500 @enderror" placeholder="Acme Ltd">
+                @error('company_name')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            @endif
 
             
         </div>
+
+        @if($type === 'company')
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+                <label for="company_tin" class="block text-sm font-medium text-gray-700 mb-1.5">Company TIN *</label>
+                <input id="company_tin" wire:model.live="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-red-500 ring-1 ring-red-500 @enderror" placeholder="123-456-789">
+                @error('company_tin')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
+                <label for="company_contact_nida" class="block text-sm font-medium text-gray-700 mb-1.5">Representative NIDA *</label>
+                <input id="company_contact_nida" wire:model.live="company_contact_nida" maxlength="20" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19XXXXXXXXXXXXXXXX">
+                @error('company_contact_nida')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+        @endif
 
         <!-- Password Fields -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -322,7 +355,7 @@
                 wire:target="register"
                 class="w-full bg-brand-red text-white py-3.5 px-4 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                <span wire:loading.remove wire:target="register">Create Account</span>
+                <span wire:loading.remove wire:target="register">{{ $type==='company' ? 'Continue as Company' : 'Create Account' }}</span>
                 <span wire:loading wire:target="register">Creating Account...</span>
             </button>
         </div>

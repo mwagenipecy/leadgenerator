@@ -22,5 +22,9 @@ class TRAController extends Controller
         return view('pages.verification.motor-vehicle');
     }
 
+    public function creditReport(){
+        return view('pages.verification.credit-report');
+    }
+
     
 }

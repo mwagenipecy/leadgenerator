@@ -1,303 +1,258 @@
 <div>
-<div>
-    <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md">
-            <!-- Header -->
-            <div class="px-6 py-4 border-b border-gray-200">
-                <div class="flex items-center justify-between">
-                    <h1 class="text-xl font-semibold text-gray-900">Identity Verification</h1>
-                    <button 
-                        wire:click="backToMethodSelection"
-                        class="text-gray-600 hover:text-gray-800 transition-colors"
-                        title="Back to verification methods"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                    </button>
+<div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="text-2xl font-bold font-poppins text-black">
+                    Lead<span class="text-brand-red">Generator</span>
                 </div>
-                
-                <!-- Progress Bar -->
-                @if (!$isVerified)
-                    <div class="mt-4">
-                        <div class="flex justify-between text-sm text-gray-600 mb-2">
-                            <span>Progress</span>
-                            <span>{{ number_format($this->getProgressPercentage()) }}%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                                class="bg-blue-600 h-2 rounded-full transition-all duration-500" 
-                                style="width: {{ $this->getProgressPercentage() }}%"
-                            ></div>
-                        </div>
-                    </div>
-                @endif
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">Welcome, {{ auth()->user()?->first_name ?? 'User' }}</span>
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="text-sm text-brand-red hover:text-red-700 transition-colors">
+                            Logout
+                        </button>
+                    </form>
+                </div>
             </div>
+        </div>
+    </header>
 
-            <!-- Content -->
-            <div class="px-6 py-6">
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <!-- Progress Indicator -->
+        <div class="mb-8">
+            <div class="flex items-center justify-center space-x-4 text-sm text-gray-600">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span>Account Created</span>
+                </div>
+                <div class="w-16 h-0.5 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span>Method Selected</span>
+                </div>
+                <div class="w-16 h-0.5 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 {{ $isVerified ? 'bg-green-500' : 'bg-brand-red' }} rounded-full flex items-center justify-center mr-2">
+                        @if($isVerified)
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        @else
+                            <span class="text-white font-medium">3</span>
+                        @endif
+                    </div>
+                    <span class="{{ $isVerified ? 'text-green-600' : '' }} font-medium">Questionnaire Verification</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <div class="mx-auto w-20 h-20 bg-brand-red/10 rounded-2xl flex items-center justify-center mb-6">
+                <svg class="w-10 h-10 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">NIDA Verification Questionnaire</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Answer the following 3 questions based on your NIDA records to verify your identity
+            </p>
+        </div>
+
+        <!-- Verification Content -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="p-6 sm:p-8">
                 @if ($isVerified)
                     <!-- Success State -->
-                    <div class="text-center">
-                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-                            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="text-center py-8">
+                        <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <h2 class="text-lg font-medium text-gray-900 mb-2">Verification Complete!</h2>
-                        <p class="text-sm text-gray-600 mb-6">{{ $successMessage }}</p>
+                        <h2 class="text-2xl font-bold text-green-800 mb-2">Verification Complete!</h2>
+                        <p class="text-green-700 mb-6">{{ $successMessage }}</p>
+                        <div class="space-y-3">
+                            <button 
+                                wire:click="goToProfile"
+                                class="w-full bg-brand-red text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                            >
+                                Complete Your Profile
+                            </button>
+                            <button 
+                                wire:click="redirectToDashboard"
+                                class="w-full bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
+                            >
+                                Go to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                @elseif($showFinalResult && $correctAnswersCount < 2)
+                    <!-- Final Result - Failed -->
+                    <div class="text-center py-8">
+                        <div class="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-red-800 mb-2">Verification Failed</h2>
+                        <p class="text-red-700 mb-4">{{ $errorMessage }}</p>
+                        <p class="text-gray-600 mb-6">
+                            You answered {{ $correctAnswersCount }} out of {{ $totalQuestions }} questions correctly. 
+                            You need at least 2 correct answers to proceed.
+                        </p>
                         <button 
-                            wire:click="redirectToDashboard"
-                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                            wire:click="retryVerification"
+                            class="w-full bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors"
                         >
-                            Continue to Dashboard
+                            Try Again
                         </button>
                     </div>
                 @else
-                    <!-- Questionnaire Form -->
+                    <!-- Sequential Questions Form -->
                     <div>
-                        <h2 class="text-lg font-medium text-gray-900 mb-2">Verification Questionnaire</h2>
-                        <p class="text-sm text-gray-600 mb-6">Please answer the following questions to verify your identity with NIDA records.</p>
+                        <!-- Progress Indicator -->
+                        <div class="mb-6">
+                            <div class="flex justify-between text-sm text-gray-600 mb-2">
+                                <span>Question {{ $currentQuestion }} of {{ $totalQuestions }}</span>
+                                <span>{{ number_format($this->getProgressPercentage()) }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div 
+                                    class="bg-brand-red h-2 rounded-full transition-all duration-500" 
+                                    style="width: {{ $this->getProgressPercentage() }}%"
+                                ></div>
+                            </div>
+                        </div>
 
-                        <form wire:submit.prevent="submitQuestionnaire" class="space-y-6">
+                        <!-- Current Question -->
+                        @if($currentQuestion <= $totalQuestions)
+                            @php
+                                $questionKey = $this->getCurrentQuestionKey();
+                            @endphp
                             
-                            <!-- Date of Birth -->
-                            <div>
-                                <label for="dob_verification" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Date of Birth <span class="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="date" 
-                                    id="dob_verification"
-                                    wire:model.live="questionnaireAnswers.dob_verification"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('questionnaireAnswers.dob_verification') border-red-500 @enderror"
-                                    max="{{ date('Y-m-d') }}"
-                                />
-                                @error('questionnaireAnswers.dob_verification')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                                <p class="mt-1 text-xs text-gray-500">{{ $this->getQuestionHelper('dob_verification') }}</p>
-                            </div>
-
-                            <!-- Birth Place -->
-                            <div>
-                                <label for="birth_place" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Place of Birth <span class="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="birth_place"
-                                    wire:model.live="questionnaireAnswers.birth_place"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('questionnaireAnswers.birth_place') border-red-500 @enderror"
-                                    placeholder="e.g., Hospital name or city"
-                                    maxlength="100"
-                                />
-                                @error('questionnaireAnswers.birth_place')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                                <p class="mt-1 text-xs text-gray-500">{{ $this->getQuestionHelper('birth_place') }}</p>
-                            </div>
-
-                            <!-- Father's Name -->
-                            <div>
-                                <label for="father_name" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Father's Full Name <span class="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="father_name"
-                                    wire:model.live="questionnaireAnswers.father_name"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('questionnaireAnswers.father_name') border-red-500 @enderror"
-                                    placeholder="Enter father's full name"
-                                    maxlength="100"
-                                />
-                                @error('questionnaireAnswers.father_name')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                                <p class="mt-1 text-xs text-gray-500">{{ $this->getQuestionHelper('father_name') }}</p>
-                            </div>
-
-                            <!-- Mother's Name -->
-                            <div>
-                                <label for="mother_name" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Mother's Full Name <span class="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    id="mother_name"
-                                    wire:model.live="questionnaireAnswers.mother_name"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('questionnaireAnswers.mother_name') border-red-500 @enderror"
-                                    placeholder="Enter mother's full name"
-                                    maxlength="100"
-                                />
-                                @error('questionnaireAnswers.mother_name')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                                <p class="mt-1 text-xs text-gray-500">{{ $this->getQuestionHelper('mother_name') }}</p>
-                            </div>
-
-                            <!-- Birth Region -->
-                            <div>
-                                <label for="birth_region" class="block text-sm font-medium text-gray-700 mb-1">
-                                    Birth Region <span class="text-red-500">*</span>
-                                </label>
-                                <select 
-                                    id="birth_region"
-                                    wire:model.live="questionnaireAnswers.birth_region"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 @error('questionnaireAnswers.birth_region') border-red-500 @enderror"
-                                >
-                                    <option value="">Select your birth region</option>
-                                    @foreach($regions as $key => $region)
-                                        <option value="{{ $key }}">{{ $region }}</option>
-                                    @endforeach
-                                </select>
-                                @error('questionnaireAnswers.birth_region')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                                <p class="mt-1 text-xs text-gray-500">{{ $this->getQuestionHelper('birth_region') }}</p>
-                            </div>
-
-                            <!-- Error Message -->
-                            @if($errorMessage)
-                                <div class="rounded-md bg-red-50 p-4">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3">
-                                            <h3 class="text-sm font-medium text-red-800">Verification Failed</h3>
-                                            <p class="mt-1 text-sm text-red-700">{{ $errorMessage }}</p>
-                                        </div>
-                                    </div>
+                            <form wire:submit.prevent="submitCurrentQuestion" class="space-y-6">
+                                <!-- Question Title -->
+                                <div class="text-center mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                                        {{ $this->getCurrentQuestionText() }} <span class="text-red-500">*</span>
+                                    </h3>
+                                    <p class="text-sm text-gray-600">{{ $this->getQuestionHelper($questionKey) }}</p>
                                 </div>
-                            @endif
 
-                            <!-- Submit Button -->
-                            <div class="flex flex-col space-y-3">
-                                <button 
-                                    type="submit"
-                                    wire:loading.attr="disabled"
-                                    @disabled($isProcessing || !$this->isFormComplete())
-                                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                >
-                                    <span wire:loading.remove wire:target="submitQuestionnaire">
-                                        @if($this->isFormComplete())
-                                            Verify Identity
-                                        @else
-                                            Complete All Fields to Continue
-                                        @endif
-                                    </span>
-                                    <span wire:loading wire:target="submitQuestionnaire" class="flex items-center">
-                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Verifying...
-                                    </span>
-                                </button>
+                                <!-- Answer Input -->
+                                <div>
+                                    @if($questionKey === 'dob_verification')
+                                        <input 
+                                            type="date" 
+                                            wire:model.live="questionnaireAnswers.{{ $questionKey }}"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('questionnaireAnswers.' . $questionKey) border-red-500 @enderror"
+                                            max="{{ date('Y-m-d') }}"
+                                            autofocus
+                                        />
+                                    @else
+                                        <input 
+                                            type="text" 
+                                            wire:model.live="questionnaireAnswers.{{ $questionKey }}"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red @error('questionnaireAnswers.' . $questionKey) border-red-500 @enderror"
+                                            placeholder="{{ $this->getCurrentQuestionPlaceholder() }}"
+                                            maxlength="100"
+                                            autofocus
+                                        />
+                                    @endif
+                                    
+                                    @error('questionnaireAnswers.' . $questionKey)
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                                @if($errorMessage)
-                                    <button 
-                                        type="button"
-                                        wire:click="retryVerification"
-                                        class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                                    >
-                                        Try Again
-                                    </button>
+                                <!-- Previous Question Result (if any) -->
+                                @if($currentQuestion > 1)
+                                    @php
+                                        $prevQuestionKey = ['dob_verification', 'father_name', 'mother_name'][$currentQuestion - 2];
+                                        $prevResult = $questionResults[$prevQuestionKey] ?? null;
+                                    @endphp
+                                    @if($prevResult !== null)
+                                        <div class="rounded-lg p-4 {{ $prevResult ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200' }}">
+                                            <div class="flex items-center">
+                                                @if($prevResult)
+                                                    <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                    <span class="text-green-800 font-medium">Previous answer was correct!</span>
+                                                @else
+                                                    <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                    <span class="text-red-800 font-medium">Previous answer was incorrect.</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endif
-                            </div>
-                        </form>
+
+                                <!-- Submit Button -->
+                                <div class="mt-8">
+                                    <button 
+                                        type="submit"
+                                        wire:loading.attr="disabled"
+                                        @disabled($isProcessing || empty($questionnaireAnswers[$questionKey]))
+                                        class="w-full flex justify-center py-3 px-6 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-brand-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    >
+                                        <span wire:loading.remove wire:target="submitCurrentQuestion">
+                                            @if($currentQuestion < $totalQuestions)
+                                                Submit Answer & Continue
+                                            @else
+                                                Submit Final Answer
+                                            @endif
+                                        </span>
+                                        <span wire:loading wire:target="submitCurrentQuestion" class="flex items-center">
+                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Verifying...
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        @endif
                     </div>
                 @endif
             </div>
-
-            <!-- Footer -->
-            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 rounded-b-lg">
-                <div class="flex items-center justify-center text-xs text-gray-500">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-9a2 2 0 00-2-2H6a2 2 0 00-2 2v9a2 2 0 002 2zm10-12V6a2 2 0 00-2-2H8a2 2 0 00-2 2v3m8 0V9a2 2 0 00-2-2H10a2 2 0 00-2 2v0"></path>
-                    </svg>
-                    Your data is encrypted and secure
-                </div>
-            </div>
         </div>
 
-        <!-- Loading Overlay -->
-        <div 
-            wire:loading.flex 
-            wire:target="submitQuestionnaire"
-            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50"
-        >
-            <div class="bg-white p-6 rounded-lg shadow-xl">
-                <div class="flex items-center space-x-3">
-                    <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <div>
-                        <p class="text-lg font-medium text-gray-900">Verifying your identity...</p>
-                        <p class="text-sm text-gray-600">This may take a few moments</p>
-                    </div>
-                </div>
+        <!-- Security Notice -->
+        <div class="mt-8 text-center">
+            <div class="inline-flex items-center space-x-2 text-sm text-gray-500 bg-white px-4 py-2 rounded-lg border border-gray-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                <span>Your data is encrypted and securely processed</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div wire:loading.flex class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-red mx-auto mb-4"></div>
+                <p class="text-gray-600">Verifying your identity...</p>
             </div>
         </div>
     </div>
-
-    <!-- Custom Styles -->
-    <style>
-        /* Custom focus styles for better accessibility */
-        input:focus, select:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        /* Smooth transitions for progress bar */
-        .progress-bar {
-            transition: width 0.3s ease-in-out;
-        }
-
-        /* Custom form validation styles */
-        .field-valid {
-            border-color: #10b981;
-        }
-
-        .field-valid:focus {
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-    </style>
-
-    <!-- JavaScript for enhanced UX -->
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            // Add visual feedback for completed fields
-            Livewire.on('fieldUpdated', (field) => {
-                const input = document.getElementById(field);
-                if (input && input.value.trim() !== '') {
-                    input.classList.add('field-valid');
-                } else {
-                    input.classList.remove('field-valid');
-                }
-            });
-
-            // Auto-focus next field after completion
-            const fields = ['dob_verification', 'birth_place', 'father_name', 'mother_name', 'birth_region'];
-            fields.forEach((field, index) => {
-                const input = document.getElementById(field);
-                if (input) {
-                    input.addEventListener('blur', () => {
-                        if (input.value.trim() !== '' && index < fields.length - 1) {
-                            const nextField = document.getElementById(fields[index + 1]);
-                            if (nextField && nextField.value.trim() === '') {
-                                setTimeout(() => nextField.focus(), 100);
-                            }
-                        }
-                    });
-                }
-            });
-        });
-    </script>
 </div>
-
 </div>

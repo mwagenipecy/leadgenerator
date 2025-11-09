@@ -1,5 +1,4 @@
 <div>
-{{-- resources/views/livewire/admin/partials/permissions-tab.blade.php --}}
 
 <!-- Filters and Search -->
 <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">

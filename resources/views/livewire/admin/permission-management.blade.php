@@ -1,43 +1,21 @@
 <div>
-{{-- resources/views/livewire/admin/permission-management.blade.php --}}
-<div>
-    <div class="p-8">
-        <!-- Page Header -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Permission Management</h1>
-                    <p class="text-gray-600 text-lg">Manage system permissions and access controls</p>
-                </div>
-                <div class="flex items-center space-x-3">
-
-
-                        <button wire:click="openCreatePermissionModal" class="bg-green-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg shadow-green-600/25">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalActivePermissions) }}</p>
-                    <p class="text-sm font-medium text-gray-500">Active Permissions</p>
-                </div>
+    <!-- Section Header -->
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-1">Permission Management</h2>
+                <p class="text-gray-600 text-sm">Manage system permissions and access controls</p>
             </div>
-
-            <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-purple-500/20">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                        </svg>
-                    </div>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">{{ number_format($totalCategories) }}</p>
-                    <p class="text-sm font-medium text-gray-500">Categories</p>
-                </div>
+            <div class="flex items-center space-x-3">
+                <button wire:click="openCreatePermissionModal" class="bg-green-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 shadow-lg shadow-green-600/25">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Create Permission
+                </button>
             </div>
         </div>
+    </div>
 
         <!-- Filters and Search -->
         <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">
@@ -174,10 +152,10 @@
 
                                         <div class="flex items-center justify-between pt-3 border-t border-gray-200">
                                             <div class="text-xs text-gray-500">
-                                                {{ $permission->roles->count() }} role(s)
+                                                {{ $permission->roles_count ?? 0 }} role(s)
                                             </div>
                                             <div class="flex items-center space-x-1">
-                                                @if($permission->roles->count() > 0)
+                                                @if(($permission->roles_count ?? 0) > 0)
                                                     <button wire:click="openPermissionRolesModal({{ $permission->id }})" 
                                                         class="text-purple-600 hover:text-purple-700 text-xs hover:underline">
                                                         View Roles
@@ -274,17 +252,17 @@
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="flex flex-wrap gap-1">
-                                        @forelse($permission->roles->take(3) as $role)
+                                        @if(($permission->roles_count ?? 0) > 0)
                                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
-                                                {{ $role->display_name }}
+                                                {{ $permission->roles_count }} role(s)
                                             </span>
-                                        @empty
+                                            @if(($permission->roles_count ?? 0) > 0)
+                                                <button wire:click="openPermissionRolesModal({{ $permission->id }})" class="text-xs text-purple-600 hover:underline ml-1">
+                                                    View
+                                                </button>
+                                            @endif
+                                        @else
                                             <span class="text-xs text-gray-400 italic">No roles</span>
-                                        @endforelse
-                                        @if($permission->roles->count() > 3)
-                                            <button wire:click="openPermissionRolesModal({{ $permission->id }})" class="text-xs text-purple-600 hover:underline">
-                                                +{{ $permission->roles->count() - 3 }} more
-                                            </button>
                                         @endif
                                     </div>
                                 </td>
@@ -365,7 +343,3 @@
     <!-- Modals -->
     @include('livewire.admin.permission-management.modals')
 </div>
-                        
-                        
-                        
-                        </div>

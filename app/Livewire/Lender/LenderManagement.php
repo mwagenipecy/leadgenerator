@@ -85,7 +85,14 @@ class LenderManagement extends Component
         'suspended'
     ];
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
+
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'statusFilter' => ['except' => ''],
+        'regionFilter' => ['except' => ''],
+        'page' => ['except' => 1],
+    ];
 
     public function mount()
     {

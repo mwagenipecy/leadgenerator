@@ -1,7 +1,113 @@
 <div>
-{{-- resources/views/livewire/admin/partials/users-tab.blade.php --}}
+    <!-- Flash Messages -->
+    @if (session()->has('message'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3" 
+             x-data="{ show: true }" x-show="show" x-transition 
+             x-init="setTimeout(() => show = false, 5000)">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>{{ session('message') }}</span>
+            <button @click="show = false" class="ml-auto">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    @endif
 
-<!-- Filters and Search -->
+    @if (session()->has('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3"
+             x-data="{ show: true }" x-show="show" x-transition 
+             x-init="setTimeout(() => show = false, 8000)">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            <span>{{ session('error') }}</span>
+            <button @click="show = false" class="ml-auto">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    @endif
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Total Users Card -->
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                    </svg>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-500">Total Users</p>
+                    <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalUsers) }}</p>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-1 text-red-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    <span class="text-sm font-semibold">All Roles</span>
+                </div>
+                <span class="text-sm text-gray-500">active system</span>
+            </div>
+        </div>
+
+        <!-- Total Lenders Card -->
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-500">Lender Users</p>
+                    <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalLenders) }}</p>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-1 text-red-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    <span class="text-sm font-semibold">Lending Partners</span>
+                </div>
+                <span class="text-sm text-gray-500">institutions</span>
+            </div>
+        </div>
+
+        <!-- Total Borrowers Card -->
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-medium text-gray-500">Borrower Users</p>
+                    <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalBorrowers) }}</p>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-1 text-red-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    <span class="text-sm font-semibold">Active Customers</span>
+                </div>
+                <span class="text-sm text-gray-500">loan seekers</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
 <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Search -->
@@ -21,10 +127,9 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Role</label>
             <select wire:model.live="roleFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 <option value="">All Roles</option>
-                <option value="super_admin">Super Admin</option>
-                <option value="admin">Admin</option>
-                <option value="lender">Lender</option>
-                <option value="borrower">Borrower</option>
+                @foreach($roles as $role)
+                    <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+                @endforeach
             </select>
         </div>
 
@@ -84,9 +189,10 @@
                             <div class="flex items-center">
                                 <div class="relative">
                                     @php
-                                        $primaryRole = $user->roles->sortByDesc('level')->first();
-                                        $roleColor = match($primaryRole?->name ?? 'borrower') {
-                                            'super_admin' => 'from-red-500 to-red-600',
+                                        // Use the role column directly to avoid relationship conflicts
+                                        $roleName = $user->role ?? 'user';
+                                        $roleColor = match(strtolower($roleName)) {
+                                            'super_admin', 'super admin' => 'from-red-500 to-red-600',
                                             'admin' => 'from-purple-500 to-purple-600',
                                             'lender' => 'from-orange-500 to-orange-600',
                                             default => 'from-green-500 to-green-600'
@@ -114,25 +220,22 @@
                         </td>
                         <td class="px-6 py-6 whitespace-nowrap">
                             <div class="flex flex-col space-y-2">
-                                @foreach($user->roles->take(2) as $role)
-                                    @php
-                                        $roleStyle = match($role->name) {
-                                            'super_admin' => 'bg-red-100 text-red-800 border-red-200',
-                                            'admin' => 'bg-purple-100 text-purple-800 border-purple-200',
-                                            'lender' => 'bg-orange-100 text-orange-800 border-orange-200',
-                                            default => 'bg-green-100 text-green-800 border-green-200'
-                                        };
-                                    @endphp
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border {{ $roleStyle }}">
-                                        <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                        </svg>
-                                        {{ $role->display_name }}
-                                    </span>
-                                @endforeach
-                                @if($user->roles->count() > 2)
-                                    <span class="text-xs text-gray-500">+{{ $user->roles->count() - 2 }} more</span>
-                                @endif
+                                @php
+                                    // Use the role column directly to avoid relationship conflicts
+                                    $roleName = $user->role ?? 'user';
+                                    $roleStyle = match(strtolower($roleName)) {
+                                        'super_admin', 'super admin' => 'bg-red-100 text-red-800 border-red-200',
+                                        'admin' => 'bg-purple-100 text-purple-800 border-purple-200',
+                                        'lender' => 'bg-orange-100 text-orange-800 border-orange-200',
+                                        default => 'bg-green-100 text-green-800 border-green-200'
+                                    };
+                                @endphp
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border {{ $roleStyle }}">
+                                    <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                    </svg>
+                                    {{ ucfirst(str_replace('_', ' ', $roleName)) }}
+                                </span>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
                                     {{ $user->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
                                     <div class="w-2 h-2 rounded-full mr-2 {{ $user->is_active ? 'bg-green-400' : 'bg-red-400' }}"></div>
@@ -172,12 +275,6 @@
                                     </svg>
                                 </button>
                                 
-                                <button wire:click="openManageUserRolesModal({{ $user->id }})" 
-                                    class="text-purple-600 hover:text-purple-700 p-2 rounded-xl hover:bg-purple-50 transition-all duration-200" title="Manage Roles">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                    </svg>
-                                </button>
                                 
                                 <button wire:click="toggleUserStatus({{ $user->id }})" 
                                     class="text-{{ $user->is_active ? 'yellow' : 'green' }}-600 hover:text-{{ $user->is_active ? 'yellow' : 'green' }}-700 p-2 rounded-xl hover:bg-{{ $user->is_active ? 'yellow' : 'green' }}-50 transition-all duration-200" title="{{ $user->is_active ? 'Deactivate' : 'Activate' }}">

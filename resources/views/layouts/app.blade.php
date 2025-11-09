@@ -29,7 +29,7 @@
       <livewire:layout.side-bar />
 
         <!-- Main Content Area -->
-        <div class="flex-1 overflow-y-auto lg:ml-0">
+        <div class="flex-1 overflow-y-auto transition-all duration-300" id="main-content">
             <!-- Enhanced Responsive Header -->
            <livewire:layout.nav-bar />
             <!-- Dashboard Content -->
@@ -52,31 +52,101 @@
     <!-- JavaScript -->
     <script>
         // Enhanced Mobile menu functionality
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-        mobileMenuButton.addEventListener('click', function() {
-            sidebar.classList.toggle('-translate-x-full');
-            sidebarOverlay.classList.toggle('hidden');
-            document.body.classList.toggle('overflow-hidden');
+        // Listen for toggle-sidebar event from navigation bar
+        window.addEventListener('toggle-sidebar', function() {
+            // Dispatch to Livewire component
+            if (window.Livewire) {
+                Livewire.dispatch('toggle-sidebar');
+            }
         });
 
-        sidebarOverlay.addEventListener('click', function() {
-            sidebar.classList.add('-translate-x-full');
-            sidebarOverlay.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        });
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            });
+        }
 
         // Auto-hide mobile menu on window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth >= 1024) {
                 sidebar.classList.remove('-translate-x-full');
-                sidebarOverlay.classList.add('hidden');
+                if (sidebarOverlay) {
+                    sidebarOverlay.classList.add('hidden');
+                }
                 document.body.classList.remove('overflow-hidden');
             } else {
                 sidebar.classList.add('-translate-x-full');
             }
+        });
+
+        // Add tooltips for collapsed sidebar menu items
+        function initSidebarTooltips() {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+            
+            // Remove existing tooltip event listeners by cloning and replacing
+            const menuItems = sidebar.querySelectorAll('nav a[title]');
+            
+            menuItems.forEach(item => {
+                // Remove old event listeners by cloning
+                const newItem = item.cloneNode(true);
+                item.parentNode.replaceChild(newItem, item);
+                
+                // Check if sidebar is collapsed
+                const isCollapsed = sidebar.classList.contains('w-16') || 
+                                  sidebar.classList.contains('lg:w-16') ||
+                                  sidebar.offsetWidth <= 80;
+                
+                if (isCollapsed && newItem.getAttribute('title')) {
+                    const title = newItem.getAttribute('title');
+                    
+                    // Add tooltip on hover
+                    newItem.addEventListener('mouseenter', function(e) {
+                        // Remove any existing tooltip
+                        const existingTooltip = document.getElementById('sidebar-tooltip');
+                        if (existingTooltip) {
+                            existingTooltip.remove();
+                        }
+                        
+                        const tooltip = document.createElement('div');
+                        tooltip.id = 'sidebar-tooltip';
+                        tooltip.className = 'fixed z-[60] px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-xl pointer-events-none whitespace-nowrap';
+                        tooltip.textContent = title;
+                        
+                        const rect = this.getBoundingClientRect();
+                        tooltip.style.left = (rect.right + 12) + 'px';
+                        tooltip.style.top = (rect.top + (rect.height / 2) - (tooltip.offsetHeight / 2)) + 'px';
+                        
+                        document.body.appendChild(tooltip);
+                    });
+                    
+                    newItem.addEventListener('mouseleave', function() {
+                        const tooltip = document.getElementById('sidebar-tooltip');
+                        if (tooltip) {
+                            tooltip.remove();
+                        }
+                    });
+                }
+            });
+        }
+
+        // Initialize tooltips when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initSidebarTooltips();
+        });
+
+        // Re-initialize tooltips after Livewire updates
+        document.addEventListener('livewire:load', function() {
+            initSidebarTooltips();
+        });
+
+        document.addEventListener('livewire:update', function() {
+            setTimeout(initSidebarTooltips, 100);
         });
 
         // Mobile search functionality
@@ -297,7 +367,20 @@
 
         /* Smooth sidebar animation */
         #sidebar {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Ensure icons are centered when collapsed and remove any text margin */
+        #sidebar[class*="w-16"] nav a,
+        #sidebar[class*="w-16"] nav button {
+            justify-content: center !important;
+        }
+
+        /* Ensure no margin on icons when collapsed */
+        #sidebar[class*="w-16"] nav a svg,
+        #sidebar[class*="w-16"] nav button svg {
+            margin-right: 0 !important;
+            margin-left: 0 !important;
         }
 
         /* Enhanced button hover states */

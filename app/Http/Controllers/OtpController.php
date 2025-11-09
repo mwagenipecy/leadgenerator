@@ -121,9 +121,23 @@ class OtpController extends Controller
                 'is_authenticated' => Auth::check(),
                 'current_user_id' => Auth::id(),
                 'otp_verified_flag' => Session::get('otp_verified'),
-                'session_id' => Session::getId()
+                'session_id' => Session::getId(),
+                'nida_verified' => $user->isNidaVerified(),
+                'nida_verified_at' => $user->nida_verified_at,
             ]);
             
+            // Check if user is NIDA verified
+            // If not verified, redirect to verification options page
+            if (!$user->isNidaVerified()) {
+                Log::info('User is not NIDA verified, redirecting to verification options', [
+                    'user_id' => $user->id,
+                ]);
+                
+                return redirect()->route('verification.options')
+                    ->with('info', 'Please complete NIDA verification to access your dashboard.');
+            }
+            
+            // User is verified, redirect to intended page (dashboard)
             return redirect()->intended(route('dashboard'))
                 ->with('success', 'Login successful! Welcome back.');
         } else {

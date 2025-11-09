@@ -10,11 +10,45 @@ use Exception;
 
 class CreditInfoService
 {
-    private const ENDPOINT = 'https://idm-stage.creditinfo.co.tz/Web/MultiConnector.svc';
-    private const USERNAME = 'scheme';
-    private const PASSWORD = 'Scheme2025';
-    private const STRATEGY_ID = '2e1a9e93-0489-40e7-8fc2-185a21ae171a';
-    private const CONNECTOR_ID = '1C8F01F8-71A2-4C99-98A1-8BD1D85C4F63';
+    /**
+     * Get the API endpoint from environment
+     */
+    private function getEndpoint(): string
+    {
+        return env('CREDITINFO_ENDPOINT', '');
+    }
+
+    /**
+     * Get the API username from environment
+     */
+    private function getUsername(): string
+    {
+        return env('CREDITINFO_USERNAME', '');
+    }
+
+    /**
+     * Get the API password from environment
+     */
+    private function getPassword(): string
+    {
+        return env('CREDITINFO_PASSWORD', '');
+    }
+
+    /**
+     * Get the strategy ID from environment
+     */
+    private function getStrategyId(): string
+    {
+        return env('CREDITINFO_STRATEGY_ID', '');
+    }
+
+    /**
+     * Get the connector ID from environment
+     */
+    private function getConnectorId(): string
+    {
+        return env('CREDITINFO_CONNECTOR_ID', '');
+    }
 
     public function checkCreditInfo(array $data): CreditInfoRequest
     {
@@ -32,7 +66,7 @@ class CreditInfoService
             'date_of_birth' => $data['date_of_birth'] ?? null,
             'phone_number' => $data['phone_number'] ?? null,
             'message_id' => $messageId,
-            'strategy_id' => self::STRATEGY_ID,
+            'strategy_id' => $this->getStrategyId(),
             'status' => 'pending',
             'requested_at' => now(),
         ]);
@@ -139,8 +173,8 @@ class CreditInfoService
    <soapenv:Header>
       <wsse:Security soapenv:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
          <wsse:UsernameToken wsu:Id="UsernameToken-1" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
-            <wsse:Username>' . self::USERNAME . '</wsse:Username>
-            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . self::PASSWORD . '</wsse:Password>
+            <wsse:Username>' . $this->getUsername() . '</wsse:Username>
+            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . $this->getPassword() . '</wsse:Password>
          </wsse:UsernameToken>
       </wsse:Security>
    </soapenv:Header>
@@ -150,11 +184,11 @@ class CreditInfoService
             <mul:MessageId>' . $messageId . '</mul:MessageId>
             <mul:RequestXml>
                <mul:RequestXml>
-                  <req:connector id="' . self::CONNECTOR_ID . '">
+                  <req:connector id="' . $this->getConnectorId() . '">
                      <req:data id="' . $messageId . '">
                         <request xmlns="http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/INT/IdmStrategy/Request">
                            <Strategy>
-                              <Id>' . self::STRATEGY_ID . '</Id>
+                              <Id>' . $this->getStrategyId() . '</Id>
                            </Strategy>
                            <ConnectorRequest>
                               <query>
@@ -190,10 +224,10 @@ class CreditInfoService
         return Http::withHeaders([
             'Content-Type' => 'text/xml; charset=utf-8',
             "X-WSSE"=> 'WSSE profile="UsernameToken"',
-            "Username"=>self::USERNAME,
-            "Password"=>self::PASSWORD,
+            "Username"=>$this->getUsername(),
+            "Password"=>$this->getPassword(),
             'SOAPAction' => 'http://creditinfo.com/schemas/2012/09/MultiConnector/MultiConnectorService/Query',
-        ])->timeout(30)->send('POST', self::ENDPOINT, [
+        ])->timeout(30)->send('POST', $this->getEndpoint(), [
             'body' => $soapRequest
         ]);
     }

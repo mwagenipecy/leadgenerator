@@ -1,4 +1,3 @@
-{{-- resources/views/livewire/lender/dashboard.blade.php --}}
 <div>
     <div class="p-8">
         <!-- Page Header -->

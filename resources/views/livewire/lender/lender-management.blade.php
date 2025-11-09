@@ -370,9 +370,23 @@
         </div>
 
         <!-- Pagination -->
-        <div class="px-8 py-4 border-t border-gray-100">
-            {{ $lenders->links() }}
-        </div>
+        @if($lenders->hasPages())
+            <div class="bg-white px-8 py-4 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-sm text-gray-700">
+                        <span class="font-medium">{{ $lenders->firstItem() }}</span>
+                        -
+                        <span class="font-medium">{{ $lenders->lastItem() }}</span>
+                        of
+                        <span class="font-medium">{{ $lenders->total() }}</span>
+                        lenders
+                    </div>
+                    <div class="flex-1 flex justify-center sm:justify-end">
+                        {{ $lenders->links() }}
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- Add Lender Modal -->

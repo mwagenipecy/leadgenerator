@@ -4,16 +4,27 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\NidaVerification;
+use App\Models\UserProfile;
 use Illuminate\Support\Facades\Auth;
 
 class QuestionnaireVerification extends Component
 {
     public $questionnaireAnswers = [
         'dob_verification' => '',
-        'birth_place' => '',
         'father_name' => '',
         'mother_name' => '',
-        'birth_region' => '',
+    ];
+
+    public $answeredQuestions = [
+        'dob_verification' => false,
+        'father_name' => false,
+        'mother_name' => false,
+    ];
+
+    public $questionResults = [
+        'dob_verification' => null, // null = not answered, true = correct, false = incorrect
+        'father_name' => null,
+        'mother_name' => null,
     ];
 
     public $isProcessing = false;
@@ -21,7 +32,10 @@ class QuestionnaireVerification extends Component
     public $errorMessage = '';
     public $successMessage = '';
     public $currentQuestion = 1;
-    public $totalQuestions = 5;
+    public $totalQuestions = 3;
+    public $currentAnswer = '';
+    public $showFinalResult = false;
+    public $correctAnswersCount = 0;
 
     // Available regions for questionnaire
     public $regions = [
@@ -60,30 +74,66 @@ class QuestionnaireVerification extends Component
 
     protected $rules = [
         'questionnaireAnswers.dob_verification' => 'required|date|before:today',
-        'questionnaireAnswers.birth_place' => 'required|string|min:2|max:100',
         'questionnaireAnswers.father_name' => 'required|string|min:2|max:100',
         'questionnaireAnswers.mother_name' => 'required|string|min:2|max:100',
-        'questionnaireAnswers.birth_region' => 'required|string',
     ];
 
     protected $messages = [
         'questionnaireAnswers.dob_verification.required' => 'Date of birth is required',
         'questionnaireAnswers.dob_verification.before' => 'Date of birth must be in the past',
-        'questionnaireAnswers.birth_place.required' => 'Place of birth is required',
-        'questionnaireAnswers.birth_place.min' => 'Place of birth must be at least 2 characters',
         'questionnaireAnswers.father_name.required' => "Father's name is required",
         'questionnaireAnswers.father_name.min' => "Father's name must be at least 2 characters",
         'questionnaireAnswers.mother_name.required' => "Mother's name is required",
         'questionnaireAnswers.mother_name.min' => "Mother's name must be at least 2 characters",
-        'questionnaireAnswers.birth_region.required' => 'Birth region is required',
     ];
 
     public function mount()
     {
-        // Check if user is already verified
-        if (Auth::user()->isNidaVerified()) {
-            $this->isVerified = true;
-            $this->successMessage = 'Your identity has already been verified.';
+        // Initialize with empty answers
+        $this->questionnaireAnswers = [
+            'dob_verification' => '',
+            'father_name' => '',
+            'mother_name' => '',
+        ];
+        
+        $this->answeredQuestions = [
+            'dob_verification' => false,
+            'father_name' => false,
+            'mother_name' => false,
+        ];
+
+        $this->questionResults = [
+            'dob_verification' => null,
+            'father_name' => null,
+            'mother_name' => null,
+        ];
+        
+        $this->currentQuestion = 1;
+        $this->currentAnswer = '';
+        
+        // Check if user has already completed questionnaire verification specifically
+        $user = Auth::user();
+        if ($user) {
+            $questionnaireVerification = NidaVerification::where('user_id', $user->id)
+                ->where('verification_method', 'questionnaire')
+                ->where('status', 'verified')
+                ->first();
+            
+            if ($questionnaireVerification) {
+                // User has already completed questionnaire verification
+                $this->isVerified = true;
+                $this->successMessage = 'Your identity has been successfully verified through the questionnaire!';
+            } else {
+                // Show the form to complete questionnaire verification
+                $this->isVerified = false;
+                $this->isProcessing = false;
+                $this->currentQuestion = 1;
+            }
+        } else {
+            // Ensure form is visible
+            $this->isVerified = false;
+            $this->isProcessing = false;
+            $this->currentQuestion = 1;
         }
     }
 
@@ -92,22 +142,47 @@ class QuestionnaireVerification extends Component
         return view('livewire.questionnaire-verification');
     }
 
-    public function submitQuestionnaire()
+    public function submitCurrentQuestion()
     {
-        $this->validate();
+        $questionKey = $this->getCurrentQuestionKey();
+        
+        // Validate current question
+        $this->validate([
+            "questionnaireAnswers.{$questionKey}" => $this->getValidationRule($questionKey)
+        ]);
         
         $this->isProcessing = true;
         $this->errorMessage = '';
         
         try {
-            // Verify answers with NIDA
-            $verificationResult = $this->verifyQuestionnaireWithNida($this->questionnaireAnswers);
+            // Verify current answer
+            $isCorrect = $this->verifySingleAnswer($questionKey, $this->questionnaireAnswers[$questionKey]);
             
-            if ($verificationResult['success']) {
-                $this->saveVerificationRecord($verificationResult);
-                $this->completeVerification();
+            // Store result
+            $this->questionResults[$questionKey] = $isCorrect;
+            $this->answeredQuestions[$questionKey] = true;
+            
+            if ($isCorrect) {
+                $this->correctAnswersCount++;
+            }
+            
+            // Check if all questions are answered
+            if ($this->areAllQuestionsAnswered()) {
+                // All questions answered, check if at least 2 are correct
+                if ($this->correctAnswersCount >= 2) {
+                    // Success - at least 2 correct answers
+                    $this->processFinalVerification();
+                } else {
+                    // Failed - less than 2 correct answers
+                    $this->showFinalResult = true;
+                    $this->errorMessage = 'Verification failed. You need at least 2 correct answers out of 3 questions.';
+                }
             } else {
-                $this->errorMessage = $verificationResult['message'] ?? 'Some answers do not match our records. Please verify your information and try again.';
+                // Move to next question
+                $this->currentQuestion++;
+                $this->currentAnswer = '';
+                $this->errorMessage = ''; // Clear any errors
+                $this->resetValidation(); // Reset validation state
             }
             
         } catch (\Exception $e) {
@@ -116,6 +191,82 @@ class QuestionnaireVerification extends Component
         } finally {
             $this->isProcessing = false;
         }
+    }
+
+    private function getCurrentQuestionKey()
+    {
+        $questions = ['dob_verification', 'father_name', 'mother_name'];
+        return $questions[$this->currentQuestion - 1] ?? 'dob_verification';
+    }
+
+    private function getValidationRule($questionKey)
+    {
+        $rules = [
+            'dob_verification' => 'required|date|before:today',
+            'father_name' => 'required|string|min:2|max:100',
+            'mother_name' => 'required|string|min:2|max:100',
+        ];
+        return $rules[$questionKey] ?? 'required';
+    }
+
+    private function verifySingleAnswer($questionKey, $answer)
+    {
+        // Simulate verification - in real app, this would check against NIDA database
+        $user = Auth::user();
+        
+        // Simulate processing time
+        sleep(1);
+        
+        // For demo purposes, we'll simulate verification
+        // In a real app, you would verify against NIDA database
+        switch ($questionKey) {
+            case 'dob_verification':
+                // Check if date of birth matches (if user has it in profile)
+                if (!empty($user->date_of_birth) && $user->date_of_birth->format('Y-m-d') === $answer) {
+                    return true;
+                }
+                // For demo: randomly return true/false (70% success rate)
+                return rand(1, 100) <= 70;
+                
+            case 'father_name':
+            case 'mother_name':
+                // For demo: check if answer is not empty and has reasonable length
+                if (!empty($answer) && strlen($answer) >= 2) {
+                    // Simulate 70% success rate for demo
+                    return rand(1, 100) <= 70;
+                }
+                return false;
+                
+            default:
+                return false;
+        }
+    }
+
+    private function areAllQuestionsAnswered()
+    {
+        foreach ($this->answeredQuestions as $answered) {
+            if (!$answered) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function processFinalVerification()
+    {
+        // All questions answered and at least 2 are correct
+        $verificationResult = [
+            'success' => true,
+            'message' => 'Identity verified successfully through questionnaire',
+            'match_score' => ($this->correctAnswersCount / $this->totalQuestions) * 100,
+            'correct_answers' => $this->correctAnswersCount,
+            'total_questions' => $this->totalQuestions,
+            'verified_fields' => array_keys($this->questionnaireAnswers),
+            'verification_method' => 'questionnaire'
+        ];
+        
+        $this->saveVerificationRecord($verificationResult);
+        $this->completeVerification();
     }
 
     private function verifyQuestionnaireWithNida($answers)
@@ -138,7 +289,7 @@ class QuestionnaireVerification extends Component
             }
             
             // Basic validation for other answers (check if they're not empty and reasonable)
-            foreach (['birth_place', 'father_name', 'mother_name', 'birth_region'] as $field) {
+            foreach (['father_name', 'mother_name'] as $field) {
                 if (!empty($answers[$field]) && strlen($answers[$field]) >= 2) {
                     // Simulate verification logic - in real app, this would check against NIDA database
                     $matchScore += $scorePerQuestion * 0.8; // Give partial credit for properly formatted answers
@@ -203,17 +354,81 @@ class QuestionnaireVerification extends Component
 
     private function completeVerification()
     {
+        $user = Auth::user();
+        
         // Update user record
-        Auth::user()->update([
+        $user->update([
             'nida_verified_at' => now(),
             'verification_status' => 'verified'
         ]);
         
+        // Create or update user profile
+        $this->createOrUpdateUserProfile($user);
+        
         $this->isVerified = true;
-        $this->successMessage = 'Your identity has been successfully verified through the questionnaire!';
+        $this->successMessage = 'Your identity has been successfully verified through the questionnaire! Your profile has been created. You can now complete your profile information.';
         
         // Clear any errors
         $this->errorMessage = '';
+    }
+
+    public function goToProfile()
+    {
+        return redirect()->route('loan-application.profile');
+    }
+
+    private function createOrUpdateUserProfile($user)
+    {
+        try {
+            // Get or create user profile
+            $profile = UserProfile::firstOrNew(['user_id' => $user->id]);
+            
+            // Update profile with user information from users table
+            $profileData = [
+                'first_name' => $user->first_name ?? $user->name ?? '',
+                'last_name' => $user->last_name ?? '',
+                'national_id' => $user->nida_number ?? '',
+                'email' => $user->email ?? '',
+                'phone_number' => $user->phone ?? '',
+                'last_updated' => now(),
+            ];
+            
+            // Handle date_of_birth - store as string in Y-m-d format
+            if ($user->date_of_birth) {
+                try {
+                    if ($user->date_of_birth instanceof \Carbon\Carbon || $user->date_of_birth instanceof \DateTime) {
+                        $profileData['date_of_birth'] = $user->date_of_birth->format('Y-m-d');
+                    } elseif (is_string($user->date_of_birth)) {
+                        // Try to parse and format the date string
+                        $date = \Carbon\Carbon::parse($user->date_of_birth);
+                        $profileData['date_of_birth'] = $date->format('Y-m-d');
+                    } else {
+                        $profileData['date_of_birth'] = $user->date_of_birth;
+                    }
+                } catch (\Exception $e) {
+                    // If date parsing fails, set to null
+                    $profileData['date_of_birth'] = null;
+                }
+            } else {
+                $profileData['date_of_birth'] = null;
+            }
+            
+            // If profile doesn't exist, set user_id
+            if (!$profile->exists) {
+                $profileData['user_id'] = $user->id;
+            }
+            
+            // Update profile
+            $profile->fill($profileData);
+            $profile->save();
+            
+            // Calculate completion percentage
+            $profile->calculateCompletionPercentage();
+            
+        } catch (\Exception $e) {
+            // Log error but don't fail verification
+            \Log::error('Error creating/updating user profile: ' . $e->getMessage());
+        }
     }
 
     public function retryVerification()
@@ -221,12 +436,24 @@ class QuestionnaireVerification extends Component
         $this->resetErrorsAndMessages();
         $this->questionnaireAnswers = [
             'dob_verification' => '',
-            'birth_place' => '',
             'father_name' => '',
             'mother_name' => '',
-            'birth_region' => '',
         ];
+        $this->answeredQuestions = [
+            'dob_verification' => false,
+            'father_name' => false,
+            'mother_name' => false,
+        ];
+        $this->questionResults = [
+            'dob_verification' => null,
+            'father_name' => null,
+            'mother_name' => null,
+        ];
+        $this->currentQuestion = 1;
+        $this->currentAnswer = '';
         $this->isProcessing = false;
+        $this->showFinalResult = false;
+        $this->correctAnswersCount = 0;
     }
 
     public function redirectToDashboard()
@@ -236,7 +463,7 @@ class QuestionnaireVerification extends Component
 
     public function backToMethodSelection()
     {
-        return redirect()->route('verification.method');
+        return redirect()->route('verification.options');
     }
 
     private function resetErrorsAndMessages()
@@ -257,19 +484,39 @@ class QuestionnaireVerification extends Component
     // Get progress percentage
     public function getProgressPercentage()
     {
-        $answeredQuestions = 0;
-        foreach ($this->questionnaireAnswers as $answer) {
-            if (!empty($answer)) {
-                $answeredQuestions++;
+        $answeredCount = 0;
+        foreach ($this->answeredQuestions as $answered) {
+            if ($answered) {
+                $answeredCount++;
             }
         }
-        return ($answeredQuestions / $this->totalQuestions) * 100;
+        return ($answeredCount / $this->totalQuestions) * 100;
     }
 
-    // Check if form is complete
-    public function isFormComplete()
+    // Get current question text
+    public function getCurrentQuestionText()
     {
-        return $this->getProgressPercentage() === 100.0;
+        $questions = [
+            'dob_verification' => 'Date of Birth',
+            'father_name' => "Father's Full Name",
+            'mother_name' => "Mother's Full Name",
+        ];
+        
+        $questionKey = $this->getCurrentQuestionKey();
+        return $questions[$questionKey] ?? '';
+    }
+
+    // Get current question placeholder
+    public function getCurrentQuestionPlaceholder()
+    {
+        $placeholders = [
+            'dob_verification' => 'Select your date of birth',
+            'father_name' => "Enter father's full name",
+            'mother_name' => "Enter mother's full name",
+        ];
+        
+        $questionKey = $this->getCurrentQuestionKey();
+        return $placeholders[$questionKey] ?? '';
     }
 
     // Get helper text for questions
@@ -277,10 +524,8 @@ class QuestionnaireVerification extends Component
     {
         $helpers = [
             'dob_verification' => 'Enter the exact date of birth as registered with NIDA',
-            'birth_place' => 'Enter the place of birth as it appears on your NIDA records',
             'father_name' => 'Enter your father\'s full name as registered with NIDA',
-            'mother_name' => 'Enter your mother\'s maiden name (before marriage)',
-            'birth_region' => 'Select the region where you were born',
+            'mother_name' => 'Enter your mother\'s full name as registered with NIDA',
         ];
 
         return $helpers[$questionKey] ?? '';

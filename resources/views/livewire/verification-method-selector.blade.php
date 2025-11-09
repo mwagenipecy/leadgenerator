@@ -1,5 +1,4 @@
 <div>
-{{-- resources/views/livewire/verification-method-selector.blade.php --}}
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <header class="bg-white shadow-sm border-b border-gray-200">
@@ -106,8 +105,18 @@
                                 </div>
                                 <div class="mt-4">
                                     <div class="flex items-center justify-center space-x-4 text-xs text-gray-500">
-                                        <span>📱 Mobile friendly</span>
-                                        <span>⚡ Quick process</span>
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                            </svg>
+                                            Mobile friendly
+                                        </span>
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                            Quick process
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -133,8 +142,18 @@
                                 </div>
                                 <div class="mt-4">
                                     <div class="flex items-center justify-center space-x-4 text-xs text-gray-500">
-                                        <span>🖥️ Desktop friendly</span>
-                                        <span>🔒 Encrypted</span>
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                            </svg>
+                                            Desktop friendly
+                                        </span>
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            </svg>
+                                            Encrypted
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -160,8 +179,18 @@
                                 </div>
                                 <div class="mt-4">
                                     <div class="flex items-center justify-center space-x-4 text-xs text-gray-500">
-                                        <span>📝 Knowledge based</span>
-                                        <span>🔐 Secure</span>
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            Knowledge based
+                                        </span>
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            </svg>
+                                            Secure
+                                        </span>
                                     </div>
                                 </div>
                             </div>

@@ -127,7 +127,7 @@
                         @if($isAvailable)
                         TSh {{ number_format($application->requested_amount, 1) }}
                         @else
-                            TSh {{ number_format($application->requested_amount, 1) }}M
+                            TSh {{ number_format($application->requested_amount, 1) }}
                         @endif
                     </div>
                     <div class="text-sm text-red-700">Requested Amount</div>

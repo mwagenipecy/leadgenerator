@@ -19,6 +19,7 @@ use App\Livewire\VerificationMethodSelector;
 use App\Livewire\PhonePhotoVerification;
 use App\Livewire\Lender\Dashboard;
 use App\Livewire\QrCodeVerification;
+use App\Livewire\QuestionnaireVerification;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OtpController;
 use App\Http\Middleware\CheckPermissions;
@@ -147,8 +148,9 @@ Route::post('/logout', function (Request $request) {
 
 
 
-// Protected routes
-Route::middleware(['auth', 'otp.required'])->group(function () {
+// Protected routes (these routes require OTP verification)
+// Note: NIDA verification is checked in OTP controller and middleware
+Route::middleware(['auth', 'otp.required', 'nida.verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -172,6 +174,7 @@ Route::middleware(['auth', 'otp.required'])->group(function () {
 
     //ONBOARDING ROUTES OR LOGIN
     Route::get('register',[OnboardingController::class,'registerNewUser'])->name('user.register');
+    Route::get('register/company',[OnboardingController::class,'registerCompany'])->name('company.register');
 
 Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), ])->group(function () {
     Route::group(['prefix'=>'onboarding'],function(){
@@ -179,7 +182,7 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), ])->group(
     Route::get('/verification/phone-photo', [OnboardingController::class,'phoneVerification'])->name('verification.phone-photo');
     Route::get('/verification/phone-photo_', [OnboardingController::class,'phoneVerificationByLink'])->name('verification.phone-photo.link');
     Route::get('/verification/qr-code', [OnboardingController::class,'qrCodeVerification'])->name('verification.qr-code');
-    Route::get('/verification/questionnaire', function() { return view('verification.questionnaire'); })->name('verification.questionnaire');
+    Route::get('/verification/questionnaire', [OnboardingController::class,'questionnaireVerification'])->name('verification.questionnaire');
     });
 });
 
@@ -232,12 +235,7 @@ Route::get('/verification-status/{token}', function ($token) {
 });
 
 
-Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified',])->group(function () {
-
-   
-   // dashboard routes
-    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
-
+Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified', 'nida.verified'])->group(function () {
 
     /// lender managenent section
     Route::get('lender-list',[LenderManagementController::class,'index'])->name('lenders.index');
@@ -279,6 +277,15 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
     /*********************************** USERMANAGEMENT ****************************************/
     Route::get('user-management',[UserManagementController::class,'index'])->name('user.management');
+    Route::get('user-management/roles', function () {
+        return view('pages.user-management.roles');
+    })->name('user.management.roles');
+    Route::get('user-management/permissions', function () {
+        return view('pages.user-management.permissions');
+    })->name('user.management.permissions');
+    Route::get('system-logs', function () {
+        return view('pages.system-logs');
+    })->name('system.logs');
 
 
 
@@ -296,6 +303,7 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     Route::get('lincense-verification',[TRAController::class,'lincenseVerification'])->name('lincense.verification');
     Route::get('taxpayer-verification',[TRAController::class,'taxpayerVerification'])->name('taxpayer.verification');
    Route::get('motor-vehicle-verification',[TRAController::class,'motorVehicleVerification'])->name('motor.vehicle.verification');
+   Route::get('credit-report',[TRAController::class,'creditReport'])->name('credit.report');
 
 
 

@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Created - Lead Generator</title>
+
+
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -79,7 +83,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎉 Welcome to Lead Generator!</h1>
+            <h1> Welcome to Lead Generator!</h1>
             <p>Your lender account has been approved and created</p>
         </div>
         
@@ -87,7 +91,7 @@
             <h2>Hello {{ $user->name }}!</h2>
             
             <div class="welcome-box">
-                <h3>🎊 Congratulations!</h3>
+                <h3>Congratulations!</h3>
                 <p>Your lender application has been <strong>approved</strong> and your account is now ready to use. You can now access our platform and start managing your lending operations.</p>
             </div>
 
@@ -115,7 +119,7 @@
             </ul>
 
             <div style="background: #EFF6FF; border: 2px solid #DBEAFE; border-radius: 16px; padding: 20px; margin: 20px 0;">
-                <h4>🔐 Security Tips:</h4>
+                <h4> Security Tips:</h4>
                 <ul>
                     <li>Change your password immediately after logging in</li>
                     <li>Use a strong, unique password</li>

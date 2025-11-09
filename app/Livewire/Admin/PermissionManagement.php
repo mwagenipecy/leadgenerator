@@ -44,14 +44,14 @@ class PermissionManagement extends Component
     public $edit_category = 'general';
     public $edit_is_active = true;
 
-    // Permission roles
+    // Permission roles - store as array to avoid serialization issues
     public $permissionRoles = [];
 
     // Stats
     public $totalPermissions;
     public $totalActivePermissions;
     public $totalCategories;
-    public $permissionsByCategory;
+    // Don't store permissionsByCategory as property - load in render() to avoid serialization issues
 
     // Available categories
     public $categories = [
@@ -86,8 +86,13 @@ class PermissionManagement extends Component
         $this->totalPermissions = Permission::count();
         $this->totalActivePermissions = Permission::where('is_active', true)->count();
         $this->totalCategories = Permission::distinct('category')->count();
-        
-        $this->permissionsByCategory = Permission::where('is_active', true)
+        // Don't load permissionsByCategory here - load in render() to avoid serialization issues
+    }
+
+    // Helper method to get permissions by category (not stored as property)
+    protected function getPermissionsByCategory()
+    {
+        return Permission::where('is_active', true)
             ->orderBy('category')
             ->orderBy('display_name')
             ->get()
@@ -208,7 +213,8 @@ class PermissionManagement extends Component
             return;
         }
 
-        $this->permissionToDelete = Permission::with('roles')->findOrFail($permissionId);
+        // Don't eager load roles to avoid serialization issues - use count instead
+        $this->permissionToDelete = Permission::findOrFail($permissionId);
         $this->showDeletePermissionModal = true;
     }
 
@@ -219,6 +225,7 @@ class PermissionManagement extends Component
             return;
         }
 
+        // Check role count without loading the relationship
         if ($this->permissionToDelete->roles()->count() > 0) {
             session()->flash('error', 'Cannot delete permission that is assigned to roles. Please remove from roles first.');
             return;
@@ -241,11 +248,20 @@ class PermissionManagement extends Component
             return;
         }
 
-        $this->selectedPermission = Permission::with(['roles' => function ($query) {
-            $query->with('users');
-        }])->findOrFail($permissionId);
+        // Load permission without eager loading relationships to avoid serialization issues
+        $this->selectedPermission = Permission::findOrFail($permissionId);
+        
+        // Load roles and convert to array to avoid Collection serialization issues
+        $roles = $this->selectedPermission->roles()->get();
+        $this->permissionRoles = $roles->map(function($role) {
+            return [
+                'id' => $role->id,
+                'name' => $role->name,
+                'display_name' => $role->display_name,
+                'level' => $role->level,
+            ];
+        })->toArray();
 
-        $this->permissionRoles = $this->selectedPermission->roles;
         $this->showPermissionRolesModal = true;
     }
 
@@ -265,15 +281,26 @@ class PermissionManagement extends Component
 
         $role->permissions()->detach($this->selectedPermission->id);
         
-        // Clear permissions cache for users with this role
-        $role->users()->update([
-            'permissions_cache' => null,
-            'permissions_updated_at' => null
-        ]);
+        // Clear permissions cache for users with this role - use direct update to avoid loading users
+        $userIds = $role->users()->pluck('id');
+        if ($userIds->isNotEmpty()) {
+            \App\Models\User::whereIn('id', $userIds)->update([
+                'permissions_cache' => null,
+                'permissions_updated_at' => null
+            ]);
+        }
 
-        // Refresh the permission roles list
-        $this->selectedPermission->load('roles');
-        $this->permissionRoles = $this->selectedPermission->roles;
+        // Refresh the permission roles list - convert to array to avoid serialization issues
+        $this->selectedPermission->refresh();
+        $roles = $this->selectedPermission->roles()->get();
+        $this->permissionRoles = $roles->map(function($role) {
+            return [
+                'id' => $role->id,
+                'name' => $role->name,
+                'display_name' => $role->display_name,
+                'level' => $role->level,
+            ];
+        })->toArray();
 
         session()->flash('message', 'Permission removed from role successfully!');
     }
@@ -360,28 +387,50 @@ class PermissionManagement extends Component
 
     public function render()
     {
-        $query = Permission::with('roles')
-            ->when($this->search, function ($q) {
-                $q->where('display_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
-            })
-            ->when($this->categoryFilter, function ($q) {
-                $q->where('category', $this->categoryFilter);
-            })
-            ->when($this->statusFilter, function ($q) {
-                if ($this->statusFilter === 'active') {
-                    $q->where('is_active', true);
-                } elseif ($this->statusFilter === 'inactive') {
-                    $q->where('is_active', false);
-                }
-            });
+        try {
+            $query = Permission::query()
+                ->when($this->search, function ($q) {
+                    $q->where('display_name', 'like', '%' . $this->search . '%')
+                      ->orWhere('name', 'like', '%' . $this->search . '%')
+                      ->orWhere('description', 'like', '%' . $this->search . '%');
+                })
+                ->when($this->categoryFilter, function ($q) {
+                    $q->where('category', $this->categoryFilter);
+                })
+                ->when($this->statusFilter, function ($q) {
+                    if ($this->statusFilter === 'active') {
+                        $q->where('is_active', true);
+                    } elseif ($this->statusFilter === 'inactive') {
+                        $q->where('is_active', false);
+                    }
+                });
 
-        $permissions = $query->orderBy('category')->orderBy('display_name')->paginate(15);
+            // Load counts only (avoid loading full relationships to prevent serialization issues)
+            $permissions = $query->withCount('roles')
+                ->orderBy('category')
+                ->orderBy('display_name')
+                ->paginate(15);
 
-        return view('livewire.admin.permission-management', [
-            'permissions' => $permissions,
-            'permissionsByCategory' => $this->permissionsByCategory,
-        ]);
+            // Load permissions by category only when rendering (not stored as property)
+            $permissionsByCategory = $this->getPermissionsByCategory();
+
+            return view('livewire.admin.permission-management', [
+                'permissions' => $permissions,
+                'permissionsByCategory' => $permissionsByCategory,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('PermissionManagement render error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Return empty permissions by category on error
+            $permissionsByCategory = collect();
+            
+            return view('livewire.admin.permission-management', [
+                'permissions' => Permission::query()->paginate(15),
+                'permissionsByCategory' => $permissionsByCategory,
+            ]);
+        }
     }
 }

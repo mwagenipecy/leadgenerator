@@ -128,16 +128,130 @@ class BorrowerDashboard extends Component
             ->first();
         $this->nidaVerificationStatus = $nidaVerification ? $nidaVerification->status : 'pending';
 
-        // Credit score from credit info requests
-        $creditInfo = CreditInfoRequest::where('phone_number', $user->phone)
-            ->where('status', 'success')
+        // Try to get credit score from multiple sources
+        $this->creditScore = null;
+        
+        // Load user profile once for reuse
+        $userProfile = \App\Models\UserProfile::where('user_id', $user->id)->first();
+        
+        // 1. First, check if user has applications with credit_score
+        $applicationWithScore = Application::where('user_id', $user->id)
+            ->whereNotNull('credit_score')
             ->latest()
             ->first();
             
-        if ($creditInfo && isset($creditInfo->response_payload['credit_score'])) {
-            $this->creditScore = $creditInfo->response_payload['credit_score'];
-        } else {
-            // Calculate mock credit score based on application history
+        if ($applicationWithScore && $applicationWithScore->credit_score) {
+            $this->creditScore = $applicationWithScore->credit_score;
+        } 
+        // 2. Check UserProfile for credit_score
+        else if ($userProfile && $userProfile->credit_score) {
+            $this->creditScore = $userProfile->credit_score;
+        } 
+        // 3. Check CreditInfoRequest - try multiple ways to find it
+        else {
+            $creditInfo = null;
+            
+            // Try by user_id through applications (get all user applications and check their credit info requests)
+            $userApplications = Application::where('user_id', $user->id)->pluck('id');
+            if ($userApplications->isNotEmpty()) {
+                $creditInfo = CreditInfoRequest::whereIn('loan_id', $userApplications)
+                    ->where('status', 'success')
+                    ->latest()
+                    ->first();
+            }
+            
+            // If not found, try by phone number
+            if (!$creditInfo && $user->phone) {
+                $creditInfo = CreditInfoRequest::where('phone_number', $user->phone)
+                    ->where('status', 'success')
+                    ->latest()
+                    ->first();
+            }
+            
+            // If not found, try by national_id from user or profile
+            if (!$creditInfo) {
+                $nationalId = $user->nida_number ?? ($userProfile->national_id ?? null);
+                if ($nationalId) {
+                    $creditInfo = CreditInfoRequest::where('national_id', $nationalId)
+                        ->where('status', 'success')
+                        ->latest()
+                        ->first();
+                }
+            }
+            
+            // Extract credit score from CreditInfoRequest using accessor methods
+            if ($creditInfo) {
+                // Helper function to safely extract numeric value from any format
+                $extractNumericValue = function($value) {
+                    if (is_null($value)) {
+                        return null;
+                    }
+                    // If it's already numeric, return it
+                    if (is_numeric($value)) {
+                        return (float) $value;
+                    }
+                    // If it's an array, try to extract the value
+                    if (is_array($value)) {
+                        // Try _value key (common in XML parsed structures)
+                        if (isset($value['_value']) && is_numeric($value['_value'])) {
+                            return (float) $value['_value'];
+                        }
+                        // Try to get first numeric value from array
+                        foreach ($value as $v) {
+                            if (is_numeric($v)) {
+                                return (float) $v;
+                            }
+                        }
+                    }
+                    // If it's a string that looks numeric, try to convert
+                    if (is_string($value) && is_numeric($value)) {
+                        return (float) $value;
+                    }
+                    return null;
+                };
+                
+                // Try CIP Score first (more common), then Mobile Score
+                $cipScore = $creditInfo->cip_score;
+                $mobileScore = $creditInfo->mobile_score;
+                
+                // Extract numeric values safely
+                $cipScoreValue = $extractNumericValue($cipScore);
+                $mobileScoreValue = $extractNumericValue($mobileScore);
+                
+                if ($cipScoreValue !== null) {
+                    $this->creditScore = $cipScoreValue;
+                } elseif ($mobileScoreValue !== null) {
+                    $this->creditScore = $mobileScoreValue;
+                } elseif ($creditInfo->response_payload) {
+                    // If still null, try to extract from response_payload directly
+                    $payload = $creditInfo->response_payload;
+                    
+                    // Try various paths in the nested structure
+                    $scorePaths = [
+                        $payload['credit_score'] ?? null,
+                        $payload['CIPScore'] ?? null,
+                        $payload['MobileScore'] ?? null,
+                        $payload['credit_data']['scoring_analysis']['CIPScore'] ?? null,
+                        $payload['credit_data']['extract']['CIPScore'] ?? null,
+                        $payload['credit_data']['extract']['MobileScore'] ?? null,
+                        // Try deeply nested paths from XML structure
+                        $payload['s:Envelope']['s:Body']['QueryResponse']['QueryResult']['ResponseXml']['response']['connector']['data']['response']['Extract']['CIPScore'] ?? null,
+                        $payload['s:Envelope']['s:Body']['QueryResponse']['QueryResult']['ResponseXml']['response']['connector']['data']['response']['Extract']['MobileScore'] ?? null,
+                    ];
+                    
+                    foreach ($scorePaths as $score) {
+                        $extracted = $extractNumericValue($score);
+                        if ($extracted !== null) {
+                            $this->creditScore = $extracted;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 4. If still no credit score found, calculate mock credit score based on application history
+        if (!$this->creditScore) {
             $baseScore = 550;
             $approvalBonus = $this->approvedApplications * 15;
             $rejectionPenalty = $this->rejectedApplications * 10;
@@ -356,9 +470,9 @@ class BorrowerDashboard extends Component
     {
         // Redirect to loan application form
         if ($productId) {
-            return redirect()->route('loan.apply', ['product' => $productId]);
+            return redirect()->route('loan-application.create', ['product' => $productId]);
         }
-        return redirect('application/create');
+        return redirect()->route('loan-application.create');
     }
 
     public function viewApplication($applicationId)
@@ -373,18 +487,58 @@ class BorrowerDashboard extends Component
 
     public function getCreditScoreColor()
     {
-        if ($this->creditScore >= 750) return 'green';
-        if ($this->creditScore >= 650) return 'blue';
-        if ($this->creditScore >= 550) return 'yellow';
+        $score = $this->getNumericCreditScore();
+        if (!$score) return 'gray';
+        
+        if ($score >= 750) return 'green';
+        if ($score >= 650) return 'blue';
+        if ($score >= 550) return 'yellow';
         return 'red';
     }
 
     public function getCreditScoreLabel()
     {
-        if ($this->creditScore >= 750) return 'Excellent';
-        if ($this->creditScore >= 650) return 'Good';
-        if ($this->creditScore >= 550) return 'Fair';
+        $score = $this->getNumericCreditScore();
+        if (!$score) return 'N/A';
+        
+        if ($score >= 750) return 'Excellent';
+        if ($score >= 650) return 'Good';
+        if ($score >= 550) return 'Fair';
         return 'Poor';
+    }
+    
+    /**
+     * Get numeric credit score, handling arrays and other formats
+     */
+    private function getNumericCreditScore()
+    {
+        if (!$this->creditScore) {
+            return null;
+        }
+        
+        // If it's already numeric, return it
+        if (is_numeric($this->creditScore)) {
+            return (float) $this->creditScore;
+        }
+        
+        // If it's an array, try to extract the value
+        if (is_array($this->creditScore)) {
+            // Try _value key (common in XML parsed structures)
+            if (isset($this->creditScore['_value']) && is_numeric($this->creditScore['_value'])) {
+                return (float) $this->creditScore['_value'];
+            }
+            // Try first element if it's numeric
+            if (isset($this->creditScore[0]) && is_numeric($this->creditScore[0])) {
+                return (float) $this->creditScore[0];
+            }
+        }
+        
+        // If it's a string that looks numeric, try to convert
+        if (is_string($this->creditScore) && is_numeric($this->creditScore)) {
+            return (float) $this->creditScore;
+        }
+        
+        return null;
     }
 
     public function render()

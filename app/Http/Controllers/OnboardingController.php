@@ -12,6 +12,11 @@ class OnboardingController extends Controller
         return view('pages.onboarding.register');
     }
 
+    public function registerCompany(){
+
+        return view('pages.onboarding.register-company');
+    }
+
     public function verificationOption()
     {
 
@@ -58,5 +63,10 @@ class OnboardingController extends Controller
     public function qrCodeVerification(){
 
         return view('pages.onboarding.qr-code');
+    }
+
+    public function questionnaireVerification(){
+
+        return view('pages.onboarding.questionnaire');
     }
 }

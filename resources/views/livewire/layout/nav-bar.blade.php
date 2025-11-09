@@ -1,8 +1,34 @@
 <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
         <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-            <!-- App Name/Logo -->
-            <div class="flex-1">
-                <h1 class="text-xl font-bold text-gray-900">Dashboard</h1>
+            <!-- Mobile Menu Button & Desktop Toggle -->
+            <div class="flex items-center space-x-3">
+                <!-- Mobile Menu Button -->
+                <button 
+                    id="mobile-menu-button"
+                    class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    onclick="toggleMobileSidebar()"
+                    aria-label="Toggle menu"
+                >
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+                
+                <!-- Desktop Sidebar Toggle -->
+                <button 
+                    onclick="if (window.Livewire) { Livewire.dispatch('toggle-sidebar'); } else { window.dispatchEvent(new CustomEvent('toggle-sidebar')); }"
+                    class="hidden lg:flex p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    aria-label="Toggle sidebar"
+                >
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+                
+                <!-- App Name/Logo -->
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">Dashboard</h1>
+                </div>
             </div>
 
             <!-- Profile Menu with Dropdown -->
@@ -65,6 +91,15 @@
             
             dropdown.classList.toggle('hidden');
             arrow.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
         }
 
         // Close dropdown when clicking outside

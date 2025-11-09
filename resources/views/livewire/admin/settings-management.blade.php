@@ -1,4 +1,3 @@
-{{-- resources/views/livewire/admin/settings-management.blade.php --}}
 <div>
     <div class="p-8">
         <!-- Page Header -->

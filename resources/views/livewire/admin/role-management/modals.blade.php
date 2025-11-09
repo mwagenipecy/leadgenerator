@@ -1,6 +1,3 @@
-<div>
-{{-- resources/views/livewire/admin/role-management/modals.blade.php --}}
-
 <!-- Create Role Modal -->
 @if($showCreateRoleModal)
     <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showCreateRoleModal', false)">
@@ -15,6 +12,56 @@
             </div>
 
             <form wire:submit.prevent="createRole" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Role Name *</label>
+                    <input wire:model="name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="e.g., content_manager">
+                    @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    <p class="text-xs text-gray-500 mt-1">Use lowercase letters and underscores only</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Display Name *</label>
+                    <input wire:model="display_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="e.g., Content Manager">
+                    @error('display_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea wire:model="description" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500" placeholder="Brief description of the role"></textarea>
+                    @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Role Level (1-{{ auth()->user()->role_level - 1 }}) *</label>
+                    <input wire:model="level" type="number" min="1" max="{{ auth()->user()->role_level - 1 }}" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                    @error('level') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="flex items-center">
+                    <input wire:model="is_active" type="checkbox" id="is_active" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                    <label for="is_active" class="ml-2 block text-sm text-gray-700">Role is active</label>
+                </div>
+
+                <div class="flex justify-end space-x-4 pt-6">
+                    <button type="button" wire:click="$set('showCreateRoleModal', false)" 
+                        class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                        class="bg-purple-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-purple-700 transition-colors">
+                        Create Role
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endif
+
+<!-- Role Users Modal -->
+@if($showRoleUsersModal && $selectedRole)
+    <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showRoleUsersModal', false)">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-3xl bg-white">
+            <div class="flex items-center justify-between mb-6">
                 <div>
                     <h3 class="text-2xl font-bold text-gray-900">Users with Role</h3>
                     <p class="text-gray-600">Role: <span class="font-semibold">{{ $selectedRole->display_name }}</span></p>
@@ -40,23 +87,20 @@
                                 <div class="flex items-center">
                                     <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                                         <span class="text-white text-sm font-bold">
-                                            {{ substr($user->first_name ?: $user->name, 0, 1) }}{{ substr($user->last_name ?: '', 0, 1) }}
+                                            {{ substr($user['name'] ?? '', 0, 1) }}{{ substr($user['name'] ?? '', 1, 1) }}
                                         </span>
                                     </div>
                                     <div class="ml-3">
                                         <div class="text-sm font-semibold text-gray-900">
-                                            {{ $user->first_name && $user->last_name ? $user->first_name . ' ' . $user->last_name : $user->name }}
+                                            {{ $user['name'] ?? 'N/A' }}
                                         </div>
-                                        <div class="text-xs text-gray-500">{{ $user->email }}</div>
-                                        @if($user->lender)
-                                            <div class="text-xs text-blue-600">{{ $user->lender->company_name }}</div>
-                                        @endif
+                                        <div class="text-xs text-gray-500">{{ $user['email'] ?? '' }}</div>
                                     </div>
                                 </div>
                                 
                                 @permission('roles.assign')
-                                    @if(auth()->user()->canManage($user))
-                                        <button wire:click="removeUserFromRole({{ $user->id }})" 
+                                    @if(auth()->user()->canManage(User::find($user['id'])))
+                                        <button wire:click="removeUserFromRole({{ $user['id'] }})" 
                                             onclick="return confirm('Remove this user from the role?')"
                                             class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
                                             title="Remove from role">
@@ -250,11 +294,11 @@
                             <div class="space-y-2">
                                 @foreach($permissions as $permission)
                                     <label class="flex items-start">
-                                        <input type="checkbox" wire:model="selectedPermissions" value="{{ $permission->id }}" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded mt-0.5 flex-shrink-0">
+                                        <input type="checkbox" wire:model="selectedPermissions" value="{{ $permission['id'] ?? $permission->id }}" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded mt-0.5 flex-shrink-0">
                                         <div class="ml-3">
-                                            <span class="text-sm text-gray-700 block">{{ $permission->display_name }}</span>
-                                            @if($permission->description)
-                                                <span class="text-xs text-gray-500">{{ $permission->description }}</span>
+                                            <span class="text-sm text-gray-700 block">{{ $permission['display_name'] ?? $permission->display_name }}</span>
+                                            @if(isset($permission['description']) && $permission['description'] || (isset($permission->description) && $permission->description))
+                                                <span class="text-xs text-gray-500">{{ $permission['description'] ?? $permission->description }}</span>
                                             @endif
                                         </div>
                                     </label>
@@ -283,9 +327,3 @@
         </div>
     </div>
 @endif
-
-
-
-
-
-                </div>

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <title>Application Status Update - Lead Generator</title>
     <style>
         /* Same styles as above */
@@ -48,12 +50,12 @@
             
             @if($status === 'approved')
                 <div class="status-approved">
-                    <h3>🎉 Application Approved!</h3>
+                    <h3>Application Approved!</h3>
                     <p>Congratulations! Your lender application has been <strong>approved</strong>. You should receive another email shortly with your login credentials.</p>
                 </div>
             @elseif($status === 'rejected')
                 <div class="status-rejected">
-                    <h3>❌ Application Not Approved</h3>
+                    <h3>Application Not Approved</h3>
                     <p>Unfortunately, your lender application has not been approved at this time.</p>
                     @if($lender->rejection_reason)
                         <p><strong>Reason:</strong> {{ $lender->rejection_reason }}</p>

@@ -12,27 +12,51 @@ use Illuminate\Validation\Rules\Password;
 
 class Register extends Component
 {
+    public $type = 'individual';
     public $first_name = '';
     public $last_name = '';
     public $email = '';
     public $phone = '';
     public $nida_number = '';
+    public $company_name = '';
+    public $company_tin = '';
+    public $company_contact_nida = '';
     public $password = '';
     public $password_confirmation = '';
     public $terms = false;
 
     protected function rules()
     {
-        return [
+        $isCompany = $this->type === 'company';
+
+        $rules = [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'max:20','unique:users'],
-            'nida_number' => ['required', 'string', 'size:20', 'unique:users', 'regex:/^[0-9]{20}$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required'],
             'terms' => ['required', 'accepted'],
         ];
+
+        if ($isCompany) {
+            $rules['company_name'] = ['required', 'string', 'max:255'];
+            $rules['company_tin'] = ['required', 'string', 'max:50'];
+            $rules['company_contact_nida'] = ['required', 'string', 'size:20', 'regex:/^[0-9]{20}$/'];
+        } else {
+            $rules['nida_number'] = ['required', 'string', 'size:20', 'unique:users', 'regex:/^[0-9]{20}$/'];
+        }
+
+        return $rules;
+    }
+
+    public function mount(): void
+    {
+        if (request()->routeIs('company.register')) {
+            $this->type = 'company';
+        } else {
+            $this->type = 'individual';
+        }
     }
 
     protected $messages = [
@@ -68,7 +92,11 @@ class Register extends Component
                     'name' => $this->first_name . ' ' . $this->last_name,
                     'email' => $this->email,
                     'phone' => $this->phone,
-                    'nida_number' => $this->nida_number,
+                    'nida_number' => $this->type === 'individual' ? $this->nida_number : null,
+                    'company_name' => $this->type === 'company' ? $this->company_name : null,
+                    'company_tin' => $this->type === 'company' ? $this->company_tin : null,
+                    'company_contact_nida' => $this->type === 'company' ? $this->company_contact_nida : null,
+                    'registration_type' => $this->type,
                     'password' => Hash::make($this->password),
                     'email_verified_at' => now(), // Auto-verify super admin
                     'role' => 'borrower', // Set the legacy role field if still using it

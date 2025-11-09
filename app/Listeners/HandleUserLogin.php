@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Services\OtpService;
+use App\Services\LogService;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -27,6 +28,7 @@ class HandleUserLogin
     {
         $user = $event->user;
         
-        
+        // Log user login
+        LogService::logLogin($user);
     }
 }

@@ -64,9 +64,17 @@ class LeadListing extends Component
     }
 
     // Booking modal methods
-    public function openBookingModal($leadId)
+    public function openBookingModal($applicationId)
     {
-        $this->selectedLead = Application::find($leadId);
+        // The view passes the application ID, so we just need to load the application
+        // The booking logic will find the submission by application_id and lender_id
+        $this->selectedLead = Application::find($applicationId);
+        
+        if (!$this->selectedLead) {
+            session()->flash('error', 'Application not found.');
+            return;
+        }
+        
         $this->showBookingModal = true;
     }
 
@@ -102,21 +110,26 @@ class LeadListing extends Component
         try {
             DB::beginTransaction();
     
+            // Lock the application row to prevent concurrent bookings
+            $application = Application::lockForUpdate()->find($applicationId);
+            
+            if (!$application) {
+                throw new \Exception('Application not found.');
+            }
+            
+            // Check if lead is already booked by another lender
+            if ($application->booking_status === 'booked' && $application->lender_id !== $currentLenderId) {
+                throw new \Exception('This lead has already been booked by another lender.');
+            }
+            
             // Check if submission exists and is in correct status
             $currentSubmission = ApplicationLenderSubmission::where('application_id', $applicationId)
                 ->where('lender_id', $currentLenderId)
                 ->where('status', 'submitted')
                 ->first();
-
-
     
             if (!$currentSubmission) {
                 throw new \Exception('No valid submission found for this lender and application.');
-            }
-    
-            // Check if lead is already booked
-            if ($this->selectedLead->booking_status === 'booked') {
-                throw new \Exception('This lead has already been booked.');
             }
     
             // Update current lender's submission to approved
@@ -147,8 +160,8 @@ class LeadListing extends Component
                     'updated_at' => now()
                 ]);
     
-            // Update application booking status
-            $applicationUpdated = $this->selectedLead->update([
+            // Update application booking status (use the locked application instance)
+            $application->update([
                 'booking_status' => 'booked',
                 'lender_id' => $currentLenderId,
                 'status'=>'under_review',
@@ -157,12 +170,8 @@ class LeadListing extends Component
                 'updated_at' => now()
             ]);
     
-            if (!$applicationUpdated) {
-                throw new \Exception('Failed to update application booking status.');
-            }
-    
-            // Generate commission bill
-            $this->generateCommissionBill($this->selectedLead);
+            // Generate commission bill (use the updated application instance)
+            $this->generateCommissionBill($application);
     
             // Log successful booking
             Log::info('Lead booking successful', [
@@ -189,8 +198,6 @@ class LeadListing extends Component
             
         } catch (\Exception $e) {
             DB::rollBack();
-
-            dd($e->getMessage());
             
             // Enhanced error logging
             Log::error('Lead booking failed', [
@@ -689,18 +696,21 @@ private function generateBillNumber()
 
     private function getAvailableLeads()
     {
-        $query = Application::with(['loanProduct', 'user'])
-            ->where('booking_status', 'unbooked')
+        $lenderId = Auth::user()->lender_id;
+        
+        // Get submissions from application_lender_submissions table for this lender
+        // that are in 'submitted' status and the application hasn't been booked by any lender yet
+        $query = ApplicationLenderSubmission::with(['application.loanProduct', 'application.user', 'lender', 'loanProduct'])
+            ->where('lender_id', $lenderId)
             ->where('status', 'submitted')
-            ->whereNotIn('id', function($subquery) {
-                $subquery->select('application_id')
-                    ->from('application_lender_submissions')
-                    ->where('lender_id', Auth::user()->lender_id)
-                    ->where('status', 'submitted');
+            ->whereHas('application', function($subquery) {
+                // Application must be unbooked (not booked by any lender)
+                $subquery->where('booking_status', 'unbooked')
+                         ->where('status', 'submitted');
             });
 
-        // Apply filters
-        $this->applyFilters($query);
+        // Apply filters to available leads
+        $this->applyFiltersToAvailableLeads($query);
 
         return $query->paginate(20);
     }
@@ -726,12 +736,18 @@ private function generateBillNumber()
 
 
     public function viewLead($selected){
-
-      //  dd($selected);
+        // $selected can be either an array with application_id or a submission ID
+        if (is_array($selected) && isset($selected["application_id"])) {
+            $applicationId = $selected["application_id"];
+        } else {
+            // If it's a submission ID, get the application_id from the submission
+            $submission = ApplicationLenderSubmission::find($selected);
+            $applicationId = $submission ? $submission->application_id : $selected;
+        }
 
         $this->dispatch('viewLead', [
-            'leadId' => $selected["application_id"],
-            'isAvailable' => true
+            'leadId' => $applicationId,
+            'isAvailable' => ($this->leadTypeFilter === 'available')
         ]);
     }
 
@@ -768,6 +784,50 @@ private function generateBillNumber()
 
         // Sorting
         $query->orderBy($this->sortBy, $this->sortDirection);
+    }
+
+    private function applyFiltersToAvailableLeads($query)
+    {
+        // Search in related application
+        if ($this->search) {
+            $query->whereHas('application', function ($q) {
+                $q->where('application_number', 'like', '%' . $this->search . '%')
+                  ->orWhere('first_name', 'like', '%' . $this->search . '%')
+                  ->orWhere('last_name', 'like', '%' . $this->search . '%');
+            });
+        }
+
+        // Date range filter (use submission created_at or application created_at)
+        if ($this->dateRange !== 'all') {
+            $query->whereHas('application', function ($q) {
+                $q->where('created_at', '>=', $this->getDateRangeStart());
+            });
+        }
+
+        // Amount range filter for available leads
+        if ($this->amountRange !== 'all') {
+            [$min, $max] = $this->getAmountRange();
+            $query->whereHas('application', function ($q) use ($min, $max) {
+                $q->whereBetween('requested_amount', [$min, $max]);
+            });
+        }
+
+        // CRB Score range filter
+        if ($this->crbScoreRange !== 'all') {
+            [$min, $max] = $this->getCrbScoreRange();
+            $query->whereHas('application', function ($q) use ($min, $max) {
+                $q->whereBetween('credit_score', [$min, $max]);
+            });
+        }
+
+        // Sorting
+        if ($this->sortBy === 'requested_amount' || $this->sortBy === 'credit_score' || $this->sortBy === 'application_number' || $this->sortBy === 'first_name' || $this->sortBy === 'last_name') {
+            $query->join('applications', 'application_lender_submissions.application_id', '=', 'applications.id')
+                  ->orderBy('applications.' . $this->sortBy, $this->sortDirection)
+                  ->select('application_lender_submissions.*');
+        } else {
+            $query->orderBy($this->sortBy, $this->sortDirection);
+        }
     }
 
     private function applyFiltersToBookedLeads($query)
@@ -808,16 +868,53 @@ private function generateBillNumber()
     {
         $lenderId = Auth::user()->lender_id;
 
+        // Calculate total_value from booked/approved submissions
+        // Filter by both submission.lender_id AND application.lender_id to ensure accuracy
+        // This should match the approved submissions that are shown in the booked leads tab
+        // Use offered_amount if set (actual approved amount), otherwise use requested_amount from application
+        try {
+            $approvedSubmissions = ApplicationLenderSubmission::where('application_lender_submissions.lender_id', $lenderId)
+                ->where('application_lender_submissions.status', 'approved')
+                ->whereHas('application', function($subquery) use ($lenderId) {
+                    $subquery->where('lender_id', $lenderId);
+                })
+                ->with('application:id,requested_amount')
+                ->get();
+            
+            $totalValue = (float) $approvedSubmissions->sum(function($submission) {
+                // Use offered_amount if available and greater than 0, otherwise use requested_amount from the application
+                if (!is_null($submission->offered_amount) && $submission->offered_amount > 0) {
+                    return (float) $submission->offered_amount;
+                }
+                // Fall back to requested_amount from application
+                $requestedAmount = $submission->application->requested_amount ?? 0;
+                return (float) $requestedAmount;
+            });
+            
+            // Log for debugging
+            Log::info('Total value calculated for booked leads', [
+                'lender_id' => $lenderId,
+                'submissions_count' => $approvedSubmissions->count(),
+                'total_value' => $totalValue,
+                'submissions_with_offered_amount' => $approvedSubmissions->filter(fn($s) => $s->offered_amount > 0)->count(),
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error calculating total_value for booked leads', [
+                'lender_id' => $lenderId,
+                'error' => $e->getMessage(),
+            ]);
+            $totalValue = 0;
+        }
         
-      
         return [
-            'available_leads' => Application::where('booking_status', 'unbooked')
+            // Available leads: submissions in application_lender_submissions for this lender
+            // that are in 'submitted' status and application hasn't been booked by any lender yet
+            'available_leads' => ApplicationLenderSubmission::where('lender_id', $lenderId)
                 ->where('status', 'submitted')
-                ->whereNotIn('id', function($subquery) use ($lenderId) {
-                    $subquery->select('application_id')
-                        ->from('application_lender_submissions')
-                        ->where('lender_id', $lenderId)
-                        ->whereIn('status', ['submitted']);
+                ->whereHas('application', function($subquery) {
+                    // Application must be unbooked (not booked by any lender)
+                    $subquery->where('booking_status', 'unbooked')
+                             ->where('status', 'submitted');
                 })
                 ->count(),
 
@@ -828,19 +925,11 @@ private function generateBillNumber()
             'pending_review' => Application::where('lender_id', $lenderId)
                 ->where('status', 'under_review')->count(),
 
-
             'approved' => ApplicationLenderSubmission::where('lender_id', $lenderId)
                 ->where('status', 'approved')->count(),
             'rejected' => ApplicationLenderSubmission::where('lender_id', $lenderId)
                 ->where('status', 'rejected')->count(),
-            'total_value' =>Application::where('lender_id', $lenderId)
-                ->where('status', 'approved')
-                ->sum('requested_amount'),
-            
-            // ApplicationLenderSubmission::where('application_lender_submissions.lender_id', $lenderId)
-            //     ->where('application_lender_submissions.status', 'approved')
-            //     ->join('applications', 'application_lender_submissions.application_id', '=', 'applications.id')
-            //     ->sum('applications.requested_amount'),
+            'total_value' => $totalValue,
         ];
     }
 

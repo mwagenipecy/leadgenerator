@@ -132,7 +132,9 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-500">Total Value</p>
-                        <p class="text-2xl font-bold text-black">TSh {{ number_format($stats['total_value']/1000000, 1) }}M</p>
+                        <p class="text-2xl font-bold text-black">
+                            TSh {{ isset($stats['total_value']) && $stats['total_value'] > 0 ? number_format($stats['total_value']/1000000, 1) . 'M' : '0.0M' }}
+                        </p>
                         <p class="text-xs text-gray-400 mt-1">Approved loans</p>
                     </div>
                 </div>
@@ -294,9 +296,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($leads as $lead)
                     @php
-                        $application = $leadTypeFilter === 'available' ? $lead : $lead->application;
+                        // Both available and booked leads are now ApplicationLenderSubmission objects
+                        $application = $lead->application;
                         $isAvailable = $leadTypeFilter === 'available';
-                        $submission = $leadTypeFilter === 'booked' ? $lead : null;
+                        $submission = $lead; // Both have submission, but status differs
                     @endphp
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 overflow-hidden">
                         <!-- Card Header -->
@@ -321,7 +324,7 @@
                                 </div>
                                 
                                 <div class="flex flex-col items-end space-y-2">
-                                    @if(!$isAvailable && $submission)
+                                    @if(!$isAvailable)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                             @switch($submission->status)
                                                 @case('submitted') bg-red-100 text-red-800 @break
@@ -331,9 +334,7 @@
                                             @endswitch">
                                             {{ ucwords(str_replace('_', ' ', $submission->status)) }}
                                         </span>
-                                    @endif
-                                    
-                                    @if($isAvailable)
+                                    @else
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
                                             Available
                                         </span>
@@ -504,9 +505,10 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($leads as $lead)
                                 @php
-                                    $application = $leadTypeFilter === 'available' ? $lead : $lead->application;
+                                    // Both available and booked leads are now ApplicationLenderSubmission objects
+                                    $application = $lead->application;
                                     $isAvailable = $leadTypeFilter === 'available';
-                                    $submission = $leadTypeFilter === 'booked' ? $lead : null;
+                                    $submission = $lead; // Both have submission, but status differs
                                 @endphp
                                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">

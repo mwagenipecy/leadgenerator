@@ -1,5 +1,4 @@
 <div>
-{{-- resources/views/livewire/admin/dashboard.blade.php --}}
 <div>
     <div class="p-8">
         <!-- Page Header -->

@@ -1,25 +1,21 @@
 <div>
-{{-- resources/views/livewire/admin/role-management.blade.php --}}
-<div>
-    <div class="p-8">
-        <!-- Page Header -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Role Management</h1>
-                    <p class="text-gray-600 text-lg">Manage system roles and their permissions</p>
-                </div>
-                <div class="flex items-center space-x-3">
-
-                        <button wire:click="openCreateRoleModal" class="bg-purple-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-purple-700 transition-all duration-200 shadow-lg shadow-purple-600/25">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                            </svg>
-                            Create Role
-                        </button>
-                </div>
+    <!-- Section Header -->
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-1">Role Management</h2>
+                <p class="text-gray-600 text-sm">Manage system roles and their permissions</p>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button wire:click="openCreateRoleModal" class="bg-purple-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-purple-700 transition-all duration-200 shadow-lg shadow-purple-600/25">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    Create Role
+                </button>
             </div>
         </div>
+    </div>
 
         <!-- Flash Messages -->
         @if (session()->has('message'))
@@ -302,14 +298,6 @@
             </div>
         @endif
 
+        <!-- Modals -->
+        @include('livewire.admin.role-management.modals')
     </div>
-
-
-  
-    <!-- Modals -->
-
-    @include('livewire.admin.role-management.modals')
-
-</div>
-
-</div>

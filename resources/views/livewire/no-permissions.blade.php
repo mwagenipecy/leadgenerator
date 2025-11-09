@@ -1,5 +1,4 @@
 <div>
-{{-- resources/views/livewire/no-permissions.blade.php --}}
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
     <div class="max-w-2xl w-full">
         <!-- Main Card -->

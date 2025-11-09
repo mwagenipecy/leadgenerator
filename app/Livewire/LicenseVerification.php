@@ -57,11 +57,11 @@ class LicenseVerification extends Component
                 'Content-Type' => 'text/xml;charset=UTF-8',
                 'SOAPAction' => 'http://creditinfo.com/schemas/2012/09/MultiConnector/MultiConnectorService/Query',
                 'Authorization' => 'WSSE profile="UsernameToken"',
-                'Username' => 'lead.gen',
-                'Password' => 'leadGen@2025',
+                'Username' => env('SOAP_USERNAME'),
+                'Password' => env('SOAP_PASSWORD'),
             ])->timeout(80)
               ->withBody($soapRequest, 'text/xml')
-              ->post('https://mc-uat.creditinfo.co.tz/MultiConnector.svc');
+              ->post( env('SOAP_URL'));
 
             if ($response->successful()) {
                 $parsedResult = $this->parseResponse($response->body());

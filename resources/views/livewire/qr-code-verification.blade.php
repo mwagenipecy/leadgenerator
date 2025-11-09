@@ -1,4 +1,3 @@
-{{-- resources/views/livewire/qr-code-verification.blade.php --}}
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <header class="bg-white shadow-sm border-b border-gray-200">

@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\NidaVerification;
+use App\Models\UserProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,13 +14,13 @@ class PhonePhotoVerification extends Component
     use WithFileUploads;
 
     public $photo;
-    public $photoType = '';
+    public $photoType = 'fingerprint'; // Default to fingerprint only
     public $photoPreview = '';
     public $isProcessing = false;
     public $isVerified = false;
     public $errorMessage = '';
     public $successMessage = '';
-    public $verificationStep = 'select'; // 'select', 'capture', 'processing', 'complete'
+    public $verificationStep = 'capture'; // Start directly at capture, skip selection
 
     protected $rules = [
         'photo' => 'required|image|max:5120', // 5MB max
@@ -178,18 +179,82 @@ class PhonePhotoVerification extends Component
 
     private function completeVerification()
     {
+        $user = Auth::user();
+        
         // Update user record
-        Auth::user()->update([
+        $user->update([
             'nida_verified_at' => now(),
             'verification_status' => 'verified'
         ]);
         
+        // Create or update user profile
+        $this->createOrUpdateUserProfile($user);
+        
         $this->isVerified = true;
         $this->verificationStep = 'complete';
-        $this->successMessage = 'Your identity has been successfully verified!';
+        $this->successMessage = 'Your identity has been successfully verified! Your profile has been created. You can now complete your profile information.';
         
         // Clear any errors
         $this->errorMessage = '';
+    }
+
+    public function goToProfile()
+    {
+        return redirect()->route('loan-application.profile');
+    }
+
+    private function createOrUpdateUserProfile($user)
+    {
+        try {
+            // Get or create user profile
+            $profile = UserProfile::firstOrNew(['user_id' => $user->id]);
+            
+            // Update profile with user information from users table
+            $profileData = [
+                'first_name' => $user->first_name ?? $user->name ?? '',
+                'last_name' => $user->last_name ?? '',
+                'national_id' => $user->nida_number ?? '',
+                'email' => $user->email ?? '',
+                'phone_number' => $user->phone ?? '',
+                'last_updated' => now(),
+            ];
+            
+            // Handle date_of_birth - store as string in Y-m-d format
+            if ($user->date_of_birth) {
+                try {
+                    if ($user->date_of_birth instanceof \Carbon\Carbon || $user->date_of_birth instanceof \DateTime) {
+                        $profileData['date_of_birth'] = $user->date_of_birth->format('Y-m-d');
+                    } elseif (is_string($user->date_of_birth)) {
+                        // Try to parse and format the date string
+                        $date = \Carbon\Carbon::parse($user->date_of_birth);
+                        $profileData['date_of_birth'] = $date->format('Y-m-d');
+                    } else {
+                        $profileData['date_of_birth'] = $user->date_of_birth;
+                    }
+                } catch (\Exception $e) {
+                    // If date parsing fails, set to null
+                    $profileData['date_of_birth'] = null;
+                }
+            } else {
+                $profileData['date_of_birth'] = null;
+            }
+            
+            // If profile doesn't exist, set user_id
+            if (!$profile->exists) {
+                $profileData['user_id'] = $user->id;
+            }
+            
+            // Update profile
+            $profile->fill($profileData);
+            $profile->save();
+            
+            // Calculate completion percentage
+            $profile->calculateCompletionPercentage();
+            
+        } catch (\Exception $e) {
+            // Log error but don't fail verification
+            \Log::error('Error creating/updating user profile: ' . $e->getMessage());
+        }
     }
 
     private function showError($message)
@@ -206,10 +271,10 @@ class PhonePhotoVerification extends Component
     public function retryVerification()
     {
         $this->resetErrorsAndMessages();
-        $this->verificationStep = 'select';
+        $this->verificationStep = 'capture'; // Go back to capture, not select
         $this->photo = null;
         $this->photoPreview = '';
-        $this->photoType = '';
+        $this->photoType = 'fingerprint'; // Keep fingerprint as default
         $this->isProcessing = false;
     }
 

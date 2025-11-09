@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log; 
-use App\Models\Permission; 
+use App\Models\Permission;
+use App\Services\LogService; 
 
 class UserManagement extends Component
 {
     use WithPagination;
 
+    public $activeTab = 'users'; // 'users', 'roles', 'permissions'
     public $search = '';
     public $roleFilter = '';
     public $statusFilter = '';
@@ -94,6 +96,12 @@ class UserManagement extends Component
         $this->loadStats();
         $this->roles = Role::get();
         $this->availableLenders = Lender::where('status', 'approved')->get();
+    }
+
+    public function setActiveTab($tab)
+    {
+        $this->activeTab = $tab;
+        $this->resetPage(); // Reset pagination when switching tabs
     }
 
     public function passwordConfirmationRules()
@@ -249,6 +257,9 @@ class UserManagement extends Component
                 // Assign role using the new role system
                 $this->assignRoleToUser($user, $this->role);
 
+                // Log user creation
+                LogService::logUserCreated($user, ['created_by' => auth()->id()]);
+
                 Log::info('User created successfully', [
                     'user_id' => $user->id,
                     'email' => $user->email,
@@ -286,6 +297,9 @@ class UserManagement extends Component
 
         try {
             DB::transaction(function () {
+                // Get old values before update
+                $oldValues = $this->selectedUser->toArray();
+                
                 $userData = [
                     'name' => $this->edit_name,
                     'email' => $this->edit_email,
@@ -307,11 +321,17 @@ class UserManagement extends Component
 
                 // Update user data
                 $this->selectedUser->update($userData);
+                
+                // Get new values after update
+                $newValues = array_intersect_key($this->selectedUser->fresh()->toArray(), $userData);
 
                 // Update role assignment if role changed
                 if ($this->selectedUser->role !== $this->edit_role) {
                     $this->updateUserRole($this->selectedUser, $this->edit_role);
                 }
+
+                // Log user update
+                LogService::logUserUpdated($this->selectedUser, $oldValues, $newValues);
 
                 Log::info('User updated successfully', [
                     'user_id' => $this->selectedUser->id,
@@ -359,6 +379,9 @@ class UserManagement extends Component
             $user->update(['role_level' => $role->level ?? 1]);
         }
 
+        // Log role assignment
+        LogService::logRoleAssigned($user, $roleName, auth()->user());
+
         Log::info('Role assigned to user', [
             'user_id' => $user->id,
             'role' => $roleName,
@@ -374,6 +397,7 @@ class UserManagement extends Component
             throw new \Exception("Role '{$newRoleName}' not found.");
         }
 
+        $oldRoleName = $user->role;
         $user->roles()->detach();
         
         if (method_exists($user, 'assignRole')) {
@@ -389,8 +413,12 @@ class UserManagement extends Component
             $user->update(['role_level' => $newRole->level ?? 1]);
         }
 
+        // Log role change
+        LogService::logRoleAssigned($user, $newRoleName, auth()->user());
+
         Log::info('User role updated', [
             'user_id' => $user->id,
+            'old_role' => $oldRoleName,
             'new_role' => $newRoleName,
             'updated_by' => auth()->id()
         ]);
@@ -493,6 +521,9 @@ class UserManagement extends Component
         $oldStatus = $user->is_active;
         $user->update(['is_active' => !$user->is_active]);
         
+        // Log status change
+        LogService::logUserStatusChanged($user, $user->is_active);
+        
         $this->loadStats();
         
         $status = $user->is_active ? 'activated' : 'deactivated';
@@ -516,6 +547,9 @@ class UserManagement extends Component
         }
 
         DB::transaction(function () use ($user) {
+            // Log user deletion before deleting
+            LogService::logUserDeleted($user);
+            
             // If user is a lender, also handle lender record
             if ($user->role === 'lender' && $user->lender) {
                 $user->lender->delete();

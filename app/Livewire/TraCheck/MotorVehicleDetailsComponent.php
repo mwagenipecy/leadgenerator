@@ -17,17 +17,43 @@ class MotorVehicleDetailsComponent extends Component
     public $error = null;
     public $rawResponse = '';
     
-    // SOAP service configuration
-    private $soapUrl = 'https://mc-uat.creditinfo.co.tz/MultiConnector.svc'; // Replace with actual URL
-    private $username = 'lead.gen';
-    private $password = 'leadGen@2025';
-    private $connectorId = 'connector-id'; // Replace with actual connector ID
-    
     public function mount()
     {
         // Set default values for testing
         $this->vehicleRegistrationPlate = 'T115DYF';
         $this->dateOfRegistration = '2021-12-21';
+    }
+    
+    /**
+     * Get SOAP URL from environment
+     */
+    private function getSoapUrl()
+    {
+        return env('SOAP_URL');
+    }
+    
+    /**
+     * Get SOAP username from environment
+     */
+    private function getSoapUsername()
+    {
+        return env('SOAP_USERNAME');
+    }
+    
+    /**
+     * Get SOAP password from environment
+     */
+    private function getSoapPassword()
+    {
+        return env('SOAP_PASSWORD');
+    }
+    
+    /**
+     * Get SOAP connector ID from environment
+     */
+    private function getSoapConnectorId()
+    {
+        return env('SOAP_CONNECTOR_ID');
     }
     
     public function getVehicleDetails()
@@ -36,6 +62,18 @@ class MotorVehicleDetailsComponent extends Component
             'vehicleRegistrationPlate' => 'required|string|min:3',
             'dateOfRegistration' => 'required|date'
         ]);
+        
+        // Validate SOAP configuration
+        $soapUrl = $this->getSoapUrl();
+        $username = $this->getSoapUsername();
+        $password = $this->getSoapPassword();
+        $connectorId = $this->getSoapConnectorId();
+        
+        if (!$soapUrl || !$username || !$password || !$connectorId) {
+            $this->isLoading = false;
+            $this->error = 'SOAP configuration is incomplete. Please check your environment variables (SOAP_URL, SOAP_USERNAME, SOAP_PASSWORD, SOAP_CONNECTOR_ID).';
+            return;
+        }
         
         $this->isLoading = true;
         $this->error = null;
@@ -46,22 +84,18 @@ class MotorVehicleDetailsComponent extends Component
             $messageId = Str::uuid()->toString();
             $dataId = Str::uuid()->toString();
             
-            $soapEnvelope = $this->buildSoapEnvelope($messageId, $dataId);
+            $soapEnvelope = $this->buildSoapEnvelope($messageId, $dataId, $username, $password, $connectorId);
             
             $response = Http::withHeaders([
                 'Content-Type' => 'text/xml;charset=UTF-8',
                 'SOAPAction' => 'http://creditinfo.com/schemas/2012/09/MultiConnector/MultiConnectorService/Query',
                 'Authorization' => 'WSSE profile="UsernameToken"',
-                'Username' => $this->username,
-                'Password' => $this->password,
+                'Username' => $username,
+                'Password' => $password,
             ])
-            
-            // ->send('POST', $this->soapUrl, [
-            //     'body' => $soapEnvelope
-            // ]);
             ->timeout(150)
             ->withBody($soapEnvelope, 'text/xml')
-            ->post($this->soapUrl);
+            ->post($soapUrl);
 
             
             $this->rawResponse = $response->body();
@@ -79,15 +113,22 @@ class MotorVehicleDetailsComponent extends Component
         $this->isLoading = false;
     }
     
-    private function buildSoapEnvelope($messageId, $dataId)
+    private function buildSoapEnvelope($messageId, $dataId, $username, $password, $connectorId)
     {
+        // Escape XML special characters
+        $username = htmlspecialchars($username, ENT_XML1, 'UTF-8');
+        $password = htmlspecialchars($password, ENT_XML1, 'UTF-8');
+        $connectorId = htmlspecialchars($connectorId, ENT_XML1, 'UTF-8');
+        $vehiclePlate = htmlspecialchars($this->vehicleRegistrationPlate, ENT_XML1, 'UTF-8');
+        $dateOfRegistration = htmlspecialchars($this->dateOfRegistration, ENT_XML1, 'UTF-8');
+        
         return '<?xml version="1.0" encoding="UTF-8"?>
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mul="http://creditinfo.com/schemas/2012/09/MultiConnector" xmlns:req="http://creditinfo.com/schemas/2012/09/MultiConnector/Messages/Request">
        <soapenv:Header>
           <wsse:Security soapenv:mustUnderstand="0" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
              <wsse:UsernameToken>
-                <wsse:Username>' . $this->username . '</wsse:Username>
-                <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . $this->password . '</wsse:Password>
+                <wsse:Username>' . $username . '</wsse:Username>
+                <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">' . $password . '</wsse:Password>
              </wsse:UsernameToken>
           </wsse:Security>
        </soapenv:Header>
@@ -96,11 +137,11 @@ class MotorVehicleDetailsComponent extends Component
              <mul:request>
                 <mul:MessageId>' . $messageId . '</mul:MessageId>
                 <mul:RequestXml>
-                   <req:connector id="' . $this->connectorId . '">
+                   <req:connector id="' . $connectorId . '">
                       <req:data id="' . $dataId . '">
                          <request xmlns="http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/TZA/TRAGetMotorVehicleDetails/Request">
-                            <VehicleRegistrationPlate>' . $this->vehicleRegistrationPlate . '</VehicleRegistrationPlate>
-                            <DateOfRegistration>' . $this->dateOfRegistration . '</DateOfRegistration>
+                            <VehicleRegistrationPlate>' . $vehiclePlate . '</VehicleRegistrationPlate>
+                            <DateOfRegistration>' . $dateOfRegistration . '</DateOfRegistration>
                          </request>
                       </req:data>
                    </req:connector>

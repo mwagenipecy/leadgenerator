@@ -1,6 +1,3 @@
-<div>
-{{-- resources/views/livewire/admin/permission-management/modals.blade.php --}}
-
 <!-- Create Permission Modal -->
 @if($showCreatePermissionModal)
     <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showCreatePermissionModal', false)">
@@ -223,35 +220,35 @@
                 <div class="max-h-96 overflow-y-auto">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($permissionRoles as $role)
+                            @php
+                                // Handle both array and object formats
+                                $roleId = is_array($role) ? $role['id'] : $role->id;
+                                $roleName = is_array($role) ? ($role['display_name'] ?? $role['name']) : ($role->display_name ?? $role->name);
+                                $roleLevel = is_array($role) ? ($role['level'] ?? 0) : ($role->level ?? 0);
+                            @endphp
                             <div class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
                                 <div class="flex items-center">
                                     @php
                                         $levelColor = match(true) {
-                                            $role->level >= 80 => 'from-red-500 to-red-600',
-                                            $role->level >= 50 => 'from-purple-500 to-purple-600',
+                                            $roleLevel >= 80 => 'from-red-500 to-red-600',
+                                            $roleLevel >= 50 => 'from-purple-500 to-purple-600',
                                             default => 'from-blue-500 to-blue-600'
                                         };
                                     @endphp
                                     <div class="w-10 h-10 bg-gradient-to-br {{ $levelColor }} rounded-xl flex items-center justify-center">
-                                        <span class="text-white text-sm font-bold">{{ $role->level }}</span>
+                                        <span class="text-white text-sm font-bold">{{ $roleLevel }}</span>
                                     </div>
                                     <div class="ml-3">
                                         <div class="text-sm font-semibold text-gray-900">
-                                            {{ $role->display_name }}
+                                            {{ $roleName }}
                                         </div>
-                                        <div class="text-xs text-gray-500">{{ $role->name }}</div>
-                                        <div class="text-xs text-blue-600">{{ $role->users->count() }} users</div>
-                                        @if($role->is_system_role)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 mt-1">
-                                                System Role
-                                            </span>
-                                        @endif
+                                        <div class="text-xs text-gray-500">{{ is_array($role) ? ($role['name'] ?? '') : $role->name }}</div>
                                     </div>
                                 </div>
                                 
                                 @permission('roles.edit')
-                                    @if(auth()->user()->role_level > $role->level)
-                                        <button wire:click="removePermissionFromRole({{ $role->id }})" 
+                                    @if(auth()->user()->role_level > $roleLevel)
+                                        <button wire:click="removePermissionFromRole({{ $roleId }})" 
                                             onclick="return confirm('Remove this permission from the role?')"
                                             class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
                                             title="Remove permission from role">
@@ -288,5 +285,3 @@
         </div>
     </div>
 @endif
-
-</div>
