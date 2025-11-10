@@ -35,6 +35,7 @@ class RequireNidaVerification
             'verification.questionnaire',
             'logout',
             'mobile.verification',
+            'company.kyc', // Allow company KYC page
         ];
 
         // Allow access to verification routes
@@ -42,13 +43,22 @@ class RequireNidaVerification
             return $next($request);
         }
 
-        // Check if user is NIDA verified
+        // For company users, allow them to complete NIDA verification as part of company KYC
+        // Don't block them from accessing verification routes
+        if ($user->registration_type === 'company') {
+            // Company users can access verification routes during KYC process
+            // They will be blocked from other routes by RequireCompanyVerification middleware
+            return $next($request);
+        }
+
+        // Check if user is NIDA verified (only for individual users)
         if (!$user->isNidaVerified()) {
             Log::info('User not NIDA verified, redirecting to verification options', [
                 'user_id' => $user->id,
                 'route' => $routeName,
                 'nida_verified_at' => $user->nida_verified_at,
                 'verification_status' => $user->verification_status,
+                'registration_type' => $user->registration_type,
             ]);
 
             // Redirect to verification options page

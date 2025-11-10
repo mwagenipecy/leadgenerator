@@ -148,6 +148,59 @@
                             @endforeach
                         </div>
 
+                        <!-- Company Information (if company user) -->
+                        @if(auth()->user()->registration_type === 'company')
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold text-gray-900">Company Information</h3>
+                                @if(auth()->user()->isCompanyVerified())
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Verified</span>
+                                @elseif(auth()->user()->isCompanyVerificationPending())
+                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">Pending Verification</span>
+                                @elseif(auth()->user()->isCompanyVerificationRejected())
+                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Rejected</span>
+                                @endif
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-500 mb-1">Company Name</label>
+                                    <p class="text-gray-900 font-medium">{{ auth()->user()->company_name ?? 'N/A' }}</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-500 mb-1">Company TIN</label>
+                                    <p class="text-gray-900 font-medium">{{ auth()->user()->company_tin ?? 'N/A' }}</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-500 mb-1">Country</label>
+                                    <p class="text-gray-900 font-medium">{{ auth()->user()->country ?? 'N/A' }}</p>
+                                </div>
+                                @if(auth()->user()->isFromTanzania())
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-500 mb-1">Representative NIDA</label>
+                                    <p class="text-gray-900 font-medium">{{ auth()->user()->company_contact_nida ?? 'N/A' }}</p>
+                                </div>
+                                @else
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-500 mb-1">Passport Number</label>
+                                    <p class="text-gray-900 font-medium">{{ auth()->user()->passport_number ?? 'N/A' }}</p>
+                                </div>
+                                @endif
+                            </div>
+                            @if(auth()->user()->isCompanyVerificationPending())
+                                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <p class="text-sm text-yellow-800">Your company verification is pending admin review. You will be notified once verification is complete.</p>
+                                </div>
+                            @elseif(auth()->user()->isCompanyVerificationRejected())
+                                <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="text-sm text-red-800">Your company verification was rejected. Please contact support for more information.</p>
+                                    @if(auth()->user()->company_verification_notes)
+                                        <p class="text-sm text-red-700 mt-2 font-medium">Reason: {{ auth()->user()->company_verification_notes }}</p>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+                        @endif
+
                         <!-- Quick Actions -->
                         <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
                             <h3 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>

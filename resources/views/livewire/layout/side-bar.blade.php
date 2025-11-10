@@ -238,6 +238,34 @@
             @endif
         </a>
 
+            <!-- Company Verification -->
+            <a href="{{ route('admin.company.verification') }}" 
+            class="group flex items-center {{ $isCollapsed ? 'justify-center px-3 py-4' : 'px-5 py-4' }} text-sm font-medium {{ request()->routeIs('admin.company.verification') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg relative" title="{{ $isCollapsed ? 'Company Verification' : '' }}">
+                <svg class="{{ $isCollapsed ? 'h-5 w-5' : 'mr-3 sm:mr-4 h-4 w-4' }} {{ request()->routeIs('admin.company.verification') ? '' : 'group-hover:text-brand-red' }} transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                @if(!$isCollapsed)
+                <span class="truncate flex-1">Company Verification</span>
+                @php
+                    $pendingCompanyCount = App\Models\User::where('registration_type', 'company')
+                        ->where('company_verification_status', 'pending')
+                        ->count();
+                @endphp
+                @if($pendingCompanyCount > 0)
+                    <span class="ml-auto bg-yellow-500 text-white text-xs px-2.5 py-1.5 rounded-full font-bold shadow-md">{{ $pendingCompanyCount }}</span>
+                @endif
+                @else
+                @php
+                    $pendingCompanyCount = App\Models\User::where('registration_type', 'company')
+                        ->where('company_verification_status', 'pending')
+                        ->count();
+                @endphp
+                @if($pendingCompanyCount > 0)
+                    <span class="absolute top-1 right-1 bg-yellow-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold shadow-md">{{ $pendingCompanyCount }}</span>
+                @endif
+                @endif
+            </a>
+
             <!-- Lender Management -->
             <a href="{{ route('lenders.index') }}"
              class="group flex items-center {{ $isCollapsed ? 'justify-center px-3 py-4' : 'px-5 py-4' }} text-sm font-medium {{ request()->routeIs('lenders.*') ? 'bg-gradient-to-r from-brand-red/90 to-brand-dark-red text-white shadow-lg shadow-brand-red/20' : 'text-gray-300 hover:bg-sidebar-gray hover:text-white' }} rounded-2xl transition-all duration-200 hover:shadow-lg relative" title="{{ $isCollapsed ? 'Lender Management' : '' }}">

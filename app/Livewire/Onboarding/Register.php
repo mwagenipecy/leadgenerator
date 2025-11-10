@@ -21,6 +21,8 @@ class Register extends Component
     public $company_name = '';
     public $company_tin = '';
     public $company_contact_nida = '';
+    public $country = '';
+    public $passport_number = '';
     public $password = '';
     public $password_confirmation = '';
     public $terms = false;
@@ -42,7 +44,13 @@ class Register extends Component
         if ($isCompany) {
             $rules['company_name'] = ['required', 'string', 'max:255'];
             $rules['company_tin'] = ['required', 'string', 'max:50'];
-            $rules['company_contact_nida'] = ['required', 'string', 'size:20', 'regex:/^[0-9]{20}$/'];
+            $rules['country'] = ['required', 'string', 'max:255'];
+            // If Tanzania, require NIDA; if not, require passport
+            if (strtolower($this->country ?? '') === 'tanzania') {
+                $rules['company_contact_nida'] = ['required', 'string', 'size:20', 'regex:/^[0-9]{20}$/'];
+            } else {
+                $rules['passport_number'] = ['required', 'string', 'max:50'];
+            }
         } else {
             $rules['nida_number'] = ['required', 'string', 'size:20', 'unique:users', 'regex:/^[0-9]{20}$/'];
         }
@@ -86,49 +94,69 @@ class Register extends Component
         try {
             $user = DB::transaction(function () {
                 // Create the user
+                // For company users from Tanzania, set nida_number from company_contact_nida for NIDA verification
+                $nidaNumber = $this->type === 'individual' ? $this->nida_number : null;
+                $companyContactNida = $this->type === 'company' && strtolower($this->country ?? '') === 'tanzania' ? $this->company_contact_nida : null;
+                
+                // Set nida_number for company users to enable NIDA verification
+                if ($this->type === 'company' && !empty($companyContactNida)) {
+                    $nidaNumber = $companyContactNida;
+                }
+                
                 $user = User::create([
                     'first_name' => $this->first_name,
                     'last_name' => $this->last_name,
                     'name' => $this->first_name . ' ' . $this->last_name,
                     'email' => $this->email,
                     'phone' => $this->phone,
-                    'nida_number' => $this->type === 'individual' ? $this->nida_number : null,
+                    'nida_number' => $nidaNumber,
                     'company_name' => $this->type === 'company' ? $this->company_name : null,
                     'company_tin' => $this->type === 'company' ? $this->company_tin : null,
-                    'company_contact_nida' => $this->type === 'company' ? $this->company_contact_nida : null,
+                    'company_contact_nida' => $companyContactNida,
+                    'country' => $this->type === 'company' ? $this->country : null,
+                    'passport_number' => $this->type === 'company' && strtolower($this->country ?? '') !== 'tanzania' ? $this->passport_number : null,
                     'registration_type' => $this->type,
                     'password' => Hash::make($this->password),
-                    'email_verified_at' => now(), // Auto-verify super admin
-                    'role' => 'borrower', // Set the legacy role field if still using it
+                    'email_verified_at' => now(),
+                    'verification_status' => $this->type === 'individual' ? 'pending' : 'pending',
+                    'company_verification_status' => $this->type === 'company' ? 'pending' : null,
+                    'role' => 'borrower',
                 ]);
     
-                // Assign Super Admin role using the new role system
-                $this->assignSuperAdminRole($user);
+                // Assign borrower role
+                $borrowerRole = Role::where('name', 'borrower')->first();
+                if ($borrowerRole) {
+                    $user->assignRole($borrowerRole);
+                }
     
                 return $user;
             });
     
-            // Auto-login the user
+            // For company registration, redirect to KYC verification
+            if ($this->type === 'company') {
+                // Auto-login the user
+                auth()->login($user);
+                
+                session()->flash('success', 'Account created successfully! Please complete your company KYC verification.');
+                
+                // Redirect to company KYC verification page
+                return redirect()->route('company.kyc');
+            }
+    
+            // For individual registration, continue with normal flow
             auth()->login($user);
-    
-            // Log successful super admin creation
-            \Log::info('Super Admin account created', [
-                'user_id' => $user->id,
-                'email' => $user->email,
-                'name' => $user->name,
-            ]);
-    
-            session()->flash('success', 'Super Admin account created successfully! You now have full system access.');
+            
+            session()->flash('success', 'Account created successfully!');
             
             // Reset form
             $this->reset();
             
-            // Redirect to admin dashboard
+            // Redirect to verification options
             return redirect()->route('verification.options');
             
         } catch (\Exception $e) {
             // Log the detailed error
-            \Log::error('Super Admin registration failed', [
+            \Log::error('Registration failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'email' => $this->email ?? 'N/A',
@@ -136,51 +164,6 @@ class Register extends Component
             
             session()->flash('error', 'Registration failed. Please try again.');
         }
-    }
-    
-    /**
-     * Assign Super Admin role to user
-     */
-    private function assignSuperAdminRole($user)
-    {
-        // Try to get existing super admin role
-        $superAdminRole = Role::where('name', 'super_admin')->first();
-        
-        if (!$superAdminRole) {
-            // Create super admin role if it doesn't exist
-            $superAdminRole = Role::create([
-                'name' => 'super_admin',
-                'display_name' => 'Super Administrator',
-                'description' => 'Full system access with all permissions',
-                'level' => 100,
-                'is_system_role' => true,
-                'is_active' => true,
-            ]);
-    
-            // Assign all permissions to super admin role
-            $allPermissions = \App\Models\Permission::where('is_active', true)->pluck('id');
-            if ($allPermissions->isNotEmpty()) {
-                $superAdminRole->permissions()->sync($allPermissions);
-            }
-        }
-    
-        // Assign role to user
-        if (method_exists($user, 'assignRole')) {
-            // Use the trait method if available
-            $user->assignRole($superAdminRole);
-        } else {
-            // Direct database assignment
-            $user->roles()->syncWithoutDetaching([
-                $superAdminRole->id => [
-                    'assigned_at' => now(),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            ]);
-        }
-    
-        // Update user's role level
-        $user->update(['role_level' => $superAdminRole->level]);
     }
 
     

@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SystemSettingController;
 use App\Http\Controllers\TRAController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\CompanyVerificationController;
 use App\Models\NidaVerification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NidaVerificationController;
@@ -184,6 +185,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), ])->group(
     Route::get('/verification/qr-code', [OnboardingController::class,'qrCodeVerification'])->name('verification.qr-code');
     Route::get('/verification/questionnaire', [OnboardingController::class,'questionnaireVerification'])->name('verification.questionnaire');
     });
+    
+    // Company KYC route
+    Route::get('/company/kyc', \App\Livewire\Onboarding\CompanyKyc::class)->name('company.kyc');
 });
 
 
@@ -277,6 +281,7 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
     /*********************************** USERMANAGEMENT ****************************************/
     Route::get('user-management',[UserManagementController::class,'index'])->name('user.management');
+    Route::get('company-verification',[CompanyVerificationController::class,'index'])->name('admin.company.verification');
     Route::get('user-management/roles', function () {
         return view('pages.user-management.roles');
     })->name('user.management.roles');

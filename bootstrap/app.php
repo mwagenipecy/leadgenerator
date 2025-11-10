@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'nida.verified' => \App\Http\Middleware\RequireNidaVerification::class,
+            'company.verified' => \App\Http\Middleware\RequireCompanyVerification::class,
+        ]);
+        $middleware->web(append: [
+            \App\Http\Middleware\RequireCompanyVerification::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

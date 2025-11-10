@@ -90,15 +90,28 @@ class NidaVerificationController extends Controller
                 ]);
 
                 // Update user record
-                $verification->user->update([
+                $user = $verification->user;
+                $updateData = [
                     'nida_verified_at' => now(),
                     'verification_status' => 'verified'
-                ]);
+                ];
+                
+                // For company users, ensure nida_number is set from company_contact_nida
+                if ($user->registration_type === 'company' && empty($user->nida_number) && !empty($user->company_contact_nida)) {
+                    $updateData['nida_number'] = $user->company_contact_nida;
+                }
+                
+                $user->update($updateData);
+                
+                // Determine redirect URL based on user type
+                $redirectUrl = $user->registration_type === 'company' 
+                    ? route('company.kyc') 
+                    : route('dashboard');
 
                 return response()->json([
                     'success' => true,
                     'message' => 'Verification completed successfully',
-                    'redirect_url' => route('dashboard')
+                    'redirect_url' => $redirectUrl
                 ]);
             } else {
                 // Clean up failed photo

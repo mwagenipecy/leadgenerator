@@ -161,10 +161,17 @@ class PhonePhotoVerification extends Component
 
     private function saveVerificationRecord($photoPath, $verificationResult)
     {
+        // Get the correct NIDA number (use company_contact_nida for company users)
+        $user = Auth::user();
+        $nidaNumber = $user->nida_number;
+        if (empty($nidaNumber) && $user->registration_type === 'company' && !empty($user->company_contact_nida)) {
+            $nidaNumber = $user->company_contact_nida;
+        }
+        
         NidaVerification::updateOrCreate(
             ['user_id' => Auth::id()],
             [
-                'nida_number' => Auth::user()->nida_number,
+                'nida_number' => $nidaNumber,
                 'status' => 'verified',
                 'verified_at' => now(),
                 'verification_method' => 'phone_photo',
@@ -181,18 +188,34 @@ class PhonePhotoVerification extends Component
     {
         $user = Auth::user();
         
-        // Update user record
-        $user->update([
+        // For company users, ensure nida_number is set from company_contact_nida
+        $updateData = [
             'nida_verified_at' => now(),
             'verification_status' => 'verified'
-        ]);
+        ];
         
-        // Create or update user profile
-        $this->createOrUpdateUserProfile($user);
+        // If company user and nida_number is not set, use company_contact_nida
+        if ($user->registration_type === 'company' && empty($user->nida_number) && !empty($user->company_contact_nida)) {
+            $updateData['nida_number'] = $user->company_contact_nida;
+        }
+        
+        // Update user record
+        $user->update($updateData);
+        
+        // Create or update user profile (skip for company users during KYC)
+        if ($user->registration_type !== 'company') {
+            $this->createOrUpdateUserProfile($user);
+        }
         
         $this->isVerified = true;
         $this->verificationStep = 'complete';
-        $this->successMessage = 'Your identity has been successfully verified! Your profile has been created. You can now complete your profile information.';
+        
+        // Different messages and redirects for company vs individual users
+        if ($user->registration_type === 'company') {
+            $this->successMessage = 'Your NIDA verification is complete! You can now continue with company document upload.';
+        } else {
+            $this->successMessage = 'Your identity has been successfully verified! Your profile has been created. You can now complete your profile information.';
+        }
         
         // Clear any errors
         $this->errorMessage = '';
@@ -200,6 +223,14 @@ class PhonePhotoVerification extends Component
 
     public function goToProfile()
     {
+        $user = Auth::user();
+        
+        // For company users, redirect to company KYC page
+        if ($user->registration_type === 'company') {
+            return redirect()->route('company.kyc')
+                ->with('success', 'NIDA verification completed! Please continue with document upload.');
+        }
+        
         return redirect()->route('loan-application.profile');
     }
 

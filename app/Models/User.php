@@ -41,9 +41,17 @@ class User extends Authenticatable
         'date_of_birth',
         'role',
         'is_active',
-        'lender_id'
-
-
+        'lender_id',
+        'registration_type',
+        'company_name',
+        'company_tin',
+        'company_contact_nida',
+        'country',
+        'passport_number',
+        'company_verification_status',
+        'company_verified_at',
+        'company_verified_by',
+        'company_verification_notes',
     ];
 
     /**
@@ -76,6 +84,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'nida_verified_at' => 'datetime',
+            'company_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -399,5 +409,52 @@ public function profile()
     return $this->hasOne(UserProfile::class);
 }
 
+/**
+ * Get company verification documents.
+ */
+public function companyVerificationDocuments()
+{
+    return $this->hasMany(CompanyVerificationDocument::class);
+}
+
+/**
+ * Check if user is company verified.
+ */
+public function isCompanyVerified(): bool
+{
+    return $this->company_verification_status === 'verified';
+}
+
+/**
+ * Check if user is from Tanzania.
+ */
+public function isFromTanzania(): bool
+{
+    return strtolower($this->country ?? '') === 'tanzania';
+}
+
+/**
+ * Get the user who verified the company.
+ */
+public function companyVerifier()
+{
+    return $this->belongsTo(User::class, 'company_verified_by');
+}
+
+/**
+ * Check if company verification is pending.
+ */
+public function isCompanyVerificationPending(): bool
+{
+    return $this->company_verification_status === 'pending';
+}
+
+/**
+ * Check if company verification is rejected.
+ */
+public function isCompanyVerificationRejected(): bool
+{
+    return $this->company_verification_status === 'rejected';
+}
 
 }

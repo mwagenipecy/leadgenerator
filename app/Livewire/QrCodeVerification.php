@@ -94,11 +94,18 @@ class QrCodeVerification extends Component
             $this->sessionCode = strtoupper(Str::random(6));
             $expirationTime = now()->addMinutes(6);
             
+            // Get the correct NIDA number (use company_contact_nida for company users)
+            $user = Auth::user();
+            $nidaNumber = $user->nida_number;
+            if (empty($nidaNumber) && $user->registration_type === 'company' && !empty($user->company_contact_nida)) {
+                $nidaNumber = $user->company_contact_nida;
+            }
+            
             // Create or update verification record
             $verification = NidaVerification::updateOrCreate(
                 ['user_id' => Auth::id()],
                 [
-                    'nida_number' => Auth::user()->nida_number,
+                    'nida_number' => $nidaNumber,
                     'verification_token' => $this->verificationToken,
                     'token_expires_at' => $expirationTime,
                     'verification_method' => 'qr_code',
@@ -294,21 +301,45 @@ class QrCodeVerification extends Component
 
     private function completeVerification()
     {
-        // Update user record
-        Auth::user()->update([
+        $user = Auth::user();
+        
+        // For company users, ensure nida_number is set from company_contact_nida
+        $updateData = [
             'nida_verified_at' => now(),
             'verification_status' => 'verified'
-        ]);
+        ];
+        
+        // If company user and nida_number is not set, use company_contact_nida
+        if ($user->registration_type === 'company' && empty($user->nida_number) && !empty($user->company_contact_nida)) {
+            $updateData['nida_number'] = $user->company_contact_nida;
+        }
+        
+        // Update user record
+        $user->update($updateData);
 
         $this->isVerified = true;
         $this->verificationStep = 'complete';
-        $this->successMessage = 'Your identity has been successfully verified!';
+        
+        if ($user->registration_type === 'company') {
+            $this->successMessage = 'Your NIDA verification is complete! You can now continue with company document upload.';
+        } else {
+            $this->successMessage = 'Your identity has been successfully verified!';
+        }
+        
         $this->stopPolling();
         $this->dispatch('verification-completed');
     }
 
     public function redirectToDashboard()
     {
+        $user = Auth::user();
+        
+        // For company users, redirect to company KYC page
+        if ($user->registration_type === 'company') {
+            return redirect()->route('company.kyc')
+                ->with('success', 'NIDA verification completed! Please continue with document upload.');
+        }
+        
         return redirect()->route('dashboard');
     }
 
