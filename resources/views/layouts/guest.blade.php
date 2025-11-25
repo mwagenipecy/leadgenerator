@@ -24,7 +24,10 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 font-inter min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<body 
+    class="font-inter min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center bg-no-repeat"
+    style="background-image: url('{{ asset('bg/login/61758.jpg') }}');"
+>
     <!-- Login Container -->
   
 

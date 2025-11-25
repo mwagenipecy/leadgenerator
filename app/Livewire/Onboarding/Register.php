@@ -34,7 +34,12 @@ class Register extends Component
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'max:20','unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => [
+                'required',
+                'string',
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+                'confirmed',
+            ],
             'password_confirmation' => ['required'],
             'terms' => ['required', 'accepted'],
         ];
@@ -70,6 +75,9 @@ class Register extends Component
         'password.required' => 'Password is required.',
         'password.min' => 'Password must be at least 8 characters.',
         'password.confirmed' => 'Password confirmation does not match.',
+        'password.mixed' => 'Password must include uppercase and lowercase letters.',
+        'password.numbers' => 'Password must include at least one number.',
+        'password.symbols' => 'Password must include at least one special character.',
         'password_confirmation.required' => 'Please confirm your password.',
         'terms.accepted' => 'You must agree to the terms and conditions.',
     ];

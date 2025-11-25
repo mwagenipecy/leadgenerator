@@ -148,6 +148,18 @@ class User extends Authenticatable
         return $this->belongsTo(Lender::class,'lender_id','id');
     }
 
+    /**
+     * Determine if the user should go through NIDA verification.
+     */
+    public function requiresNidaVerification(): bool
+    {
+        if ($this->isAdmin() || $this->isLender() || $this->hasAnyRole(['admin', 'lender'])) {
+            return false;
+        }
+
+        return true;
+    }
+
     // Role helpers
     public function isAdmin(): bool
     {

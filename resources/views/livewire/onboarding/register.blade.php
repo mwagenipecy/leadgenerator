@@ -1,71 +1,65 @@
-<div class="min-h-screen flex">
-<!-- Left Side - Welcome Content (Hidden on mobile) -->
-  <div class="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-brand-red via-brand-dark-red to-red-900 relative overflow-hidden">
-            <!-- Background Pattern -->
-            <div class="absolute inset-0 opacity-5">
-                <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-rule="evenodd"%3E%3Ccircle cx="20" cy="20" r="2"/%3E%3Ccircle cx="10" cy="10" r="1"/%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/svg%3E');"></div>
-            </div>
-            
-            <!-- Content -->
-            <div class="relative z-10 flex flex-col justify-center p-12 w-full">
-                <div class="max-w-sm">
-                    <!-- Logo -->
-                    <div class="mb-8">
-                        <div class="w-20 h-20 bg-white/15 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
-                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <!-- Welcome Text -->
-                    <h1 class="text-3xl font-bold font-poppins text-white mb-4">
-                        Join Lead<span class="text-red-200">Generator</span>
-                    </h1>
-                    <p class="text-red-100 text-lg mb-8 leading-relaxed">
-                        Transform your business with our advanced lead generation platform powered by secure NIDA verification.
-                    </p>
-                    
-                    <!-- Feature List -->
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-red-100">Biometric Security</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-red-100">Real-time Analytics</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-red-100">NIDA Integration</span>
+@php
+    $slides = [
+        [
+            'image' => asset('register-assets/image/slider/getCreditScoreInstantly.png'),
+            'title' => 'Get credit scores instantly',
+            'description' => 'Access bureau-backed credit information and insights in seconds.',
+        ],
+        [
+            'image' => asset('register-assets/image/slider/onlineCreditInstantly.jpg'),
+            'title' => 'Accelerate borrower onboarding',
+            'description' => 'Guide applicants through a seamless, digital-first verification flow.',
+        ],
+        [
+            'image' => asset('register-assets/image/slider/registerEasyAndApplyOnline.jpg'),
+            'title' => 'Register, analyze, approve',
+            'description' => 'Empower your team with collaborative tools from application to payout.',
+        ],
+    ];
+@endphp
+
+<div class="min-h-screen flex flex-col lg:flex-row gap-0 p-4">
+    <!-- Left Side Slider -->
+    <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-4">
+        <div class="relative w-full h-[620px] rounded-3xl overflow-hidden shadow-2xl" id="register-slider">
+            @foreach ($slides as $index => $slide)
+                <div 
+                    class="absolute inset-0 transition-all duration-700 ease-in-out {{ $index === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-105 pointer-events-none' }}" 
+                    data-slide="{{ $index }}"
+                >
+                    <img 
+                        src="{{ $slide['image'] }}" 
+                        alt="{{ $slide['title'] }}" 
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                    <div class="absolute inset-x-0 bottom-0 p-8">
+                        <div class="bg-black/65 backdrop-blur-sm rounded-2xl p-6 shadow-[0_-20px_60px_rgba(0,0,0,0.45)]">
+                            <p class="text-sm uppercase tracking-[0.4em] text-white/70 mb-3">LeadGenerator</p>
+                            <h3 class="text-3xl font-semibold text-white capitalize mb-3">{{ $slide['title'] }}</h3>
+                            <p class="text-white/85 leading-relaxed text-base">{{ $slide['description'] }}</p>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Bottom Wave -->
-            <div class="absolute bottom-0 left-0 right-0">
-                <svg viewBox="0 0 1200 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-16">
-                    <path d="M0 100L48 90C96 80 192 60 288 50C384 40 480 40 576 45C672 50 768 60 864 65C960 70 1056 70 1104 70L1152 70V100H1104C1056 100 960 100 864 100C768 100 672 100 576 100C480 100 384 100 288 100C192 100 96 100 48 100H0Z" fill="white" fill-opacity="0.1"/>
-                </svg>
+            @endforeach
+            <div class="absolute bottom-6 left-0 right-0 flex justify-center">
+                <div class="flex items-center gap-3 bg-black/40 backdrop-blur-lg px-6 py-3 rounded-full" id="slider-dots">
+                    @foreach ($slides as $index => $slide)
+                        <button 
+                            type="button" 
+                            class="h-2.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'w-8 bg-white' : 'w-2.5 bg-white/40' }}"
+                            aria-label="Show slide {{ $index + 1 }}"
+                            data-dot="{{ $index }}"
+                        ></button>
+                    @endforeach
+                </div>
             </div>
         </div>
+    </div>
 
         <!-- Right Side - Registration Form -->
-        <div class="w-full lg:w-3/5 flex items-center justify-center p-6 sm:p-8 lg:p-12">
+        <div class="w-full lg:w-1/2 flex items-center justify-center px-4 pl-0 pr-4 py-4">
             <div class="w-full max-w-lg">
                 
                 <!-- Header -->
@@ -285,6 +279,7 @@
                 @error('password')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
+                <p class="text-xs text-gray-500 mt-1">Use 8+ characters with uppercase, number, and special character.</p>
             </div>
             
             <div>
@@ -389,3 +384,59 @@
     
     
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slider = document.getElementById('register-slider');
+        if (!slider) return;
+
+        const slides = slider.querySelectorAll('[data-slide]');
+        const dots = slider.querySelectorAll('[data-dot]');
+        let currentSlide = 0;
+        let intervalId;
+
+        const showSlide = (index) => {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.remove('opacity-0', 'scale-105', 'pointer-events-none');
+                    slide.classList.add('opacity-100', 'scale-100');
+                } else {
+                    slide.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
+                    slide.classList.remove('opacity-100', 'scale-100');
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('w-8', 'bg-white');
+                    dot.classList.remove('w-2.5', 'bg-white/40');
+                } else {
+                    dot.classList.add('w-2.5', 'bg-white/40');
+                    dot.classList.remove('w-8', 'bg-white');
+                }
+            });
+
+            currentSlide = index;
+        };
+
+        const startRotation = () => {
+            if (slides.length <= 1) return;
+            intervalId = setInterval(() => {
+                const nextIndex = (currentSlide + 1) % slides.length;
+                showSlide(nextIndex);
+            }, 6000);
+        };
+
+        dots.forEach((dot) => {
+            dot.addEventListener('click', () => {
+                const index = Number(dot.dataset.dot);
+                showSlide(index);
+                clearInterval(intervalId);
+                startRotation();
+            });
+        });
+
+        showSlide(0);
+        startRotation();
+    });
+</script>

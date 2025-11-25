@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
+use ZipArchive;
 
 class CreditReportSearch extends Component
 {
@@ -444,14 +445,13 @@ class CreditReportSearch extends Component
      */
     private function getSoapEndpoint()
     {
-        // First, check if a specific CB5 endpoint is configured
-        $cb5Endpoint = env('CREDITINFO_CB5_ENDPOINT');
-        if ($cb5Endpoint) {
-            Log::info('Using configured CB5 endpoint', ['endpoint' => $cb5Endpoint]);
-            return $cb5Endpoint;
+        $configuredEndpoint = config('services.creditinfo.cb5_endpoint');
+        if ($configuredEndpoint) {
+            Log::info('Using configured CreditInfo CB5 endpoint', ['endpoint' => $configuredEndpoint]);
+            return $configuredEndpoint;
         }
         
-        $endpoint = env('CREDITINFO_ENDPOINT') ?: env('SOAP_URL');
+        $endpoint = env('CREDITINFO_CB5_ENDPOINT') ?: env('CREDITINFO_ENDPOINT') ?: env('SOAP_URL') ?: 'https://ws-stage.creditinfo.co.tz/WsReport/v5.73/service.svc';
         
         // If endpoint contains MultiConnector.svc, the CB5 API is likely on a different endpoint
         if ($endpoint && str_contains($endpoint, 'MultiConnector.svc')) {
@@ -488,13 +488,13 @@ class CreditReportSearch extends Component
      */
     private function getSoapUsername()
     {
-        return env('CREDITINFO_USERNAME') ?: env('SOAP_USERNAME') ?: 'payasyougo';
+        return config('services.creditinfo.username') ?: env('CREDITINFO_USERNAME') ?: env('SOAP_USERNAME') ?: 'nbcemkopo';
     }
     
     
     private function getSoapPassword()
     {
-        return env('CREDITINFO_PASSWORD') ?: env('SOAP_PASSWORD') ?: 'pay2025';
+        return config('services.creditinfo.password') ?: env('CREDITINFO_PASSWORD') ?: env('SOAP_PASSWORD') ?: 'nbcEmkopo213';
     }
     
    
@@ -523,31 +523,25 @@ class CreditReportSearch extends Component
                 throw new \Exception('SOAP configuration is incomplete. Please check your environment variables (CREDITINFO_ENDPOINT, CREDITINFO_USERNAME, CREDITINFO_PASSWORD).');
             }
             
-            // Build SOAP request for search
             $messageId = Str::uuid()->toString();
-            $soapRequest = $this->buildSearchSoapRequest($messageId, $username, $password);
-            
-            // Log the FULL request for debugging
+            $soapRequest = $this->buildSearchSoapRequestEmptyHeader($messageId, $username, $password);
+
             Log::info('CreditInfo CB5 Search Request', [
                 'url' => $soapUrl,
                 'username' => $username,
-                'soap_action' => 'http://creditinfo.com/CB5/ISearchService/SearchIndividual',
+                'auth_method' => 'basic',
                 'request_length' => strlen($soapRequest),
                 'request' => $soapRequest
             ]);
-            
-            // Try with WSSE headers (like MultiConnector services)
-            // The SOAP request already has WSSE Security in the header
-            $response = Http::withHeaders([
-                'Content-Type' => 'text/xml; charset=utf-8',
-                'X-WSSE' => 'WSSE profile="UsernameToken"',
-                'Username' => $username,
-                'Password' => $password,
-                'SOAPAction' => 'http://creditinfo.com/CB5/ISearchService/SearchIndividual',
-            ])->timeout(150)
-              ->send('POST', $soapUrl, [
-                  'body' => $soapRequest
-              ]);
+
+            $response = Http::withBasicAuth($username, $password)
+                ->withHeaders([
+                    'Content-Type' => 'text/xml; charset=utf-8',
+                    'SOAPAction' => 'http://creditinfo.com/CB5/ISearchService/SearchIndividual',
+                ])->timeout(150)
+                ->send('POST', $soapUrl, [
+                    'body' => $soapRequest
+                ]);
             
             // Log the response
             Log::info('CreditInfo CB5 Search Response', [
@@ -555,31 +549,6 @@ class CreditReportSearch extends Component
                 'response_length' => strlen($response->body()),
                 'response_preview' => substr($response->body(), 0, 1000)
             ]);
-            
-            // If we get a 500 error with Client fault, try with empty header and HTTP Basic Auth
-            if ($response->status() === 500) {
-                $faultCode = $this->extractFaultCode($response->body());
-                if ($faultCode === 's:Client') {
-                    Log::info('Client fault detected, trying with empty header and HTTP Basic Auth');
-                    
-                    // Rebuild request with empty header
-                    $soapRequestEmptyHeader = $this->buildSearchSoapRequestEmptyHeader($messageId, $username, $password);
-                    
-                    $response = Http::withBasicAuth($username, $password)
-                      ->withHeaders([
-                          'Content-Type' => 'text/xml; charset=utf-8',
-                          'SOAPAction' => 'http://creditinfo.com/CB5/ISearchService/SearchIndividual',
-                      ])->timeout(150)
-                      ->send('POST', $soapUrl, [
-                          'body' => $soapRequestEmptyHeader
-                      ]);
-                    
-                    Log::info('CreditInfo CB5 Search Response (Empty Header + Basic Auth)', [
-                        'status' => $response->status(),
-                        'response_preview' => substr($response->body(), 0, 1000)
-                    ]);
-                }
-            }
             
             // Check response status
             if ($response->successful()) {
@@ -1277,17 +1246,10 @@ class CreditReportSearch extends Component
             // Check if response is directly base64 encoded PDF (not wrapped in XML)
             // Sometimes the API returns just the base64 string
             if (preg_match('/^[A-Za-z0-9+\/]+=*$/', $cleanXml) && strlen($cleanXml) > 100) {
-                // This looks like base64 encoded data
-                $pdfContent = base64_decode($cleanXml);
-                if ($pdfContent !== false && substr($pdfContent, 0, 4) === '%PDF') {
-                    // Valid PDF content
-                    $filename = 'credit_report_' . $creditinfoId . '_' . time() . '.pdf';
-                    $path = 'credit-reports/' . $filename;
-                    
-                    Storage::disk('public')->put($path, $pdfContent);
-                    $url = Storage::disk('public')->url($path);
-                    Log::info('PDF report saved from direct base64 response', ['path' => $path, 'creditinfo_id' => $creditinfoId]);
-                    return $url;
+                $directUrl = $this->decodeAndPersistPdf($cleanXml, $creditinfoId);
+                if ($directUrl) {
+                    Log::info('PDF report saved from direct base64 response', ['url' => $directUrl, 'creditinfo_id' => $creditinfoId]);
+                    return $directUrl;
                 }
             }
             
@@ -1296,15 +1258,10 @@ class CreditReportSearch extends Component
             $xml = simplexml_load_string($cleanXml);
             
             if ($xml === false) {
-                // If XML parsing fails, check if it's base64 encoded PDF directly
-                $pdfContent = base64_decode($cleanXml);
-                if ($pdfContent !== false && substr($pdfContent, 0, 4) === '%PDF') {
-                    $filename = 'credit_report_' . $creditinfoId . '_' . time() . '.pdf';
-                    $path = 'credit-reports/' . $filename;
-                    Storage::disk('public')->put($path, $pdfContent);
-                    $url = Storage::disk('public')->url($path);
-                    Log::info('PDF report saved from base64 (XML parse failed)', ['path' => $path, 'creditinfo_id' => $creditinfoId]);
-                    return $url;
+                $fallbackUrl = $this->decodeAndPersistPdf($cleanXml, $creditinfoId);
+                if ($fallbackUrl) {
+                    Log::info('PDF report saved from fallback base64 response', ['url' => $fallbackUrl, 'creditinfo_id' => $creditinfoId]);
+                    return $fallbackUrl;
                 }
                 
                 $errors = libxml_get_errors();
@@ -1329,19 +1286,10 @@ class CreditReportSearch extends Component
                 
                 // If the text is long enough and looks like base64, try to decode it
                 if (!empty($resultText) && strlen($resultText) > 100) {
-                    // Remove any whitespace/newlines
-                    $resultText = preg_replace('/\s+/', '', $resultText);
-                    
-                    // Try to decode as base64
-                    $decoded = base64_decode($resultText, true);
-                    if ($decoded !== false && substr($decoded, 0, 4) === '%PDF') {
-                        // Valid PDF content
-                        $filename = 'credit_report_' . $creditinfoId . '_' . time() . '.pdf';
-                        $path = 'credit-reports/' . $filename;
-                        Storage::disk('public')->put($path, $decoded);
-                        $url = Storage::disk('public')->url($path);
-                        Log::info('PDF report saved from GetPdfReportResult base64', ['path' => $path, 'creditinfo_id' => $creditinfoId]);
-                        return $url;
+                    $storedUrl = $this->decodeAndPersistPdf($resultText, $creditinfoId);
+                    if ($storedUrl) {
+                        Log::info('PDF report saved from GetPdfReportResult base64', ['url' => $storedUrl, 'creditinfo_id' => $creditinfoId]);
+                        return $storedUrl;
                     }
                 }
                 
@@ -1350,15 +1298,10 @@ class CreditReportSearch extends Component
                 foreach ($childNodes as $child) {
                     $childText = trim((string)$child);
                     if (!empty($childText) && strlen($childText) > 100) {
-                        $childText = preg_replace('/\s+/', '', $childText);
-                        $decoded = base64_decode($childText, true);
-                        if ($decoded !== false && substr($decoded, 0, 4) === '%PDF') {
-                            $filename = 'credit_report_' . $creditinfoId . '_' . time() . '.pdf';
-                            $path = 'credit-reports/' . $filename;
-                            Storage::disk('public')->put($path, $decoded);
-                            $url = Storage::disk('public')->url($path);
-                            Log::info('PDF report saved from child node base64', ['path' => $path, 'creditinfo_id' => $creditinfoId]);
-                            return $url;
+                        $storedUrl = $this->decodeAndPersistPdf($childText, $creditinfoId);
+                        if ($storedUrl) {
+                            Log::info('PDF report saved from child node base64', ['url' => $storedUrl, 'creditinfo_id' => $creditinfoId]);
+                            return $storedUrl;
                         }
                     }
                 }
@@ -1370,14 +1313,10 @@ class CreditReportSearch extends Component
                 foreach ($allTextNodes as $textNode) {
                     $text = preg_replace('/\s+/', '', trim((string)$textNode));
                     if (!empty($text) && strlen($text) > 100) {
-                        $decoded = base64_decode($text, true);
-                        if ($decoded !== false && substr($decoded, 0, 4) === '%PDF') {
-                            $filename = 'credit_report_' . $creditinfoId . '_' . time() . '.pdf';
-                            $path = 'credit-reports/' . $filename;
-                            Storage::disk('public')->put($path, $decoded);
-                            $url = Storage::disk('public')->url($path);
-                            Log::info('PDF report saved from text node base64', ['path' => $path, 'creditinfo_id' => $creditinfoId]);
-                            return $url;
+                        $storedUrl = $this->decodeAndPersistPdf($text, $creditinfoId);
+                        if ($storedUrl) {
+                            Log::info('PDF report saved from text node base64', ['url' => $storedUrl, 'creditinfo_id' => $creditinfoId]);
+                            return $storedUrl;
                         }
                     }
                 }
@@ -1413,6 +1352,86 @@ class CreditReportSearch extends Component
             ]);
             throw $e;
         }
+    }
+
+    private function decodeAndPersistPdf(string $payload, string $creditinfoId): ?string
+    {
+        $normalized = preg_replace('/\s+/', '', $payload);
+        $binary = base64_decode($normalized, true);
+
+        if ($binary === false) {
+            return null;
+        }
+
+        return $this->persistPdfBinary($binary, $creditinfoId);
+    }
+
+    private function persistPdfBinary(string $binary, string $creditinfoId): ?string
+    {
+        if (str_starts_with($binary, '%PDF')) {
+            return $this->storePdfContent($creditinfoId, $binary);
+        }
+
+        if (substr($binary, 0, 2) === 'PK') {
+            return $this->extractPdfFromZipBinary($binary, $creditinfoId);
+        }
+
+        return null;
+    }
+
+    private function extractPdfFromZipBinary(string $binary, string $creditinfoId): ?string
+    {
+        $tempPath = storage_path('app/creditinfo_report_' . Str::uuid() . '.zip');
+        file_put_contents($tempPath, $binary);
+
+        $zip = new ZipArchive();
+        $pdfContent = null;
+
+        if ($zip->open($tempPath) === true) {
+            $preferredNames = ['report.pdf', 'Report.pdf'];
+            foreach ($preferredNames as $name) {
+                $content = $zip->getFromName($name);
+                if ($content !== false) {
+                    $pdfContent = $content;
+                    break;
+                }
+            }
+
+            if (!$pdfContent) {
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $stat = $zip->statIndex($i);
+                    if ($stat && str_ends_with(strtolower($stat['name']), '.pdf')) {
+                        $content = $zip->getFromIndex($i);
+                        if ($content !== false) {
+                            $pdfContent = $content;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            $zip->close();
+        }
+
+        @unlink($tempPath);
+
+        if ($pdfContent && str_starts_with($pdfContent, '%PDF')) {
+            Log::info('Extracted PDF from zip archive', ['creditinfo_id' => $creditinfoId]);
+            return $this->storePdfContent($creditinfoId, $pdfContent);
+        }
+
+        Log::warning('Unable to extract PDF from zip archive', ['creditinfo_id' => $creditinfoId]);
+        return null;
+    }
+
+    private function storePdfContent(string $creditinfoId, string $pdfContent): string
+    {
+        $filename = 'credit_report_' . $creditinfoId . '_' . time() . '.pdf';
+        $path = 'credit-reports/' . $filename;
+        
+        Storage::disk('public')->put($path, $pdfContent);
+
+        return Storage::disk('public')->url($path);
     }
     
     private function logReportRetrieval($creditinfoId)

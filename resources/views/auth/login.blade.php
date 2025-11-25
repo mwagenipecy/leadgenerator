@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-authentication-card>
-         <!-- Header -->
-         <div class="text-center">
+        <!-- Header -->
+        <div class="text-center">
             <!-- Logo -->
             <div class="text-3xl font-bold font-poppins text-black mb-2">
                 Lead<span class="text-brand-red">Generator</span>
@@ -13,7 +13,7 @@
         <!-- Login Form -->
         <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
             
-            <form method="POST" class="space-y-6"  action="{{ route('login') }}">
+            <form method="POST" class="space-y-6" id="login-form" action="{{ route('login') }}">
 
                 @csrf 
                 <!-- Email Field -->
@@ -112,9 +112,20 @@
                 <div>
                     <button 
                         type="submit" 
-                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02]"
+                        id="sign-in-button"
+                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2"
                     >
-                        Sign In
+                        <span id="sign-in-text">Sign In</span>
+                        <svg 
+                            id="sign-in-loader" 
+                            class="hidden animate-spin h-5 w-5 text-white" 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" 
+                            viewBox="0 0 24 24"
+                        >
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
                     </button>
                 </div>
 
@@ -178,3 +189,24 @@
 
     </x-authentication-card>
 </x-guest-layout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('login-form');
+        const button = document.getElementById('sign-in-button');
+        const loader = document.getElementById('sign-in-loader');
+        const buttonText = document.getElementById('sign-in-text');
+
+        if (!form || !button || !loader || !buttonText) {
+            return;
+        }
+
+        form.addEventListener('submit', () => {
+            button.disabled = true;
+            button.classList.add('opacity-70', 'cursor-not-allowed');
+            loader.classList.remove('hidden');
+            buttonText.textContent = 'Signing in...';
+        });
+
+    });
+</script>

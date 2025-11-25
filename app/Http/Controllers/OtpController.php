@@ -126,9 +126,8 @@ class OtpController extends Controller
                 'nida_verified_at' => $user->nida_verified_at,
             ]);
             
-            // Check if user is NIDA verified
-            // If not verified, redirect to verification options page
-            if (!$user->isNidaVerified()) {
+            // Only borrowers must complete NIDA verification
+            if ($user->requiresNidaVerification() && !$user->isNidaVerified()) {
                 Log::info('User is not NIDA verified, redirecting to verification options', [
                     'user_id' => $user->id,
                 ]);

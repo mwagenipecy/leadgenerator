@@ -28,11 +28,17 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
-    'slack' => [
-        'notifications' => [
-            'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
-            'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
-        ],
+'slack' => [
+    'notifications' => [
+        'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
+        'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
     ],
+],
+
+'creditinfo' => [
+    'cb5_endpoint' => env('CREDITINFO_CB5_ENDPOINT', 'https://ws-stage.creditinfo.co.tz/WsReport/v5.73/service.svc'),
+    'username' => env('CREDITINFO_USERNAME', 'nbcemkopo'),
+    'password' => env('CREDITINFO_PASSWORD', 'nbcEmkopo213'),
+],
 
 ];

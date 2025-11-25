@@ -22,7 +22,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body class="bg-gradient-to-br from-red-50 to-red-100 min-h-screen flex items-center justify-center p-4">
+<body 
+    class="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat"
+    style="background-image: url('{{ asset('bg/login/61758.jpg') }}');"
+>
     <div class="w-full max-w-md space-y-8">
         
         <!-- Header -->
@@ -105,7 +108,7 @@
                     <button 
                         type="submit" 
                         id="verifyBtn"
-                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold bg-red-700 hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] disabled:bg-brand-red/80 disabled:text-white disabled:cursor-not-allowed"
                         disabled
                     >
                         {{ __('Verify Code') }}

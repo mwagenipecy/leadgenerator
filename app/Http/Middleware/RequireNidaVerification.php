@@ -42,6 +42,11 @@ class RequireNidaVerification
             return $next($request);
         }
 
+        // Allow users who do not require NIDA verification (admins, lenders, etc.)
+        if (!$user->requiresNidaVerification()) {
+            return $next($request);
+        }
+
         // Check if user is NIDA verified
         if (!$user->isNidaVerified()) {
             Log::info('User not NIDA verified, redirecting to verification options', [
