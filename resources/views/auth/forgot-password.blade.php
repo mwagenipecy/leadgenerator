@@ -3,8 +3,8 @@
         <!-- Header -->
         <div class="text-center">
             <!-- Logo -->
-            <div class="text-3xl font-bold font-poppins text-black mb-2">
-                Lead<span class="text-brand-red">Generator</span>
+            <div class="flex justify-center mb-4">
+                <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" class="h-16 w-auto">
             </div>
             <h2 class="text-2xl font-semibold text-gray-900 mb-2">Reset Password</h2>
             <p class="text-gray-600">Enter your email  to receive a reset link</p>
@@ -15,8 +15,8 @@
             
             <!-- Description -->
             <div class="mb-6 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-red/10 rounded-full mb-4">
-                    <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-green/10 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                     </svg>
                 </div>
@@ -62,7 +62,7 @@
                             :value="old('email')"
                             required 
                             autofocus
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Enter your email "
                         >
                     </div>
@@ -75,7 +75,7 @@
                 <div>
                     <button 
                         type="submit" 
-                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+                        class="w-full bg-brand-green text-white py-3 rounded-lg font-semibold hover:bg-brand-green-light focus:ring-4 focus:ring-brand-green/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
                     >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -90,7 +90,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Remember your password? 
-                    <a href="{{ route('login') }}" class="font-medium text-brand-red hover:text-red-700 transition-colors inline-flex items-center">
+                    <a href="{{ route('login') }}" class="font-medium text-brand-green hover:text-brand-green-light transition-colors inline-flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>

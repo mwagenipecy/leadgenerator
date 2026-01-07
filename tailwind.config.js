@@ -10,6 +10,8 @@ export default {
         colors: {
           'brand-red': '#C40F12',
           'brand-dark-red': '#A00E11',
+          'brand-green': '#19733B',
+          'brand-green-light': '#1a7f40',
           'sidebar-black': '#0A0A0A',
           'sidebar-gray': '#1F1F1F',
           'accent-gray': '#F8F9FA',

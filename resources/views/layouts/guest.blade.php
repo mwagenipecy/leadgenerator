@@ -13,7 +13,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#C40F12',
+                        'brand-green': '#19733B',
+                        'brand-green-light': '#1a7f40',
                     },
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],
@@ -23,8 +24,28 @@
             }
         }
     </script>
+    <style>
+        .auth-background {
+            position: relative;
+        }
+        .auth-background::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('{{ asset("landing/loginImage.png") }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        .auth-background > * {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 font-inter min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<body class="auth-background font-inter min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <!-- Login Container -->
   
 

@@ -9,7 +9,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#dc2626'
+                        'brand-green': '#19733B',
+                        'brand-green-light': '#1a7f40'
                     },
                     fontFamily: {
                         'poppins': ['Poppins', 'sans-serif']
@@ -21,15 +22,35 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .auth-background {
+            position: relative;
+        }
+        .auth-background::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('{{ asset("landing/loginImage.png") }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        .auth-background > * {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-red-50 to-red-100 min-h-screen flex items-center justify-center p-4">
+<body class="auth-background min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md space-y-8">
         
         <!-- Header -->
         <div class="text-center">
             <!-- Logo -->
-            <div class="text-3xl font-bold font-poppins text-black mb-2">
-                Lead<span class="text-brand-red">Generator</span>
+            <div class="flex justify-center mb-4">
+                <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" class="h-16 w-auto">
             </div>
             <h2 class="text-2xl font-semibold text-gray-900 mb-2">{{ __('Verify Your Identity') }}</h2>
             <p class="text-gray-600">{{ __("We've sent a 6-digit code to") }}</p>
@@ -84,7 +105,7 @@
                             <input 
                                 type="text" 
                                 maxlength="1" 
-                                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-brand-red focus:ring-2 focus:ring-brand-red/30 focus:outline-none transition-all duration-200" 
+                                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-brand-green focus:ring-2 focus:ring-brand-green/30 focus:outline-none transition-all duration-200" 
                                 data-index="{{ $i }}"
                                 autocomplete="off"
                             >
@@ -105,7 +126,7 @@
                     <button 
                         type="submit" 
                         id="verifyBtn"
-                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-full bg-brand-green text-white py-3 rounded-lg font-semibold hover:bg-brand-green-light focus:ring-4 focus:ring-brand-green/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled
                     >
                         {{ __('Verify Code') }}
@@ -122,7 +143,7 @@
                         <button 
                             type="submit" 
                             id="resendBtn"
-                            class="font-medium text-brand-red hover:text-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                            class="font-medium text-brand-green hover:text-brand-green-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                             @if(!$canResend) disabled @endif
                         >
                             {{ __('Resend Code') }}
@@ -260,10 +281,10 @@
                 // Add visual feedback
                 otpInputs.forEach(input => {
                     if (input.value) {
-                        input.classList.add('border-brand-red', 'bg-red-50');
+                        input.classList.add('border-brand-green', 'bg-green-50');
                         input.classList.remove('border-gray-300');
                     } else {
-                        input.classList.remove('border-brand-red', 'bg-red-50');
+                        input.classList.remove('border-brand-green', 'bg-green-50');
                         input.classList.add('border-gray-300');
                     }
                 });
