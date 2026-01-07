@@ -117,13 +117,13 @@
                 @elseif($showFinalResult && $correctAnswersCount < 2)
                     <!-- Final Result - Failed -->
                     <div class="text-center py-6 sm:py-8">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-sidebar-green rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                             <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </div>
-                        <h2 class="text-xl sm:text-2xl font-bold text-red-800 mb-2 px-4">Verification Failed</h2>
-                        <p class="text-sm sm:text-base text-red-700 mb-4 px-4">{{ $errorMessage }}</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-sidebar-green-800 mb-2 px-4">Verification Failed</h2>
+                        <p class="text-sm sm:text-base text-sidebar-green-light mb-4 px-4">{{ $errorMessage }}</p>
                         <p class="text-xs sm:text-sm text-gray-600 mb-6 px-4">
                             You answered {{ $correctAnswersCount }} out of {{ $totalQuestions }} questions correctly. 
                             You need at least 2 correct answers to proceed.
@@ -162,7 +162,7 @@
                                 <!-- Question Title -->
                                 <div class="text-center mb-4 sm:mb-6">
                                     <h3 class="text-base sm:text-lg md:text-xl font-semibold text-gray-900 mb-2 px-2">
-                                        {{ $this->getCurrentQuestionText() }} <span class="text-red-500">*</span>
+                                        {{ $this->getCurrentQuestionText() }} <span class="text-sidebar-green">*</span>
                                     </h3>
                                     <p class="text-xs sm:text-sm text-gray-600 px-2">{{ $this->getQuestionHelper($questionKey) }}</p>
                                 </div>
@@ -173,7 +173,7 @@
                                         <input 
                                             type="date" 
                                             wire:model.defer="questionnaireAnswers.{{ $questionKey }}"
-                                            class="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-brand-green @error('questionnaireAnswers.' . $questionKey) border-red-500 @enderror"
+                                            class="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-brand-green @error('questionnaireAnswers.' . $questionKey) border-sidebar-green @enderror"
                                             max="{{ date('Y-m-d') }}"
                                             autofocus
                                         />
@@ -181,7 +181,7 @@
                                         <input 
                                             type="text" 
                                             wire:model.defer="questionnaireAnswers.{{ $questionKey }}"
-                                            class="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-brand-green @error('questionnaireAnswers.' . $questionKey) border-red-500 @enderror"
+                                            class="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-brand-green @error('questionnaireAnswers.' . $questionKey) border-sidebar-green @enderror"
                                             placeholder="{{ $this->getCurrentQuestionPlaceholder() }}"
                                             maxlength="100"
                                             autofocus
@@ -189,7 +189,7 @@
                                     @endif
                                     
                                     @error('questionnaireAnswers.' . $questionKey)
-                                        <p class="mt-1 text-xs sm:text-sm text-red-600">{{ $message }}</p>
+                                        <p class="mt-1 text-xs sm:text-sm text-sidebar-green">{{ $message }}</p>
                                     @enderror
                                 </div>
 
@@ -200,7 +200,7 @@
                                         $prevResult = $questionResults[$prevQuestionKey] ?? null;
                                     @endphp
                                     @if($prevResult !== null)
-                                        <div class="rounded-lg p-3 sm:p-4 {{ $prevResult ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200' }}">
+                                        <div class="rounded-lg p-3 sm:p-4 {{ $prevResult ? 'bg-green-50 border border-green-200' : 'bg-sidebar-green-50 border border-sidebar-green-200' }}">
                                             <div class="flex items-center">
                                                 @if($prevResult)
                                                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,10 +208,10 @@
                                                     </svg>
                                                     <span class="text-xs sm:text-sm text-green-800 font-medium">Previous answer was correct!</span>
                                                 @else
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-sidebar-green mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
-                                                    <span class="text-xs sm:text-sm text-red-800 font-medium">Previous answer was incorrect.</span>
+                                                    <span class="text-xs sm:text-sm text-sidebar-green-800 font-medium">Previous answer was incorrect.</span>
                                                 @endif
                                             </div>
                                         </div>

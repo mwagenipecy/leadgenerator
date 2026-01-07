@@ -14,7 +14,7 @@
                     <!-- Quick Stats -->
                     <div class="hidden md:flex items-center space-x-6 text-sm">
                         <div class="text-center">
-                            <div class="font-bold text-red-600">{{ $stats['available_leads'] }}</div>
+                            <div class="font-bold text-sidebar-green">{{ $stats['available_leads'] }}</div>
                             <div class="text-gray-500">Available</div>
                         </div>
                         <div class="text-center">
@@ -22,7 +22,7 @@
                             <div class="text-gray-500">My Leads</div>
                         </div>
                         <div class="text-center">
-                            <div class="font-bold text-red-600">{{ $stats['pending_review'] }}</div>
+                            <div class="font-bold text-sidebar-green">{{ $stats['pending_review'] }}</div>
                             <div class="text-gray-500">Pending</div>
                         </div>
                     </div>
@@ -55,8 +55,8 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 bg-sidebar-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                             </svg>
                         </div>
@@ -89,8 +89,8 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 bg-sidebar-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
@@ -98,7 +98,7 @@
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-500">Pending Review</p>
                         <p class="text-2xl font-bold text-black">{{ number_format($stats['pending_review']) }}</p>
-                        <p class="text-xs text-red-600 mt-1">Requires action</p>
+                        <p class="text-xs text-sidebar-green mt-1">Requires action</p>
                     </div>
                 </div>
             </div>
@@ -126,12 +126,12 @@
             <div class="border-b border-gray-200">
                 <nav class="flex space-x-8 px-6" aria-label="Tabs">
                     <button wire:click="setLeadTypeFilter('available')" 
-                            class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'available' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                            class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'available' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         Available Leads
-                        <span class="ml-2 bg-red-100 text-red-600 py-0.5 px-2 rounded-full text-xs">{{ $stats['available_leads'] }}</span>
+                        <span class="ml-2 bg-sidebar-green-100 text-sidebar-green py-0.5 px-2 rounded-full text-xs">{{ $stats['available_leads'] }}</span>
                     </button>
                     <button wire:click="setLeadTypeFilter('booked')" 
-                            class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'booked' ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                            class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'booked' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         My Booked Leads
                         <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ $stats['my_leads'] }}</span>
                     </button>
@@ -150,7 +150,7 @@
                                 </svg>
                             </div>
                             <input wire:model.live.debounce.300ms="search" type="text" 
-                                   class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm transition-all duration-200" 
+                                   class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-sm transition-all duration-200" 
                                    placeholder="Search by application #, name...">
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                         @if($leadTypeFilter === 'booked')
                             <!-- Status Filter for booked leads -->
                             <div class="relative">
-                                <select wire:model.live="statusFilter" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 cursor-pointer">
+                                <select wire:model.live="statusFilter" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green cursor-pointer">
                                     <option value="all">All Status</option>
                                     <option value="submitted">Under Review</option>
                                     <option value="approved">Approved</option>
@@ -176,7 +176,7 @@
 
                         <!-- Date Range Filter -->
                         <div class="relative">
-                            <select wire:model.live="dateRange" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 cursor-pointer">
+                            <select wire:model.live="dateRange" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green cursor-pointer">
                                 <option value="all">All Time</option>
                                 <option value="today">Today</option>
                                 <option value="week">This Week</option>
@@ -193,7 +193,7 @@
 
                         <!-- Sort Options -->
                         <div class="relative">
-                            <select wire:model.live="sortBy" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500 cursor-pointer">
+                            <select wire:model.live="sortBy" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green cursor-pointer">
                                 <option value="created_at">Latest First</option>
                                 <option value="requested_amount">Amount (High to Low)</option>
                                 <option value="credit_score">CRB Score</option>
@@ -207,7 +207,7 @@
 
                         <!-- Advanced Filters Toggle -->
                         <button wire:click="toggleFilters" 
-                                class="inline-flex items-center px-4 py-3 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:ring-2 focus:ring-red-500 transition-all duration-200 {{ $showFilters ? 'bg-red-50 border-red-300 text-red-700' : '' }}">
+                                class="inline-flex items-center px-4 py-3 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:ring-2 focus:ring-sidebar-green transition-all duration-200 {{ $showFilters ? 'bg-sidebar-green-50 border-sidebar-green-300 text-sidebar-green-light' : '' }}">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                             </svg>
@@ -215,7 +215,7 @@
                         </button>
 
                         <!-- Export Button -->
-                        <button class="inline-flex items-center px-4 py-3 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 focus:ring-2 focus:ring-red-500 transition-all duration-200">
+                        <button class="inline-flex items-center px-4 py-3 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 focus:ring-2 focus:ring-sidebar-green transition-all duration-200">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
@@ -232,7 +232,7 @@
                         <!-- Amount Range Filter -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount Range</label>
-                            <select wire:model.live="amountRange" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-red-500">
+                            <select wire:model.live="amountRange" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sidebar-green">
                                 <option value="all">All Amounts</option>
                                 <option value="under_100k">Under TSh 100K</option>
                                 <option value="100k_500k">TSh 100K - 500K</option>
@@ -245,7 +245,7 @@
                         <!-- CRB Score Range Filter -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">CRB Score Range</label>
-                            <select wire:model.live="crbScoreRange" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-red-500">
+                            <select wire:model.live="crbScoreRange" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sidebar-green">
                                 <option value="all">All Scores</option>
                                 <option value="excellent">Excellent (750+)</option>
                                 <option value="good">Good (650-749)</option>
@@ -259,7 +259,7 @@
                     <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                         <div class="flex items-center space-x-4">
                             <button wire:click="clearFilters" 
-                                    class="text-sm text-red-600 hover:text-red-800 underline transition-colors">
+                                    class="text-sm text-sidebar-green hover:text-sidebar-green-800 underline transition-colors">
                                 Clear all filters
                             </button>
                             <div class="text-sm text-gray-500">
@@ -273,7 +273,7 @@
 
         {{-- Flash Messages --}}
         @if (session()->has('message'))
-            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl" role="alert">
+            <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-xl" role="alert">
                 <div class="flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -298,7 +298,7 @@
                         <div class="p-6 pb-4">
                             <div class="flex items-start justify-between mb-4">
                                 <div class="flex items-center space-x-3">
-                                    <div class="h-12 w-12 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-red-400 to-red-600' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
+                                    <div class="h-12 w-12 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-sidebar-green-400 to-sidebar-green' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
                                         <span class="text-lg font-bold text-white">
                                             {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                                         </span>
@@ -306,13 +306,13 @@
                                 </div>
                                 <div class="flex flex-col items-end space-y-2">
                                     @if($isAvailable)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sidebar-green-100 text-sidebar-green-800">
                                             Available
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                             @switch($lead->status)
-                                                @case('submitted') bg-red-100 text-red-800 @break
+                                                @case('submitted') bg-sidebar-green-100 text-sidebar-green-800 @break
                                                 @case('approved') bg-green-100 text-green-800 @break
                                                 @case('rejected') bg-gray-100 text-gray-800 @break
                                                 @default bg-gray-100 text-gray-800
@@ -343,7 +343,7 @@
                                 <div class="text-center p-3 bg-gray-50 rounded-lg">
                                     <div class="text-xs text-gray-500 mb-1">CRB Score</div>
                                     @if($application->credit_score)
-                                        <div class="text-sm font-bold {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-red-600') }}">
+                                        <div class="text-sm font-bold {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                             {{ $application->credit_score }}
                                         </div>
                                     @else
@@ -381,7 +381,7 @@
                                     </button>
                                     
                                     <button wire:click="bookLead({{ $lead->id }})" 
-                                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-all duration-200">
+                                            class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-all duration-200">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                         </svg>
@@ -405,7 +405,7 @@
                                                 </svg>
                                             </button>
                                             <button wire:click="processLead({{ $lead->id }}, 'reject')" 
-                                                    class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100 transition-all duration-200"
+                                                    class="text-sidebar-green hover:text-sidebar-green-800 p-2 rounded-lg hover:bg-sidebar-green-100 transition-all duration-200"
                                                     title="Reject">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -499,7 +499,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
-                                                <div class="h-10 w-10 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-red-400 to-red-600' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
+                                                <div class="h-10 w-10 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-sidebar-green-400 to-sidebar-green' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
                                                     <span class="text-sm font-bold text-white">
                                                         {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                                                     </span>
@@ -520,7 +520,7 @@
                                         @if($application->credit_score)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                 {{ $application->credit_score >= 650 ? 'bg-green-100 text-green-800' : 
-                                                   ($application->credit_score >= 550 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                                   ($application->credit_score >= 550 ? 'bg-yellow-100 text-yellow-800' : 'bg-sidebar-green-100 text-sidebar-green-800') }}">
                                                 {{ $application->credit_score }}
                                             </span>
                                         @else
@@ -534,7 +534,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                 @switch($lead->status)
-                                                    @case('submitted') bg-red-100 text-red-800 @break
+                                                    @case('submitted') bg-sidebar-green-100 text-sidebar-green-800 @break
                                                     @case('approved') bg-green-100 text-green-800 @break
                                                     @case('rejected') bg-gray-100 text-gray-800 @break
                                                     @default bg-gray-100 text-gray-800
@@ -559,7 +559,7 @@
                                             
                                             @if($isAvailable)
                                                 <button wire:click="bookLead({{ $lead->id }})" 
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-medium hover:bg-red-700 transition-all duration-200">
+                                                        class="inline-flex items-center px-3 py-1.5 bg-sidebar-green text-white rounded-lg text-xs font-medium hover:bg-sidebar-green-light transition-all duration-200">
                                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                                     </svg>
@@ -575,7 +575,7 @@
                                                         </svg>
                                                     </button>
                                                     <button wire:click="processLead({{ $lead->id }}, 'reject')" 
-                                                            class="text-red-600 hover:text-red-900 p-1.5 rounded-lg hover:bg-red-50 transition-all duration-200"
+                                                            class="text-sidebar-green hover:text-sidebar-green-900 p-1.5 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200"
                                                             title="Reject">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -642,13 +642,13 @@
                     
                     <div class="flex items-center space-x-3">
                         @if($isAvailable)
-                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-sidebar-green-100 text-sidebar-green-800">
                                 Available
                             </span>
                         @else
                             <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium
                                 @switch($selectedLead->status)
-                                    @case('submitted') bg-red-100 text-red-800 @break
+                                    @case('submitted') bg-sidebar-green-100 text-sidebar-green-800 @break
                                     @case('approved') bg-green-100 text-green-800 @break
                                     @case('rejected') bg-gray-100 text-gray-800 @break
                                     @default bg-gray-100 text-gray-800
@@ -661,7 +661,7 @@
                         <div class="flex items-center space-x-2">
                             @if($isAvailable)
                                 <button wire:click="bookLead({{ $selectedLead->id }})" 
-                                        class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                        class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                     </svg>
@@ -677,7 +677,7 @@
                                         Approve
                                     </button>
                                     <button wire:click="processLead({{ $selectedLead->id }}, 'reject')" 
-                                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                            class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
@@ -693,7 +693,7 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
                     <div class="flex items-start justify-between">
                         <div class="flex items-center space-x-6">
-                            <div class="h-20 w-20 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-red-400 to-red-600' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
+                            <div class="h-20 w-20 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-sidebar-green-400 to-sidebar-green' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
                                 <span class="text-2xl font-bold text-white">
                                     {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                                 </span>
@@ -727,19 +727,19 @@
                         
                         <!-- Key Metrics -->
                         <div class="grid grid-cols-3 gap-6 text-center">
-                            <div class="p-4 bg-red-50 rounded-lg">
-                                <div class="text-2xl font-bold text-red-600">TSh {{ number_format($application->requested_amount/1000000, 1) }}M</div>
-                                <div class="text-sm text-red-700">Requested Amount</div>
+                            <div class="p-4 bg-sidebar-green-50 rounded-lg">
+                                <div class="text-2xl font-bold text-sidebar-green">TSh {{ number_format($application->requested_amount/1000000, 1) }}M</div>
+                                <div class="text-sm text-sidebar-green-light">Requested Amount</div>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <div class="text-2xl font-bold text-black">TSh {{ number_format($application->total_monthly_income/1000, 0) }}K</div>
                                 <div class="text-sm text-gray-700">Monthly Income</div>
                             </div>
-                            <div class="p-4 {{ $application->credit_score >= 650 ? 'bg-green-50' : ($application->credit_score >= 550 ? 'bg-yellow-50' : 'bg-red-50') }} rounded-lg">
-                                <div class="text-2xl font-bold {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-red-600') }}">
+                            <div class="p-4 {{ $application->credit_score >= 650 ? 'bg-green-50' : ($application->credit_score >= 550 ? 'bg-yellow-50' : 'bg-sidebar-green-50') }} rounded-lg">
+                                <div class="text-2xl font-bold {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                     {{ $application->credit_score ?? 'N/A' }}
                                 </div>
-                                <div class="text-sm {{ $application->credit_score >= 650 ? 'text-green-700' : ($application->credit_score >= 550 ? 'text-yellow-700' : 'text-red-700') }}">CRB Score</div>
+                                <div class="text-sm {{ $application->credit_score >= 650 ? 'text-green-700' : ($application->credit_score >= 550 ? 'text-yellow-700' : 'text-sidebar-green-light') }}">CRB Score</div>
                             </div>
                         </div>
                     </div>
@@ -795,7 +795,7 @@
                                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                         <span class="text-sm font-medium text-gray-600">DSR</span>
                                         @if($application->debt_to_income_ratio)
-                                            <span class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                            <span class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                                 {{ number_format($application->debt_to_income_ratio, 1) }}%
                                             </span>
                                         @else
@@ -887,16 +887,16 @@
 
                             <!-- Rejection Section -->
                             <div class="space-y-4">
-                                <h4 class="text-md font-medium text-red-700">Reject Lead</h4>
-                                <div class="bg-red-50 rounded-lg p-4 space-y-4">
+                                <h4 class="text-md font-medium text-sidebar-green-light">Reject Lead</h4>
+                                <div class="bg-sidebar-green-50 rounded-lg p-4 space-y-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Rejection Reason</label>
                                         <textarea wire:model="leadNotes" rows="6" 
-                                                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500"
+                                                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sidebar-green"
                                                   placeholder="Please provide reason for rejection..."></textarea>
                                     </div>
                                     <button wire:click="processLead({{ $selectedLead->id }}, 'reject')" 
-                                            class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                            class="w-full inline-flex justify-center items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>

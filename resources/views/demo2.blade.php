@@ -13,7 +13,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#C40F12',
+                        'sidebar-green': '#1D753F',
                     },
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],
@@ -29,12 +29,12 @@
     <nav class="bg-white py-4">
         <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
             <div class="text-xl font-semibold text-black font-poppins">
-                Lead<span class="text-brand-red">Generator</span>
+                Lead<span class="text-sidebar-green">Generator</span>
             </div>
             <div class="flex items-center space-x-6">
                 <a href="#about" class="text-gray-600 hover:text-gray-900">About</a>
                 <a href="#eligibility" class="text-gray-600 hover:text-gray-900">Eligibility</a>
-                <button class="bg-brand-red text-white px-4 py-2 rounded text-sm hover:bg-red-700 transition-colors">
+                <button class="bg-sidebar-green text-white px-4 py-2 rounded text-sm hover:bg-sidebar-green-light transition-colors">
                     Get Started
                 </button>
             </div>
@@ -45,7 +45,7 @@
     <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
         <!-- Diagonal Background Elements -->
         <div class="absolute inset-0">
-            <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-red/10 to-transparent transform skew-x-12 origin-top-right"></div>
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-sidebar-green/10 to-transparent transform skew-x-12 origin-top-right"></div>
             <div class="absolute bottom-0 left-0 w-2/3 h-3/4 bg-gradient-to-t from-gray-800/30 to-transparent transform -skew-x-12 origin-bottom-left"></div>
         </div>
         
@@ -54,12 +54,12 @@
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
                     <div class="mb-6">
-                        <span class="inline-block bg-brand-red/20 text-brand-red px-4 py-2 rounded-full text-sm font-medium">
+                        <span class="inline-block bg-sidebar-green/20 text-sidebar-green px-4 py-2 rounded-full text-sm font-medium">
                             🚀 Now Available
                         </span>
                     </div>
                     <h1 class="text-4xl md:text-6xl font-bold font-poppins leading-tight mb-8">
-                        Loans for <span class="text-brand-red">Everyone</span><br>
+                        Loans for <span class="text-sidebar-green">Everyone</span><br>
                         <span class="text-2xl md:text-3xl text-gray-300 font-light">Employed or Not</span>
                     </h1>
                     <p class="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed">
@@ -67,7 +67,7 @@
                         are ready to help you achieve your financial goals.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <button class="bg-brand-red text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-red-700 transition-all duration-300 transform hover:scale-105">
+                        <button class="bg-sidebar-green text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-sidebar-green-light transition-all duration-300 transform hover:scale-105">
                             Apply Now
                         </button>
                         <button class="border-2 border-white/30 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white/10 transition-all duration-300">
@@ -80,7 +80,7 @@
                 <div class="relative">
                     <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                         <div class="text-center mb-8">
-                            <div class="w-20 h-20 bg-brand-red rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div class="w-20 h-20 bg-sidebar-green rounded-full flex items-center justify-center mx-auto mb-4">
                                 <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
@@ -127,7 +127,7 @@
             <div class="grid md:grid-cols-3 gap-12">
                 <div class="text-center">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
                     </div>
@@ -138,7 +138,7 @@
                 </div>
                 <div class="text-center">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
                     </div>
@@ -149,7 +149,7 @@
                 </div>
                 <div class="text-center">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-1a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
                     </div>
@@ -171,21 +171,21 @@
             </div>
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-lg border border-gray-100">
-                    <div class="w-8 h-8 bg-brand-red text-white rounded-full flex items-center justify-center text-sm font-medium mb-6">1</div>
+                    <div class="w-8 h-8 bg-sidebar-green text-white rounded-full flex items-center justify-center text-sm font-medium mb-6">1</div>
                     <h3 class="text-lg font-medium text-black mb-3">Register & Verify</h3>
                     <p class="text-gray-600 text-sm leading-relaxed">
                         Create your account and verify your identity with NIDA for secure processing
                     </p>
                 </div>
                 <div class="bg-white p-8 rounded-lg border border-gray-100">
-                    <div class="w-8 h-8 bg-brand-red text-white rounded-full flex items-center justify-center text-sm font-medium mb-6">2</div>
+                    <div class="w-8 h-8 bg-sidebar-green text-white rounded-full flex items-center justify-center text-sm font-medium mb-6">2</div>
                     <h3 class="text-lg font-medium text-black mb-3">Submit Application</h3>
                     <p class="text-gray-600 text-sm leading-relaxed">
                         Tell us about your needs and financial situation through our simple form
                     </p>
                 </div>
                 <div class="bg-white p-8 rounded-lg border border-gray-100">
-                    <div class="w-8 h-8 bg-brand-red text-white rounded-full flex items-center justify-center text-sm font-medium mb-6">3</div>
+                    <div class="w-8 h-8 bg-sidebar-green text-white rounded-full flex items-center justify-center text-sm font-medium mb-6">3</div>
                     <h3 class="text-lg font-medium text-black mb-3">Get Connected</h3>
                     <p class="text-gray-600 text-sm leading-relaxed">
                         We match you with suitable lenders and handle the connection process
@@ -210,25 +210,25 @@
                     </p>
                     <ul class="space-y-4">
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-brand-red mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-sidebar-green mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-gray-700 text-sm">No employment requirement</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-brand-red mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-sidebar-green mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-gray-700 text-sm">NIDA verified security</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-brand-red mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-sidebar-green mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-gray-700 text-sm">Multiple lender options</span>
                         </li>
                         <li class="flex items-start">
-                            <svg class="w-5 h-5 text-brand-red mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-sidebar-green mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-gray-700 text-sm">Fast approval process</span>
@@ -238,7 +238,7 @@
                 <div class="bg-gray-50 p-12 rounded-lg">
                     <div class="text-center">
                         <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                            <svg class="w-10 h-10 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-10 h-10 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
@@ -263,7 +263,7 @@
                 Don't let employment status limit your financial opportunities. 
                 Connect with lenders who understand your unique situation.
             </p>
-            <button class="bg-brand-red text-white px-10 py-4 rounded-md text-lg hover:bg-red-700 transition-colors">
+            <button class="bg-sidebar-green text-white px-10 py-4 rounded-md text-lg hover:bg-sidebar-green-light transition-colors">
                 Apply Now
             </button>
             <p class="text-gray-500 text-sm mt-6">
@@ -277,7 +277,7 @@
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="text-xl font-semibold text-black mb-4 md:mb-0 font-poppins">
-                    Lead<span class="text-brand-red">Generator</span>
+                    Lead<span class="text-sidebar-green">Generator</span>
                 </div>
                 <div class="flex space-x-8 text-sm text-gray-600">
                     <a href="#" class="hover:text-gray-900">Privacy</a>

@@ -7,7 +7,7 @@
                 <div class="flex items-center space-x-3 mb-2">
                     <h1 class="text-4xl font-bold text-black">{{ $product->name }}</h1>
                     @if($product->promotional_tag)
-                        <span class="bg-red-100 text-red-800 text-sm font-semibold px-3 py-1 rounded-full">{{ $product->promotional_tag }}</span>
+                        <span class="bg-sidebar-green-100 text-sidebar-green-800 text-sm font-semibold px-3 py-1 rounded-full">{{ $product->promotional_tag }}</span>
                     @endif
                     @if($product->is_active)
                         <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-green-100 text-green-800 border border-green-200">
@@ -23,7 +23,7 @@
                 <p class="text-gray-500 text-sm">Created {{ $product->created_at->diffForHumans() }}</p>
             </div>
             <div class="flex items-center space-x-3">
-                <button wire:click="editProduct" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-sm flex items-center">
+                <button wire:click="editProduct" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-sm flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
@@ -75,9 +75,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Success Rate</p>
-                    <p class="text-3xl font-bold text-red-600">{{ $applicationStats['success_rate'] }}%</p>
+                    <p class="text-3xl font-bold text-sidebar-green">{{ $applicationStats['success_rate'] }}%</p>
                 </div>
-                <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
+                <div class="w-12 h-12 bg-sidebar-green rounded-lg flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
@@ -109,7 +109,7 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50">
                     <h3 class="text-xl font-bold text-black flex items-center">
-                        <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-sidebar-green mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         Product Information
@@ -142,11 +142,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-2">Amount Range</h4>
-                            <p class="text-sm font-bold text-red-600">{{ $product->amount_range }}</p>
+                            <p class="text-sm font-bold text-sidebar-green">{{ $product->amount_range }}</p>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-2">Interest Rate</h4>
-                            <p class="text-sm font-bold text-red-600">{{ $product->interest_range }}</p>
+                            <p class="text-sm font-bold text-sidebar-green">{{ $product->interest_range }}</p>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-2">Tenure</h4>
@@ -160,7 +160,7 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50">
                     <h3 class="text-xl font-bold text-black flex items-center">
-                        <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-sidebar-green mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         Eligibility Criteria
@@ -215,7 +215,7 @@
             <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50">
                     <h3 class="text-xl font-bold text-black flex items-center">
-                        <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-sidebar-green mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                         Requirements & Documentation
@@ -229,7 +229,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 @foreach($product->required_documents as $doc)
                                     <div class="flex items-center bg-gray-50 rounded-lg p-3">
-                                        <svg class="w-5 h-5 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-5 h-5 text-sidebar-green mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                         </svg>
                                         <span class="text-sm font-medium text-black">{{ $documentTypes[$doc] ?? ucwords(str_replace('_', ' ', $doc)) }}</span>
@@ -244,7 +244,7 @@
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-3">Collateral</h4>
                             @if($product->requires_collateral)
-                                <p class="text-red-600 font-medium mb-2">Required</p>
+                                <p class="text-sidebar-green font-medium mb-2">Required</p>
                                 @if($product->collateral_types && count($product->collateral_types) > 0)
                                     <div class="space-y-1">
                                         @foreach($product->collateral_types as $type)
@@ -260,7 +260,7 @@
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-3">Guarantors</h4>
                             @if($product->requires_guarantor)
-                                <p class="text-red-600 font-medium">Required</p>
+                                <p class="text-sidebar-green font-medium">Required</p>
                                 <p class="text-sm text-gray-600 mt-1">Minimum: {{ $product->min_guarantors }} guarantor(s)</p>
                             @else
                                 <p class="text-gray-600 text-sm  font-medium">Not Required</p>
@@ -279,7 +279,7 @@
                     <h3 class="text-lg font-bold text-black">Quick Actions</h3>
                 </div>
                 <div class="p-6 space-y-3">
-                    <button wire:click="editProduct" class="w-full bg-red-50 text-red-700 py-3 px-4 rounded-lg font-semibold hover:bg-red-100 transition-colors flex items-center justify-center">
+                    <button wire:click="editProduct" class="w-full bg-sidebar-green-50 text-sidebar-green-light py-3 px-4 rounded-lg font-semibold hover:bg-sidebar-green-100 transition-colors flex items-center justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
@@ -301,7 +301,7 @@
                     </button>
 
                     <div class="border-t border-gray-200 pt-3 mt-4">
-                        <button wire:click="confirmDelete" class="w-full bg-red-50 text-red-700 py-3 px-4 rounded-lg font-semibold hover:bg-red-100 transition-colors flex items-center justify-center">
+                        <button wire:click="confirmDelete" class="w-full bg-sidebar-green-50 text-sidebar-green-light py-3 px-4 rounded-lg font-semibold hover:bg-sidebar-green-100 transition-colors flex items-center justify-center">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
@@ -320,7 +320,7 @@
                     <div class="text-center">
                         <div class="flex items-center justify-center space-x-1 mb-3">
                             @for($i = 1; $i <= 5; $i++)
-                                <svg class="w-6 h-6 {{ $i <= $performanceMetrics['rating'] ? 'text-red-500' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-6 h-6 {{ $i <= $performanceMetrics['rating'] ? 'text-sidebar-green' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                                 </svg>
                             @endfor
@@ -332,7 +332,7 @@
                     <div class="mt-6 space-y-4">
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-600">Success Rate</span>
-                            <span class="text-sm font-bold text-red-600">{{ $performanceMetrics['success_rate'] }}%</span>
+                            <span class="text-sm font-bold text-sidebar-green">{{ $performanceMetrics['success_rate'] }}%</span>
                         </div>
                         <!-- <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-600">Avg. Amount</span>
@@ -362,11 +362,11 @@
                     </div>
                     <!-- <div class="flex justify-between items-center">
                         <span class="text-sm text-gray-600">Avg. Processing</span>
-                        <span class="text-sm font-bold text-red-600">{{ $applicationStats['average_processing_time'] }} days</span>
+                        <span class="text-sm font-bold text-sidebar-green">{{ $applicationStats['average_processing_time'] }} days</span>
                     </div> -->
                     @if($product->auto_approval_eligible)
                     <div class="pt-3 border-t border-gray-200">
-                        <div class="flex items-center text-red-600">
+                        <div class="flex items-center text-sidebar-green">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
@@ -387,8 +387,8 @@
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                 <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
                     </div>
@@ -399,7 +399,7 @@
                     <button wire:click="closeDeleteModal" class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         Cancel
                     </button>
-                    <button wire:click="deleteProduct" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <button wire:click="deleteProduct" class="px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors">
                         Delete Product
                     </button>
                 </div>
@@ -412,8 +412,8 @@
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                 <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
@@ -424,7 +424,7 @@
                     <button wire:click="closeActivateModal" class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         Cancel
                     </button>
-                    <button wire:click="toggleProductStatus" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <button wire:click="toggleProductStatus" class="px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors">
                         {{ $product->is_active ? 'Deactivate' : 'Activate' }}
                     </button>
                 </div>

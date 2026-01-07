@@ -1,34 +1,34 @@
 {{-- The Master doesn't talk, he acts. --}}
 <div class="min-h-screen bg-gray-50">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
     <!-- Header -->
-    <div class="mb-8">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
-            <div>
-                <h1 class="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
-                <p class="text-gray-600 text-lg">Complete your profile for faster loan applications</p>
+    <div class="mb-6 sm:mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
+            <div class="mb-4 sm:mb-0">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">My Profile</h1>
+                <p class="text-gray-600 text-sm sm:text-base lg:text-lg">Complete your profile for faster loan applications</p>
             </div>
-            <div class="mt-4 lg:mt-0">
+            <div class="flex justify-start sm:justify-end">
                 <!-- Profile Completion Circle -->
-                <div class="flex items-center space-x-4">
-                    <div class="relative w-16 h-16">
-                        <svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 100 100">
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <div class="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                             <circle cx="50" cy="50" r="40" stroke="#e5e7eb" stroke-width="8" fill="none"/>
                             <circle cx="50" cy="50" r="40" 
-                                    stroke="{{ $completionPercentage >= 70 ? '#10b981' : ($completionPercentage >= 40 ? '#f59e0b' : '#ef4444') }}" 
+                                    stroke="{{ $completionPercentage >= 70 ? '#10b981' : ($completionPercentage >= 40 ? '#f59e0b' : '#1D753F') }}" 
                                     stroke-width="8" fill="none" stroke-linecap="round"
                                     stroke-dasharray="{{ 2 * pi() * 40 }}" 
                                     stroke-dashoffset="{{ 2 * pi() * 40 * (1 - $completionPercentage / 100) }}"/>
                         </svg>
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="text-lg font-bold {{ $completionPercentage >= 70 ? 'text-green-600' : ($completionPercentage >= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                            <span class="text-sm sm:text-base lg:text-lg font-bold {{ $completionPercentage >= 70 ? 'text-green-600' : ($completionPercentage >= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                 {{ $completionPercentage }}%
                             </span>
                         </div>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Profile Completion</p>
-                        <p class="text-lg font-bold {{ $completionPercentage >= 70 ? 'text-green-600' : ($completionPercentage >= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                        <p class="text-xs sm:text-sm text-gray-500">Profile Completion</p>
+                        <p class="text-sm sm:text-base lg:text-lg font-bold {{ $completionPercentage >= 70 ? 'text-green-600' : ($completionPercentage >= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                             {{ $completionPercentage >= 70 ? 'Complete' : ($completionPercentage >= 40 ? 'Good Progress' : 'Needs Work') }}
                         </p>
                     </div>
@@ -38,35 +38,50 @@
 
         <!-- Flash Messages -->
         @if (session()->has('message'))
-            <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg" role="alert">
+            <div class="mb-4 sm:mb-6 bg-green-50 border border-green-200 text-green-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-sm sm:text-base" role="alert">
                 <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    {{ session('message') }}
+                    <span class="flex-1">{{ session('message') }}</span>
                 </div>
             </div>
         @endif
 
         @if (session()->has('error'))
-            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
+            <div class="mb-4 sm:mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-sm sm:text-base" role="alert">
                 <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
-                    {{ session('error') }}
+                    <span class="flex-1">{{ session('error') }}</span>
                 </div>
             </div>
         @endif
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <!-- Left Sidebar - Navigation -->
-        <div class="lg:col-span-1">
+    <!-- Mobile Section Selector -->
+    <div class="lg:hidden mb-4 sm:mb-6">
+        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Select Section</label>
+        <select wire:model.live="currentStep" 
+                class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-sm sm:text-base">
+            <option value="overview">Overview</option>
+            <option value="personal">Personal Info</option>
+            <option value="address">Address</option>
+            <option value="employment">Employment</option>
+            <option value="financial">Financial</option>
+            <option value="bank">Banking</option>
+            <option value="emergency">Emergency Contact</option>
+        </select>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 lg:gap-8">
+        <!-- Left Sidebar - Navigation (Desktop Only) -->
+        <div class="hidden lg:block lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
-                <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-brand-red to-brand-dark-red text-white">
-                    <h3 class="text-lg font-bold">Profile Sections</h3>
-                    <p class="text-red-100 text-sm">Complete all sections</p>
+                <div class="p-4 lg:p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white">
+                    <h3 class="text-base lg:text-lg font-bold">Profile Sections</h3>
+                    <p class="text-white text-xs lg:text-sm opacity-90">Complete all sections</p>
                 </div>
                 
                 <nav class="p-2">
@@ -84,13 +99,13 @@
 
                     @foreach($sections as $key => $section)
                         <button wire:click="goToStep('{{ $key }}')" 
-                                class="w-full flex items-center px-4 py-3 rounded-lg text-left transition-all duration-200 mb-1 {{ $currentStep === $key ? 'bg-brand-red text-white' : 'text-gray-700 hover:bg-gray-100' }}">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="w-full flex items-center px-3 lg:px-4 py-2 lg:py-3 rounded-lg text-left transition-all duration-200 mb-1 text-sm lg:text-base {{ $currentStep === $key ? 'bg-sidebar-green text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+                            <svg class="w-4 h-4 lg:w-5 lg:h-5 mr-2 lg:mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $section['icon'] }}"/>
                             </svg>
                             <span class="font-medium">{{ $section['name'] }}</span>
                             @if($currentStep === $key)
-                                <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3 h-3 lg:w-4 lg:h-4 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>
                             @endif
@@ -105,14 +120,14 @@
             {{-- OVERVIEW --}}
             @if($currentStep === 'overview')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Profile Overview</h2>
-                        <p class="text-gray-600">Your complete profile status and quick actions</p>
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Profile Overview</h2>
+                        <p class="text-sm sm:text-base text-gray-600">Your complete profile status and quick actions</p>
                     </div>
                     
                     <div class="p-6">
                         <!-- Profile Completion Status -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-8">
                             @foreach($sections as $key => $section)
                                 @if($key !== 'overview')
                                     @php
@@ -121,7 +136,7 @@
                                         $completionColor = $isComplete ? 'green' : 'gray';
                                     @endphp
                                     <div wire:click="goToStep('{{ $key }}')" 
-                                         class="border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-brand-red hover:bg-gray-50 transition-all duration-200">
+                                         class="border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-sidebar-green hover:bg-gray-50 transition-all duration-200">
                                         <div class="flex items-center justify-between mb-3">
                                             <div class="w-10 h-10 bg-{{ $completionColor }}-100 rounded-full flex items-center justify-center">
                                                 <svg class="w-5 h-5 text-{{ $completionColor }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,16 +167,16 @@
                         @if(auth()->user()->registration_type === 'company')
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-bold text-gray-900">Company Information</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900">Company Information</h3>
                                 @if(auth()->user()->isCompanyVerified())
                                     <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Verified</span>
                                 @elseif(auth()->user()->isCompanyVerificationPending())
                                     <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">Pending Verification</span>
                                 @elseif(auth()->user()->isCompanyVerificationRejected())
-                                    <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Rejected</span>
+                                    <span class="px-3 py-1 bg-sidebar-green-100 text-sidebar-green-800 text-xs font-semibold rounded-full">Rejected</span>
                                 @endif
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-500 mb-1">Company Name</label>
                                     <p class="text-gray-900 font-medium">{{ auth()->user()->company_name ?? 'N/A' }}</p>
@@ -191,10 +206,10 @@
                                     <p class="text-sm text-yellow-800">Your company verification is pending admin review. You will be notified once verification is complete.</p>
                                 </div>
                             @elseif(auth()->user()->isCompanyVerificationRejected())
-                                <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                                    <p class="text-sm text-red-800">Your company verification was rejected. Please contact support for more information.</p>
+                                <div class="mt-4 p-4 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg">
+                                    <p class="text-sm text-sidebar-green-800">Your company verification was rejected. Please contact support for more information.</p>
                                     @if(auth()->user()->company_verification_notes)
-                                        <p class="text-sm text-red-700 mt-2 font-medium">Reason: {{ auth()->user()->company_verification_notes }}</p>
+                                        <p class="text-sm text-sidebar-green-light mt-2 font-medium">Reason: {{ auth()->user()->company_verification_notes }}</p>
                                     @endif
                                 </div>
                             @endif
@@ -202,11 +217,11 @@
                         @endif
 
                         <!-- Quick Actions -->
-                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-purple-200">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <a href="{{ route('loan-application.create') }}" 
-                                   class="flex items-center justify-center px-6 py-3 bg-brand-red text-white rounded-lg font-semibold hover:bg-brand-dark-red transition-colors">
+                                   class="flex items-center justify-center px-6 py-3 bg-sidebar-green text-white rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                     </svg>
@@ -227,85 +242,86 @@
             {{-- PERSONAL INFORMATION --}}
             @elseif($currentStep === 'personal')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Personal Information</h2>
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Personal Information</h2>
                         <p class="text-gray-600">Basic personal details and identification</p>
                     </div>
                     
-                    <div class="p-6 space-y-6">
+                    <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
                         <!-- Name Section -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">First Name *</label>
                                 <input type="text" value="{{ $first_name }}" disabled
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
-                                <p class="text-xs text-gray-500 mt-1">This field is automatically filled from your account</p>
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
+                                <p class="text-xs sm:text-sm text-gray-500 mt-1">This field is automatically filled from your account</p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Middle Name</label>
                                 <input wire:model="middle_name" type="text" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                @error('middle_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                @error('middle_name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Last Name *</label>
                                 <input type="text" value="{{ $last_name }}" disabled
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
-                                <p class="text-xs text-gray-500 mt-1">This field is automatically filled from your account</p>
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
+                                <p class="text-xs sm:text-sm text-gray-500 mt-1">This field is automatically filled from your account</p>
                             </div>
                         </div>
 
                         <!-- Personal Details -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth *</label>
-                                <input wire:model="date_of_birth" type="date" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                @error('date_of_birth') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Date of Birth *</label>
+                                <input wire:model.defer="date_of_birth" type="date" 
+                                       max="{{ date('Y-m-d') }}"
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                @error('date_of_birth') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Gender *</label>
                                 <select wire:model="gender" 
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     <option value="">Select gender</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                     <option value="other">Other</option>
                                 </select>
-                                @error('gender') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                @error('gender') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Marital Status *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Marital Status *</label>
                                 <select wire:model="marital_status" 
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     <option value="">Select status</option>
                                     @foreach($maritalStatuses as $key => $status)
                                         <option value="{{ $key }}">{{ $status }}</option>
                                     @endforeach
                                 </select>
-                                @error('marital_status') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                @error('marital_status') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
                         <!-- Contact Information -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">National ID (NIDA) *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">National ID (NIDA) *</label>
                                 <input type="text" value="{{ $national_id }}" disabled
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
-                                <p class="text-xs text-gray-500 mt-1">This field is automatically filled from your account</p>
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
+                                <p class="text-xs sm:text-sm text-gray-500 mt-1">This field is automatically filled from your account</p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Phone Number *</label>
                                 <input wire:model="phone_number" type="tel" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                @error('phone_number') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                @error('phone_number') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Email Address *</label>
                                 <input wire:model="email" type="email" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                @error('email') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                @error('email') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
@@ -323,18 +339,18 @@
                         </div>
                     </div>
 
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                    <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('overview')" 
-                                class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                                class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
                             Back to Overview
                         </button>
-                        <div class="flex gap-3">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
-                                    class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                    class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
                                 Save
                             </button>
                             <button wire:click="saveAndContinue('address')" 
-                                    class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors">
+                                    class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
                                 Save & Continue
                             </button>
                         </div>
@@ -344,48 +360,48 @@
             {{-- ADDRESS INFORMATION --}}
             @elseif($currentStep === 'address')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Address Information</h2>
-                        <p class="text-gray-600">Your current and permanent address details</p>
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Address Information</h2>
+                        <p class="text-sm sm:text-base text-gray-600">Your current and permanent address details</p>
                     </div>
                     
                     <div class="p-6 space-y-8">
                         <!-- Current Address -->
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Current Address</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Current Address</h3>
                             <div class="space-y-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Street Address *</label>
                                     <textarea wire:model="current_address" rows="3" 
-                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red" 
+                                              class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" 
                                               placeholder="Enter your current street address"></textarea>
-                                    @error('current_address') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                    @error('current_address') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">City *</label>
                                         <input wire:model="current_city" type="text" 
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                        @error('current_city') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                               class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                        @error('current_city') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Region *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Region *</label>
                                         <input wire:model="current_region" type="text" 
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                          @error('current_region') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                               class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                          @error('current_region') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Postal Code</label>
                                         <input wire:model="current_postal_code" type="text" 
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                        @error('current_postal_code') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                               class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                        @error('current_postal_code') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Years at Current Address *</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Years at Current Address *</label>
                                     <input wire:model="years_at_current_address" type="number" min="0" max="50" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    @error('years_at_current_address') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('years_at_current_address') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -393,10 +409,10 @@
                         <!-- Permanent Address -->
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-bold text-gray-900">Permanent Address</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900">Permanent Address</h3>
                                 <label class="flex items-center cursor-pointer">
                                     <input wire:model.live="is_permanent_same_as_current" type="checkbox" 
-                                           class="text-brand-red focus:ring-brand-red rounded">
+                                           class="text-sidebar-green focus:ring-sidebar-green rounded">
                                     <span class="ml-2 text-sm font-medium text-gray-700">Same as current address</span>
                                 </label>
                             </div>
@@ -404,21 +420,21 @@
                             @if(!$is_permanent_same_as_current)
                                 <div class="space-y-6">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Permanent Address</label>
                                         <textarea wire:model="permanent_address" rows="3" 
-                                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red" 
+                                                  class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" 
                                                   placeholder="Enter your permanent address"></textarea>
                                     </div>
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">City</label>
                                             <input wire:model="permanent_city" type="text" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Region</label>
                                             <input wire:model="permanent_region" type="text" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         </div>
                                     </div>
                                 </div>
@@ -432,18 +448,18 @@
                         </div>
                     </div>
 
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                    <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('personal')" 
-                                class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                                class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
                             Previous
                         </button>
-                        <div class="flex gap-3">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
-                                    class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                    class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
                                 Save
                             </button>
                             <button wire:click="saveAndContinue('employment')" 
-                                    class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors">
+                                    class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
                                 Save & Continue
                             </button>
                         </div>
@@ -453,17 +469,17 @@
             {{-- EMPLOYMENT INFORMATION --}}
             @elseif($currentStep === 'employment')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Employment Information</h2>
-                        <p class="text-gray-600">Your work and business details</p>
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Employment Information</h2>
+                        <p class="text-sm sm:text-base text-gray-600">Your work and business details</p>
                     </div>
                     
-                    <div class="p-6 space-y-6">
+                    <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
                         <!-- Employment Status -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Employment Status *</label>
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Employment Status *</label>
                             <select wire:model.live="employment_status" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                    class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <option value="">Select employment status</option>
                                 <option value="employed">Employed</option>
                                 <option value="self_employed">Sole trader </option>
@@ -471,33 +487,33 @@
                                 <option value="retired">Retired</option>
                                 <option value="student">Student</option> -->
                             </select>
-                            @error('employment_status') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('employment_status') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Employment Details (if employed) -->
                         @if($employment_status === 'employed')
-                            <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100">
-                                <h3 class="text-lg font-bold text-gray-900 mb-4">Employment Details</h3>
+                            <div class="bg-blue-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-blue-100">
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Employment Details</h3>
                                 <div class="space-y-6">
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Employer Name *</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Employer Name *</label>
                                             <input wire:model="employer_name" type="text" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                            @error('employer_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                            @error('employer_name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Job Title *</label>
                                             <input wire:model="job_title" type="text" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                            @error('job_title') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                            @error('job_title') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Employment Sector</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Employment Sector</label>
                                             <select wire:model="employment_sector" 
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                    class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                                 <option value="">Select sector</option>
                                                 @foreach($employmentSectors as $key => $sector)
                                                     <option value="{{ $key }}">{{ $sector }}</option>
@@ -505,9 +521,9 @@
                                             </select>
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Months with Current Employer</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Months with Current Employer</label>
                                             <input wire:model="months_with_current_employer" type="number" min="0" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         </div>
                                     </div>
                                 </div>
@@ -516,62 +532,62 @@
 
                         <!-- Business Details (if self-employed) -->
                         @if($employment_status === 'self_employed')
-                            <div class="bg-green-50 rounded-2xl p-6 border border-green-100">
-                                <h3 class="text-lg font-bold text-gray-900 mb-4">Business Details</h3>
+                            <div class="bg-green-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-green-100">
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Business Details</h3>
                                 <div class="space-y-6">
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Business Name *</label>
                                             <input wire:model="business_name" type="text" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                            @error('business_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                            @error('business_name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Business Type *</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Business Type *</label>
                                             <select wire:model="business_type" 
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                    class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                                 <option value="">Select business type</option>
                                                 @foreach($businessTypes as $key => $type)
                                                     <option value="{{ $key }}">{{ $type }}</option>
                                                 @endforeach
                                             </select>
-                                            @error('business_type') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                            @error('business_type') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Registration Number</label>
                                             <input wire:model="business_registration_number" type="text" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Years in Business</label>
+                                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Years in Business</label>
                                             <input wire:model="years_in_business" type="number" min="0" max="50" 
-                                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                   class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Business Address</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Business Address</label>
                                         <textarea wire:model="business_address" rows="2" 
-                                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"></textarea>
+                                                  class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"></textarea>
                                     </div>
                                 </div>
                             </div>
                         @endif
                     </div>
 
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                    <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('address')" 
-                                class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                                class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
                             Previous
                         </button>
-                        <div class="flex gap-3">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
-                                    class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                    class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
                                 Save
                             </button>
                             <button wire:click="saveAndContinue('financial')" 
-                                    class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors">
+                                    class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
                                 Save & Continue
                             </button>
                         </div>
@@ -581,46 +597,46 @@
             {{-- FINANCIAL INFORMATION --}}
             @elseif($currentStep === 'financial')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-yellow-50 to-orange-50">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Financial Information</h2>
-                        <p class="text-gray-600">Your income, expenses, and financial obligations</p>
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-yellow-50 to-orange-50">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Financial Information</h2>
+                        <p class="text-sm sm:text-base text-gray-600">Your income, expenses, and financial obligations</p>
                     </div>
                     
-                    <div class="p-6 space-y-6">
+                    <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
                         <!-- Income Section -->
-                        <div class="bg-green-50 rounded-2xl p-6 border border-green-100">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Monthly Income</h3>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-green-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-green-100">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Monthly Income</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                 @if($employment_status === 'employed')
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Salary (TSh) *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Monthly Salary (TSh) *</label>
                                         <div class="relative">
                                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
                                             <input wire:model.live="monthly_salary" type="number" step="1000" min="0" 
-                                                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         </div>
-                                        @error('monthly_salary') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                        @error('monthly_salary') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 @endif
                                 
                                 @if($employment_status === 'self_employed')
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Business Income (TSh) *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Monthly Business Income (TSh) *</label>
                                         <div class="relative">
                                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
                                             <input wire:model.live="monthly_business_income" type="number" step="1000" min="0" 
-                                                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                   class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         </div>
-                                        @error('monthly_business_income') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                        @error('monthly_business_income') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 @endif
                                 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Other Monthly Income (TSh)</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Other Monthly Income (TSh)</label>
                                     <div class="relative">
                                         <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
                                         <input wire:model.live="other_monthly_income" type="number" step="1000" min="0" 
-                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     </div>
                                     <p class="text-sm text-gray-500 mt-1">Rental income, investments, etc.</p>
                                 </div>
@@ -638,57 +654,39 @@
                         </div>
 
                         <!-- Expenses Section -->
-                        <div class="bg-red-50 rounded-2xl p-6 border border-red-100">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Monthly Expenses & Obligations</h3>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-orange-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-orange-100">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Monthly Expenses & Obligations</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Expenses (TSh) *</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Monthly Expenses (TSh) *</label>
                                     <div class="relative">
                                         <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
                                         <input wire:model="monthly_expenses" type="number" step="1000" min="0" 
-                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     </div>
-                                    @error('monthly_expenses') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                    @error('monthly_expenses') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Existing Loan Payments (TSh)</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Existing Loan Payments (TSh)</label>
                                     <div class="relative">
                                         <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
                                         <input wire:model="existing_loan_payments" type="number" step="1000" min="0" 
-                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Credit Information -->
-                        <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Credit Information</h3>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Credit Score (if known)</label>
-                                    <input wire:model="credit_score" type="number" min="300" max="850" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                    <p class="text-sm text-gray-500 mt-1">Leave empty if you don't know your credit score</p>
-                                </div>
-                                <div class="flex items-center pt-8">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input wire:model="has_bad_credit_history" type="checkbox" 
-                                               class="text-brand-red focus:ring-brand-red rounded">
-                                        <span class="ml-2 text-sm font-medium text-gray-700">I have a bad credit history</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <!-- Financial Summary -->
                         @if($total_monthly_income > 0 && $monthly_expenses > 0)
-                            <div class="bg-purple-50 rounded-2xl p-6 border border-purple-100">
-                                <h3 class="text-lg font-bold text-gray-900 mb-4">Financial Summary</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-purple-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-purple-100">
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Financial Summary</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                     <div class="text-center">
                                         <p class="text-sm text-gray-600">Net Income</p>
-                                        <p class="text-xl font-bold {{ ($total_monthly_income - $monthly_expenses) > 0 ? 'text-green-600' : 'text-red-600' }}">
+                                        <p class="text-xl font-bold {{ ($total_monthly_income - $monthly_expenses) > 0 ? 'text-green-600' : 'text-sidebar-green' }}">
                                             TSh {{ number_format($total_monthly_income - $monthly_expenses) }}
                                         </p>
                                     </div>
@@ -703,7 +701,7 @@
                                         @php
                                             $currentDSR = $total_monthly_income > 0 ? ($existing_loan_payments / $total_monthly_income) * 100 : 0;
                                         @endphp
-                                        <p class="text-xl font-bold {{ $currentDSR <= 30 ? 'text-green-600' : ($currentDSR <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                        <p class="text-xl font-bold {{ $currentDSR <= 30 ? 'text-green-600' : ($currentDSR <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                             {{ number_format($currentDSR, 1) }}%
                                         </p>
                                     </div>
@@ -712,18 +710,18 @@
                         @endif
                     </div>
 
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                    <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('employment')" 
-                                class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                                class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
                             Previous
                         </button>
-                        <div class="flex gap-3">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
-                                    class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                    class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
                                 Save
                             </button>
                             <button wire:click="saveAndContinue('bank')" 
-                                    class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors">
+                                    class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
                                 Save & Continue
                             </button>
                         </div>
@@ -733,25 +731,25 @@
             {{-- BANK INFORMATION --}}
             @elseif($currentStep === 'bank')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-blue-50">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Banking Information</h2>
-                        <p class="text-gray-600">Your bank account and financial institution details</p>
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-blue-50">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Banking Information</h2>
+                        <p class="text-sm sm:text-base text-gray-600">Your bank account and financial institution details</p>
                     </div>
                     
-                    <div class="p-6 space-y-6">
+                    <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
                         <!-- Bank Account Question -->
-                        <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Do you have a bank account?</h3>
+                        <div class="bg-blue-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-blue-100">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Do you have a bank account?</h3>
                             
                             <div class="flex gap-4">
                                 <label class="flex items-center">
                                     <input wire:model.live="has_bank_account" type="radio" value="1" 
-                                           class="mr-2 text-brand-red focus:ring-brand-red">
+                                           class="mr-2 text-sidebar-green focus:ring-sidebar-green">
                                     <span class="text-gray-700">Yes, I have a bank account</span>
                                 </label>
                                 <label class="flex items-center">
                                     <input wire:model.live="has_bank_account" type="radio" value="0" 
-                                           class="mr-2 text-brand-red focus:ring-brand-red">
+                                           class="mr-2 text-sidebar-green focus:ring-sidebar-green">
                                     <span class="text-gray-700">No, I don't have a bank account</span>
                                 </label>
                             </div>
@@ -760,42 +758,42 @@
                         <!-- Bank Details (if has account) -->
                         @if($has_bank_account)
                             <div class="space-y-6">
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Bank Name *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Bank Name *</label>
                                         <input wire:model="bank_name" type="text" 
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                        @error('bank_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                               class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                        @error('bank_name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Account Type *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Account Type *</label>
                                         <select wire:model="account_type" 
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                                class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                             <option value="">Select account type</option>
                                             <option value="savings">Savings Account</option>
                                             <option value="current">Current Account</option>
                                         </select>
-                                        @error('account_type') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                        @error('account_type') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Account Number *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Account Number *</label>
                                         <input wire:model="account_number" type="text" 
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                        @error('account_number') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                               class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                        @error('account_number') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Account Holder Name *</label>
+                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Account Holder Name *</label>
                                         <input wire:model="account_name" type="text" 
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                        @error('account_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                               class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                        @error('account_name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Years with Bank</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Years with Bank</label>
                                     <input wire:model="years_with_bank" type="number" min="0" max="50" 
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                           class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 </div>
                             </div>
                         @elseif($has_bank_account === false || $has_bank_account === 0)
@@ -814,9 +812,9 @@
 
                         <!-- Disbursement Preference -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Disbursement Method</label>
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Preferred Disbursement Method</label>
                             <select wire:model="preferred_disbursement_method" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                    class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <option value="bank_transfer">Bank Transfer</option>
                                 <option value="mobile_money">Mobile Money</option>
                                 <option value="cash">Cash Pickup</option>
@@ -825,18 +823,18 @@
                         </div>
                     </div>
 
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                    <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('financial')" 
-                                class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                                class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
                             Previous
                         </button>
-                        <div class="flex gap-3">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
-                                    class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                    class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
                                 Save
                             </button>
                             <button wire:click="saveAndContinue('emergency')" 
-                                    class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-red transition-colors">
+                                    class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green transition-colors">
                                 Save & Continue
                             </button>
                         </div>
@@ -846,23 +844,35 @@
             {{-- EMERGENCY CONTACT --}}
             @elseif($currentStep === 'emergency')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-red-50 to-pink-50">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Emergency Contact</h2>
-                        <p class="text-gray-600">Provide details of someone we can contact in case of emergency</p>
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Emergency Contact</h2>
+                        <p class="text-sm sm:text-base text-gray-600">Provide details of someone we can contact in case of emergency</p>
                     </div>
                     
-                    <div class="p-6 space-y-6">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
+                        <!-- Required Notice -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-2 sm:mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div>
+                                    <h4 class="text-sm font-medium text-blue-800">Required Section</h4>
+                                    <p class="text-xs sm:text-sm text-blue-700 mt-1">Emergency contact information is mandatory. Please provide complete details of someone we can reach in case of emergency.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Name *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Contact Name *</label>
                                 <input wire:model="emergency_contact_name" type="text" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                @error('emergency_contact_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                @error('emergency_contact_name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Relationship *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Relationship *</label>
                                 <select wire:model="emergency_contact_relationship" 
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                        class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     <option value="">Select relationship</option>
                                     <option value="spouse">Spouse</option>
                                     <option value="parent">Parent</option>
@@ -872,36 +882,36 @@
                                     <option value="colleague">Colleague</option>
                                     <option value="other">Other</option>
                                 </select>
-                                @error('emergency_contact_relationship') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                @error('emergency_contact_relationship') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Phone Number *</label>
                                 <input wire:model="emergency_contact_phone" type="tel" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
-                                @error('emergency_contact_phone') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                @error('emergency_contact_phone') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Address</label>
                                 <input wire:model="emergency_contact_address" type="text" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                       class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                             </div>
                         </div>
                     </div>
 
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
+                    <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('bank')" 
-                                class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                                class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
                             Previous
                         </button>
-                        <div class="flex gap-3">
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
-                                    class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                    class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
                                 Save
                             </button>
                             <button wire:click="saveStep('emergency')" 
-                                    class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors">
+                                    class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
                                 Save Profile
                             </button>
                         </div>

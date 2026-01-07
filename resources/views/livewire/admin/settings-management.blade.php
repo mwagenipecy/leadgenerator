@@ -29,15 +29,15 @@
             <div class="border-b border-gray-200">
                 <nav class="-mb-px flex space-x-8 px-8" aria-label="Tabs">
                     <button wire:click="setActiveTab('commission')" 
-                            class="border-transparent {{ $activeTab === 'commission' ? 'text-red-600 border-b-2 border-red-500' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
+                            class="border-transparent {{ $activeTab === 'commission' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
                         Commission Settings
                     </button>
                     <button wire:click="setActiveTab('payment')" 
-                            class="border-transparent {{ $activeTab === 'payment' ? 'text-red-600 border-b-2 border-red-500' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
+                            class="border-transparent {{ $activeTab === 'payment' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
                         Payment Settings
                     </button>
                     <button wire:click="setActiveTab('business')" 
-                            class="border-transparent {{ $activeTab === 'business' ? 'text-red-600 border-b-2 border-red-500' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
+                            class="border-transparent {{ $activeTab === 'business' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
                         Business Info
                     </button>
                 </nav>
@@ -56,7 +56,7 @@
                                 <!-- Commission Type -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Commission Type</label>
-                                    <select wire:model.live="default_commission_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    <select wire:model.live="default_commission_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         <option value="percentage">Percentage of Loan</option>
                                         <option value="fixed">Fixed Amount</option>
                                     </select>
@@ -68,27 +68,27 @@
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Commission Percentage (%)</label>
                                         <div class="relative">
                                             <input wire:model="default_commission_percentage" type="number" step="0.1" min="0" max="100" 
-                                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                             <span class="absolute right-3 top-2 text-gray-500">%</span>
                                         </div>
-                                        @error('default_commission_percentage') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                        @error('default_commission_percentage') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                     </div>
                                 @else
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Fixed Commission Amount</label>
                                         <div class="relative">
                                             <input wire:model="default_commission_fixed_amount" type="number" step="0.01" min="0" 
-                                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                             <span class="absolute left-3 top-2 text-gray-500">{{ $system_currency }}</span>
                                         </div>
-                                        @error('default_commission_fixed_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                        @error('default_commission_fixed_amount') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                     </div>
                                 @endif
 
                                 <!-- Calculation Base -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Calculate Commission Based On</label>
-                                    <select wire:model="commission_calculation_base" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    <select wire:model="commission_calculation_base" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         <option value="loan_amount">Total Loan Amount</option>
                                         <option value="interest_amount">Interest Amount</option>
                                         <option value="monthly_payment">Monthly Payment</option>
@@ -105,21 +105,21 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Commission Amount</label>
                                     <div class="relative">
                                         <input wire:model="minimum_commission_amount" type="number" step="0.01" min="0" 
-                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         <span class="absolute left-3 top-2 text-gray-500">{{ $system_currency }}</span>
                                     </div>
-                                    @error('minimum_commission_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    @error('minimum_commission_amount') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Commission Amount (Optional)</label>
                                     <div class="relative">
                                         <input wire:model="maximum_commission_amount" type="number" step="0.01" min="0" 
-                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                                placeholder="No limit">
                                         <span class="absolute left-3 top-2 text-gray-500">{{ $system_currency }}</span>
                                     </div>
-                                    @error('maximum_commission_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    @error('maximum_commission_amount') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Collection Frequency</label>
-                                    <select wire:model="commission_collection_frequency" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    <select wire:model="commission_collection_frequency" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         <option value="per_loan">Per Loan (Immediate)</option>
                                         <option value="monthly">Monthly</option>
                                         <option value="quarterly">Quarterly</option>
@@ -141,8 +141,8 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Payment Due Days</label>
                                     <input wire:model="payment_due_days" type="number" min="1" max="365" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('payment_due_days') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('payment_due_days') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
                             </div>
 
@@ -150,7 +150,7 @@
                             <div class="mt-4">
                                 <label class="flex items-center">
                                     <input wire:model="auto_collection_enabled" type="checkbox" 
-                                           class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                           class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                     <span class="ml-2 text-sm text-gray-700">Enable automatic commission collection</span>
                                 </label>
                             </div>
@@ -184,7 +184,7 @@
                         <!-- Save Button -->
                         <div class="flex justify-end">
                             <button type="submit" 
-                                    class="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                                    class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                                 <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
@@ -208,32 +208,32 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Payment Due Days</label>
                                     <input wire:model="payment_due_days" type="number" min="1" max="365" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('payment_due_days') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('payment_due_days') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Grace Period (Days)</label>
                                     <input wire:model="grace_period_days" type="number" min="0" max="30" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('grace_period_days') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('grace_period_days') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Late Payment Penalty (%)</label>
                                     <div class="relative">
                                         <input wire:model="late_payment_penalty_percentage" type="number" step="0.1" min="0" max="50" 
-                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         <span class="absolute right-3 top-2 text-gray-500">%</span>
                                     </div>
-                                    @error('late_payment_penalty_percentage') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    @error('late_payment_penalty_percentage') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Reminder Days Before Due</label>
                                     <input wire:model="reminder_days_before_due" type="number" min="1" max="30" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('reminder_days_before_due') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('reminder_days_before_due') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -244,7 +244,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <label class="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
                                     <input wire:model="selected_payment_methods" type="checkbox" value="bank_transfer" 
-                                           class="h-4 w-4 text-red-600 focus:ring-red-500  border-gray-300 rounded">
+                                           class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green  border-gray-300 rounded">
                                     <div class="ml-3">
                                         <div class="text-sm font-medium text-gray-900">Bank Transfer</div>
                                         <div class="text-xs text-gray-500">Direct bank-to-bank transfers</div>
@@ -253,7 +253,7 @@
 
                                 <label class="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
                                     <input wire:model="selected_payment_methods" type="checkbox" value="mobile_money" 
-                                           class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                           class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                     <div class="ml-3">
                                         <div class="text-sm font-medium text-gray-900">Mobile Money</div>
                                         <div class="text-xs text-gray-500">M-Pesa, Tigo Pesa, Airtel Money</div>
@@ -262,7 +262,7 @@
 
                                 <label class="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer">
                                     <input wire:model="selected_payment_methods" type="checkbox" value="cash" 
-                                           class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                           class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                     <div class="ml-3">
                                         <div class="text-sm font-medium text-gray-900">Cash Payment</div>
                                         <div class="text-xs text-gray-500">Physical cash payments</div>
@@ -279,34 +279,34 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Notification Email</label>
                                         <input wire:model="notification_email" type="email" 
-                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                                placeholder="admin@example.com">
-                                        @error('notification_email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                        @error('notification_email') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
 
                                 <div class="space-y-3">
                                     <label class="flex items-center">
                                         <input wire:model="send_commission_notifications" type="checkbox" 
-                                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                         <span class="ml-2 text-sm text-gray-700">Send commission notifications to lenders</span>
                                     </label>
 
                                     <label class="flex items-center">
                                         <input wire:model="send_payment_reminders" type="checkbox" 
-                                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                         <span class="ml-2 text-sm text-gray-700">Send payment reminders before due date</span>
                                     </label>
 
                                     <label class="flex items-center">
                                         <input wire:model="send_overdue_notices" type="checkbox" 
-                                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                         <span class="ml-2 text-sm text-gray-700">Send overdue payment notices</span>
                                     </label>
 
                                     <label class="flex items-center">
                                         <input wire:model="sms_notifications_enabled" type="checkbox" 
-                                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                         <span class="ml-2 text-sm text-gray-700">Enable SMS notifications</span>
                                     </label>
                                 </div>
@@ -316,7 +316,7 @@
                         <!-- Save Button -->
                         <div class="flex justify-end">
                             <button type="submit" 
-                                    class="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                                    class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                                 <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
@@ -340,48 +340,48 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
                                     <input wire:model="business_name" type="text" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('business_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('business_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Business Email</label>
                                     <input wire:model="business_email" type="email" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('business_email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('business_email') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Business Phone</label>
                                     <input wire:model="business_phone" type="text" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('business_phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('business_phone') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Business Website</label>
                                     <input wire:model="business_website" type="url" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    @error('business_website') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    @error('business_website') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Registration Number</label>
                                     <input wire:model="business_registration_number" type="text" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 </div>
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Tax ID Number</label>
                                     <input wire:model="tax_identification_number" type="text" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 </div>
                             </div>
 
                             <div class="mt-6">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Business Address</label>
                                 <textarea wire:model="business_address" rows="3" 
-                                          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                                          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"></textarea>
                             </div>
                         </div>
 
@@ -391,7 +391,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">System Currency</label>
-                                    <select wire:model="system_currency" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    <select wire:model="system_currency" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         <option value="TZS">Tanzanian Shilling (TZS)</option>
                                         <option value="USD">US Dollar (USD)</option>
                                         <option value="EUR">Euro (EUR)</option>
@@ -404,10 +404,10 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Tax Rate (%)</label>
                                     <div class="relative">
                                         <input wire:model="tax_rate" type="number" step="0.1" min="0" max="100" 
-                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                               class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                         <span class="absolute right-3 top-2 text-gray-500">%</span>
                                     </div>
-                                    @error('tax_rate') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                    @error('tax_rate') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -432,7 +432,7 @@
                         <!-- Save Button -->
                         <div class="flex justify-end">
                             <button type="submit" 
-                                    class="bg-red-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                                    class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                                 <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
@@ -454,7 +454,7 @@
                             <p class="text-gray-600">Override default settings for individual lenders</p>
                         </div>
                         <button wire:click="openLenderModal" 
-                                class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                                class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>
@@ -481,11 +481,11 @@
                                 <tr class="hover:bg-gray-50 transition-colors duration-200 group">
                                     <td class="px-8 py-6 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-md">
+                                            <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-2xl flex items-center justify-center shadow-md">
                                                 <span class="text-white text-sm font-bold">{{ substr($commission->lender->company_name, 0, 2) }}</span>
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ $commission->lender->company_name }}</div>
+                                                <div class="text-sm font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ $commission->lender->company_name }}</div>
                                                 <div class="text-xs text-gray-500">{{ $commission->lender->license_number ?: 'No License' }}</div>
                                             </div>
                                         </div>
@@ -530,8 +530,8 @@
                                     <td class="px-6 py-6 whitespace-nowrap">
                                         <button wire:click="toggleLenderStatus({{ $commission->lender_id }})"
                                             class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors
-                                                {{ $commission->is_active ? 'bg-green-100 text-green-800 border border-green-200 hover:bg-green-200' : 'bg-red-100 text-red-800 border border-red-200 hover:bg-red-200' }}">
-                                            <div class="w-2 h-2 rounded-full mr-2 {{ $commission->is_active ? 'bg-green-400' : 'bg-red-400' }}"></div>
+                                                {{ $commission->is_active ? 'bg-green-100 text-green-800 border border-green-200 hover:bg-green-200' : 'bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200 hover:bg-sidebar-green-200' }}">
+                                            <div class="w-2 h-2 rounded-full mr-2 {{ $commission->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
                                             {{ $commission->is_active ? 'Active' : 'Inactive' }}
                                         </button>
                                     </td>
@@ -545,7 +545,7 @@
                                             </button>
                                             <button wire:click="deleteLenderSetting({{ $commission->lender_id }})" 
                                                 onclick="return confirm('Are you sure you want to delete this commission setting?')"
-                                                class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
+                                                class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
@@ -564,7 +564,7 @@
                                         <h4 class="text-lg font-semibold text-gray-900 mb-2">No Custom Settings</h4>
                                         <p class="text-gray-500 mb-4">All lenders are using default commission settings.</p>
                                         <button wire:click="openLenderModal" 
-                                            class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                                            class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
                                             Add First Custom Setting
                                         </button>
                                     </td>
@@ -597,7 +597,7 @@
                     @if(!$selectedLender)
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Select Lender *</label>
-                            <select wire:model="selectedLender" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <select wire:model="selectedLender" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <option value="">Choose a lender...</option>
                                 @foreach($lenders as $lender)
                                     @if(!$lenderCommissions->where('lender_id', $lender->id)->count())
@@ -605,7 +605,7 @@
                                     @endif
                                 @endforeach
                             </select>
-                            @error('selectedLender') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @error('selectedLender') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                         </div>
                     @endif
 
@@ -613,7 +613,7 @@
                         <!-- Commission Type -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Commission Type *</label>
-                            <select wire:model.live="lender_commission_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <select wire:model.live="lender_commission_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <option value="percentage">Percentage of Loan</option>
                                 <option value="fixed">Fixed Amount per Loan</option>
                             </select>
@@ -625,20 +625,20 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Commission Percentage (%) *</label>
                                 <div class="relative">
                                     <input wire:model="lender_commission_percentage" type="number" step="0.1" min="0" max="100" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     <span class="absolute right-3 top-2 text-gray-500">%</span>
                                 </div>
-                                @error('lender_commission_percentage') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                @error('lender_commission_percentage') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                             </div>
                         @else
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Fixed Commission Amount *</label>
                                 <div class="relative">
                                     <input wire:model="lender_commission_fixed_amount" type="number" step="0.01" min="0" 
-                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     <span class="absolute left-3 top-2 text-gray-500">{{ $system_currency }}</span>
                                 </div>
-                                @error('lender_commission_fixed_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                @error('lender_commission_fixed_amount') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                             </div>
                         @endif
 
@@ -647,10 +647,10 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Commission Amount *</label>
                             <div class="relative">
                                 <input wire:model="lender_minimum_amount" type="number" step="0.01" min="0" 
-                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <span class="absolute left-3 top-2 text-gray-500">{{ $system_currency }}</span>
                             </div>
-                            @error('lender_minimum_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @error('lender_minimum_amount') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Maximum Amount -->
@@ -658,11 +658,11 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Commission Amount (Optional)</label>
                             <div class="relative">
                                 <input wire:model="lender_maximum_amount" type="number" step="0.01" min="0" 
-                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                        placeholder="No limit">
                                 <span class="absolute left-3 top-2 text-gray-500">{{ $system_currency }}</span>
                             </div>
-                            @error('lender_maximum_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @error('lender_maximum_amount') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
@@ -670,7 +670,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Special Terms & Conditions</label>
                         <textarea wire:model="lender_special_terms" rows="3" 
-                                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                   placeholder="Any special terms or conditions for this lender's commission..."></textarea>
                     </div>
 
@@ -702,7 +702,7 @@
                     <!-- Active Status -->
                     <div class="flex items-center">
                         <input wire:model="lender_is_active" type="checkbox" id="lender_is_active" 
-                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                         <label for="lender_is_active" class="ml-2 block text-sm text-gray-700">
                             This commission setting is active
                         </label>
@@ -715,7 +715,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                            class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
                             {{ $selectedLender ? 'Update' : 'Create' }} Setting
                         </button>
                     </div>

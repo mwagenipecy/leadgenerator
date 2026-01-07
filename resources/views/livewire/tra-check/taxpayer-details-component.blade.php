@@ -16,12 +16,12 @@
                     type="text" 
                     id="taxpayerNumber"
                     wire:model="taxpayerNumber" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                     placeholder="Enter taxpayer number"
                     :disabled="$wire.isLoading"
                 >
                 @error('taxpayerNumber') 
-                    <span class="text-red-600 text-sm">{{ $message }}</span> 
+                    <span class="text-sidebar-green text-sm">{{ $message }}</span> 
                 @enderror
             </div>
         </div>
@@ -29,7 +29,7 @@
         <div class="flex gap-3">
             <button 
                 wire:click="getTaxpayerDetails" 
-                class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition duration-200 flex items-center"
+                class="bg-sidebar-green hover:bg-sidebar-green-light text-white font-medium py-2 px-6 rounded-md transition duration-200 flex items-center"
                 :disabled="$wire.isLoading"
             >
                 <div wire:loading wire:target="getTaxpayerDetails" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -50,19 +50,19 @@
 
     <!-- Loading State -->
     <div wire:loading wire:target="getTaxpayerDetails" class="mb-6">
-        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
             <div class="flex items-center">
-                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-red-600 mr-3"></div>
-                <span class="text-red-700">Sending request to TRA service...</span>
+                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-sidebar-green mr-3"></div>
+                <span class="text-sidebar-green-light">Sending request to TRA service...</span>
             </div>
         </div>
     </div>
 
     <!-- Error Display -->
     @if($error)
-        <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-red-800 mb-2">Error</h3>
-            <p class="text-red-700">{{ $error }}</p>
+        <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-sidebar-green-800 mb-2">Error</h3>
+            <p class="text-sidebar-green-light">{{ $error }}</p>
         </div>
     @endif
 
@@ -70,14 +70,14 @@
     @if($response)
         <div class="mb-6 bg-white border border-gray-200 rounded-lg p-4">
             <div class="flex items-center mb-4 pb-3 border-b border-gray-200">
-                <div class="w-3 h-3 bg-red-600 rounded-full mr-3"></div>
+                <div class="w-3 h-3 bg-sidebar-green rounded-full mr-3"></div>
                 <h3 class="text-lg font-semibold text-black">Taxpayer Details Retrieved Successfully</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Personal Information -->
-                <div class="bg-white p-4 rounded-lg border-2 border-red-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-red-200">Personal Information</h4>
+                <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Personal Information</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">Taxpayer ID:</span>
@@ -107,8 +107,8 @@
                 </div>
 
                 <!-- Contact Information -->
-                <div class="bg-white p-4 rounded-lg border-2 border-red-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-red-200">Contact Information</h4>
+                <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Contact Information</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">Mobile:</span>
@@ -134,8 +134,8 @@
                 </div>
 
                 <!-- Address Information -->
-                <div class="bg-white p-4 rounded-lg border-2 border-red-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-red-200">Address Information</h4>
+                <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Address Information</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">Region:</span>
@@ -169,8 +169,8 @@
                 </div>
 
                 <!-- Business Information -->
-                <div class="bg-white p-4 rounded-lg border-2 border-red-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-red-200">Business Information</h4>
+                <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Business Information</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">Taxpayer Name:</span>

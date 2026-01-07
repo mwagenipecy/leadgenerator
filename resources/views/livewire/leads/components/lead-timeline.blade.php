@@ -9,12 +9,12 @@
                 <div>
                     <label for="noteText" class="block text-sm font-medium text-gray-700 mb-2">Note</label>
                     <textarea wire:model="noteText" id="noteText" rows="3" 
-                              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                               placeholder="Add your notes about this lead..."></textarea>
                 </div>
                 <div class="flex items-center space-x-3">
                     <button wire:click="addNote" 
-                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                            class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
@@ -36,7 +36,7 @@
                         <div class="relative pb-8">
                             <div class="relative flex space-x-3">
                                 <div>
-                                    <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                                    <span class="h-8 w-8 rounded-full bg-sidebar-green flex items-center justify-center ring-8 ring-white">
                                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                         </svg>
@@ -62,7 +62,7 @@
                             <div class="relative pb-8">
                                 <div class="relative flex space-x-3">
                                     <div>
-                                        <span class="h-8 w-8 rounded-full bg-red-600 flex items-center justify-center ring-8 ring-white">
+                                        <span class="h-8 w-8 rounded-full bg-sidebar-green flex items-center justify-center ring-8 ring-white">
                                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                             </svg>
@@ -150,7 +150,7 @@
                             <div class="relative pb-8">
                                 <div class="relative flex space-x-3">
                                     <div>
-                                        <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                                        <span class="h-8 w-8 rounded-full bg-sidebar-green flex items-center justify-center ring-8 ring-white">
                                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                             </svg>
@@ -162,7 +162,7 @@
                                             @if($application->rejection_reasons && count($application->rejection_reasons) > 0)
                                                 <div class="mt-1">
                                                     <p class="text-xs text-gray-600 mb-1">Rejection reasons:</p>
-                                                    <ul class="text-xs text-red-600 list-disc list-inside">
+                                                    <ul class="text-xs text-sidebar-green list-disc list-inside">
                                                         @foreach($application->rejection_reasons as $reason)
                                                             <li>{{ $reason }}</li>
                                                         @endforeach
@@ -184,7 +184,7 @@
                             <div class="relative">
                                 <div class="relative flex space-x-3">
                                     <div>
-                                        <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                                        <span class="h-8 w-8 rounded-full bg-sidebar-green flex items-center justify-center ring-8 ring-white">
                                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                                             </svg>

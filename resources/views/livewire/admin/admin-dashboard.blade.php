@@ -57,16 +57,16 @@
             </div>
 
             <!-- Total Applications Card -->
-            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-14 h-14 bg-sidebar-green-100 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green-200 transition-colors">
+                        <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Total Applications</p>
-                        <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalApplications) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($totalApplications) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -139,7 +139,7 @@
                         <p class="text-gray-600">Application submissions and approvals throughout the year</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-red-600/25">Current Year</button>
+                        <button class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-sidebar-green/25">Current Year</button>
                         <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Export</button> -->
                     </div>
                 </div>
@@ -156,7 +156,7 @@
                         <p class="text-gray-600">Current breakdown of all application statuses</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <!-- <button class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-red-600/25">Live View</button>
+                        <!-- <button class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-sidebar-green/25">Live View</button>
                         <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Refresh</button> -->
                     </div>
                 </div>
@@ -189,7 +189,7 @@
                             <div class="flex items-center space-x-3">
                                 <div class="w-3 h-3 rounded-full 
                                     @if($status === 'approved') bg-green-500
-                                    @elseif($status === 'rejected') bg-red-500
+                                    @elseif($status === 'rejected') bg-sidebar-green
                                     @elseif($status === 'under_review') bg-yellow-500
                                     @elseif($status === 'submitted') bg-blue-500
                                     @elseif($status === 'disbursed') bg-purple-500
@@ -202,7 +202,7 @@
                                 <div class="w-32 bg-gray-200 rounded-full h-2">
                                     <div class="h-2 rounded-full 
                                         @if($status === 'approved') bg-green-500
-                                        @elseif($status === 'rejected') bg-red-500
+                                        @elseif($status === 'rejected') bg-sidebar-green
                                         @elseif($status === 'under_review') bg-yellow-500
                                         @elseif($status === 'submitted') bg-blue-500
                                         @elseif($status === 'disbursed') bg-purple-500
@@ -232,7 +232,7 @@
                         <div class="flex items-start space-x-3 p-3 rounded-2xl hover:bg-gray-50 transition-colors group">
                             <div class="w-10 h-10 bg-{{ $activity['color'] }}-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-{{ $activity['color'] }}-200 transition-colors">
                                 <div class="w-3 h-3 bg-{{ $activity['color'] }}-500 rounded-full 
-                                    @if($activity['color'] === 'brand-red') animate-pulse @endif">
+                                    @if($activity['color'] === 'sidebar-green') animate-pulse @endif">
                                 </div>
                             </div>
                             <div class="flex-1 min-w-0">
@@ -300,7 +300,7 @@
                                                 {{ $lender->license_number }}
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 border border-red-200">
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200">
                                                 No License
                                             </span>
                                         @endif
@@ -312,7 +312,7 @@
                                                 Approve
                                             </button>
                                             <button wire:click="rejectLender({{ $lender->id }})" 
-                                                class="bg-red-600 text-white px-4 py-2 rounded-xl font-medium text-sm hover:bg-red-700 transition-colors">
+                                                class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-medium text-sm hover:bg-sidebar-green-light transition-colors">
                                                 Reject
                                             </button>
                                         </div>
@@ -337,7 +337,7 @@
                         <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
                             Filter
                         </button>
-                        <button class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                        <button class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                             View All Applications
                         </button> -->
                     </div>
@@ -360,11 +360,11 @@
                             <tr class="hover:bg-gray-50 transition-colors duration-200 group">
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-md">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-2xl flex items-center justify-center shadow-md">
                                             <span class="text-white text-sm font-bold">{{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}</span>
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ $application->first_name }} {{ $application->last_name }}</div>
+                                            <div class="text-sm font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ $application->first_name }} {{ $application->last_name }}</div>
                                             <div class="text-xs text-gray-500">{{ $application->email }}</div>
                                             <div class="text-xs text-blue-600 font-medium mt-1">#{{ $application->application_number }}</div>
                                         </div>
@@ -384,7 +384,7 @@
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold 
                                         @if($application->status === 'approved') bg-green-100 text-green-800 border border-green-200
-                                        @elseif($application->status === 'rejected') bg-red-100 text-red-800 border border-red-200
+                                        @elseif($application->status === 'rejected') bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200
                                         @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800 border border-yellow-200
                                         @elseif($application->status === 'submitted') bg-blue-100 text-blue-800 border border-blue-200
                                         @elseif($application->status === 'disbursed') bg-purple-100 text-purple-800 border border-purple-200
@@ -412,7 +412,7 @@
                                 </td>
                                 <!-- <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
-                                        <button class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200">
+                                        <button class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -461,12 +461,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 {
                     label: 'Total Applications',
                     data: {!! json_encode($monthlyApplications) !!},
-                    borderColor: 'rgb(239, 68, 68)',
-                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    borderColor: 'rgb(29, 117, 63)',
+                    backgroundColor: 'rgba(29, 117, 63, 0.1)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4,
-                    pointBackgroundColor: 'rgb(239, 68, 68)',
+                    pointBackgroundColor: 'rgb(29, 117, 63)',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 6
@@ -588,7 +588,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {!! json_encode($statusData) !!},
                 backgroundColor: [
                     'rgb(59, 130, 246)',   // submitted - blue
-                    'rgb(239, 68, 68)',    // under_review - red  
+                    'rgb(29, 117, 63)',    // under_review - red  
                     'rgb(34, 197, 94)',    // approved - green
                     'rgb(156, 163, 175)',  // rejected - gray
                     'rgb(147, 51, 234)'    // disbursed - purple
@@ -649,14 +649,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {!! json_encode($statusData) !!},
                 backgroundColor: [
                     'rgba(59, 130, 246, 0.8)',   // submitted - blue
-                    'rgba(239, 68, 68, 0.8)',    // under_review - red  
+                    'rgba(29, 117, 63, 0.8)',    // under_review - red  
                     'rgba(34, 197, 94, 0.8)',    // approved - green
                     'rgba(156, 163, 175, 0.8)',  // rejected - gray
                     'rgba(147, 51, 234, 0.8)'    // disbursed - purple
                 ],
                 borderColor: [
                     'rgb(59, 130, 246)',   
-                    'rgb(239, 68, 68)',    
+                    'rgb(29, 117, 63)',    
                     'rgb(34, 197, 94)',    
                     'rgb(156, 163, 175)',  
                     'rgb(147, 51, 234)'    

@@ -28,16 +28,16 @@
             </div>
 
             <!-- Critical Logs -->
-            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-14 h-14 bg-sidebar-green-100 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green-200 transition-colors">
+                        <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.348 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                         </svg>
                     </div>
                     <div class="text-right">
                         <p class="text-sm font-medium text-gray-500">Critical Logs</p>
-                        <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($criticalLogs) }}</p>
+                        <p class="text-lg font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($criticalLogs) }}</p>
                     </div>
                 </div>
             </div>
@@ -209,7 +209,7 @@
                                             'low' => 'bg-gray-100 text-gray-800 border-gray-200',
                                             'medium' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
                                             'high' => 'bg-orange-100 text-orange-800 border-orange-200',
-                                            'critical' => 'bg-red-100 text-red-800 border-red-200',
+                                            'critical' => 'bg-sidebar-green-100 text-sidebar-green-800 border-sidebar-green-200',
                                         ];
                                         $color = $severityColors[$log->severity] ?? $severityColors['medium'];
                                     @endphp
@@ -300,7 +300,7 @@
                                     'low' => 'bg-gray-100 text-gray-800',
                                     'medium' => 'bg-yellow-100 text-yellow-800',
                                     'high' => 'bg-orange-100 text-orange-800',
-                                    'critical' => 'bg-red-100 text-red-800',
+                                    'critical' => 'bg-sidebar-green-100 text-sidebar-green-800',
                                 ];
                                 $color = $severityColors[$selectedLog->severity] ?? $severityColors['medium'];
                             @endphp
@@ -359,7 +359,7 @@
                     @if($selectedLog->old_values)
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Old Values</label>
-                            <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                            <div class="bg-sidebar-green-50 border border-sidebar-green-200 p-4 rounded-lg">
                                 <pre class="text-xs text-gray-800 whitespace-pre-wrap">{{ json_encode($selectedLog->old_values, JSON_PRETTY_PRINT) }}</pre>
                             </div>
                         </div>

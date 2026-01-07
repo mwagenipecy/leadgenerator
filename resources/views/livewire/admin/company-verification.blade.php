@@ -12,8 +12,8 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p class="text-red-800 text-sm">{{ session('error') }}</p>
+        <div class="mb-4 p-4 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg">
+            <p class="text-sidebar-green-800 text-sm">{{ session('error') }}</p>
         </div>
     @endif
 
@@ -24,13 +24,13 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search Companies</label>
                 <input wire:model.live="search" type="text" placeholder="Search by company name, email, TIN..." 
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent">
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent">
             </div>
 
             <!-- Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
-                <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-brand-red focus:border-transparent">
+                <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-transparent">
                     <option value="pending">Pending</option>
                     <option value="verified">Verified</option>
                     <option value="rejected">Rejected</option>
@@ -74,7 +74,7 @@
                             @if($company->company_verification_status === 'verified')
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Verified</span>
                             @elseif($company->company_verification_status === 'rejected')
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-sidebar-green-100 text-sidebar-green-800">Rejected</span>
                             @else
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
                             @endif
@@ -83,14 +83,14 @@
                             {{ $company->companyVerificationDocuments->count() }} documents
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button wire:click="viewDocuments({{ $company->id }})" class="text-brand-red hover:text-brand-dark-red mr-3">
+                            <button wire:click="viewDocuments({{ $company->id }})" class="text-sidebar-green hover:text-brand-dark-red mr-3">
                                 View
                             </button>
                             @if($company->company_verification_status === 'pending')
                                 <button wire:click="openVerifyModal({{ $company->id }})" class="text-green-600 hover:text-green-800 mr-3">
                                     Verify
                                 </button>
-                                <button wire:click="openRejectModal({{ $company->id }})" class="text-red-600 hover:text-red-800">
+                                <button wire:click="openRejectModal({{ $company->id }})" class="text-sidebar-green hover:text-sidebar-green-800">
                                     Reject
                                 </button>
                             @endif
@@ -143,12 +143,12 @@
                                     @if($document->status === 'verified')
                                         <span class="mt-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Verified</span>
                                     @elseif($document->status === 'rejected')
-                                        <span class="mt-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
+                                        <span class="mt-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-sidebar-green-100 text-sidebar-green-800">Rejected</span>
                                     @else
                                         <span class="mt-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
                                     @endif
                                 </div>
-                                <button wire:click="downloadDocument({{ $document->id }})" class="ml-4 text-brand-red hover:text-brand-dark-red">
+                                <button wire:click="downloadDocument({{ $document->id }})" class="ml-4 text-sidebar-green hover:text-brand-dark-red">
                                     Download
                                 </button>
                             </div>
@@ -166,7 +166,7 @@
                         <button wire:click="openVerifyModal({{ $selectedUser->id }})" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
                             Verify Company
                         </button>
-                        <button wire:click="openRejectModal({{ $selectedUser->id }})" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <button wire:click="openRejectModal({{ $selectedUser->id }})" class="px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light">
                             Reject
                         </button>
                     @endif
@@ -185,7 +185,7 @@
                 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Verification Notes (Optional)</label>
-                    <textarea wire:model="verificationNotes" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent" placeholder="Add any notes about this verification..."></textarea>
+                    <textarea wire:model="verificationNotes" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent" placeholder="Add any notes about this verification..."></textarea>
                 </div>
 
                 <div class="flex justify-end space-x-3">
@@ -210,15 +210,15 @@
                 
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reason *</label>
-                    <textarea wire:model="rejectionReason" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent" placeholder="Please provide a reason for rejection..."></textarea>
-                    @error('rejectionReason') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    <textarea wire:model="rejectionReason" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent" placeholder="Please provide a reason for rejection..."></textarea>
+                    @error('rejectionReason') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="flex justify-end space-x-3">
                     <button wire:click="closeModals" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
                         Cancel
                     </button>
-                    <button wire:click="rejectCompany" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    <button wire:click="rejectCompany" class="px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light">
                         Reject Company
                     </button>
                 </div>

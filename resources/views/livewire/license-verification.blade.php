@@ -16,13 +16,13 @@
                     type="text" 
                     id="licenseNumber"
                     wire:model.live="licenseNumber" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                     placeholder="Enter license number (e.g., 4002014677)"
                     maxlength="20"
                     wire:loading.attr="disabled"
                 >
                 @error('licenseNumber') 
-                    <span class="text-red-600 text-sm">{{ $message }}</span> 
+                    <span class="text-sidebar-green text-sm">{{ $message }}</span> 
                 @enderror
             </div>
         </div>
@@ -30,7 +30,7 @@
         <div class="flex gap-3">
             <button 
                 wire:click="verifyLicense" 
-                class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition duration-200 flex items-center"
+                class="bg-sidebar-green hover:bg-sidebar-green-light text-white font-medium py-2 px-6 rounded-md transition duration-200 flex items-center"
                 wire:loading.attr="disabled"
             >
                 <div wire:loading wire:target="verifyLicense" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -49,19 +49,19 @@
 
     <!-- Loading State -->
     <div wire:loading wire:target="verifyLicense" class="mb-6">
-        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
             <div class="flex items-center">
-                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-red-600 mr-3"></div>
-                <span class="text-red-700">Connecting to TRA database for license verification...</span>
+                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-sidebar-green mr-3"></div>
+                <span class="text-sidebar-green-light">Connecting to TRA database for license verification...</span>
             </div>
         </div>
     </div>
 
     <!-- Error Display -->
     @if($error)
-        <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-red-800 mb-2">Verification Failed</h3>
-            <p class="text-red-700">{{ $error }}</p>
+        <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-sidebar-green-800 mb-2">Verification Failed</h3>
+            <p class="text-sidebar-green-light">{{ $error }}</p>
         </div>
     @endif
 
@@ -69,14 +69,14 @@
     @if($showResult && $verificationResult)
         <div class="mb-6 bg-white border border-gray-200 rounded-lg p-4">
             <div class="flex items-center mb-4 pb-3 border-b border-gray-200">
-                <div class="w-3 h-3 bg-red-600 rounded-full mr-3"></div>
+                <div class="w-3 h-3 bg-sidebar-green rounded-full mr-3"></div>
                 <h3 class="text-lg font-semibold text-black">License Verification Successful</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Driver Information -->
-                <div class="bg-white p-4 rounded-lg border-2 border-red-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-red-200">Driver Information</h4>
+                <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Driver Information</h4>
                     
                     <!-- Driver Photo -->
                     <div class="mb-4">
@@ -106,8 +106,8 @@
                 </div>
 
                 <!-- License Details -->
-                <div class="bg-white p-4 rounded-lg border-2 border-red-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-red-200">License Details</h4>
+                <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">License Details</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">License Number:</span>
@@ -115,7 +115,7 @@
                         </div>
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">Status:</span>
-                            <span class="font-medium {{ $verificationResult['is_expired'] ? 'text-red-600' : 'text-black' }}">
+                            <span class="font-medium {{ $verificationResult['is_expired'] ? 'text-sidebar-green' : 'text-black' }}">
                                 {{ $verificationResult['is_expired'] ? 'Expired' : 'Valid' }}
                             </span>
                         </div>
@@ -128,7 +128,7 @@
                             <div class="mt-1">
                                 @if(isset($verificationResult['license_categories_array']) && count($verificationResult['license_categories_array']) > 0)
                                     @foreach($verificationResult['license_categories_array'] as $category)
-                                        <span class="inline-block px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-medium mr-1 mb-1">
+                                        <span class="inline-block px-2 py-1 bg-sidebar-green-100 text-sidebar-green-800 rounded text-xs font-medium mr-1 mb-1">
                                             {{ $category }}
                                         </span>
                                     @endforeach
@@ -141,8 +141,8 @@
                 </div>
 
                 <!-- Verification Information -->
-                <div class="bg-white p-4 rounded-lg border-2 border-red-100 md:col-span-2">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-red-200">Verification Information</h4>
+                <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100 md:col-span-2">
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Verification Information</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">Verified On:</span>
@@ -155,7 +155,7 @@
                         <div class="flex gap-3 pt-2">
                             <button
                                 wire:click="verifyLicense"
-                                class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-1 px-3 rounded transition duration-200"
+                                class="bg-sidebar-green hover:bg-sidebar-green-light text-white text-sm font-medium py-1 px-3 rounded transition duration-200"
                             >
                                 Re-verify
                             </button>

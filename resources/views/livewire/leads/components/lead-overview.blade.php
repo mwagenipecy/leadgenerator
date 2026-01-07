@@ -48,7 +48,7 @@
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
                 <span class="text-sm font-medium text-gray-600">Debt-to-Income Ratio</span>
                 @if($application->debt_to_income_ratio && !$isAvailable)
-                    <span class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                    <span class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                         {{ number_format($application->debt_to_income_ratio, 1) }}%
                     </span>
                 @else
@@ -91,7 +91,7 @@
                     <div class="relative pb-8">
                         <div class="relative flex space-x-3">
                             <div>
-                                <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                                <span class="h-8 w-8 rounded-full bg-sidebar-green flex items-center justify-center ring-8 ring-white">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                     </svg>
@@ -165,7 +165,7 @@
                         <div class="relative">
                             <div class="relative flex space-x-3">
                                 <div>
-                                    <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                                    <span class="h-8 w-8 rounded-full bg-sidebar-green flex items-center justify-center ring-8 ring-white">
                                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                                         </svg>

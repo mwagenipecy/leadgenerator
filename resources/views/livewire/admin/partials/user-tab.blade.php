@@ -17,7 +17,7 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6 flex items-center space-x-3"
+        <div class="bg-sidebar-green-100 border border-sidebar-green-400 text-sidebar-green-light px-6 py-4 rounded-lg mb-6 flex items-center space-x-3"
              x-data="{ show: true }" x-show="show" x-transition 
              x-init="setTimeout(() => show = false, 8000)">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,20 +35,20 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <!-- Total Users Card -->
-        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
             <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-14 h-14 bg-sidebar-green-100 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green-200 transition-colors">
+                    <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                     </svg>
                 </div>
                 <div class="text-right">
                     <p class="text-sm font-medium text-gray-500">Total Users</p>
-                    <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalUsers) }}</p>
+                    <p class="text-lg font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($totalUsers) }}</p>
                 </div>
             </div>
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-1 text-red-600">
+                <div class="flex items-center space-x-1 text-sidebar-green">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
@@ -59,20 +59,20 @@
         </div>
 
         <!-- Total Lenders Card -->
-        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
             <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-14 h-14 bg-sidebar-green-100 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green-200 transition-colors">
+                    <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
                 </div>
                 <div class="text-right">
                     <p class="text-sm font-medium text-gray-500">Lender Users</p>
-                    <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalLenders) }}</p>
+                    <p class="text-lg font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($totalLenders) }}</p>
                 </div>
             </div>
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-1 text-red-600">
+                <div class="flex items-center space-x-1 text-sidebar-green">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
@@ -83,20 +83,20 @@
         </div>
 
         <!-- Total Borrowers Card -->
-        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
             <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-14 h-14 bg-sidebar-green-100 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green-200 transition-colors">
+                    <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                     </svg>
                 </div>
                 <div class="text-right">
                     <p class="text-sm font-medium text-gray-500">Borrower Users</p>
-                    <p class="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($totalBorrowers) }}</p>
+                    <p class="text-lg font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($totalBorrowers) }}</p>
                 </div>
             </div>
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-1 text-red-600">
+                <div class="flex items-center space-x-1 text-sidebar-green">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
@@ -192,7 +192,7 @@
                                         // Use the role column directly to avoid relationship conflicts
                                         $roleName = $user->role ?? 'user';
                                         $roleColor = match(strtolower($roleName)) {
-                                            'super_admin', 'super admin' => 'from-red-500 to-red-600',
+                                            'super_admin', 'super admin' => 'from-sidebar-green to-sidebar-green',
                                             'admin' => 'from-purple-500 to-purple-600',
                                             'lender' => 'from-orange-500 to-orange-600',
                                             default => 'from-green-500 to-green-600'
@@ -224,7 +224,7 @@
                                     // Use the role column directly to avoid relationship conflicts
                                     $roleName = $user->role ?? 'user';
                                     $roleStyle = match(strtolower($roleName)) {
-                                        'super_admin', 'super admin' => 'bg-red-100 text-red-800 border-red-200',
+                                        'super_admin', 'super admin' => 'bg-sidebar-green-100 text-sidebar-green-800 border-sidebar-green-200',
                                         'admin' => 'bg-purple-100 text-purple-800 border-purple-200',
                                         'lender' => 'bg-orange-100 text-orange-800 border-orange-200',
                                         default => 'bg-green-100 text-green-800 border-green-200'
@@ -237,8 +237,8 @@
                                     {{ ucfirst(str_replace('_', ' ', $roleName)) }}
                                 </span>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                    {{ $user->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
-                                    <div class="w-2 h-2 rounded-full mr-2 {{ $user->is_active ? 'bg-green-400' : 'bg-red-400' }}"></div>
+                                    {{ $user->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200' }}">
+                                    <div class="w-2 h-2 rounded-full mr-2 {{ $user->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
                                     {{ $user->is_active ? 'Active' : 'Inactive' }}
                                 </span>
                             </div>
@@ -292,7 +292,7 @@
                                 @if($user->id !== auth()->id())
                                     <button wire:click="deleteUser({{ $user->id }})" 
                                         onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
-                                        class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" title="Delete User">
+                                        class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200" title="Delete User">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>

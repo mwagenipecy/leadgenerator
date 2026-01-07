@@ -46,7 +46,7 @@
                 <div class="flex items-center">
                     @php
                         $levelColor = match(true) {
-                            $role->level >= 80 => 'from-red-500 to-red-600',
+                            $role->level >= 80 => 'from-sidebar-green to-sidebar-green',
                             $role->level >= 50 => 'from-purple-500 to-purple-600',
                             default => 'from-blue-500 to-blue-600'
                         };
@@ -70,8 +70,8 @@
                             System
                         </span>
                     @endif
-                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $role->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                        <div class="w-2 h-2 rounded-full mr-1 {{ $role->is_active ? 'bg-green-400' : 'bg-red-400' }}"></div>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $role->is_active ? 'bg-green-100 text-green-800' : 'bg-sidebar-green-100 text-sidebar-green-800' }}">
+                        <div class="w-2 h-2 rounded-full mr-1 {{ $role->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
                         {{ $role->is_active ? 'Active' : 'Inactive' }}
                     </span>
                 </div>
@@ -112,7 +112,7 @@
                     @if(!$role->is_system_role)
                         <button wire:click="deleteRole({{ $role->id }})" 
                             onclick="return confirm('Are you sure you want to delete this role? Users with this role will lose access.')"
-                            class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" title="Delete Role">
+                            class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200" title="Delete Role">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
@@ -177,7 +177,7 @@
                             <div class="flex items-center">
                                 @php
                                     $levelColor = match(true) {
-                                        $role->level >= 80 => 'from-red-500 to-red-600',
+                                        $role->level >= 80 => 'from-sidebar-green to-sidebar-green',
                                         $role->level >= 50 => 'from-purple-500 to-purple-600',
                                         default => 'from-blue-500 to-blue-600'
                                     };
@@ -203,7 +203,7 @@
                                 <div class="text-2xl font-bold text-gray-900">{{ $role->level }}</div>
                                 <div class="ml-2">
                                     @if($role->level >= 80)
-                                        <span class="text-xs text-red-600 font-medium">High</span>
+                                        <span class="text-xs text-sidebar-green font-medium">High</span>
                                     @elseif($role->level >= 50)
                                         <span class="text-xs text-purple-600 font-medium">Medium</span>
                                     @else
@@ -224,8 +224,8 @@
                         </td>
                         <td class="px-6 py-6 whitespace-nowrap">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                {{ $role->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
-                                <div class="w-2 h-2 rounded-full mr-2 {{ $role->is_active ? 'bg-green-400' : 'bg-red-400' }}"></div>
+                                {{ $role->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200' }}">
+                                <div class="w-2 h-2 rounded-full mr-2 {{ $role->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
                                 {{ $role->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
@@ -248,7 +248,7 @@
                                 @if(!$role->is_system_role)
                                     <button wire:click="deleteRole({{ $role->id }})" 
                                         onclick="return confirm('Are you sure you want to delete this role?')"
-                                        class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" title="Delete Role">
+                                        class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200" title="Delete Role">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                         </svg>

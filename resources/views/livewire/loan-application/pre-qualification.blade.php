@@ -16,10 +16,10 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     @foreach($loanCategories as $key => $name)
                         <div wire:click="selectLoanCategory('{{ $key }}')" 
-                             class="bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-brand-red hover:shadow-lg transition-all duration-300 cursor-pointer group {{ $loan_category === $key ? 'border-brand-red bg-red-50' : '' }}">
+                             class="bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-sidebar-green hover:shadow-lg transition-all duration-300 cursor-pointer group {{ $loan_category === $key ? 'border-sidebar-green bg-sidebar-green-50' : '' }}">
                             <div class="text-center">
                                 <!-- Category Icon -->
-                                <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center {{ $loan_category === $key ? 'bg-brand-red text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-brand-red group-hover:text-white' }} transition-colors">
+                                <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center {{ $loan_category === $key ? 'bg-sidebar-green text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-sidebar-green group-hover:text-white' }} transition-colors">
                                     @switch($key)
                                         @case('personal')
                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,7 +69,7 @@
                                 
                                 @if($loan_category === $key)
                                     <div class="mt-4">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-brand-red text-white">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-sidebar-green text-white">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                             </svg>
@@ -91,7 +91,7 @@
                         <h1 class="text-4xl font-bold text-gray-900 mb-2">Loan Requirements</h1>
                         <p class="text-gray-600 text-lg">Enter your loan details to find matching lenders</p>
                         <div class="mt-2 flex items-center space-x-4 text-sm">
-                            <span class="text-gray-500">Category: <span class="font-medium text-brand-red">{{ $loanCategories[$loan_category] ?? '' }}</span></span>
+                            <span class="text-gray-500">Category: <span class="font-medium text-sidebar-green">{{ $loanCategories[$loan_category] ?? '' }}</span></span>
                         </div>
                     </div>
                     <button wire:click="backToCategory" class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
@@ -105,9 +105,9 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- Left Column - Input Form -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-brand-red to-brand-dark-red text-white">
+                        <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white">
                             <h3 class="text-xl font-bold mb-2">Loan Details</h3>
-                            <p class="text-red-100 text-sm">Specify your loan requirements</p>
+                            <p class="text-white text-sm opacity-90">Specify your loan requirements</p>
                         </div>
                         
                         <div class="p-6 space-y-6">
@@ -122,11 +122,11 @@
                                            type="number" 
                                            step="1000" 
                                            min="1000" 
-                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50"
+                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold bg-gray-50"
                                            placeholder="50,000">
                                 </div>
                                 @error('requested_amount') 
-                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> 
+                                    <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> 
                                 @enderror
                             </div>
 
@@ -136,7 +136,7 @@
                                     Loan Period (Months) *
                                 </label>
                                 <select wire:model.live="requested_tenure" 
-                                        class="w-full px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold bg-gray-50">
+                                        class="w-full px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold bg-gray-50">
                                     <option value="">Select period</option>
                                     <option value="6">6 months</option>
                                     <option value="12">12 months</option>
@@ -151,7 +151,7 @@
                                     <option value="120">120 months</option>
                                 </select>
                                 @error('requested_tenure') 
-                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> 
+                                    <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> 
                                 @enderror
                             </div>
                         </div>
@@ -190,11 +190,11 @@
                                            step="1000" 
                                            min="0" 
                                            {{ $use_profile_data && $userProfile ? 'readonly' : '' }}
-                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold {{ $use_profile_data && $userProfile ? 'bg-gray-100' : 'bg-gray-50' }}"
+                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold {{ $use_profile_data && $userProfile ? 'bg-gray-100' : 'bg-gray-50' }}"
                                            placeholder="500,000">
                                 </div>
                                 @error('monthly_income') 
-                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> 
+                                    <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> 
                                 @enderror
                                 @if($use_profile_data && $userProfile)
                                     <p class="text-sm text-blue-600 mt-1">From your profile</p>
@@ -213,11 +213,11 @@
                                            step="1000" 
                                            min="0" 
                                            {{ $use_profile_data && $userProfile ? 'readonly' : '' }}
-                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red text-lg font-bold {{ $use_profile_data && $userProfile ? 'bg-gray-100' : 'bg-gray-50' }}"
+                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold {{ $use_profile_data && $userProfile ? 'bg-gray-100' : 'bg-gray-50' }}"
                                            placeholder="0">
                                 </div>
                                 @error('existing_loans') 
-                                    <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> 
+                                    <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> 
                                 @enderror
                                 @if($use_profile_data && $userProfile)
                                     <p class="text-sm text-blue-600 mt-1">From your profile</p>
@@ -254,7 +254,7 @@
                             <!-- Calculate Button -->
                             <div class="pt-4">
                                 <button wire:click="calculateEligibility" 
-                                        class="w-full bg-gradient-to-r from-brand-red to-brand-dark-red text-white py-4 px-6 rounded-lg font-bold hover:from-brand-dark-red hover:to-red-700 transition-all duration-200 shadow-lg shadow-brand-red/25 flex items-center justify-center">
+                                        class="w-full bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white py-4 px-6 rounded-lg font-bold hover:from-sidebar-green-light hover:to-sidebar-green-dark transition-all duration-200 shadow-lg shadow-sidebar-green/25 flex items-center justify-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                     </svg>
@@ -274,7 +274,7 @@
                         <h1 class="text-4xl font-bold text-gray-900 mb-2">Eligible Loan Products</h1>
                         <p class="text-gray-600 text-lg">Found {{ count($availableProducts) }} products that match your criteria and DSR requirements</p>
                         <div class="mt-2 flex items-center space-x-4 text-sm">
-                            <span class="text-gray-500">Amount: <span class="font-medium text-brand-red">TSh {{ number_format($requested_amount) }}</span></span>
+                            <span class="text-gray-500">Amount: <span class="font-medium text-sidebar-green">TSh {{ number_format($requested_amount) }}</span></span>
                             <span class="text-gray-500">Period: <span class="font-medium text-gray-900">{{ $requested_tenure }} months</span></span>
                             <span class="text-gray-500">Income: <span class="font-medium text-green-600">TSh {{ number_format($monthly_income) }}</span></span>
                         </div>
@@ -297,7 +297,7 @@
                         <div class="flex flex-wrap items-center gap-3">
                             <!-- Sort Options -->
                             <select wire:model.live="sort_by" 
-                                    class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-brand-red focus:border-brand-red">
+                                    class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <option value="score">Best Match</option>
                                 <option value="interest_rate">Lowest Rate</option>
                                 <option value="processing_time">Fastest Processing</option>
@@ -351,23 +351,23 @@
                             @endphp
                             
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 
-                                        {{ $isSelected ? 'ring-2 ring-brand-red' : '' }}
+                                        {{ $isSelected ? 'ring-2 ring-sidebar-green' : '' }}
                                         {{ $isDisabled ? 'opacity-50' : '' }}">
                                 
                                 <!-- Product Header -->
-                                <div class="p-6 {{ $isTopMatch ? 'bg-gradient-to-r from-brand-red to-brand-dark-red text-white' : 'bg-gradient-to-r from-gray-50 to-gray-100' }}">
+                                <div class="p-6 {{ $isTopMatch ? 'bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white' : 'bg-gradient-to-r from-gray-50 to-gray-100' }}">
                                     <div class="flex items-center justify-between mb-3">
                                         <div>
                                             <h3 class="text-xl font-bold {{ $isTopMatch ? 'text-white' : 'text-gray-900' }}">
                                                 {{ $product['lender_name'] }}
                                             </h3>
-                                            <p class="text-sm {{ $isTopMatch ? 'text-red-100' : 'text-gray-600' }}">
+                                            <p class="text-sm {{ $isTopMatch ? 'text-sidebar-green-100' : 'text-gray-600' }}">
                                                 {{ $product['product_name'] }}
                                             </p>
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             @if($isTopMatch)
-                                                <span class="bg-white text-brand-red px-3 py-1 rounded-full text-xs font-bold">BEST MATCH</span>
+                                                <span class="bg-white text-sidebar-green px-3 py-1 rounded-full text-xs font-bold">BEST MATCH</span>
                                             @endif
                                             @if($isLenderSelected && !$isSelected)
                                                 <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold">LENDER SELECTED</span>
@@ -382,11 +382,11 @@
                                     <!-- Key Metrics -->
                                     <div class="grid grid-cols-3 gap-4">
                                         <div>
-                                            <p class="text-xs {{ $isTopMatch ? 'text-red-200' : 'text-gray-500' }}">Eligibility Score</p>
+                                            <p class="text-xs {{ $isTopMatch ? 'text-sidebar-green-200' : 'text-gray-500' }}">Eligibility Score</p>
                                             <p class="text-lg font-bold {{ $isTopMatch ? 'text-white' : 'text-gray-900' }}">{{ number_format($product['eligibility_score'], 1) }}%</p>
                                         </div>
                                         <div>
-                                            <p class="text-xs {{ $isTopMatch ? 'text-red-200' : 'text-gray-500' }}">Interest Rate</p>
+                                            <p class="text-xs {{ $isTopMatch ? 'text-sidebar-green-200' : 'text-gray-500' }}">Interest Rate</p>
                                             <p class="text-lg font-bold {{ $isTopMatch ? 'text-white' : 'text-gray-900' }}">
                                                 {{ $product['interest_rate_min'] }}%
                                                 @if($product['interest_rate_min'] != $product['interest_rate_max'])
@@ -395,7 +395,7 @@
                                             </p>
                                         </div>
                                         <div>
-                                            <p class="text-xs {{ $isTopMatch ? 'text-red-200' : 'text-gray-500' }}">Monthly Payment</p>
+                                            <p class="text-xs {{ $isTopMatch ? 'text-sidebar-green-200' : 'text-gray-500' }}">Monthly Payment</p>
                                             <p class="text-lg font-bold {{ $isTopMatch ? 'text-white' : 'text-gray-900' }}">
                                                 TSh {{ number_format($product['monthly_payment'] ?? 0) }}
                                             </p>
@@ -481,7 +481,7 @@
                                                        wire:click="selectProduct({{ $product['product_id'] }})"
                                                        {{ $isSelected ? 'checked' : '' }}
                                                        {{ $isDisabled ? 'disabled' : '' }}
-                                                       class="text-brand-red focus:ring-brand-red rounded {{ $isDisabled ? 'cursor-not-allowed' : '' }}">
+                                                       class="text-sidebar-green focus:ring-sidebar-green rounded {{ $isDisabled ? 'cursor-not-allowed' : '' }}">
                                                 <span class="ml-3 text-sm font-medium text-gray-700">
                                                     {{ $isDisabled ? 'Another product selected from this lender' : 'Select for application' }}
                                                 </span>
@@ -489,7 +489,7 @@
                                             
                                             <!-- View Details Button -->
                                             <button wire:click="showProductDetails({{ $product['product_id'] }})"
-                                                    class="text-brand-red hover:text-brand-dark-red text-sm font-medium flex items-center">
+                                                    class="text-sidebar-green hover:text-sidebar-green-light text-sm font-medium flex items-center">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                 </svg>
@@ -504,24 +504,24 @@
 
                     <!-- Proceed to Application -->
                     @if(!empty($selected_products))
-                        <div class="bg-gradient-to-r from-brand-red to-brand-dark-red rounded-2xl shadow-lg p-8 text-white text-center">
+                        <div class="bg-gradient-to-r from-sidebar-green to-sidebar-green-light rounded-2xl shadow-lg p-8 text-white text-center">
                             <div class="max-w-2xl mx-auto">
                                 <h3 class="text-2xl font-bold mb-2">Ready to Apply?</h3>
-                                <p class="text-red-100 mb-6">
+                                <p class="text-sidebar-green-100 mb-6">
                                     You've selected {{ count($selected_products) }} product(s) from {{ $this->getSelectedLendersCount() }} lender(s). 
                                     Continue to complete your full loan application.
                                 </p>
                                 
                                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                                     <button wire:click="proceedToApplication" 
-                                            class="bg-white text-brand-red px-8 py-3 rounded-lg font-bold hover:bg-gray-50 transition-all duration-200 shadow-lg flex items-center justify-center">
+                                            class="bg-white text-sidebar-green px-8 py-3 rounded-lg font-bold hover:bg-gray-50 transition-all duration-200 shadow-lg flex items-center justify-center">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                                         </svg>
                                         Complete Application
                                     </button>
                                     <button wire:click="clearSelection" 
-                                            class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold hover:bg-white hover:text-brand-red transition-all duration-200">
+                                            class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-bold hover:bg-white hover:text-sidebar-green transition-all duration-200">
                                         Change Selection
                                     </button>
                                 </div>
@@ -566,7 +566,7 @@
                         
                         <div class="flex flex-col sm:flex-row gap-3 justify-center">
                             <button wire:click="backToCriteria" 
-                                    class="bg-brand-red text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors">
+                                    class="bg-sidebar-green text-white px-6 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
                                 Adjust Criteria
                             </button>
                             <button wire:click="backToCategory" 
@@ -586,17 +586,17 @@
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-screen overflow-y-auto">
             <!-- Modal Header -->
-            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-brand-red to-brand-dark-red text-white">
+            <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-bold">{{ $selectedProductForDetails['product_name'] }}</h2>
-                        <p class="text-red-100">{{ $selectedProductForDetails['lender_name'] }}</p>
+                        <p class="text-sidebar-green-100">{{ $selectedProductForDetails['lender_name'] }}</p>
                     </div>
                     <div class="flex items-center space-x-3">
                         <span class="px-3 py-1 rounded-full text-xs font-bold {{ $selectedProductForDetails['is_secured'] ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800' }}">
                             {{ $selectedProductForDetails['is_secured'] ? 'SECURED' : 'UNSECURED' }}
                         </span>
-                        <button wire:click="closeProductDetails" class="text-white hover:text-red-200 p-2">
+                        <button wire:click="closeProductDetails" class="text-white hover:text-sidebar-green-200 p-2">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
@@ -620,7 +620,7 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Monthly Payment:</span>
-                                    <span class="font-semibold text-brand-red">TSh {{ number_format($selectedProductForDetails['monthly_payment']) }}</span>
+                                    <span class="font-semibold text-sidebar-green">TSh {{ number_format($selectedProductForDetails['monthly_payment']) }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Your DSR:</span>
@@ -745,7 +745,7 @@
                 <!-- Modal Actions -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t border-gray-200">
                     <button wire:click="selectProduct({{ $selectedProductForDetails['product_id'] }})"
-                            class="bg-brand-red text-white px-8 py-3 rounded-lg font-bold hover:bg-brand-dark-red transition-colors flex items-center justify-center">
+                            class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-bold hover:bg-sidebar-green-light transition-colors flex items-center justify-center">
                         @if(in_array($selectedProductForDetails['product_id'], $selected_products))
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>

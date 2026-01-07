@@ -8,7 +8,6 @@
 
     <meta http-equiv="Cross-Origin-Resource-Policy" content="same-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -208,11 +207,11 @@
             const searchInputs = document.querySelectorAll('input[type="text"]');
             searchInputs.forEach(input => {
                 input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('ring-2', 'ring-brand-red/50');
+                    this.parentElement.classList.add('ring-2', 'ring-sidebar-green/50');
                 });
                 
                 input.addEventListener('blur', function() {
-                    this.parentElement.classList.remove('ring-2', 'ring-brand-red/50');
+                    this.parentElement.classList.remove('ring-2', 'ring-sidebar-green/50');
                 });
 
                 // Add search suggestions (placeholder functionality)

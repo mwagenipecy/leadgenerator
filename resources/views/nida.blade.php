@@ -13,7 +13,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#C40F12',
+                        'sidebar-green': '#1D753F',
                     }
 
         // Photo capture
@@ -65,7 +65,7 @@
                     <h4 class="font-semibold text-gray-900 mb-3">Processing ${type === 'id_document' ? 'ID Document' : 'Fingerprint'}...</h4>
                     <div class="relative inline-block">
                         <img src="${imageSrc}" alt="Captured ${type}" class="w-64 h-48 object-cover rounded-lg border">
-                        <div class="absolute inset-0 bg-brand-red/20 rounded-lg flex items-center justify-center">
+                        <div class="absolute inset-0 bg-sidebar-green/20 rounded-lg flex items-center justify-center">
                             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                         </div>
                     </div>
@@ -144,12 +144,12 @@
             .catch(error => {
                 console.error('QR generation error:', error);
                 qrCodeEl.innerHTML = `
-                    <div class="text-center text-red-500 p-4">
+                    <div class="text-center text-sidebar-green p-4">
                         <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         <p class="text-sm">Failed to generate QR code</p>
-                        <button onclick="generateQRCode()" class="text-brand-red hover:underline mt-1">Try again</button>
+                        <button onclick="generateQRCode()" class="text-sidebar-green hover:underline mt-1">Try again</button>
                     </div>
                 `;
             });
@@ -189,7 +189,7 @@
                         statusEl.innerHTML = `
                             <div class="flex items-center justify-center space-x-2 text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
                                 <span>Session expired. </span>
-                                <button onclick="generateQRCode()" class="text-brand-red hover:underline">Generate new code</button>
+                                <button onclick="generateQRCode()" class="text-sidebar-green hover:underline">Generate new code</button>
                             </div>
                         `;
                     }
@@ -284,16 +284,16 @@
         // Show verification error
         function showVerificationError(message) {
             const errorDiv = document.createElement('div');
-            errorDiv.className = 'mt-6 p-4 bg-red-50 border border-red-200 rounded-lg';
+            errorDiv.className = 'mt-6 p-4 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg';
             errorDiv.innerHTML = `
                 <div class="flex">
-                    <svg class="w-5 h-5 text-red-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-sidebar-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <h3 class="text-sm font-medium text-red-800">Verification Failed</h3>
-                        <p class="text-sm text-red-700 mt-1">${message}</p>
-                        <button onclick="location.reload()" class="mt-2 text-sm text-red-600 hover:text-red-800 underline">
+                        <h3 class="text-sm font-medium text-sidebar-green-800">Verification Failed</h3>
+                        <p class="text-sm text-sidebar-green-light mt-1">${message}</p>
+                        <button onclick="location.reload()" class="mt-2 text-sm text-sidebar-green hover:text-sidebar-green-800 underline">
                             Try Again
                         </button>
                     </div>
@@ -359,11 +359,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="text-2xl font-bold font-poppins text-black">
-                    Lead<span class="text-brand-red text-red-600 ">Generator</span>
+                    Lead<span class="text-sidebar-green text-sidebar-green ">Generator</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm text-gray-500">Welcome, {{ auth()->user()->first_name ?? 'User' }}</span>
-                    <button onclick="logout()" class="text-sm text-brand-red hover:text-red-700">
+                    <button onclick="logout()" class="text-sm text-sidebar-green hover:text-sidebar-green-light">
                         Logout
                     </button>
                 </div>
@@ -376,8 +376,8 @@
         
         <!-- Header Section -->
         <div class="text-center mb-12">
-            <div class="mx-auto w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mb-6">
-                <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mx-auto w-16 h-16 bg-sidebar-green/10 rounded-full flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                 </svg>
             </div>
@@ -410,10 +410,10 @@
                 <div class="grid md:grid-cols-2 gap-6 mb-8">
                     
                     <!-- QR Code Method (Desktop) -->
-                    <div id="qr-method" class="verification-method border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-brand-red transition-all duration-300" onclick="selectMethod('qr-code')">
+                    <div id="qr-method" class="verification-method border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-sidebar-green transition-all duration-300" onclick="selectMethod('qr-code')">
                         <div class="text-center">
-                            <div class="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-16 h-16 bg-sidebar-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                 </svg>
                             </div>
@@ -426,10 +426,10 @@
                     </div>
 
                     <!-- Direct Capture Method (Mobile) -->
-                    <div id="direct-method" class="verification-method border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-brand-red transition-all duration-300" onclick="selectMethod('direct-capture')">
+                    <div id="direct-method" class="verification-method border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-sidebar-green transition-all duration-300" onclick="selectMethod('direct-capture')">
                         <div class="text-center">
-                            <div class="w-16 h-16 bg-brand-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-16 h-16 bg-sidebar-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10v16a2 2 0 01-2 2H9a2 2 0 01-2-2V4z"></path>
                                 </svg>
                             </div>
@@ -453,7 +453,7 @@
                         <div class="inline-block bg-white p-6 rounded-xl shadow-sm">
                             <div id="qr-code" class="w-64 h-64 border-2 border-gray-300 rounded-lg flex items-center justify-center">
                                 <div class="text-center">
-                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-red mx-auto mb-2"></div>
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-sidebar-green mx-auto mb-2"></div>
                                     <p class="text-sm text-gray-500">Generating QR Code...</p>
                                 </div>
                             </div>
@@ -462,7 +462,7 @@
                             <p class="text-sm text-gray-600 mb-4">
                                 Scan this code with your phone to continue verification on your mobile device
                             </p>
-                            <button id="regenerate-qr" onclick="generateQRCode()" class="text-brand-red hover:text-red-700 font-medium">
+                            <button id="regenerate-qr" onclick="generateQRCode()" class="text-sidebar-green hover:text-sidebar-green-light font-medium">
                                 Regenerate Code
                             </button>
                         </div>
@@ -481,18 +481,18 @@
                         <div class="max-w-md mx-auto">
                             <div class="relative">
                                 <!-- Fingerprint Scanner Visualization -->
-                                <div class="w-64 h-64 mx-auto bg-gradient-to-br from-brand-red/10 to-brand-red/5 rounded-full border-4 border-dashed border-brand-red/30 flex items-center justify-center relative overflow-hidden">
+                                <div class="w-64 h-64 mx-auto bg-gradient-to-br from-sidebar-green/10 to-sidebar-green/5 rounded-full border-4 border-dashed border-sidebar-green/30 flex items-center justify-center relative overflow-hidden">
                                     <!-- Scanning Animation -->
                                     <div id="scan-animation" class="hidden absolute inset-0">
-                                        <div class="absolute w-full h-1 bg-brand-red opacity-60 animate-pulse" style="top: 50%; animation: scan 2s linear infinite;"></div>
+                                        <div class="absolute w-full h-1 bg-sidebar-green opacity-60 animate-pulse" style="top: 50%; animation: scan 2s linear infinite;"></div>
                                     </div>
                                     
                                     <!-- Status Display -->
                                     <div id="capture-status" class="text-center z-10">
-                                        <svg class="w-20 h-20 text-brand-red mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-20 h-20 text-sidebar-green mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V6a2 2 0 012-2z"></path>
                                         </svg>
-                                        <p class="text-brand-red font-semibold">Place finger here</p>
+                                        <p class="text-sidebar-green font-semibold">Place finger here</p>
                                         <p class="text-gray-500 text-sm mt-1">Ready to scan</p>
                                     </div>
                                 </div>
@@ -514,7 +514,7 @@
                                 <button 
                                     id="start-capture" 
                                     onclick="startCapture()" 
-                                    class="bg-brand-red text-white px-8 py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-105"
+                                    class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light focus:ring-4 focus:ring-sidebar-green/30 transition-all duration-300 transform hover:scale-105"
                                 >
                                     Start Fingerprint Capture
                                 </button>
@@ -595,7 +595,7 @@
             
             // Update UI
             document.querySelectorAll('.verification-method').forEach(el => {
-                el.classList.remove('border-brand-red', 'bg-red-50');
+                el.classList.remove('border-sidebar-green', 'bg-sidebar-green-50');
                 el.classList.add('border-gray-200');
             });
             
@@ -606,12 +606,12 @@
             // Show selected method
             if (method === 'qr-code') {
                 document.getElementById('qr-method').classList.remove('border-gray-200');
-                document.getElementById('qr-method').classList.add('border-brand-red', 'bg-red-50');
+                document.getElementById('qr-method').classList.add('border-sidebar-green', 'bg-sidebar-green-50');
                 document.getElementById('qr-container').classList.remove('hidden');
                 generateQRCode();
             } else if (method === 'direct-capture') {
                 document.getElementById('direct-method').classList.remove('border-gray-200');
-                document.getElementById('direct-method').classList.add('border-brand-red', 'bg-red-50');
+                document.getElementById('direct-method').classList.add('border-sidebar-green', 'bg-sidebar-green-50');
                 document.getElementById('capture-container').classList.remove('hidden');
             }
         }
@@ -682,10 +682,10 @@
             
             // Update status
             status.innerHTML = `
-                <svg class="w-20 h-20 text-brand-red mx-auto mb-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-20 h-20 text-sidebar-green mx-auto mb-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                 </svg>
-                <p class="text-brand-red font-semibold">Scanning...</p>
+                <p class="text-sidebar-green font-semibold">Scanning...</p>
                 <p class="text-gray-500 text-sm mt-1">Keep finger still</p>
             `;
             

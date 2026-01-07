@@ -1,15 +1,30 @@
-<header class="h-20 bg-white border-b border-gray-200 flex items-center justify-end px-4 sm:px-6 lg:px-8 gap-4 sm:gap-6 sticky top-0 z-30">
-    <!-- Mobile Menu Button (Left Side) -->
-    <button 
-        id="mobile-menu-button"
-        class="lg:hidden absolute left-4 p-2 rounded-lg hover:bg-gray-100 transition-colors"
-        onclick="toggleMobileSidebar()"
-        aria-label="Toggle menu">
-        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-    </button>
+<header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 gap-4 sm:gap-6 sticky top-0 z-30">
+    <!-- Left Section: Toggle Buttons -->
+    <div class="flex items-center gap-3">
+        <!-- Desktop Sidebar Toggle Button -->
+        <button 
+            wire:click="$dispatch('toggle-sidebar')"
+            class="hidden lg:flex p-2.5 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200 group border border-transparent hover:border-sidebar-green-200"
+            title="Toggle Sidebar">
+            <svg class="w-5 h-5 text-gray-700 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h12M4 18h16"/>
+            </svg>
+        </button>
 
+        <!-- Mobile Menu Button -->
+        <button 
+            id="mobile-menu-button"
+            class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            onclick="toggleMobileSidebar()"
+            aria-label="Toggle menu">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Right Section: Actions & User -->
+    <div class="flex items-center gap-4 sm:gap-6">
     <!-- SMS Credits -->
     @if(auth()->user()->role=='lender' || auth()->user()->role=='super_admin')
     <div class="hidden sm:flex items-center gap-2">
@@ -36,11 +51,11 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
         </svg>
         <!-- Notification Badge -->
-        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+        <span class="absolute top-1 right-1 w-2 h-2 bg-sidebar-green rounded-full"></span>
     </button>
 
-    <!-- User Profile Dropdown -->
-    <div class="relative">
+        <!-- User Profile Dropdown -->
+        <div class="relative">
         <button 
             id="profile-menu-button" 
             class="flex items-center gap-2 sm:gap-3 p-1 sm:p-2 rounded-lg hover:bg-gray-100 transition-all duration-200 group"
@@ -89,13 +104,14 @@
                     @csrf
                     <button 
                         type="submit" 
-                        class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-sidebar-green hover:bg-sidebar-green-50 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
                         <span>Logout</span>
                     </button>
                 </form>
+            </div>
             </div>
         </div>
     </div>

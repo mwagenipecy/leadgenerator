@@ -19,7 +19,7 @@
         @endif
 
         @if (session()->has('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <div class="bg-sidebar-green-100 border border-sidebar-green-400 text-sidebar-green-light px-4 py-3 rounded mb-4">
                 {{ session('error') }}
             </div>
         @endif
@@ -47,11 +47,11 @@
                                 @endif
                             </div>
                         @else
-                            <div class="w-full border border-red-300 rounded-md bg-red-50 p-3 text-red-700">
+                            <div class="w-full border border-sidebar-green-300 rounded-md bg-sidebar-green-50 p-3 text-sidebar-green-light">
                                 No application available
                             </div>
                         @endif
-                        @error('application_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        @error('application_id') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                     </div>
                     
                     <div class="mt-4">
@@ -159,14 +159,14 @@
                                         </div>
                                         <div class="text-sm">
                                             <span class="font-medium">Decision:</span> 
-                                            <span class="font-semibold {{ $extract['Decision']['_value'] === 'Approve' ? 'text-green-700' : 'text-red-700' }}">
+                                            <span class="font-semibold {{ $extract['Decision']['_value'] === 'Approve' ? 'text-green-700' : 'text-sidebar-green-light' }}">
                                                 {{ $extract['Decision']['_value'] }}
                                             </span>
                                         </div>
                                         @if($generalInfo && isset($generalInfo['BrokenRules']))
                                             <div class="text-sm">
                                                 <span class="font-medium">Broken Rules:</span> 
-                                                <span class="{{ $generalInfo['BrokenRules']['_value'] > 0 ? 'text-red-700' : 'text-green-700' }} font-semibold">
+                                                <span class="{{ $generalInfo['BrokenRules']['_value'] > 0 ? 'text-sidebar-green-light' : 'text-green-700' }} font-semibold">
                                                     {{ $generalInfo['BrokenRules']['_value'] }}
                                                 </span>
                                             </div>
@@ -188,14 +188,14 @@
                                         </div>
                                         <div>
                                             <span class="font-medium">At Risk:</span> 
-                                            <span class="text-red-700 font-semibold">
+                                            <span class="text-sidebar-green-light font-semibold">
                                                 TZS {{ number_format($currentContracts['Total']['BalanceAtRisk']['_value']) }}
                                             </span>
                                         </div>
                                         <div>
                                             <span class="font-medium">Contracts:</span> 
                                             <span class="text-green-700 font-semibold">{{ $currentContracts['Total']['Positive']['_value'] }}</span> / 
-                                            <span class="text-red-700 font-semibold">{{ $currentContracts['Total']['Negative']['_value'] }}</span>
+                                            <span class="text-sidebar-green-light font-semibold">{{ $currentContracts['Total']['Negative']['_value'] }}</span>
                                         </div>
                                         @if($pastDueInfo)
                                             <div>
@@ -215,13 +215,13 @@
                                 @if($request->status === 'success')
                                     <span class="text-green-700 font-semibold">Success</span>
                                 @elseif($request->status === 'failed')
-                                    <span class="text-red-700 font-semibold">Failed</span>
+                                    <span class="text-sidebar-green-light font-semibold">Failed</span>
                                 @else
                                     <span class="text-yellow-700 font-semibold">Pending</span>
                                 @endif
                                 
                                 @if($request->error_message)
-                                    <div class="text-xs text-red-600 mt-1">
+                                    <div class="text-xs text-sidebar-green mt-1">
                                         {{ Str::limit($request->error_message, 50) }}
                                     </div>
                                 @endif
@@ -330,7 +330,7 @@
                                         // Define score ranges and their corresponding angles
                                         $maxScore = 999;
                                         $segments = [
-                                            ['min' => 0, 'max' => 299, 'color' => '#dc2626', 'label' => 'Poor'],
+                                            ['min' => 0, 'max' => 299, 'color' => '#1D753F', 'label' => 'Poor'],
                                             ['min' => 300, 'max' => 549, 'color' => '#ea580c', 'label' => 'Fair'], 
                                             ['min' => 550, 'max' => 699, 'color' => '#fbbf24', 'label' => 'Good'],
                                             ['min' => 700, 'max' => 999, 'color' => '#16a34a', 'label' => 'Excellent']
@@ -415,7 +415,7 @@
                                 <div class="text-5xl font-bold text-gray-900 mb-2">{{ $creditScore }}</div>
                                 <div class="text-lg font-medium text-gray-600 mb-1">Grade: {{ $creditGrade }}</div>
                                 <div class="text-sm px-4 py-2 rounded-full inline-block
-                                    @if($decision === 'Approve') bg-green-100 text-green-800 @else bg-red-100 text-red-800 @endif">
+                                    @if($decision === 'Approve') bg-green-100 text-green-800 @else bg-sidebar-green-100 text-sidebar-green-800 @endif">
                                 
                                 </div>
                             </div>
@@ -446,7 +446,7 @@
                                 </div>
                                 <div>
                                     <span class="text-sm font-medium text-gray-500">Status</span>
-                                    <div class="text-sm font-semibold {{ $selectedRequest->status === 'success' ? 'text-green-700' : ($selectedRequest->status === 'failed' ? 'text-red-700' : 'text-yellow-700') }}">
+                                    <div class="text-sm font-semibold {{ $selectedRequest->status === 'success' ? 'text-green-700' : ($selectedRequest->status === 'failed' ? 'text-sidebar-green-light' : 'text-yellow-700') }}">
                                         {{ ucfirst($selectedRequest->status) }}
                                     </div>
                                 </div>
@@ -496,16 +496,16 @@
                                     </div>
                                     <div>
                                         <span class="text-sm font-medium text-gray-500">Final Decision</span>
-                                        <div class="text-sm font-bold {{ $decision === 'Approve' ? 'text-green-700' : 'text-red-700' }}">{{ $decision }}</div>
+                                        <div class="text-sm font-bold {{ $decision === 'Approve' ? 'text-green-700' : 'text-sidebar-green-light' }}">{{ $decision }}</div>
                                     </div>
                                     @if($generalInfo)
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Recommended Decision</span>
-                                            <div class="text-sm font-bold {{ $generalInfo['RecommendedDecision']['_value'] === 'Approve' ? 'text-green-700' : 'text-red-700' }}">{{ $generalInfo['RecommendedDecision']['_value'] }}</div>
+                                            <div class="text-sm font-bold {{ $generalInfo['RecommendedDecision']['_value'] === 'Approve' ? 'text-green-700' : 'text-sidebar-green-light' }}">{{ $generalInfo['RecommendedDecision']['_value'] }}</div>
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Broken Rules</span>
-                                            <div class="text-sm font-bold {{ $generalInfo['BrokenRules']['_value'] > 0 ? 'text-red-700' : 'text-green-700' }}">{{ $generalInfo['BrokenRules']['_value'] }}</div>
+                                            <div class="text-sm font-bold {{ $generalInfo['BrokenRules']['_value'] > 0 ? 'text-sidebar-green-light' : 'text-green-700' }}">{{ $generalInfo['BrokenRules']['_value'] }}</div>
                                         </div>
                                     @endif
                                     @if($creditData)
@@ -536,7 +536,7 @@
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Balance At Risk</span>
-                                            <div class="text-sm text-red-700 font-semibold">TZS {{ number_format($currentContracts['Total']['BalanceAtRisk']['_value']) }}</div>
+                                            <div class="text-sm text-sidebar-green-light font-semibold">TZS {{ number_format($currentContracts['Total']['BalanceAtRisk']['_value']) }}</div>
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Positive Contracts</span>
@@ -544,7 +544,7 @@
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Negative Contracts</span>
-                                            <div class="text-sm text-red-700 font-semibold">{{ $currentContracts['Total']['Negative']['_value'] }}</div>
+                                            <div class="text-sm text-sidebar-green-light font-semibold">{{ $currentContracts['Total']['Negative']['_value'] }}</div>
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Banking Balance</span>
@@ -577,7 +577,7 @@
                                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Current Past Due</span>
-                                            <div class="text-sm text-red-700 font-semibold">TZS {{ number_format($pastDueInfo['TotalCurrentPastDue']['_value']) }}</div>
+                                            <div class="text-sm text-sidebar-green-light font-semibold">TZS {{ number_format($pastDueInfo['TotalCurrentPastDue']['_value']) }}</div>
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Current Days Past Due</span>
@@ -585,7 +585,7 @@
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Worst Current Past Due</span>
-                                            <div class="text-sm text-red-700 font-semibold">TZS {{ number_format($pastDueInfo['WorstCurrentPastDue']['_value']) }}</div>
+                                            <div class="text-sm text-sidebar-green-light font-semibold">TZS {{ number_format($pastDueInfo['WorstCurrentPastDue']['_value']) }}</div>
                                         </div>
                                         <div>
                                             <span class="text-sm font-medium text-gray-500">Worst Current Days</span>
@@ -768,12 +768,12 @@
 
                     @if($selectedRequest->error_message)
                         <!-- Error Information Row -->
-                        <div class="border border-red-200 rounded-lg">
-                            <div class="bg-red-50 px-6 py-3 border-b border-red-200">
-                                <h4 class="font-bold text-red-900">Error Details</h4>
+                        <div class="border border-sidebar-green-200 rounded-lg">
+                            <div class="bg-sidebar-green-50 px-6 py-3 border-b border-sidebar-green-200">
+                                <h4 class="font-bold text-sidebar-green-900">Error Details</h4>
                             </div>
                             <div class="p-6">
-                                <p class="text-sm text-red-700">{{ $selectedRequest->error_message }}</p>
+                                <p class="text-sm text-sidebar-green-light">{{ $selectedRequest->error_message }}</p>
                             </div>
                         </div>
                     @endif

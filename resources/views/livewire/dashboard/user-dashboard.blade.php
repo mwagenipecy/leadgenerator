@@ -22,16 +22,16 @@
                     <!-- Key Performance Metrics -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <!-- Total Leads Card -->
-                        <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-brand-red/20">
+                        <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-14 h-14 bg-brand-red/10 rounded-2xl flex items-center justify-center group-hover:bg-brand-red/20 transition-colors">
-                                    <svg class="w-7 h-7 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-14 h-14 bg-sidebar-green/10 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green/20 transition-colors">
+                                    <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                                     </svg>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-sm font-medium text-gray-500">Total Leads</p>
-                                    <p class="text-3xl font-bold text-gray-900 group-hover:text-brand-red transition-colors">1,249</p>
+                                    <p class="text-3xl font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">1,249</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between">
@@ -128,7 +128,7 @@
                                     <p class="text-gray-600">Track your lead acquisition performance over time</p>
                                 </div>
                                 <div class="flex items-center space-x-3">
-                                    <button class="bg-brand-red text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-brand-red/25">7 Days</button>
+                                    <button class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-sidebar-green/25">7 Days</button>
                                     <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">30 Days</button>
                                     <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">90 Days</button>
                                 </div>
@@ -139,8 +139,8 @@
                                     <div class="absolute inset-0" style="background-image: radial-gradient(circle at 20px 20px, #C40F12 2px, transparent 0), radial-gradient(circle at 60px 60px, #C40F12 1px, transparent 0); background-size: 40px 40px;"></div>
                                 </div>
                                 <div class="text-center relative z-10">
-                                    <div class="w-20 h-20 bg-brand-red/10 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-brand-red/20">
-                                        <svg class="w-10 h-10 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-20 h-20 bg-sidebar-green/10 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-sidebar-green/20">
+                                        <svg class="w-10 h-10 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                                         </svg>
                                     </div>
@@ -162,8 +162,8 @@
                             <div class="space-y-4 max-h-80 overflow-y-auto">
                                 <!-- Activity Item 1 -->
                                 <div class="flex items-start space-x-3 p-3 rounded-2xl hover:bg-gray-50 transition-colors group">
-                                    <div class="w-10 h-10 bg-brand-red/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-brand-red/20 transition-colors">
-                                        <div class="w-3 h-3 bg-brand-red rounded-full animate-pulse"></div>
+                                    <div class="w-10 h-10 bg-sidebar-green/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-sidebar-green/20 transition-colors">
+                                        <div class="w-3 h-3 bg-sidebar-green rounded-full animate-pulse"></div>
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-semibold text-gray-900">New Lead Verified</p>
@@ -235,7 +235,7 @@
                                     <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
                                         Filter
                                     </button>
-                                    <button class="bg-brand-red text-white px-6 py-2 rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-brand-red/25">
+                                    <button class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-brand-dark-red transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                                         View All Leads
                                     </button>
                                 </div>
@@ -259,13 +259,13 @@
                                         <td class="px-8 py-6 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="relative">
-                                                    <div class="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-2xl flex items-center justify-center shadow-md">
+                                                    <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-brand-dark-red rounded-2xl flex items-center justify-center shadow-md">
                                                         <span class="text-white text-sm font-bold">JS</span>
                                                     </div>
                                                     <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-bold text-gray-900 group-hover:text-brand-red transition-colors">John Smith</div>
+                                                    <div class="text-sm font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">John Smith</div>
                                                     <div class="text-xs text-gray-500">Lead ID: #L001234</div>
                                                     <div class="text-xs text-blue-600 font-medium mt-1">Premium Prospect</div>
                                                 </div>
@@ -297,7 +297,7 @@
                                         </td>
                                         <td class="px-6 py-6 whitespace-nowrap text-right">
                                             <div class="flex items-center space-x-2">
-                                                <button class="text-brand-red hover:text-brand-dark-red p-2 rounded-xl hover:bg-brand-red/10 transition-all duration-200">
+                                                <button class="text-sidebar-green hover:text-brand-dark-red p-2 rounded-xl hover:bg-sidebar-green/10 transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -355,7 +355,7 @@
                                         </td>
                                         <td class="px-6 py-6 whitespace-nowrap text-right">
                                             <div class="flex items-center space-x-2">
-                                                <button class="text-brand-red hover:text-brand-dark-red p-2 rounded-xl hover:bg-brand-red/10 transition-all duration-200">
+                                                <button class="text-sidebar-green hover:text-brand-dark-red p-2 rounded-xl hover:bg-sidebar-green/10 transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -413,7 +413,7 @@
                                         </td>
                                         <td class="px-6 py-6 whitespace-nowrap text-right">
                                             <div class="flex items-center space-x-2">
-                                                <button class="text-brand-red hover:text-brand-dark-red p-2 rounded-xl hover:bg-brand-red/10 transition-all duration-200">
+                                                <button class="text-sidebar-green hover:text-brand-dark-red p-2 rounded-xl hover:bg-sidebar-green/10 transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>

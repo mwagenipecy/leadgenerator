@@ -15,20 +15,20 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Permission Name *</label>
                     <input wire:model="name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="e.g., users.create">
-                    @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                     <p class="text-xs text-gray-500 mt-1">Use lowercase letters, dots, and underscores only</p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Display Name *</label>
                     <input wire:model="display_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="e.g., Create Users">
-                    @error('display_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('display_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <textarea wire:model="description" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Brief description of this permission..."></textarea>
-                    @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('description') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
@@ -39,7 +39,7 @@
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
-                    @error('category') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('category') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="flex items-center">
@@ -79,20 +79,20 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Permission Name *</label>
                     <input wire:model="edit_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    @error('edit_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('edit_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                     <p class="text-xs text-gray-500 mt-1">Use lowercase letters, dots, and underscores only</p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Display Name *</label>
                     <input wire:model="edit_display_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    @error('edit_display_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('edit_display_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                     <textarea wire:model="edit_description" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"></textarea>
-                    @error('edit_description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('edit_description') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
@@ -102,7 +102,7 @@
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
-                    @error('edit_category') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    @error('edit_category') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="flex items-center">
@@ -140,8 +140,8 @@
 
             <div class="mb-6">
                 <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 15.5c-.77.833.192 2.5 1.732 2.5z"/>
                         </svg>
                     </div>
@@ -156,21 +156,21 @@
                 </p>
 
                 @if($permissionToDelete->roles->count() > 0)
-                    <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
-                        <p class="text-red-800 text-sm">
+                    <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-xl p-4 mb-4">
+                        <p class="text-sidebar-green-800 text-sm">
                             <strong>Warning:</strong> This permission is assigned to {{ $permissionToDelete->roles->count() }} role(s). 
                             You must remove it from all roles before deleting.
                         </p>
                         <div class="mt-2">
-                            <p class="text-red-700 text-xs font-medium mb-1">Assigned to roles:</p>
+                            <p class="text-sidebar-green-light text-xs font-medium mb-1">Assigned to roles:</p>
                             <div class="flex flex-wrap gap-1">
                                 @foreach($permissionToDelete->roles->take(5) as $role)
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-sidebar-green-100 text-sidebar-green-800">
                                         {{ $role->display_name }}
                                     </span>
                                 @endforeach
                                 @if($permissionToDelete->roles->count() > 5)
-                                    <span class="text-xs text-red-600">+{{ $permissionToDelete->roles->count() - 5 }} more</span>
+                                    <span class="text-xs text-sidebar-green">+{{ $permissionToDelete->roles->count() - 5 }} more</span>
                                 @endif
                             </div>
                         </div>
@@ -184,7 +184,7 @@
                     Cancel
                 </button>
                 <button wire:click="deletePermission" 
-                    class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors"
+                    class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors"
                     @if($permissionToDelete->roles->count() > 0) disabled @endif>
                     Delete Permission
                 </button>
@@ -230,7 +230,7 @@
                                 <div class="flex items-center">
                                     @php
                                         $levelColor = match(true) {
-                                            $roleLevel >= 80 => 'from-red-500 to-red-600',
+                                            $roleLevel >= 80 => 'from-sidebar-green to-sidebar-green',
                                             $roleLevel >= 50 => 'from-purple-500 to-purple-600',
                                             default => 'from-blue-500 to-blue-600'
                                         };
@@ -250,7 +250,7 @@
                                     @if(auth()->user()->role_level > $roleLevel)
                                         <button wire:click="removePermissionFromRole({{ $roleId }})" 
                                             onclick="return confirm('Remove this permission from the role?')"
-                                            class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200"
+                                            class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200"
                                             title="Remove permission from role">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>

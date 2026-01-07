@@ -75,7 +75,7 @@ class ProfileManagement extends Component
     public $business_address = '';
 
     // Financial Information
-    #[Rule('required|numeric|min:0')]
+    #[Rule('nullable|numeric|min:0')]
     public $monthly_salary = 0;
 
     #[Rule('nullable|numeric|min:0')]
@@ -84,10 +84,10 @@ class ProfileManagement extends Component
     #[Rule('nullable|numeric|min:0')]
     public $monthly_business_income = 0;
 
-    #[Rule('required|numeric|min:0')]
+    #[Rule('nullable|numeric|min:0')]
     public $total_monthly_income = 0;
 
-    #[Rule('required|numeric|min:0')]
+    #[Rule('nullable|numeric|min:0')]
     public $monthly_expenses = 0;
 
     #[Rule('nullable|numeric|min:0')]
@@ -107,15 +107,16 @@ class ProfileManagement extends Component
     public $years_with_bank = 0;
 
     // Emergency Contact
-    #[Rule('required|string')]
+    #[Rule('required|string|max:255')]
     public $emergency_contact_name = '';
 
-    #[Rule('required|string')]
+    #[Rule('required|string|in:spouse,parent,sibling,child,friend,colleague,other')]
     public $emergency_contact_relationship = '';
 
-    #[Rule('required|string')]
+    #[Rule('required|string|min:10|max:20')]
     public $emergency_contact_phone = '';
 
+    #[Rule('nullable|string|max:255')]
     public $emergency_contact_address = '';
     public $preferred_disbursement_method = 'bank_transfer';
 
@@ -237,7 +238,7 @@ class ProfileManagement extends Component
             case 'bank':
                 return !empty($this->bank_name) || !empty($this->account_number);
             case 'emergency':
-                return !empty($this->emergency_contact_name) || !empty($this->emergency_contact_phone);
+                return !empty($this->emergency_contact_name) || !empty($this->emergency_contact_phone) || !empty($this->emergency_contact_relationship);
             default:
                 return false;
         }
@@ -258,8 +259,12 @@ class ProfileManagement extends Component
             }
         }
         
-        // Update total income
-        $this->total_monthly_income = $this->monthly_salary + $this->other_monthly_income + $this->monthly_business_income;
+        // Update total income (with safe numeric conversion)
+        $salary = is_numeric($this->monthly_salary) ? (float)$this->monthly_salary : 0;
+        $otherIncome = is_numeric($this->other_monthly_income) ? (float)$this->other_monthly_income : 0;
+        $businessIncome = is_numeric($this->monthly_business_income) ? (float)$this->monthly_business_income : 0;
+        
+        $this->total_monthly_income = $salary + $otherIncome + $businessIncome;
         
         // Handle permanent address logic
         if ($this->is_permanent_same_as_current) {
@@ -275,6 +280,13 @@ class ProfileManagement extends Component
         $data = $this->getProfileData();
         
         try {
+            // Update date_of_birth in users table if changed
+            if ($stepToSave === 'personal' && $this->date_of_birth) {
+                $user = Auth::user();
+                $user->date_of_birth = $this->date_of_birth;
+                $user->save();
+            }
+            
             if ($this->profile->exists) {
                 $this->profile->update($data);
             } else {
@@ -332,28 +344,69 @@ class ProfileManagement extends Component
                 break;
             case 'address':
                 $this->validate([
-                    'current_address' => 'nullable|string',
-                    'current_city' => 'nullable|string',
-                    'current_region' => 'nullable|string',
+                    'current_address' => 'nullable|string|max:500',
+                    'current_city' => 'nullable|string|max:100',
+                    'current_region' => 'nullable|string|max:100',
+                    'current_postal_code' => 'nullable|string|max:20',
                     'years_at_current_address' => 'nullable|integer|min:0|max:50',
+                    'permanent_address' => 'nullable|string|max:500',
+                    'permanent_city' => 'nullable|string|max:100',
+                    'permanent_region' => 'nullable|string|max:100',
                 ]);
                 break;
             case 'employment':
-                $this->validate([
+                $rules = [
                     'employment_status' => 'nullable|in:employed,self_employed,unemployed,retired,student',
-                ]);
+                ];
+                
+                // Additional validation based on employment status
+                if ($this->employment_status === 'employed') {
+                    $rules['employer_name'] = 'nullable|string|max:255';
+                    $rules['job_title'] = 'nullable|string|max:255';
+                    $rules['employment_sector'] = 'nullable|string|max:100';
+                    $rules['months_with_current_employer'] = 'nullable|integer|min:0|max:1200';
+                }
+                
+                if ($this->employment_status === 'self_employed') {
+                    $rules['business_name'] = 'nullable|string|max:255';
+                    $rules['business_type'] = 'nullable|string|max:100';
+                    $rules['business_registration_number'] = 'nullable|string|max:100';
+                    $rules['years_in_business'] = 'nullable|integer|min:0|max:100';
+                    $rules['business_address'] = 'nullable|string|max:500';
+                }
+                
+                $this->validate($rules);
                 break;
             case 'financial':
                 $this->validate([
-                    'total_monthly_income' => 'nullable|numeric|min:0',
-                    'monthly_expenses' => 'nullable|numeric|min:0',
+                    'monthly_salary' => 'nullable|numeric|min:0|max:999999999',
+                    'other_monthly_income' => 'nullable|numeric|min:0|max:999999999',
+                    'monthly_business_income' => 'nullable|numeric|min:0|max:999999999',
+                    'total_monthly_income' => 'nullable|numeric|min:0|max:999999999',
+                    'monthly_expenses' => 'nullable|numeric|min:0|max:999999999',
+                    'existing_loan_payments' => 'nullable|numeric|min:0|max:999999999',
+                    'credit_score' => 'nullable|integer|min:300|max:850',
                 ]);
+                break;
+            case 'bank':
+                $rules = ['has_bank_account' => 'required|boolean'];
+                
+                if ($this->has_bank_account) {
+                    $rules['bank_name'] = 'required|string|max:255';
+                    $rules['account_number'] = 'required|string|max:50';
+                    $rules['account_name'] = 'required|string|max:255';
+                    $rules['account_type'] = 'required|in:savings,current';
+                    $rules['years_with_bank'] = 'nullable|integer|min:0|max:100';
+                }
+                
+                $this->validate($rules);
                 break;
             case 'emergency':
                 $this->validate([
-                    'emergency_contact_name' => 'nullable|string',
-                    'emergency_contact_relationship' => 'nullable|string',
-                    'emergency_contact_phone' => 'nullable|string',
+                    'emergency_contact_name' => 'required|string|max:255',
+                    'emergency_contact_relationship' => 'required|string|in:spouse,parent,sibling,child,friend,colleague,other',
+                    'emergency_contact_phone' => 'required|string|min:10|max:20',
+                    'emergency_contact_address' => 'nullable|string|max:255',
                 ]);
                 break;
         }
@@ -456,9 +509,30 @@ class ProfileManagement extends Component
 
     public function updated($propertyName)
     {
-        // Auto-calculate total income
+        // Convert empty strings to zero for numeric fields
+        $numericFields = [
+            'monthly_salary', 'other_monthly_income', 'monthly_business_income',
+            'monthly_expenses', 'existing_loan_payments', 'credit_score',
+            'years_at_current_address', 'years_of_employment', 'months_with_current_employer',
+            'years_in_business', 'years_with_bank'
+        ];
+        
+        if (in_array($propertyName, $numericFields)) {
+            if ($this->$propertyName === '' || $this->$propertyName === null) {
+                $this->$propertyName = 0;
+            } else {
+                // Ensure it's numeric
+                $this->$propertyName = is_numeric($this->$propertyName) ? (float)$this->$propertyName : 0;
+            }
+        }
+
+        // Auto-calculate total income (with safe numeric conversion)
         if (in_array($propertyName, ['monthly_salary', 'other_monthly_income', 'monthly_business_income'])) {
-            $this->total_monthly_income = $this->monthly_salary + $this->other_monthly_income + $this->monthly_business_income;
+            $salary = is_numeric($this->monthly_salary) ? (float)$this->monthly_salary : 0;
+            $otherIncome = is_numeric($this->other_monthly_income) ? (float)$this->other_monthly_income : 0;
+            $businessIncome = is_numeric($this->monthly_business_income) ? (float)$this->monthly_business_income : 0;
+            
+            $this->total_monthly_income = $salary + $otherIncome + $businessIncome;
         }
 
         // Handle permanent address same as current

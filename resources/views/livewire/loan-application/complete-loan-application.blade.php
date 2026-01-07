@@ -16,7 +16,7 @@
                         <div class="flex items-center {{ $i < 3 ? 'flex-1' : '' }}">
                             <div class="flex items-center space-x-3">
                                 <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-200 relative
-                                    {{ $currentStep >= $i ? 'bg-brand-red text-white shadow-lg shadow-brand-red/25' : 'bg-gray-200 text-gray-600' }}">
+                                    {{ $currentStep >= $i ? 'bg-sidebar-green text-white shadow-lg shadow-sidebar-green/25' : 'bg-gray-200 text-gray-600' }}">
                                     @if($currentStep > $i)
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -26,7 +26,7 @@
                                     @endif
                                 </div>
                                 <div class="hidden sm:block">
-                                    <p class="text-sm font-bold {{ $currentStep >= $i ? 'text-brand-red' : 'text-gray-500' }}">
+                                    <p class="text-sm font-bold {{ $currentStep >= $i ? 'text-sidebar-green' : 'text-gray-500' }}">
                                         @switch($i)
                                             @case(1) Upload Documents @break
                                             @case(2) Review Application @break
@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                             @if($i < 3)
-                                <div class="flex-1 h-1 mx-4 rounded-full {{ $currentStep > $i ? 'bg-brand-red' : 'bg-gray-200' }}"></div>
+                                <div class="flex-1 h-1 mx-4 rounded-full {{ $currentStep > $i ? 'bg-sidebar-green' : 'bg-gray-200' }}"></div>
                             @endif
                         </div>
                     @endfor
@@ -63,7 +63,7 @@
             @endif
 
             @if (session()->has('error'))
-                <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
+                <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-lg" role="alert">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -154,7 +154,7 @@
                     <!-- Document Upload Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         @foreach($requiredDocuments as $type => $document)
-                            <div class="border border-gray-200 rounded-xl p-6 {{ $document['uploaded'] ? 'bg-green-50 border-green-200' : ($document['required'] ? 'bg-red-50 border-red-200' : 'bg-gray-50') }}">
+                            <div class="border border-gray-200 rounded-xl p-6 {{ $document['uploaded'] ? 'bg-green-50 border-green-200' : ($document['required'] ? 'bg-sidebar-green-50 border-sidebar-green-200' : 'bg-gray-50') }}">
                                 <div class="flex items-start space-x-4">
                                     <div class="flex-shrink-0">
                                         @if($document['uploaded'])
@@ -164,8 +164,8 @@
                                                 </svg>
                                             </div>
                                         @else
-                                            <div class="w-12 h-12 {{ $document['required'] ? 'bg-red-100' : 'bg-gray-100' }} rounded-full flex items-center justify-center">
-                                                <svg class="w-6 h-6 {{ $document['required'] ? 'text-red-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="w-12 h-12 {{ $document['required'] ? 'bg-sidebar-green-100' : 'bg-gray-100' }} rounded-full flex items-center justify-center">
+                                                <svg class="w-6 h-6 {{ $document['required'] ? 'text-sidebar-green' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                                 </svg>
                                             </div>
@@ -176,7 +176,7 @@
                                         <div class="flex items-center space-x-2 mb-2">
                                             <h4 class="text-lg font-semibold text-gray-900">{{ $document['name'] }}</h4>
                                             @if($document['required'])
-                                                <span class="bg-red-100 text-red-800 text-xs font-medium px-2 py-1 rounded-full">Required</span>
+                                                <span class="bg-sidebar-green-100 text-sidebar-green-800 text-xs font-medium px-2 py-1 rounded-full">Required</span>
                                             @else
                                                 <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2 py-1 rounded-full">Optional</span>
                                             @endif
@@ -198,7 +198,7 @@
                                                         </svg>
                                                         <span class="text-sm font-medium text-gray-900">{{ $uploadedDocuments[$type]['name'] ?? 'Uploaded' }}</span>
                                                     </div>
-                                                    <button wire:click="removeDocument('{{ $type }}')" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                                    <button wire:click="removeDocument('{{ $type }}')" class="text-sidebar-green hover:text-sidebar-green-800 text-sm font-medium">
                                                         Remove
                                                     </button>
                                                 </div>
@@ -212,13 +212,13 @@
                                                 <input type="file" 
                                                        wire:model="documents.{{ $type }}" 
                                                        accept=".pdf,.jpg,.jpeg,.png" 
-                                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-red file:text-white hover:file:bg-red-700">
+                                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-sidebar-green-light">
                                                 
                                                 @if(isset($documents[$type]))
                                                     <button wire:click="uploadDocument('{{ $type }}')" 
                                                             wire:loading.attr="disabled"
                                                             wire:target="uploadDocument('{{ $type }}')"
-                                                            class="w-full bg-brand-red text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                                            class="w-full bg-sidebar-green text-white py-2 px-4 rounded-lg font-medium hover:bg-sidebar-green-light disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                                                         <span wire:loading.remove wire:target="uploadDocument('{{ $type }}')">Upload Document</span>
                                                         <span wire:loading wire:target="uploadDocument('{{ $type }}')">Uploading...</span>
                                                     </button>
@@ -227,7 +227,7 @@
                                         @endif
                                         
                                         @error('documents.' . $type)
-                                            <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                                            <p class="text-sidebar-green text-sm mt-2">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -254,7 +254,7 @@
                             ← Back to Pre-qualification
                         </button>
                         
-                        <button wire:click="nextStep" class="bg-brand-red text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors">
+                        <button wire:click="nextStep" class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-medium hover:bg-sidebar-green-light transition-colors">
                             Continue to Review →
                         </button>
                     </div>
@@ -448,7 +448,7 @@
                         <button wire:click="nextStep" 
                                 wire:loading.attr="disabled"
                                 wire:target="nextStep"
-                                class="bg-brand-red text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-medium hover:bg-sidebar-green-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                             <span wire:loading.remove wire:target="nextStep">Submit Application →</span>
                             <span wire:loading wire:target="nextStep">Submitting...</span>
                         </button>
@@ -556,7 +556,7 @@
                     <!-- Action Buttons -->
                     <div class="flex justify-center space-x-4 mt-8">
                         <button wire:click="viewApplications"
-                                class="bg-brand-red text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors">
+                                class="bg-sidebar-green text-white px-6 py-3 rounded-lg font-medium hover:bg-sidebar-green-light transition-colors">
                             View My Applications
                         </button>
                         <a href="{{ route('dashboard') }}" 

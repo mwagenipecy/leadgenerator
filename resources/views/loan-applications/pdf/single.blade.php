@@ -22,7 +22,7 @@
         }
         
         .header h1 {
-            color: #dc2626;
+            color: #1D753F;
             margin: 0;
             font-size: 28px;
         }
@@ -57,7 +57,7 @@
         }
         
         .section h2 {
-            color: #dc2626;
+            color: #1D753F;
             border-bottom: 1px solid #e5e7eb;
             padding-bottom: 5px;
             margin-bottom: 15px;
@@ -91,7 +91,7 @@
         .amount-highlight {
             font-size: 20px;
             font-weight: bold;
-            color: #dc2626;
+            color: #1D753F;
         }
         
         .footer {

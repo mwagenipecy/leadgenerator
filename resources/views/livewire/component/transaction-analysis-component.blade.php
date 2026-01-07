@@ -18,7 +18,7 @@
                         <span>Last updated: {{ now()->format('M d, Y H:i') }}</span>
                     </div>
                     <button wire:click="$refresh" 
-                            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                            class="bg-sidebar-green hover:bg-sidebar-green-light text-white px-4 py-2 rounded-lg transition-colors duration-200">
                         <i class="fas fa-sync-alt mr-2"></i>Refresh
                     </button>
                 </div>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="px-4 py-2 rounded-full text-sm font-semibold {{ $latestAnalysis->status === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
+                        <span class="px-4 py-2 rounded-full text-sm font-semibold {{ $latestAnalysis->status === 'success' ? 'bg-green-500 text-white' : 'bg-sidebar-green text-white' }}">
                             {{ ucfirst($latestAnalysis->status) }}
                         </span>
                         <p class="text-gray-300 text-sm mt-2">{{ $latestAnalysis->created_at->format('M d, Y H:i') }}</p>
@@ -86,17 +86,17 @@
             <!-- Financial Overview Cards -->
             @if($customerProfile)
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                    <div class="bg-white rounded-lg shadow-lg border-l-4 border-red-500 p-6">
+                    <div class="bg-white rounded-lg shadow-lg border-l-4 border-sidebar-green p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-red-600">Total Turnover</p>
+                                <p class="text-sm font-medium text-sidebar-green">Total Turnover</p>
                                 <p class="text-3xl font-bold text-black mt-2">
                                     {{ number_format($customerProfile['total_turnover']) }}
                                 </p>
                                 <p class="text-sm text-gray-500">{{ $profile['currency_code'] ?? 'TZS' }}</p>
                             </div>
-                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-chart-line text-red-600 text-2xl"></i>
+                            <div class="w-16 h-16 bg-sidebar-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-chart-line text-sidebar-green text-2xl"></i>
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
             @if($cashFlow)
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
                     <h3 class="text-2xl font-bold text-black mb-6 flex items-center">
-                        <i class="fas fa-chart-area mr-3 text-red-600"></i>
+                        <i class="fas fa-chart-area mr-3 text-sidebar-green"></i>
                         Cash Flow Analysis
                     </h3>
                     
@@ -171,11 +171,11 @@
                         </div>
 
                         <!-- Cash Outflow -->
-                        <div class="bg-red-50 rounded-lg p-6">
+                        <div class="bg-sidebar-green-50 rounded-lg p-6">
                             <div class="flex items-center justify-between mb-4">
-                                <h4 class="text-xl font-bold text-red-700">Cash Outflow</h4>
-                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-arrow-up text-red-600"></i>
+                                <h4 class="text-xl font-bold text-sidebar-green-light">Cash Outflow</h4>
+                                <div class="w-12 h-12 bg-sidebar-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-arrow-up text-sidebar-green"></i>
                                 </div>
                             </div>
                             <div class="space-y-4">
@@ -205,14 +205,14 @@
             @if($affordability)
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
                     <h3 class="text-2xl font-bold text-black mb-6 flex items-center">
-                        <i class="fas fa-star mr-3 text-red-600"></i>
+                        <i class="fas fa-star mr-3 text-sidebar-green"></i>
                         Affordability Assessment
                     </h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div class="bg-red-50 rounded-lg p-6 text-center border-2 border-red-200">
-                            <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span class="text-3xl font-bold text-red-600">{{ $affordability['rank'] }}</span>
+                        <div class="bg-sidebar-green-50 rounded-lg p-6 text-center border-2 border-sidebar-green-200">
+                            <div class="w-20 h-20 bg-sidebar-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-3xl font-bold text-sidebar-green">{{ $affordability['rank'] }}</span>
                             </div>
                             <p class="text-lg font-bold text-black">Affordability Rank</p>
                             <p class="text-sm text-gray-600">Overall Rating</p>
@@ -240,12 +240,12 @@
                             <p class="text-sm text-gray-600">{{ $profile['currency_code'] ?? 'TZS' }}</p>
                         </div>
                         
-                        <div class="bg-red-50 rounded-lg p-6 text-center">
-                            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-arrow-down text-red-600 text-2xl"></i>
+                        <div class="bg-sidebar-green-50 rounded-lg p-6 text-center">
+                            <div class="w-16 h-16 bg-sidebar-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-arrow-down text-sidebar-green text-2xl"></i>
                             </div>
                             <p class="text-lg font-bold text-black">Low Capacity</p>
-                            <p class="text-2xl font-bold text-red-600">
+                            <p class="text-2xl font-bold text-sidebar-green">
                                 {{ number_format($affordability['low']) }}
                             </p>
                             <p class="text-sm text-gray-600">{{ $profile['currency_code'] ?? 'TZS' }}</p>
@@ -321,12 +321,12 @@
                     <!-- Cash Out Categories -->
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-xl font-bold text-black mb-6 flex items-center">
-                            <i class="fas fa-minus-circle mr-3 text-red-600"></i>
+                            <i class="fas fa-minus-circle mr-3 text-sidebar-green"></i>
                             Cash Out Categories
                         </h3>
                         <div class="space-y-4">
                             @if(isset($oneDAnalysis['p2p_sent']) && $oneDAnalysis['p2p_sent']['total_p2p_sent_amount'] > 0)
-                                <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+                                <div class="flex justify-between items-center p-4 bg-sidebar-green-50 rounded-lg">
                                     <div>
                                         <p class="font-medium text-black">P2P Sent</p>
                                         <p class="text-sm text-gray-600">{{ $oneDAnalysis['p2p_sent']['no_of_p2p_sent_transactions'] }} transactions</p>
@@ -339,7 +339,7 @@
                             @endif
                             
                             @if(isset($oneDAnalysis['agent_withdrawal']) && $oneDAnalysis['agent_withdrawal']['total_agent_withdrawal_amount'] > 0)
-                                <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+                                <div class="flex justify-between items-center p-4 bg-sidebar-green-50 rounded-lg">
                                     <div>
                                         <p class="font-medium text-black">Agent Withdrawal</p>
                                         <p class="text-sm text-gray-600">{{ $oneDAnalysis['agent_withdrawal']['no_of_agent_withdrawal_transactions'] }} transactions</p>
@@ -352,7 +352,7 @@
                             @endif
                             
                             @if(isset($oneDAnalysis['bill_payment']) && $oneDAnalysis['bill_payment']['total_bill_payment_amount'] > 0)
-                                <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+                                <div class="flex justify-between items-center p-4 bg-sidebar-green-50 rounded-lg">
                                     <div>
                                         <p class="font-medium text-black">Bill Payments</p>
                                         <p class="text-sm text-gray-600">{{ $oneDAnalysis['bill_payment']['no_of_bill_payment_transactions'] }} transactions</p>
@@ -365,7 +365,7 @@
                             @endif
                             
                             @if(isset($oneDAnalysis['wallet_to_bank']) && $oneDAnalysis['wallet_to_bank']['total_wallet_to_bank_amount'] > 0)
-                                <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+                                <div class="flex justify-between items-center p-4 bg-sidebar-green-50 rounded-lg">
                                     <div>
                                         <p class="font-medium text-black">Wallet to Bank</p>
                                         <p class="text-sm text-gray-600">{{ $oneDAnalysis['wallet_to_bank']['no_of_wallet_to_bank_transactions'] }} transactions</p>
@@ -378,7 +378,7 @@
                             @endif
                             
                             @if(isset($oneDAnalysis['luku']) && $oneDAnalysis['luku']['total_luku_amount'] > 0)
-                                <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg">
+                                <div class="flex justify-between items-center p-4 bg-sidebar-green-50 rounded-lg">
                                     <div>
                                         <p class="font-medium text-black">Luku Payments</p>
                                         <p class="text-sm text-gray-600">{{ $oneDAnalysis['luku']['no_of_luku_transactions'] }} transactions</p>
@@ -403,7 +403,7 @@
             ))
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
                     <h3 class="text-2xl font-bold text-black mb-6 flex items-center">
-                        <i class="fas fa-credit-card mr-3 text-red-600"></i>
+                        <i class="fas fa-credit-card mr-3 text-sidebar-green"></i>
                         Loan Services Activity
                     </h3>
                     
@@ -424,8 +424,8 @@
                                                 <p class="text-xl font-bold text-black">{{ number_format($disbursed) }}</p>
                                                 <p class="text-xs text-gray-600">{{ $loanInfo['number_of_' . strtolower($name) . '_disbursements'] }} transactions</p>
                                             </div>
-                                            <div class="bg-red-100 rounded-lg p-3">
-                                                <p class="text-sm text-red-600 font-medium">Repaid</p>
+                                            <div class="bg-sidebar-green-100 rounded-lg p-3">
+                                                <p class="text-sm text-sidebar-green font-medium">Repaid</p>
                                                 <p class="text-xl font-bold text-black">{{ number_format($repaid) }}</p>
                                                 <p class="text-xs text-gray-600">{{ $loanInfo['number_of_' . strtolower($name) . '_repayments'] }} transactions</p>
                                             </div>
@@ -442,7 +442,7 @@
             @if($threeDAnalysis && isset($threeDAnalysis['cash_flow_analysis']))
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h3 class="text-2xl font-bold text-black mb-6 flex items-center">
-                        <i class="fas fa-calendar-alt mr-3 text-red-600"></i>
+                        <i class="fas fa-calendar-alt mr-3 text-sidebar-green"></i>
                         Monthly Cash Flow Trends
                     </h3>
                     
@@ -464,8 +464,8 @@
                         </div>
 
                         <!-- Monthly Outflow -->
-                        <div class="bg-red-50 rounded-lg p-6">
-                            <h4 class="text-xl font-bold text-red-700 mb-4">Monthly Cash Outflow</h4>
+                        <div class="bg-sidebar-green-50 rounded-lg p-6">
+                            <h4 class="text-xl font-bold text-sidebar-green-light mb-4">Monthly Cash Outflow</h4>
                             <div class="space-y-4">
                                 @foreach($threeDAnalysis['cash_flow_analysis']['cash_outflow'] as $monthData)
                                     <div class="flex justify-between items-center p-3 bg-white rounded-lg">
@@ -492,7 +492,7 @@
                     <h2 class="text-2xl font-bold text-black mb-4">No Transaction Analysis Available</h2>
                     <p class="text-lg text-gray-500 mb-6">No transaction analysis data found for this user.</p>
                     <button wire:click="$refresh" 
-                            class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium">
+                            class="bg-sidebar-green hover:bg-sidebar-green-light text-white px-6 py-3 rounded-lg transition-colors duration-200 font-medium">
                         <i class="fas fa-sync-alt mr-2"></i>Check for Updates
                     </button>
                 </div>

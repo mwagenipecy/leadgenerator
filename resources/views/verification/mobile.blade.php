@@ -15,8 +15,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#C40F12',
-                        'brand-dark-red': '#A00E11',
+                        'sidebar-green': '#1D753F',
+                        'brand-dark-red': '#186432',
                     },
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],
@@ -34,7 +34,7 @@
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="text-xl font-bold font-poppins text-black">
-                        Lead<span class="text-brand-red">Generator</span>
+                        Lead<span class="text-sidebar-green">Generator</span>
                     </div>
                     <div class="text-sm text-gray-500">
                         Mobile Verification
@@ -49,8 +49,8 @@
                 
                 <!-- Welcome Section -->
                 <div class="text-center mb-8">
-                    <div class="w-16 h-16 bg-brand-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-16 h-16 bg-sidebar-green/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                         </svg>
                     </div>
@@ -79,7 +79,7 @@
                                     <button 
                                         type="button" 
                                         onclick="document.getElementById('id-document').click()"
-                                        class="w-full bg-brand-red text-white px-6 py-4 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors flex items-center justify-center space-x-3"
+                                        class="w-full bg-sidebar-green text-white px-6 py-4 rounded-lg font-semibold hover:bg-brand-dark-red transition-colors flex items-center justify-center space-x-3"
                                     >
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0"/>
@@ -112,14 +112,14 @@
                             </div>
 
                             <!-- Error Message -->
-                            <div id="error-message" class="hidden mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <div id="error-message" class="hidden mb-6 p-4 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg">
                                 <div class="flex">
-                                    <svg class="w-5 h-5 text-red-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 text-sidebar-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                     <div>
-                                        <h3 class="text-sm font-medium text-red-800">Error</h3>
-                                        <p id="error-text" class="text-sm text-red-700 mt-1"></p>
+                                        <h3 class="text-sm font-medium text-sidebar-green-800">Error</h3>
+                                        <p id="error-text" class="text-sm text-sidebar-green-light mt-1"></p>
                                     </div>
                                 </div>
                             </div>

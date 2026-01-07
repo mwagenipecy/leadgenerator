@@ -13,7 +13,7 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#C40F12',
+                        'sidebar-green': '#1D753F',
                     },
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],
@@ -33,7 +33,7 @@
         <div class="text-center">
             <!-- Logo -->
             <div class="text-3xl font-bold font-poppins text-black mb-2">
-                Lead<span class="text-brand-red">Generator</span>
+                Lead<span class="text-sidebar-green">Generator</span>
             </div>
             <h2 class="text-2xl font-semibold text-gray-900 mb-2">Welcome Back</h2>
             <p class="text-gray-600">Sign in to your account</p>
@@ -61,7 +61,7 @@
                             type="email" 
                             autocomplete="email" 
                             required 
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Enter your email"
                         >
                     </div>
@@ -84,7 +84,7 @@
                             type="password" 
                             autocomplete="current-password" 
                             required 
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Enter your password"
                         >
                         <button 
@@ -107,13 +107,13 @@
                             id="remember-me" 
                             name="remember-me" 
                             type="checkbox" 
-                            class="h-4 w-4 text-brand-red focus:ring-brand-red border-gray-300 rounded"
+                            class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded"
                         >
                         <label for="remember-me" class="ml-2 block text-sm text-gray-700">
                             Remember me
                         </label>
                     </div>
-                    <a href="#" class="text-sm text-brand-red hover:text-red-700 transition-colors">
+                    <a href="#" class="text-sm text-sidebar-green hover:text-sidebar-green-light transition-colors">
                         Forgot password?
                     </a>
                 </div>
@@ -122,7 +122,7 @@
                 <div>
                     <button 
                         type="submit" 
-                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02]"
+                        class="w-full bg-sidebar-green text-white py-3 rounded-lg font-semibold hover:bg-sidebar-green-light focus:ring-4 focus:ring-sidebar-green/30 transition-all duration-300 transform hover:scale-[1.02]"
                     >
                         Sign In
                     </button>
@@ -169,7 +169,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Don't have an account? 
-                    <a href="#" class="font-medium text-brand-red hover:text-red-700 transition-colors">
+                    <a href="#" class="font-medium text-sidebar-green hover:text-sidebar-green-light transition-colors">
                         Sign up here
                     </a>
                 </p>

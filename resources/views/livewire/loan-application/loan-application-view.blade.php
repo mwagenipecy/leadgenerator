@@ -66,7 +66,7 @@
 
                 @if(in_array($application->status, ['draft', 'submitted', 'under_review']))
                     <button wire:click="showCancelConfirmation" 
-                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
+                            class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white font-medium rounded-lg hover:bg-sidebar-green-light transition-colors">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -94,7 +94,7 @@
     <!-- Loading Indicator -->
     <div wire:loading class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-lg border border-gray-200 z-50">
         <div class="flex items-center space-x-2">
-            <div class="animate-spin rounded-full h-4 w-4 border-2 border-red-600 border-t-transparent"></div>
+            <div class="animate-spin rounded-full h-4 w-4 border-2 border-sidebar-green border-t-transparent"></div>
             <span class="text-sm text-gray-600">Loading...</span>
         </div>
     </div>
@@ -104,15 +104,15 @@
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 bg-sidebar-green-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                         </svg>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Loan Amount</p>
-                    <p class="text-2xl font-bold text-red-600">TSh {{ number_format($application->requested_amount) }}</p>
+                    <p class="text-2xl font-bold text-sidebar-green">TSh {{ number_format($application->requested_amount) }}</p>
                 </div>
             </div>
         </div>
@@ -176,30 +176,30 @@
             <span class="text-sm text-gray-600">{{ $this->getProgressPercentage($application->status) }}% Complete</span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
-            <div class="bg-gradient-to-r from-red-600 to-red-700 h-3 rounded-full transition-all duration-500" 
+            <div class="bg-gradient-to-r from-sidebar-green to-sidebar-green-light h-3 rounded-full transition-all duration-500" 
                  style="width: {{ $this->getProgressPercentage($application->status) }}%"></div>
         </div>
         
         <!-- Status Timeline -->
         <div class="flex items-center justify-between text-sm">
-            <div class="flex flex-col items-center {{ $application->status === 'draft' ? 'text-red-600 font-medium' : ($this->getProgressPercentage($application->status) > 20 ? 'text-gray-600' : 'text-gray-400') }}">
-                <div class="w-3 h-3 rounded-full {{ $application->status === 'draft' ? 'bg-red-600' : ($this->getProgressPercentage($application->status) > 20 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
+            <div class="flex flex-col items-center {{ $application->status === 'draft' ? 'text-sidebar-green font-medium' : ($this->getProgressPercentage($application->status) > 20 ? 'text-gray-600' : 'text-gray-400') }}">
+                <div class="w-3 h-3 rounded-full {{ $application->status === 'draft' ? 'bg-sidebar-green' : ($this->getProgressPercentage($application->status) > 20 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
                 <span>Draft</span>
             </div>
-            <div class="flex flex-col items-center {{ $application->status === 'submitted' ? 'text-red-600 font-medium' : ($this->getProgressPercentage($application->status) > 40 ? 'text-gray-600' : 'text-gray-400') }}">
-                <div class="w-3 h-3 rounded-full {{ $application->status === 'submitted' ? 'bg-red-600' : ($this->getProgressPercentage($application->status) > 40 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
+            <div class="flex flex-col items-center {{ $application->status === 'submitted' ? 'text-sidebar-green font-medium' : ($this->getProgressPercentage($application->status) > 40 ? 'text-gray-600' : 'text-gray-400') }}">
+                <div class="w-3 h-3 rounded-full {{ $application->status === 'submitted' ? 'bg-sidebar-green' : ($this->getProgressPercentage($application->status) > 40 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
                 <span>Submitted</span>
             </div>
-            <div class="flex flex-col items-center {{ $application->status === 'under_review' ? 'text-red-600 font-medium' : ($this->getProgressPercentage($application->status) > 60 ? 'text-gray-600' : 'text-gray-400') }}">
-                <div class="w-3 h-3 rounded-full {{ $application->status === 'under_review' ? 'bg-red-600' : ($this->getProgressPercentage($application->status) > 60 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
+            <div class="flex flex-col items-center {{ $application->status === 'under_review' ? 'text-sidebar-green font-medium' : ($this->getProgressPercentage($application->status) > 60 ? 'text-gray-600' : 'text-gray-400') }}">
+                <div class="w-3 h-3 rounded-full {{ $application->status === 'under_review' ? 'bg-sidebar-green' : ($this->getProgressPercentage($application->status) > 60 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
                 <span>Under Review</span>
             </div>
-            <div class="flex flex-col items-center {{ $application->status === 'approved' ? 'text-red-600 font-medium' : ($this->getProgressPercentage($application->status) > 80 ? 'text-gray-600' : 'text-gray-400') }}">
-                <div class="w-3 h-3 rounded-full {{ $application->status === 'approved' ? 'bg-red-600' : ($this->getProgressPercentage($application->status) > 80 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
+            <div class="flex flex-col items-center {{ $application->status === 'approved' ? 'text-sidebar-green font-medium' : ($this->getProgressPercentage($application->status) > 80 ? 'text-gray-600' : 'text-gray-400') }}">
+                <div class="w-3 h-3 rounded-full {{ $application->status === 'approved' ? 'bg-sidebar-green' : ($this->getProgressPercentage($application->status) > 80 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
                 <span>Approved</span>
             </div>
-            <div class="flex flex-col items-center {{ $application->status === 'disbursed' ? 'text-red-600 font-medium' : ($this->getProgressPercentage($application->status) >= 100 ? 'text-gray-600' : 'text-gray-400') }}">
-                <div class="w-3 h-3 rounded-full {{ $application->status === 'disbursed' ? 'bg-red-600' : ($this->getProgressPercentage($application->status) >= 100 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
+            <div class="flex flex-col items-center {{ $application->status === 'disbursed' ? 'text-sidebar-green font-medium' : ($this->getProgressPercentage($application->status) >= 100 ? 'text-gray-600' : 'text-gray-400') }}">
+                <div class="w-3 h-3 rounded-full {{ $application->status === 'disbursed' ? 'bg-sidebar-green' : ($this->getProgressPercentage($application->status) >= 100 ? 'bg-gray-600' : 'bg-gray-300') }} mb-1"></div>
                 <span>Disbursed</span>
             </div>
         </div>
@@ -210,38 +210,38 @@
         <div class="border-b border-gray-200">
             <nav class="-mb-px flex space-x-8 px-6" aria-label="Tabs">
                 <button wire:click="switchTab('overview')" 
-                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'overview' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
+                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'overview' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
                     Overview
                 </button>
                 <button wire:click="switchTab('personal')" 
-                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'personal' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
+                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'personal' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
                     Personal Info
                 </button>
                 <button wire:click="switchTab('financial')" 
-                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'financial' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
+                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'financial' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                     </svg>
                     Financial
                 </button>
                 <button wire:click="switchTab('documents')" 
-                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'documents' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
+                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'documents' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                     Documents
                     @if($application->documents && $application->documents->count() > 0)
-                        <span class="ml-2 bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">{{ $application->documents->count() }}</span>
+                        <span class="ml-2 bg-sidebar-green-100 text-sidebar-green text-xs px-2 py-1 rounded-full">{{ $application->documents->count() }}</span>
                     @endif
                 </button>
                 <button wire:click="switchTab('timeline')" 
-                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'timeline' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
+                        class="py-4 px-1 border-b-2 font-medium text-sm {{ $activeTab === 'timeline' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} transition-all">
                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -256,13 +256,13 @@
             @if($activeTab === 'overview')
                 <div class="space-y-8">
                     <!-- Loan Details -->
-                    <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-6 border border-red-100">
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Loan Details</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <div class="mb-4">
                                     <div class="text-sm font-medium text-gray-600 mb-1">Requested Amount</div>
-                                    <div class="text-3xl font-bold text-red-600">TSh {{ number_format($application->requested_amount) }}</div>
+                                    <div class="text-3xl font-bold text-sidebar-green">TSh {{ number_format($application->requested_amount) }}</div>
                                 </div>
                                 <div class="mb-4">
                                     <div class="text-sm font-medium text-gray-600 mb-1">Loan Period</div>
@@ -285,7 +285,7 @@
                                 @if($application->debt_to_income_ratio)
                                     <div>
                                         <div class="text-sm font-medium text-gray-600 mb-1">Debt Service Ratio</div>
-                                        <div class="text-lg font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-gray-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                        <div class="text-lg font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-gray-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                             {{ number_format($application->debt_to_income_ratio, 1) }}%
                                         </div>
                                     </div>
@@ -355,10 +355,10 @@
                                 </p>
                                 @if($application->status === 'submitted' && !$application->lender_id)
                                     <div class="mt-3">
-                                        <button wire:click="selectLenders" 
+                                        <!-- <button wire:click="selectLenders" 
                                                 class="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors">
                                             Choose Lenders Now
-                                        </button>
+                                        </button> -->
                                     </div>
                                 @endif
                             </div>
@@ -376,7 +376,7 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Monthly Expenses:</span>
-                                    <span class="font-medium text-red-600">TSh {{ number_format($application->monthly_expenses) }}</span>
+                                    <span class="font-medium text-sidebar-green">TSh {{ number_format($application->monthly_expenses) }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-600">Existing Loans:</span>
@@ -385,7 +385,7 @@
                                 <hr class="border-gray-200">
                                 <div class="flex justify-between">
                                     <span class="text-gray-900 font-medium">Net Available:</span>
-                                    <span class="font-bold {{ $this->getNetAvailableIncome() > 0 ? 'text-gray-600' : 'text-red-600' }}">
+                                    <span class="font-bold {{ $this->getNetAvailableIncome() > 0 ? 'text-gray-600' : 'text-sidebar-green' }}">
                                         TSh {{ number_format($this->getNetAvailableIncome()) }}
                                     </span>
                                 </div>
@@ -546,7 +546,7 @@
 
                     <!-- Emergency Contact -->
                     @if($application->emergency_contact_name)
-                        <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-100">
+                        <div class="bg-gradient-to-br from-orange-50 to-sidebar-green-50 rounded-2xl p-6 border border-orange-100">
                             <h3 class="text-xl font-bold text-gray-900 mb-6">Emergency Contact</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
@@ -658,7 +658,7 @@
                                 </div>
                                 <div>
                                     <h5 class="text-sm font-semibold text-gray-700 mb-2">Monthly Expenses</h5>
-                                    <p class="text-lg font-bold text-red-600">TSh {{ number_format($application->monthly_expenses) }}</p>
+                                    <p class="text-lg font-bold text-sidebar-green">TSh {{ number_format($application->monthly_expenses) }}</p>
                                 </div>
                                 <div>
                                     <h5 class="text-sm font-semibold text-gray-700 mb-2">Existing Loans</h5>
@@ -669,7 +669,7 @@
                                     @php
                                         $netIncome = $application->total_monthly_income - $application->monthly_expenses - $application->existing_loan_payments;
                                     @endphp
-                                    <p class="text-lg font-bold {{ $netIncome > 0 ? 'text-gray-600' : 'text-red-600' }}">TSh {{ number_format($netIncome) }}</p>
+                                    <p class="text-lg font-bold {{ $netIncome > 0 ? 'text-gray-600' : 'text-sidebar-green' }}">TSh {{ number_format($netIncome) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -695,7 +695,7 @@
 
                         <!-- Credit Information -->
                         @if($application->credit_score || $application->has_bad_credit_history)
-                            <div class="mt-6 bg-red-50 rounded-lg p-4">
+                            <div class="mt-6 bg-sidebar-green-50 rounded-lg p-4">
                                 <h4 class="text-sm font-semibold text-gray-700 mb-2">Credit Information</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     @if($application->credit_score)
@@ -706,7 +706,7 @@
                                     @endif
                                     <div>
                                         <p class="text-sm text-gray-600">Credit History</p>
-                                        <p class="font-medium {{ $application->has_bad_credit_history ? 'text-red-600' : 'text-gray-600' }}">
+                                        <p class="font-medium {{ $application->has_bad_credit_history ? 'text-sidebar-green' : 'text-gray-600' }}">
                                             {{ $application->has_bad_credit_history ? 'Has issues' : 'Good standing' }}
                                         </p>
                                     </div>
@@ -736,7 +736,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                                 </svg>
                                             @else
-                                                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                                 </svg>
                                             @endif
@@ -752,7 +752,7 @@
                                                 @switch($document->status)
                                                     @case('uploaded') bg-gray-100 text-gray-800 @break
                                                     @case('verified') bg-gray-100 text-gray-800 @break
-                                                    @case('rejected') bg-red-100 text-red-800 @break
+                                                    @case('rejected') bg-sidebar-green-100 text-sidebar-green-800 @break
                                                     @default bg-gray-100 text-gray-800
                                                 @endswitch">
                                                 {{ ucfirst($document->status) }}
@@ -897,8 +897,8 @@
                             @if($application->status === 'rejected')
                                 <div class="flex items-start space-x-4">
                                     <div class="flex-shrink-0">
-                                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-10 h-10 bg-sidebar-green-100 rounded-full flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                             </svg>
                                         </div>
@@ -914,21 +914,21 @@
                                             Unfortunately, your application was not approved by {{ $application->lender->company_name ?? 'the lender' }}.
                                         </p>
                                         @if($application->rejection_reasons)
-                                            <div class="mt-2 p-2 bg-red-50 rounded-lg">
-                                                <p class="text-xs text-red-700 font-medium">Rejection Reasons:</p>
+                                            <div class="mt-2 p-2 bg-sidebar-green-50 rounded-lg">
+                                                <p class="text-xs text-sidebar-green-light font-medium">Rejection Reasons:</p>
                                                 @php
                                                     $reasons = is_string($application->rejection_reasons) 
                                                         ? json_decode($application->rejection_reasons, true) 
                                                         : $application->rejection_reasons;
                                                 @endphp
                                                 @if(is_array($reasons))
-                                                    <ul class="text-xs text-red-600 mt-1 list-disc list-inside">
+                                                    <ul class="text-xs text-sidebar-green mt-1 list-disc list-inside">
                                                         @foreach($reasons as $reason)
                                                             <li>{{ $reason }}</li>
                                                         @endforeach
                                                     </ul>
                                                 @else
-                                                    <p class="text-xs text-red-600 mt-1">{{ $application->rejection_reasons }}</p>
+                                                    <p class="text-xs text-sidebar-green mt-1">{{ $application->rejection_reasons }}</p>
                                                 @endif
                                             </div>
                                         @endif
@@ -1088,8 +1088,8 @@
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click="closeCancelModal">
             <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg bg-white" wire:click.stop>
                 <div class="mt-3 text-center">
-                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                        <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-sidebar-green-100">
+                        <svg class="h-6 w-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                         </svg>
                     </div>
@@ -1105,7 +1105,7 @@
                             No, Keep It
                         </button>
                         <button wire:click="confirmCancel" 
-                                class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors">
+                                class="px-4 py-2 bg-sidebar-green text-white text-sm font-medium rounded-md hover:bg-sidebar-green-light transition-colors">
                             Yes, Cancel
                         </button>
                     </div>

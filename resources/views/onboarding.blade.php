@@ -13,8 +13,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#C40F12',
-                        'brand-dark-red': '#A00E11',
+                        'sidebar-green': '#1D753F',
+                        'brand-dark-red': '#186432',
                     },
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],
@@ -33,7 +33,7 @@
     
         
         <!-- Left Side - Welcome Content (Hidden on mobile) -->
-        <div class="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-brand-red via-brand-dark-red to-red-900 relative overflow-hidden">
+        <div class="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-sidebar-green via-brand-dark-red to-sidebar-green-900 relative overflow-hidden">
             <!-- Background Pattern -->
             <div class="absolute inset-0 opacity-5">
                 <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-rule="evenodd"%3E%3Ccircle cx="20" cy="20" r="2"/%3E%3Ccircle cx="10" cy="10" r="1"/%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/svg%3E');"></div>
@@ -53,9 +53,9 @@
                     
                     <!-- Welcome Text -->
                     <h1 class="text-3xl font-bold font-poppins text-white mb-4">
-                        Join Lead<span class="text-red-200">Generator</span>
+                        Join Lead<span class="text-sidebar-green-200">Generator</span>
                     </h1>
-                    <p class="text-red-100 text-lg mb-8 leading-relaxed">
+                    <p class="text-sidebar-green-100 text-lg mb-8 leading-relaxed">
                         Transform your business with our advanced lead generation platform powered by secure NIDA verification.
                     </p>
                     
@@ -67,7 +67,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
                             </div>
-                            <span class="text-red-100">Biometric Security</span>
+                            <span class="text-sidebar-green-100">Biometric Security</span>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
@@ -75,7 +75,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
                             </div>
-                            <span class="text-red-100">Real-time Analytics</span>
+                            <span class="text-sidebar-green-100">Real-time Analytics</span>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
@@ -83,7 +83,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
                             </div>
-                            <span class="text-red-100">NIDA Integration</span>
+                            <span class="text-sidebar-green-100">NIDA Integration</span>
                         </div>
                     </div>
                 </div>
@@ -105,13 +105,13 @@
                 <div class="text-center mb-8">
                     <!-- Mobile Logo -->
                     <div class="lg:hidden mb-6">
-                        <div class="w-16 h-16 bg-brand-red/10 rounded-xl flex items-center justify-center mx-auto">
-                            <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-16 h-16 bg-sidebar-green/10 rounded-xl flex items-center justify-center mx-auto">
+                            <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
                         </div>
                         <h1 class="text-2xl font-bold font-poppins text-black mt-3">
-                            Lead<span class="text-brand-red">Generator</span>
+                            Lead<span class="text-sidebar-green">Generator</span>
                         </h1>
                     </div>
                     
@@ -135,11 +135,11 @@
                                 type="text" 
                                 required 
                                 value="{{ old('first_name') }}"
-                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('first_name') border-red-500 ring-1 ring-red-500 @enderror"
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('first_name') border-sidebar-green ring-1 ring-sidebar-green @enderror"
                                 placeholder="John"
                             >
                             @error('first_name')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
@@ -152,11 +152,11 @@
                                 type="text" 
                                 required 
                                 value="{{ old('last_name') }}"
-                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('last_name') border-red-500 ring-1 ring-red-500 @enderror"
+                                class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('last_name') border-sidebar-green ring-1 ring-sidebar-green @enderror"
                                 placeholder="Doe"
                             >
                             @error('last_name')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -179,12 +179,12 @@
                                 autocomplete="email" 
                                 required 
                                 value="{{ old('email') }}"
-                                class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('email') border-red-500 ring-1 ring-red-500 @enderror"
+                                class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('email') border-sidebar-green ring-1 ring-sidebar-green @enderror"
                                 placeholder="john.doe@example.com"
                             >
                         </div>
                         @error('email')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -206,12 +206,12 @@
                                     type="tel" 
                                     required 
                                     value="{{ old('phone') }}"
-                                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('phone') border-red-500 ring-1 ring-red-500 @enderror"
+                                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('phone') border-sidebar-green ring-1 ring-sidebar-green @enderror"
                                     placeholder="+255 XXX XXX XXX"
                                 >
                             </div>
                             @error('phone')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                         
@@ -232,12 +232,12 @@
                                     required 
                                     value="{{ old('nida_number') }}"
                                     maxlength="20"
-                                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('nida_number') border-red-500 ring-1 ring-red-500 @enderror"
+                                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('nida_number') border-sidebar-green ring-1 ring-sidebar-green @enderror"
                                     placeholder="19XXXXXXXXXXXXXXXX"
                                 >
                             </div>
                             @error('nida_number')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -260,7 +260,7 @@
                                     type="password" 
                                     autocomplete="new-password" 
                                     required 
-                                    class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password') border-red-500 ring-1 ring-red-500 @enderror"
+                                    class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password') border-sidebar-green ring-1 ring-sidebar-green @enderror"
                                     placeholder="••••••••"
                                 >
                                 <button 
@@ -275,7 +275,7 @@
                                 </button>
                             </div>
                             @error('password')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                         
@@ -295,7 +295,7 @@
                                     type="password" 
                                     autocomplete="new-password" 
                                     required 
-                                    class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all"
+                                    class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 text-sm transition-all"
                                     placeholder="••••••••"
                                 >
                                 <button 
@@ -320,15 +320,15 @@
                                 name="terms" 
                                 type="checkbox" 
                                 required
-                                class="h-4 w-4 text-brand-red focus:ring-brand-red border-gray-300 rounded transition-colors"
+                                class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded transition-colors"
                             >
                         </div>
                         <div class="ml-3">
                             <label for="terms" class="text-sm text-gray-600">
                                 I agree to the 
-                                <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium">Terms of Service</a> 
+                                <a href="#" class="text-sidebar-green hover:text-brand-dark-red font-medium">Terms of Service</a> 
                                 and 
-                                <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium">Privacy Policy</a>
+                                <a href="#" class="text-sidebar-green hover:text-brand-dark-red font-medium">Privacy Policy</a>
                             </label>
                         </div>
                     </div>
@@ -337,7 +337,7 @@
                     <div class="pt-2">
                         <button 
                             type="submit" 
-                            class="w-full bg-brand-red text-white py-3.5 px-4 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none"
+                            class="w-full bg-sidebar-green text-white py-3.5 px-4 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-sidebar-green/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none"
                         >
                             Create Account
                         </button>
@@ -349,7 +349,7 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Already have an account? 
-                        <a href="{{ route('login') }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
+                        <a href="{{ route('login') }}" class="font-medium text-sidebar-green hover:text-brand-dark-red transition-colors">
                             Sign in
                         </a>
                     </p>
@@ -416,7 +416,7 @@
             if (password !== passwordConfirmation) {
                 e.preventDefault();
                 document.getElementById('password_confirmation').focus();
-                document.getElementById('password_confirmation').classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                document.getElementById('password_confirmation').classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
                 return false;
             }
         });
@@ -427,9 +427,9 @@
             const confirmation = this.value;
             
             if (confirmation && password !== confirmation) {
-                this.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                this.classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
             } else {
-                this.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                this.classList.remove('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
             }
         });
 
@@ -437,7 +437,7 @@
         document.querySelectorAll('input[required]').forEach(input => {
             input.addEventListener('blur', function() {
                 if (this.value.trim()) {
-                    this.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                    this.classList.remove('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
                     this.classList.add('border-green-400');
                 } else {
                     this.classList.remove('border-green-400');

@@ -138,7 +138,7 @@
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-600">Rejected</span>
-                    <span class="text-sm font-semibold text-red-600">{{ number_format($stats['rejected']) }}</span>
+                    <span class="text-sm font-semibold text-sidebar-green">{{ number_format($stats['rejected']) }}</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-600">Under Review</span>
@@ -165,7 +165,7 @@
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-sm text-gray-600">Overdue</span>
-                    <span class="text-sm font-semibold text-red-600">TZS {{ number_format($commissionStats['overdue_commission']) }}</span>
+                    <span class="text-sm font-semibold text-sidebar-green">TZS {{ number_format($commissionStats['overdue_commission']) }}</span>
                 </div>
             </div>
         </div>
@@ -183,7 +183,7 @@
                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
                             @if($app->status === 'approved') bg-green-100 text-green-800
                             @elseif($app->status === 'pending') bg-yellow-100 text-yellow-800
-                            @elseif($app->status === 'rejected') bg-red-100 text-red-800
+                            @elseif($app->status === 'rejected') bg-sidebar-green-100 text-sidebar-green-800
                             @else bg-gray-100 text-gray-800 @endif">
                             {{ ucfirst($app->status) }}
                         </span>
@@ -211,9 +211,9 @@
                             <div class="text-sm font-semibold text-green-600">{{ $month['approved_applications'] }}</div>
                             <div class="text-xs text-green-500">Approved</div>
                         </div>
-                        <div class="bg-red-100 rounded p-2">
-                            <div class="text-xs font-semibold text-red-600">{{ number_format($month['disbursed_amount']/1000000, 1) }}M</div>
-                            <div class="text-xs text-red-500">TZS</div>
+                        <div class="bg-sidebar-green-100 rounded p-2">
+                            <div class="text-xs font-semibold text-sidebar-green">{{ number_format($month['disbursed_amount']/1000000, 1) }}M</div>
+                            <div class="text-xs text-sidebar-green">TZS</div>
                         </div>
                     </div>
                 </div>
@@ -252,7 +252,7 @@
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
                                     @if($rate >= 80) bg-green-100 text-green-800
                                     @elseif($rate >= 60) bg-yellow-100 text-yellow-800
-                                    @else bg-red-100 text-red-800 @endif">
+                                    @else bg-sidebar-green-100 text-sidebar-green-800 @endif">
                                     {{ $rate }}%
                                 </span>
                             </td>
@@ -327,7 +327,7 @@
                                     @if($application->status === 'approved') bg-green-100 text-green-800
                                     @elseif($application->status === 'disbursed') bg-blue-100 text-blue-800
                                     @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800
-                                    @elseif($application->status === 'rejected') bg-red-100 text-red-800
+                                    @elseif($application->status === 'rejected') bg-sidebar-green-100 text-sidebar-green-800
                                     @elseif($application->status === 'submitted') bg-purple-100 text-purple-800
                                     @else bg-gray-100 text-gray-800 @endif">
                                     {{ ucfirst(str_replace('_', ' ', $application->status)) }}
@@ -407,7 +407,7 @@
                                                 @if($selectedApplication->status === 'approved') bg-green-100 text-green-800
                                                 @elseif($selectedApplication->status === 'disbursed') bg-blue-100 text-blue-800
                                                 @elseif($selectedApplication->status === 'under_review') bg-yellow-100 text-yellow-800
-                                                @elseif($selectedApplication->status === 'rejected') bg-red-100 text-red-800
+                                                @elseif($selectedApplication->status === 'rejected') bg-sidebar-green-100 text-sidebar-green-800
                                                 @else bg-gray-100 text-gray-800 @endif">
                                                 {{ ucfirst(str_replace('_', ' ', $selectedApplication->status)) }}
                                             </span>

@@ -1,29 +1,29 @@
 <div>
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
     <!-- Header Section -->
-    <div class="mb-8">
+    <div class="mb-6 sm:mb-8">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-            <div class="mb-6 lg:mb-0">
-                <h1 class="text-4xl font-bold text-gray-900 mb-2">My Loan Applications</h1>
-                <p class="text-gray-600 text-lg">Track and manage your loan applications</p>
-                <div class="mt-3 flex items-center space-x-4 text-sm text-gray-500">
+            <div class="mb-4 sm:mb-6 lg:mb-0">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">My Loan Applications</h1>
+                <p class="text-sm sm:text-base lg:text-lg text-gray-600">Track and manage your loan applications</p>
+                <div class="mt-3 flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-sm text-gray-500">
                     <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         Last updated: {{ now()->format('M d, Y H:i') }}
                     </span>
                     <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                         {{ $applications->total() }} total applications
                     </span>
                 </div>
             </div>
-            <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <a href="{{ route('loan-application.create') }}" 
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                   class="w-full sm:w-auto inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white font-bold rounded-lg hover:from-sidebar-green-light hover:to-sidebar-green-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
@@ -31,7 +31,7 @@
                 </a>
                 <!-- <button wire:click="exportApplications" 
                         class="inline-flex items-center px-4 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                     Export PDF
@@ -53,7 +53,7 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
+        <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-lg" role="alert">
             <div class="flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -64,8 +64,8 @@
     @endif
 
     <!-- Status Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -75,13 +75,13 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Total Applications</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $applications->total() }}</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600">Total Applications</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ $applications->total() }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -91,13 +91,13 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Under Review</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $statusCounts['under_review'] ?? 0 }}</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600">Under Review</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ $statusCounts['under_review'] ?? 0 }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -107,13 +107,13 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Approved</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $statusCounts['approved'] ?? 0 }}</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600">Approved</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ $statusCounts['approved'] ?? 0 }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -123,18 +123,18 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Disbursed</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $statusCounts['disbursed'] ?? 0 }}</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600">Disbursed</p>
+                    <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ $statusCounts['disbursed'] ?? 0 }}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Search and Filters -->
-    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-6">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+    <div class="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-5 lg:p-6 border border-gray-100 mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <!-- Search -->
-            <div class="flex-1 max-w-md">
+            <div class="flex-1 w-full sm:max-w-md">
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,15 +143,15 @@
                     </div>
                     <input wire:model.live.debounce.300ms="search" 
                            type="text" 
-                           class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" 
+                           class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" 
                            placeholder="Search applications...">
                 </div>
             </div>
 
             <!-- Filters -->
-            <div class="flex items-center space-x-4">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
                 <select wire:model.live="statusFilter" 
-                        class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        class="bg-gray-50 border border-gray-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <option value="all">All Status</option>
                     <option value="draft">Draft</option>
                     <option value="submitted">Submitted</option>
@@ -163,7 +163,7 @@
                 </select>
 
                 <select wire:model.live="sortBy" 
-                        class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        class="bg-gray-50 border border-gray-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <option value="created_at">Date Created</option>
                     <option value="requested_amount">Amount</option>
                     <option value="status">Status</option>
@@ -179,7 +179,7 @@
 
                 @if($search || $statusFilter !== 'all')
                     <button wire:click="clearFilters" 
-                            class="px-4 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium">
+                            class="px-4 py-3 bg-sidebar-green-100 text-sidebar-green-light rounded-lg hover:bg-sidebar-green-200 transition-colors text-sm font-medium">
                         Clear Filters
                     </button>
                 @endif
@@ -190,7 +190,7 @@
     <!-- Loading Indicator -->
     <div wire:loading class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-lg border border-gray-200 z-50">
         <div class="flex items-center space-x-2">
-            <div class="animate-spin rounded-full h-4 w-4 border-2 border-red-600 border-t-transparent"></div>
+            <div class="animate-spin rounded-full h-4 w-4 border-2 border-sidebar-green border-t-transparent"></div>
             <span class="text-sm text-gray-600">Loading...</span>
         </div>
     </div>
@@ -263,7 +263,7 @@
                                 <!-- Amount & Terms -->
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex flex-col">
-                                        <div class="text-lg font-bold text-red-600">TSh {{ number_format($application->requested_amount) }}</div>
+                                        <div class="text-lg font-bold text-sidebar-green">TSh {{ number_format($application->requested_amount) }}</div>
                                         <div class="text-sm text-gray-600">{{ $application->requested_tenure_months }} months</div>
                                         @if($application->loan_purpose)
                                             <div class="text-xs text-gray-500">{{ ucwords(str_replace('_', ' ', $application->loan_purpose)) }}</div>
@@ -278,7 +278,7 @@
                                             {{ ucwords(str_replace('_', ' ', $application->status)) }}
                                         </span>
                                         <div class="mt-2 w-full bg-gray-200 rounded-full h-1.5">
-                                            <div class="bg-gradient-to-r from-red-600 to-red-700 h-1.5 rounded-full transition-all duration-500" 
+                                            <div class="bg-gradient-to-r from-sidebar-green to-sidebar-green-light h-1.5 rounded-full transition-all duration-500" 
                                                  style="width: {{ $this->getProgressPercentage($application->status) }}%"></div>
                                         </div>
                                         <div class="text-xs text-gray-500 mt-1">{{ $this->getProgressPercentage($application->status) }}% complete</div>
@@ -297,7 +297,7 @@
                                         <div class="text-gray-600">Expenses: <span class="font-medium">TSh {{ number_format($application->monthly_expenses) }}</span></div>
                                         @if($application->debt_to_income_ratio)
                                             <div class="text-gray-600">DSR: 
-                                                <span class="font-medium {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                                <span class="font-medium {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                                     {{ number_format($application->debt_to_income_ratio, 1) }}%
                                                 </span>
                                             </div>
@@ -335,41 +335,51 @@
                                     <div class="flex items-center justify-end space-x-2">
                                         <!-- View Button -->
                                         <button wire:click="viewApplication({{ $application->id }})" 
-                                                class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-colors" 
+                                                class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-all" 
                                                 title="View Details">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
                                         </button>
 
                                         <!-- Edit Button (Draft only) -->
-                                     
-
-                                        <!-- Lender Selection (Submitted without lender) -->
-                                      
+                                        @if($application->status === 'draft')
+                                            <button wire:click="editApplication({{ $application->id }})" 
+                                                    class="text-gray-700 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-all" 
+                                                    title="Edit Draft">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                </svg>
+                                            </button>
+                                        @endif
 
                                         <!-- Download PDF -->
                                         <button wire:click="downloadApplication({{ $application->id }})" 
-                                                class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-50 transition-colors" 
+                                                class="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50 transition-all" 
                                                 title="Download PDF">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
                                         </button>
 
-                                        <!-- Copy Application Number -->
-                                 
-
-                                        <!-- Cancel Button -->
-                                        
+                                        <!-- Cancel Button (Draft/Submitted only) -->
+                                        @if(in_array($application->status, ['draft', 'submitted']))
+                                            <button wire:click="showCancelConfirmation({{ $application->id }})" 
+                                                    class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-all" 
+                                                    title="Cancel Application">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        @endif
 
                                         <!-- Delete Button (Draft only) -->
                                         @if($application->status === 'draft')
                                             <button wire:click="showDeleteConfirmation({{ $application->id }})" 
-                                                    class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors" 
+                                                    class="text-orange-600 hover:text-orange-900 p-2 rounded-lg hover:bg-orange-50 transition-all" 
                                                     title="Delete Draft">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
                                             </button>
@@ -404,7 +414,7 @@
                             <div class="grid grid-cols-2 gap-4 text-sm mb-4">
                                 <div>
                                     <p class="text-gray-500">Amount</p>
-                                    <p class="font-bold text-red-600">TSh {{ number_format($application->requested_amount) }}</p>
+                                    <p class="font-bold text-sidebar-green">TSh {{ number_format($application->requested_amount) }}</p>
                                 </div>
                                 <div>
                                     <p class="text-gray-500">Period</p>
@@ -427,41 +437,62 @@
                                     <span class="text-xs text-gray-500">{{ $this->getProgressPercentage($application->status) }}%</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                    <div class="bg-gradient-to-r from-red-600 to-red-700 h-1.5 rounded-full" 
+                                    <div class="bg-gradient-to-r from-sidebar-green to-sidebar-green-light h-1.5 rounded-full" 
                                          style="width: {{ $this->getProgressPercentage($application->status) }}%"></div>
                                 </div>
                             </div>
 
                             <!-- Mobile Actions -->
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2">
-                                    <button wire:click="viewApplication({{ $application->id }})" 
-                                            class="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50">
+                            <div class="flex items-center justify-end gap-2">
+                                <!-- View Button -->
+                                <button wire:click="viewApplication({{ $application->id }})" 
+                                        class="flex items-center justify-center w-10 h-10 text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all"
+                                        title="View Details">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Edit Button (Draft only) -->
+                                @if($application->status === 'draft')
+                                    <button wire:click="editApplication({{ $application->id }})" 
+                                            class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                                            title="Edit Draft">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </button>
-                                    @if($application->status === 'draft')
-                                        <button wire:click="editApplication({{ $application->id }})" 
-                                                class="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-50">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </button>
-                                    @endif
-                                    @if(in_array($application->status, ['draft', 'submitted']))
-                                        <button wire:click="showCancelConfirmation({{ $application->id }})" 
-                                                class="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-50">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
-                                    @endif
-                                </div>
-                                @if($application->status === 'submitted' && !$application->lender_id)
-                                    <button wire:click="selectLenders({{ $application->id }})" 
-                                           class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium hover:bg-blue-200">
-                                        Choose Lender
+                                @endif
+
+                                <!-- Download Button -->
+                                <button wire:click="downloadApplication({{ $application->id }})" 
+                                        class="flex items-center justify-center w-10 h-10 text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100 rounded-lg transition-all"
+                                        title="Download PDF">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Cancel Button (Draft/Submitted only) -->
+                                @if(in_array($application->status, ['draft', 'submitted']))
+                                    <button wire:click="showCancelConfirmation({{ $application->id }})" 
+                                            class="flex items-center justify-center w-10 h-10 text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 rounded-lg transition-all"
+                                            title="Cancel Application">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                @endif
+
+                                <!-- Delete Button (Draft only) -->
+                                @if($application->status === 'draft')
+                                    <button wire:click="showDeleteConfirmation({{ $application->id }})" 
+                                            class="flex items-center justify-center w-10 h-10 text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 rounded-lg transition-all"
+                                            title="Delete Draft">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
                                     </button>
                                 @endif
                             </div>
@@ -472,7 +503,7 @@
         @else
             <!-- Empty State -->
             <div class="p-12 text-center">
-                <div class="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <div class="w-20 h-20 bg-gradient-to-br from-sidebar-green to-sidebar-green-light rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
@@ -493,7 +524,7 @@
                         </button>
                     @endif
                     <a href="" 
-                       class="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-lg font-bold hover:from-red-700 hover:to-red-800 transition-all duration-200 shadow-lg">
+                       class="bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white px-8 py-3 rounded-lg font-bold hover:from-sidebar-green-light hover:to-sidebar-green-800 transition-all duration-200 shadow-lg">
                         Start Application
                     </a>
                 </div>
@@ -549,8 +580,8 @@
                      x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                     
                     <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-sidebar-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                             </svg>
                         </div>
@@ -577,7 +608,7 @@
                     
                     <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                         <button wire:click="confirmCancel" 
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm">
                             <span wire:loading.remove wire:target="confirmCancel">Yes, Cancel Application</span>
                             <span wire:loading wire:target="confirmCancel" class="flex items-center">
                                 <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -623,8 +654,8 @@
                      x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                     
                     <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-sidebar-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
                         </div>
@@ -650,7 +681,7 @@
                     
                     <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                         <button wire:click="confirmDelete" 
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm">
                             <span wire:loading.remove wire:target="confirmDelete">Yes, Delete Forever</span>
                             <span wire:loading wire:target="confirmDelete" class="flex items-center">
                                 <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -825,16 +856,16 @@
 
 <style>
     /* Custom styles for better visual hierarchy */
-    .bg-red-600 { background-color: #dc2626; }
-    .bg-red-700 { background-color: #b91c1c; }
-    .text-red-600 { color: #dc2626; }
-    .text-red-700 { color: #b91c1c; }
-    .border-red-500 { border-color: #ef4444; }
-    .ring-red-500 { --tw-ring-color: #ef4444; }
-    .focus\:ring-red-500:focus { --tw-ring-color: #ef4444; }
-    .focus\:border-red-500:focus { border-color: #ef4444; }
-    .hover\:from-red-700:hover { --tw-gradient-from: #b91c1c; }
-    .hover\:to-red-800:hover { --tw-gradient-to: #991b1b; }
+    .bg-sidebar-green { background-color: #1D753F; }
+    .bg-sidebar-green-light { background-color: #22864A; }
+    .text-sidebar-green { color: #1D753F; }
+    .text-sidebar-green-light { color: #22864A; }
+    .border-sidebar-green { border-color: #1D753F; }
+    .ring-sidebar-green { --tw-ring-color: #1D753F; }
+    .focus\:ring-sidebar-green:focus { --tw-ring-color: #1D753F; }
+    .focus\:border-sidebar-green:focus { border-color: #1D753F; }
+    .hover\:from-sidebar-green-light:hover { --tw-gradient-from: #22864A; }
+    .hover\:to-sidebar-green-800:hover { --tw-gradient-to: #186432; }
     
     /* Loading animation */
     @keyframes spin {

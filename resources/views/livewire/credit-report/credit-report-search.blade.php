@@ -16,12 +16,12 @@
                         type="text" 
                         id="fullName"
                         wire:model.live="fullName" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="Enter full name"
                         wire:loading.attr="disabled"
                     >
                     @error('fullName') 
-                        <span class="text-red-600 text-sm">{{ $message }}</span> 
+                        <span class="text-sidebar-green text-sm">{{ $message }}</span> 
                     @enderror
                 </div>
                 
@@ -33,12 +33,12 @@
                         type="text" 
                         id="idNumber"
                         wire:model.live="idNumber" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="Enter ID number"
                         wire:loading.attr="disabled"
                     >
                     @error('idNumber') 
-                        <span class="text-red-600 text-sm">{{ $message }}</span> 
+                        <span class="text-sidebar-green text-sm">{{ $message }}</span> 
                     @enderror
                 </div>
                 
@@ -50,12 +50,12 @@
                         type="text" 
                         id="phoneNumber"
                         wire:model.live="phoneNumber" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="Enter phone number"
                         wire:loading.attr="disabled"
                     >
                     @error('phoneNumber') 
-                        <span class="text-red-600 text-sm">{{ $message }}</span> 
+                        <span class="text-sidebar-green text-sm">{{ $message }}</span> 
                     @enderror
                 </div>
             </div>
@@ -63,7 +63,7 @@
             <div class="flex gap-3">
                 <button 
                     wire:click="search" 
-                    class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition duration-200 flex items-center"
+                    class="bg-sidebar-green hover:bg-sidebar-green-light text-white font-medium py-2 px-6 rounded-md transition duration-200 flex items-center"
                     wire:loading.attr="disabled"
                     wire:target="search"
                 >
@@ -85,10 +85,10 @@
 
         <!-- Loading State -->
         <div wire:loading wire:target="search" class="mb-6">
-            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
                 <div class="flex items-center">
-                    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-red-600 mr-3"></div>
-                    <span class="text-red-700">Searching credit information...</span>
+                    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-sidebar-green mr-3"></div>
+                    <span class="text-sidebar-green-light">Searching credit information...</span>
                 </div>
             </div>
         </div>
@@ -107,14 +107,14 @@
 
         <!-- Error Display -->
         @if($errorMessage)
-            <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
                 <div class="flex items-center">
-                    <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-sidebar-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <h3 class="text-lg font-semibold text-red-800 mb-1">Error</h3>
-                        <p class="text-red-700">{{ $errorMessage }}</p>
+                        <h3 class="text-lg font-semibold text-sidebar-green-800 mb-1">Error</h3>
+                        <p class="text-sidebar-green-light">{{ $errorMessage }}</p>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                                         @if(isset($result['CreditinfoId']))
                                             <button 
                                                 wire:click="getReport('{{ $result['CreditinfoId'] }}')" 
-                                                class="text-red-600 hover:text-red-900"
+                                                class="text-sidebar-green hover:text-sidebar-green-900"
                                                 wire:loading.attr="disabled"
                                                 wire:target="getReport"
                                             >
@@ -219,14 +219,14 @@
 
         <!-- Report Error -->
         @if($reportError)
-            <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
                 <div class="flex items-center">
-                    <svg class="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-sidebar-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <h3 class="text-lg font-semibold text-red-800 mb-1">Report Generation Error</h3>
-                        <p class="text-red-700">{{ $reportError }}</p>
+                        <h3 class="text-lg font-semibold text-sidebar-green-800 mb-1">Report Generation Error</h3>
+                        <p class="text-sidebar-green-light">{{ $reportError }}</p>
                     </div>
                 </div>
             </div>
@@ -257,7 +257,7 @@
                     <a 
                         href="{{ $reportUrl }}" 
                         target="_blank"
-                        class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
+                        class="bg-sidebar-green hover:bg-sidebar-green-light text-white font-medium py-2 px-4 rounded-md transition duration-200"
                     >
                         Open in New Tab
                     </a>
@@ -312,7 +312,7 @@
                         <input 
                             type="text" 
                             wire:model.live.debounce.300ms="creditInfoSearch"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green"
                             placeholder="Search by name, NIDA, or application number..."
                         >
                     </div>
@@ -320,7 +320,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                         <select 
                             wire:model.live="creditInfoStatusFilter"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green"
                         >
                             <option value="">All Statuses</option>
                             <option value="pending">Pending</option>
@@ -359,7 +359,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                         @if($request->status === 'success') bg-green-100 text-green-800
-                                        @elseif($request->status === 'failed') bg-red-100 text-red-800
+                                        @elseif($request->status === 'failed') bg-sidebar-green-100 text-sidebar-green-800
                                         @else bg-yellow-100 text-yellow-800
                                         @endif">
                                         {{ ucfirst($request->status) }}
@@ -371,7 +371,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <button 
                                         wire:click="viewCreditInfoDetails({{ $request->id }})"
-                                        class="text-red-600 hover:text-red-900 mr-3"
+                                        class="text-sidebar-green hover:text-sidebar-green-900 mr-3"
                                     >
                                         View Details
                                     </button>
@@ -441,7 +441,7 @@
                             <p class="mt-1">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                     @if($selectedCreditRequest->status === 'success') bg-green-100 text-green-800
-                                    @elseif($selectedCreditRequest->status === 'failed') bg-red-100 text-red-800
+                                    @elseif($selectedCreditRequest->status === 'failed') bg-sidebar-green-100 text-sidebar-green-800
                                     @else bg-yellow-100 text-yellow-800
                                     @endif">
                                     {{ ucfirst($selectedCreditRequest->status) }}
@@ -451,7 +451,7 @@
                         @if($selectedCreditRequest->error_message)
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Error Message</label>
-                                <p class="mt-1 text-sm text-red-600">{{ $selectedCreditRequest->error_message }}</p>
+                                <p class="mt-1 text-sm text-sidebar-green">{{ $selectedCreditRequest->error_message }}</p>
                             </div>
                         @endif
                         @if($selectedCreditRequest->isSuccessful())
@@ -470,7 +470,7 @@
                     <button 
                         type="button" 
                         wire:click="closeCreditInfoModal"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm"
                     >
                         Close
                     </button>
@@ -505,7 +505,7 @@
                     <button 
                         type="button" 
                         wire:click="closeCreditInfoJsonModal"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm"
                     >
                         Close
                     </button>

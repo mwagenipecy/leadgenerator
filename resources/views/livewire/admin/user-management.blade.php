@@ -9,7 +9,7 @@
                 </div>
                 <div class="flex items-center space-x-3">
                     @if(request()->routeIs('user.management') && !request()->routeIs('user.management.*'))
-                        <button wire:click="openCreateUserModal" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                        <button wire:click="openCreateUserModal" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>
@@ -26,13 +26,13 @@
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                     <!-- Users Tab -->
                     <a href="{{ route('user.management') }}" 
-                            class="@if(request()->routeIs('user.management') && !request()->routeIs('user.management.*')) border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center space-x-2">
+                            class="@if(request()->routeIs('user.management') && !request()->routeIs('user.management.*')) border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center space-x-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                         </svg>
                         <span>Users</span>
                         @if(request()->routeIs('user.management') && !request()->routeIs('user.management.*'))
-                            <span class="bg-red-100 text-red-600 ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium">{{ number_format($totalUsers) }}</span>
+                            <span class="bg-sidebar-green-100 text-sidebar-green ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium">{{ number_format($totalUsers) }}</span>
                         @endif
                     </a>
 
@@ -96,62 +96,62 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                             <input wire:model="name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('name') border-red-500 @enderror">
-                            @error('name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('name') border-sidebar-green @enderror">
+                            @error('name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                             <input wire:model="email" type="email" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('email') border-red-500 @enderror">
-                            @error('email') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('email') border-sidebar-green @enderror">
+                            @error('email') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                             <input wire:model="first_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('first_name') border-red-500 @enderror">
-                            @error('first_name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('first_name') border-sidebar-green @enderror">
+                            @error('first_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                             <input wire:model="last_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('last_name') border-red-500 @enderror">
-                            @error('last_name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('last_name') border-sidebar-green @enderror">
+                            @error('last_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                             <input wire:model="phone" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('phone') border-red-500 @enderror">
-                            @error('phone') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('phone') border-sidebar-green @enderror">
+                            @error('phone') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">NIDA Number</label>
                             <input wire:model="nida_number" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('nida_number') border-red-500 @enderror">
-                            @error('nida_number') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('nida_number') border-sidebar-green @enderror">
+                            @error('nida_number') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
                             <input wire:model="date_of_birth" type="date" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('date_of_birth') border-red-500 @enderror">
-                            @error('date_of_birth') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('date_of_birth') border-sidebar-green @enderror">
+                            @error('date_of_birth') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">User Role *</label>
                             <select wire:model="role" 
-                                    class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('role') border-red-500 @enderror">
+                                    class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('role') border-sidebar-green @enderror">
                                 <option value="user">Borrower</option>
                                 @foreach($roles as $roleOption)
                                     <option value="{{ $roleOption->name }}">{{ ucfirst($roleOption->name) }}</option>
                                 @endforeach
                             </select>
-                            @error('role') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            @error('role') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Lender Association (only show for lender and user roles) -->
@@ -159,35 +159,35 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Associated Lender</label>
                                 <select wire:model="selected_lender_id" 
-                                        class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('selected_lender_id') border-red-500 @enderror">
+                                        class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('selected_lender_id') border-sidebar-green @enderror">
                                     <option value="">No Lender Association</option>
                                     @foreach($availableLenders as $lender)
                                         <option value="{{ $lender->id }}">{{ $lender->company_name }}</option>
                                     @endforeach
                                 </select>
-                                @error('selected_lender_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                @error('selected_lender_id') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         @endif
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Password *</label>
                             <input wire:model="password" type="password" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('password') border-red-500 @enderror">
-                            @error('password') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('password') border-sidebar-green @enderror">
+                            @error('password') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password *</label>
                             <input wire:model="password_confirmation" type="password" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('password_confirmation') border-red-500 @enderror">
-                            @error('password_confirmation') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('password_confirmation') border-sidebar-green @enderror">
+                            @error('password_confirmation') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <!-- Active Status -->
                     <div class="flex items-center">
                         <input wire:model="is_active" type="checkbox" id="is_active" 
-                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                         <label for="is_active" class="ml-2 block text-sm text-gray-700">User is active</label>
                     </div>
 
@@ -198,7 +198,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             wire:loading.attr="disabled">
                             <span wire:loading.remove>Create User</span>
                             <span wire:loading>Creating...</span>
@@ -237,62 +237,62 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                             <input wire:model="edit_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_name') border-red-500 @enderror">
-                            @error('edit_name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_name') border-sidebar-green @enderror">
+                            @error('edit_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                             <input wire:model="edit_email" type="email" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_email') border-red-500 @enderror">
-                            @error('edit_email') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_email') border-sidebar-green @enderror">
+                            @error('edit_email') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                             <input wire:model="edit_first_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_first_name') border-red-500 @enderror">
-                            @error('edit_first_name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_first_name') border-sidebar-green @enderror">
+                            @error('edit_first_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                             <input wire:model="edit_last_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_last_name') border-red-500 @enderror">
-                            @error('edit_last_name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_last_name') border-sidebar-green @enderror">
+                            @error('edit_last_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                             <input wire:model="edit_phone" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_phone') border-red-500 @enderror">
-                            @error('edit_phone') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_phone') border-sidebar-green @enderror">
+                            @error('edit_phone') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">NIDA Number</label>
                             <input wire:model="edit_nida_number" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_nida_number') border-red-500 @enderror">
-                            @error('edit_nida_number') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_nida_number') border-sidebar-green @enderror">
+                            @error('edit_nida_number') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
                             <input wire:model="edit_date_of_birth" type="date" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_date_of_birth') border-red-500 @enderror">
-                            @error('edit_date_of_birth') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_date_of_birth') border-sidebar-green @enderror">
+                            @error('edit_date_of_birth') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">User Role *</label>
                             <select wire:model="edit_role" 
-                                    class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_role') border-red-500 @enderror">
+                                    class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_role') border-sidebar-green @enderror">
                                 <option value="user">Borrower</option>
                                 @foreach($roles as $roleOption)
                                     <option value="{{ $roleOption->name }}">{{ ucfirst($roleOption->name) }}</option>
                                 @endforeach
                             </select>
-                            @error('edit_role') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            @error('edit_role') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Lender Association -->
@@ -300,13 +300,13 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Associated Lender</label>
                                 <select wire:model="edit_selected_lender_id" 
-                                        class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('edit_selected_lender_id') border-red-500 @enderror">
+                                        class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_selected_lender_id') border-sidebar-green @enderror">
                                     <option value="">No Lender Association</option>
                                     @foreach($availableLenders as $lender)
                                         <option value="{{ $lender->id }}">{{ $lender->company_name }}</option>
                                     @endforeach
                                 </select>
-                                @error('edit_selected_lender_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                                @error('edit_selected_lender_id') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         @endif
                     </div>
@@ -314,7 +314,7 @@
                     <!-- Active Status -->
                     <div class="flex items-center">
                         <input wire:model="edit_is_active" type="checkbox" id="edit_is_active" 
-                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                         <label for="edit_is_active" class="ml-2 block text-sm text-gray-700">User is active</label>
                     </div>
 
@@ -325,7 +325,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             wire:loading.attr="disabled">
                             <span wire:loading.remove>Update User</span>
                             <span wire:loading>Updating...</span>
@@ -353,8 +353,8 @@
                 <!-- Modal Header -->
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 bg-sidebar-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.348 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                             </svg>
                         </div>
@@ -371,14 +371,14 @@
                 </div>
 
                 <!-- Warning Message -->
-                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4 mb-6">
                     <div class="flex items-start space-x-3">
-                        <svg class="w-5 h-5 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-sidebar-green mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.348 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                         </svg>
                         <div>
-                            <h4 class="text-sm font-semibold text-red-800">Critical Action Warning</h4>
-                            <p class="text-sm text-red-700 mt-1">{{ $passwordConfirmMessage }}</p>
+                            <h4 class="text-sm font-semibold text-sidebar-green-800">Critical Action Warning</h4>
+                            <p class="text-sm text-sidebar-green-light mt-1">{{ $passwordConfirmMessage }}</p>
                         </div>
                     </div>
                 </div>
@@ -392,10 +392,10 @@
                         <input wire:model="currentPassword" 
                                type="password" 
                                placeholder="Your current password"
-                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('currentPassword') border-red-500 @enderror"
+                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('currentPassword') border-sidebar-green @enderror"
                                autofocus>
                         @error('currentPassword') 
-                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
+                            <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> 
                         @enderror
                     </div>
 
@@ -407,7 +407,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 wire:loading.attr="disabled">
                             <span wire:loading.remove>Confirm Action</span>
                             <span wire:loading>Processing...</span>

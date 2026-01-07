@@ -53,7 +53,7 @@
             <div class="flex justify-between items-center">
                 <span class="text-sm font-medium text-gray-600">Debt-to-Income Ratio</span>
                 @if($application->debt_to_income_ratio && !$isAvailable)
-                    <span class="text-lg font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                    <span class="text-lg font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                         {{ number_format($application->debt_to_income_ratio, 1) }}%
                     </span>
                 @else
@@ -117,7 +117,7 @@
                 </div>
                 <div class="flex justify-between py-2 border-b border-gray-200">
                     <span class="text-sm text-gray-600">Monthly Expenses:</span>
-                    <span class="text-sm font-bold text-red-600 {{ $isAvailable ? 'blur-sm' : '' }}">
+                    <span class="text-sm font-bold text-sidebar-green {{ $isAvailable ? 'blur-sm' : '' }}">
                         {{ $this->getBlurredAmount($application->monthly_expenses) }}
                     </span>
                 </div>

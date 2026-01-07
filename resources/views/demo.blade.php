@@ -37,7 +37,7 @@
                 <div class="flex items-center">
                     <!-- Logo -->
                     <a href="#" class="flex-shrink-0 flex items-center">
-                        <svg class="h-10 w-10 text-red-600" viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="h-10 w-10 text-sidebar-green" viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40Z"/>
                             <path d="M12 12L28 28M12 28L28 12" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -47,21 +47,21 @@
 
                 <!-- Navigation Links - Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#features" class="text-base font-medium text-gray-700 hover:text-red-600 transition duration-150 ease-in-out">Features</a>
-                    <a href="#how-it-works" class="text-base font-medium text-gray-700 hover:text-red-600 transition duration-150 ease-in-out">How It Works</a>
-                    <a href="#testimonials" class="text-base font-medium text-gray-700 hover:text-red-600 transition duration-150 ease-in-out">Testimonials</a>
-                    <a href="#contact" class="text-base font-medium text-gray-700 hover:text-red-600 transition duration-150 ease-in-out">Contact</a>
-                    <a href="/login" class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                    <a href="#features" class="text-base font-medium text-gray-700 hover:text-sidebar-green transition duration-150 ease-in-out">Features</a>
+                    <a href="#how-it-works" class="text-base font-medium text-gray-700 hover:text-sidebar-green transition duration-150 ease-in-out">How It Works</a>
+                    <a href="#testimonials" class="text-base font-medium text-gray-700 hover:text-sidebar-green transition duration-150 ease-in-out">Testimonials</a>
+                    <a href="#contact" class="text-base font-medium text-gray-700 hover:text-sidebar-green transition duration-150 ease-in-out">Contact</a>
+                    <a href="/login" class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sidebar-green hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                         Login
                     </a>
-                    <a href="/register" class="inline-flex items-center justify-center px-4 py-2 border border-red-600 rounded-md shadow-sm text-base font-medium text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                    <a href="/register" class="inline-flex items-center justify-center px-4 py-2 border border-sidebar-green rounded-md shadow-sm text-base font-medium text-sidebar-green bg-white hover:bg-sidebar-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                         Register
                     </a>
                 </div>
 
                 <!-- Mobile menu button -->
                 <div class="flex items-center md:hidden">
-                    <button type="button" class="mobile-menu-button p-2 rounded-md inline-flex items-center justify-center text-gray-700 hover:text-red-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
+                    <button type="button" class="mobile-menu-button p-2 rounded-md inline-flex items-center justify-center text-gray-700 hover:text-sidebar-green hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sidebar-green">
                         <span class="sr-only">Open main menu</span>
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -74,17 +74,17 @@
         <!-- Mobile menu, show/hide based on menu state -->
         <div class="mobile-menu hidden md:hidden bg-white border-b border-gray-200 pb-4">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 transition duration-150 ease-in-out">Features</a>
-                <a href="#how-it-works" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 transition duration-150 ease-in-out">How It Works</a>
-                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 transition duration-150 ease-in-out">Testimonials</a>
-                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 transition duration-150 ease-in-out">Contact</a>
+                <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-sidebar-green hover:bg-gray-50 transition duration-150 ease-in-out">Features</a>
+                <a href="#how-it-works" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-sidebar-green hover:bg-gray-50 transition duration-150 ease-in-out">How It Works</a>
+                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-sidebar-green hover:bg-gray-50 transition duration-150 ease-in-out">Testimonials</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-sidebar-green hover:bg-gray-50 transition duration-150 ease-in-out">Contact</a>
             </div>
             <div class="pt-4 pb-3 border-t border-gray-200">
                 <div class="px-2 space-y-3">
-                    <a href="/login" class="block w-full text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                    <a href="/login" class="block w-full text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sidebar-green hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                         Login
                     </a>
-                    <a href="/register" class="block w-full text-center px-4 py-2 border border-red-600 rounded-md shadow-sm text-base font-medium text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                    <a href="/register" class="block w-full text-center px-4 py-2 border border-sidebar-green rounded-md shadow-sm text-base font-medium text-sidebar-green bg-white hover:bg-sidebar-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                         Register
                     </a>
                 </div>
@@ -94,17 +94,17 @@
 
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-r from-[#2D2D2D] to-gray-900 py-20 md:py-32">
-        <div class="absolute inset-0 bg-red-600 opacity-5 pattern-dots"></div>
+        <div class="absolute inset-0 bg-sidebar-green opacity-5 pattern-dots"></div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
             <div class="md:w-1/2 mb-12 md:mb-0">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
-                    Generate High-Quality <span class="text-red-500">Leads</span> & Manage Receipts
+                    Generate High-Quality <span class="text-sidebar-green">Leads</span> & Manage Receipts
                 </h1>
                 <p class="text-xl text-gray-300 mb-8 max-w-lg">
                     A powerful platform for businesses to generate qualified leads and manage receipt requests efficiently. All in one place.
                 </p>
                 <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="#contact" class="inline-flex items-center justify-center px-8 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                    <a href="#contact" class="inline-flex items-center justify-center px-8 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sidebar-green hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                         Get Started
                     </a>
                     <a href="#how-it-works" class="inline-flex items-center justify-center px-8 py-3 border border-gray-300 rounded-md shadow-sm text-base font-medium text-white bg-transparent hover:bg-white hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition duration-150 ease-in-out">
@@ -114,9 +114,9 @@
             </div>
             <div class="md:w-1/2 md:ml-auto">
                 <div class="relative mx-auto w-full max-w-md">
-                    <div class="absolute top-0 -left-4 w-64 h-64 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob"></div>
-                    <div class="absolute top-0 -right-4 w-64 h-64 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-2000"></div>
-                    <div class="absolute -bottom-8 left-16 w-64 h-64 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-4000"></div>
+                    <div class="absolute top-0 -left-4 w-64 h-64 bg-sidebar-green rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob"></div>
+                    <div class="absolute top-0 -right-4 w-64 h-64 bg-sidebar-green rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-2000"></div>
+                    <div class="absolute -bottom-8 left-16 w-64 h-64 bg-sidebar-green rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-4000"></div>
                     <div class="relative">
                         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                             <div class="px-6 py-8">
@@ -124,18 +124,18 @@
                                 <form class="space-y-4">
                                     <div>
                                         <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                                        <input type="text" id="name" name="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                                        <input type="text" id="name" name="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-sidebar-green focus:border-sidebar-green">
                                     </div>
                                     <div>
                                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                        <input type="email" id="email" name="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                                        <input type="email" id="email" name="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-sidebar-green focus:border-sidebar-green">
                                     </div>
                                     <div>
                                         <label for="company" class="block text-sm font-medium text-gray-700">Company</label>
-                                        <input type="text" id="company" name="company" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                                        <input type="text" id="company" name="company" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-sidebar-green focus:border-sidebar-green">
                                     </div>
                                     <div>
-                                        <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                                        <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sidebar-green hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                                             Schedule a Demo
                                         </button>
                                     </div>
@@ -197,7 +197,7 @@
     <section id="features" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-base font-semibold text-red-600 uppercase tracking-wide">Features</h2>
+                <h2 class="text-base font-semibold text-sidebar-green uppercase tracking-wide">Features</h2>
                 <p class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight">Everything you need to succeed</p>
                 <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500">Our comprehensive platform offers all the tools you need to generate and manage leads effectively.</p>
             </div>
@@ -205,8 +205,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
                 <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition duration-300 border border-gray-100">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-sidebar-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
                     </div>
@@ -216,8 +216,8 @@
 
                 <!-- Feature 2 -->
                 <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition duration-300 border border-gray-100">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-sidebar-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
@@ -227,8 +227,8 @@
 
                 <!-- Feature 3 -->
                 <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition duration-300 border border-gray-100">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-sidebar-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
@@ -238,8 +238,8 @@
 
                 <!-- Feature 4 -->
                 <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition duration-300 border border-gray-100">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-sidebar-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                         </svg>
                     </div>
@@ -249,8 +249,8 @@
 
                 <!-- Feature 5 -->
                 <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition duration-300 border border-gray-100">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-sidebar-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
@@ -260,8 +260,8 @@
 
                 <!-- Feature 6 -->
                 <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition duration-300 border border-gray-100">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-sidebar-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                         </svg>
                     </div>
@@ -276,14 +276,14 @@
     <section id="how-it-works" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-base font-semibold text-red-600 uppercase tracking-wide">How It Works</h2>
+                <h2 class="text-base font-semibold text-sidebar-green uppercase tracking-wide">How It Works</h2>
                 <p class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight">Simple, efficient, and powerful</p>
                 <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500">Our platform makes lead generation and receipt management a breeze in just a few simple steps.</p>
             </div>
 
             <div class="relative">
                 <!-- Process Timeline -->
-                <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-red-100"></div>
+                <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-sidebar-green-100"></div>
 
                 <!-- Step 1 -->
                 <div class="relative mb-12 md:mb-0">
@@ -294,7 +294,7 @@
                                 <p class="text-gray-600">Design personalized lead capture forms tailored to your specific business needs. Choose from various field types and customization options.</p>
                             </div>
                         </div>
-                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-red-600 rounded-full text-white font-bold z-10">1</div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-sidebar-green rounded-full text-white font-bold z-10">1</div>
                         <div class="flex-1 md:pl-12"></div>
                     </div>
                 </div>
@@ -308,7 +308,7 @@
                                 <p class="text-gray-600">Capture leads from multiple channels and organize them automatically. All data is securely stored and easily accessible.</p>
                             </div>
                         </div>
-                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-red-600 rounded-full text-white font-bold z-10">2</div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-sidebar-green rounded-full text-white font-bold z-10">2</div>
                         <div class="flex-1 md:pl-12 hidden md:block">
                             <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 inline-block">
                                 <h3 class="text-xl font-bold text-gray-900 mb-2">2. Collect and Organize Leads</h3>
@@ -327,7 +327,7 @@
                                 <p class="text-gray-600">Process receipt requests efficiently with our streamlined workflow. Generate, deliver, and track receipts all in one place.</p>
                             </div>
                         </div>
-                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-red-600 rounded-full text-white font-bold z-10">3</div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-sidebar-green rounded-full text-white font-bold z-10">3</div>
                         <div class="flex-1 md:pl-12"></div>
                     </div>
                 </div>
@@ -341,7 +341,7 @@
                                 <p class="text-gray-600">Monitor performance with comprehensive analytics. Gain insights to optimize your lead generation strategy for better results.</p>
                             </div>
                         </div>
-                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-red-600 rounded-full text-white font-bold z-10">4</div>
+                        <div class="hidden md:flex items-center justify-center w-12 h-12 bg-sidebar-green rounded-full text-white font-bold z-10">4</div>
                         <div class="flex-1 md:pl-12 hidden md:block">
                             <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 inline-block">
                                 <h3 class="text-xl font-bold text-gray-900 mb-2">4. Analyze and Optimize</h3>
@@ -358,7 +358,7 @@
     <section id="testimonials" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-base font-semibold text-red-600 uppercase tracking-wide">Testimonials</h2>
+                <h2 class="text-base font-semibold text-sidebar-green uppercase tracking-wide">Testimonials</h2>
                 <p class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight">What our customers say</p>
                 <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500">Don't just take our word for it—hear from our satisfied customers.</p>
             </div>
@@ -448,7 +448,7 @@
     <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-base font-semibold text-red-600 uppercase tracking-wide">Pricing</h2>
+                <h2 class="text-base font-semibold text-sidebar-green uppercase tracking-wide">Pricing</h2>
                 <p class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight">Plans for businesses of all sizes</p>
                 <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500">Choose a plan that works best for your business needs.</p>
             </div>
@@ -491,7 +491,7 @@
                         </ul>
                     </div>
                     <div class="bg-gray-50 px-6 py-4">
-                        <a href="#contact" class="block w-full text-center px-4 py-2 border border-red-600 rounded-md shadow-sm text-base font-medium text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                        <a href="#contact" class="block w-full text-center px-4 py-2 border border-sidebar-green rounded-md shadow-sm text-base font-medium text-sidebar-green bg-white hover:bg-sidebar-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                             Get Started
                         </a>
                     </div>
@@ -534,7 +534,7 @@
                         </ul>
                     </div>
                     <div class="bg-gray-50 px-6 py-4">
-                        <a href="#contact" class="block w-full text-center px-4 py-2 border border-red-600 rounded-md shadow-sm text-base font-medium text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                        <a href="#contact" class="block w-full text-center px-4 py-2 border border-sidebar-green rounded-md shadow-sm text-base font-medium text-sidebar-green bg-white hover:bg-sidebar-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                             Get Started
                         </a>
                     </div>
@@ -577,7 +577,7 @@
                         </ul>
                     </div>
                     <div class="bg-gray-50 px-6 py-4">
-                        <a href="#contact" class="block w-full text-center px-4 py-2 border border-red-600 rounded-md shadow-sm text-base font-medium text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                        <a href="#contact" class="block w-full text-center px-4 py-2 border border-sidebar-green rounded-md shadow-sm text-base font-medium text-sidebar-green bg-white hover:bg-sidebar-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                             Contact Us
                         </a>
                     </div>

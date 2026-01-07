@@ -72,7 +72,7 @@
                 
                 <!-- Validation Errors -->
                 @if($errors->any())
-                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                    <div class="bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-lg">
                         @foreach($errors->all() as $error)
                             <p class="text-sm">{{ $error }}</p>
                         @endforeach
@@ -88,7 +88,7 @@
 
                 <!-- Error Messages -->
                 @if(session('error'))
-                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                    <div class="bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-lg">
                         <p class="text-sm">{{ session('error') }}</p>
                     </div>
                 @endif
@@ -191,7 +191,7 @@
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
                     timerElement.textContent = '{{ __("Code expired. Please request a new one.") }}';
-                    timerElement.className = 'text-sm text-red-600 mb-4';
+                    timerElement.className = 'text-sm text-sidebar-green mb-4';
                     
                     // Enable resend button when code expires
                     if (resendBtn) {

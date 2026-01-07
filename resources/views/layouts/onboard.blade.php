@@ -77,7 +77,7 @@
         if (password !== passwordConfirmation) {
             e.preventDefault();
             document.getElementById('password_confirmation').focus();
-            document.getElementById('password_confirmation').classList.add('border-red-500', 'ring-1', 'ring-red-500');
+            document.getElementById('password_confirmation').classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
             return false;
         }
     });
@@ -88,9 +88,9 @@
         const confirmation = this.value;
         
         if (confirmation && password !== confirmation) {
-            this.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+            this.classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
         } else {
-            this.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+            this.classList.remove('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
         }
     });
 
@@ -98,7 +98,7 @@
     document.querySelectorAll('input[required]').forEach(input => {
         input.addEventListener('blur', function() {
             if (this.value.trim()) {
-                this.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                this.classList.remove('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
                 this.classList.add('border-green-400');
             } else {
                 this.classList.remove('border-green-400');

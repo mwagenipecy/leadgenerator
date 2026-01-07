@@ -8,11 +8,11 @@
                 <p class="text-gray-600 text-lg">Manage lender onboarding and verification</p>
             </div>
             <div class="flex items-center space-x-3">
-                <div class="flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full">
-                    <div class="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-                    <span class="text-sm font-medium text-red-700">{{ $stats['pending'] }} Pending Review</span>
+                <div class="flex items-center space-x-2 bg-sidebar-green-50 px-4 py-2 rounded-full">
+                    <div class="w-2 h-2 bg-sidebar-green-400 rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium text-sidebar-green-light">{{ $stats['pending'] }} Pending Review</span>
                 </div>
-                <button wire:click="showAddLenderForm" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                <button wire:click="showAddLenderForm" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                     + Add Lender
                 </button>
             </div>
@@ -21,7 +21,7 @@
 
     <!-- Flash Messages -->
     @if (session()->has('message'))
-        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl" role="alert"
+        <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-xl" role="alert"
              x-data="{ show: true }" x-show="show" x-transition 
              x-init="setTimeout(() => show = false, 5000)">
             <div class="flex items-center">
@@ -39,7 +39,7 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="mb-6 bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-xl" role="alert"
+        <div class="mb-6 bg-sidebar-green-100 border border-sidebar-green-300 text-sidebar-green-800 px-4 py-3 rounded-xl" role="alert"
              x-data="{ show: true }" x-show="show" x-transition 
              x-init="setTimeout(() => show = false, 8000)">
             <div class="flex items-center">
@@ -61,7 +61,7 @@
         <!-- Total Lenders -->
         <div class="bg-white rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
             <div class="flex items-center justify-between">
-                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
@@ -76,14 +76,14 @@
         <!-- Pending -->
         <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
             <div class="flex items-center justify-between">
-                <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-red-500 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green-400 to-sidebar-green rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
                 <div class="text-right">
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Pending</p>
-                    <p class="text-2xl font-bold text-red-600">{{ $stats['pending'] }}</p>
+                    <p class="text-2xl font-bold text-sidebar-green">{{ $stats['pending'] }}</p>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search Lenders</label>
                 <div class="relative">
                     <input wire:model.live="search" type="text" placeholder="Search by name, email..." 
-                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -137,7 +137,7 @@
             <!-- Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
-                <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <option value="">All Statuses</option>
                     @foreach ($lender_status as $status)
                         <option value="{{ $status }}">{{ ucfirst($status) }}</option>
@@ -176,13 +176,13 @@
                         <tr class="hover:bg-gray-50 transition-colors duration-200 group">
                             <td class="px-8 py-6 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-md">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-2xl flex items-center justify-center shadow-md">
                                         <span class="text-white text-sm font-bold">{{ substr($lender->company_name, 0, 2) }}</span>
                                     </div>
                                     <div class="ml-4">
-                                        <a href="{{ route('lender.dashboard',$lender) }}" class="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ $lender->company_name }}</a>
+                                        <a href="{{ route('lender.dashboard',$lender) }}" class="text-sm font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ $lender->company_name }}</a>
                                         <div class="text-xs text-gray-500">{{ $lender->license_number ?? 'No License' }}</div>
-                                        <div class="text-xs text-red-600 font-medium mt-1">{{ $lender->contact_person }}</div>
+                                        <div class="text-xs text-sidebar-green font-medium mt-1">{{ $lender->contact_person }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -190,7 +190,7 @@
                                 <div class="text-sm text-gray-900">{{ $lender->email }}</div>
                                 <div class="text-sm text-gray-500">{{ $lender->phone }}</div>
                                 @if($lender->website)
-                                    <div class="text-xs text-red-600 mt-1">
+                                    <div class="text-xs text-sidebar-green mt-1">
                                         <a href="{{ $lender->website }}" target="_blank" class="hover:underline">Website</a>
                                     </div>
                                 @endif
@@ -204,7 +204,7 @@
                             </td>
                             <td class="px-6 py-6 whitespace-nowrap">
                                 @if($lender->status === 'pending')
-                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 border border-red-200">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200">
                                         <svg class="w-3 h-3 mr-1.5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
@@ -236,7 +236,7 @@
                             <td class="px-6 py-6 whitespace-nowrap">
                                 <div class="flex items-center space-x-1">
                                     @if($lender->documents && count($lender->documents) > 0)
-                                        <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-red-100 text-red-800">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-sidebar-green-100 text-sidebar-green-800">
                                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
@@ -281,7 +281,7 @@
 
                                         <!-- Reject Button -->
                                         <button onclick="document.getElementById('reject-modal-{{ $lender->id }}').style.display='block'" 
-                                                class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" 
+                                                class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200" 
                                                 title="Reject">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -292,7 +292,7 @@
                                     @if($lender->isApproved())
                                         <!-- Suspend Button -->
                                         <button wire:click="suspendLender({{ $lender->id }})" 
-                                                class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" 
+                                                class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200" 
                                                 title="Suspend">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -314,7 +314,7 @@
 
                                     <!-- Delete Button -->
                                     <button wire:click="deleteLender({{ $lender->id }})" 
-                                            class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" 
+                                            class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200" 
                                             title="Delete">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -330,7 +330,7 @@
                                             <div class="mb-4">
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reason</label>
                                                 <textarea wire:model="rejection_reason" rows="3" 
-                                                          class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500" 
+                                                          class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" 
                                                           placeholder="Please provide a reason for rejection..."></textarea>
                                             </div>
                                             <div class="flex justify-end space-x-3">
@@ -340,7 +340,7 @@
                                                 </button>
                                                 <button wire:click="rejectLender({{ $lender->id }})" 
                                                         onclick="document.getElementById('reject-modal-{{ $lender->id }}').style.display='none'" 
-                                                        class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors">
+                                                        class="px-4 py-2 bg-sidebar-green text-white rounded-xl hover:bg-sidebar-green-light transition-colors">
                                                     Reject
                                                 </button>
                                             </div>
@@ -358,7 +358,7 @@
                                     </svg>
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">No lenders found</h3>
                                     <p class="text-gray-500 mb-4">Get started by adding your first lender.</p>
-                                    <button wire:click="showAddLenderForm" class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200">
+                                    <button wire:click="showAddLenderForm" class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-all duration-200">
                                         Add First Lender
                                     </button>
                                 </div>
@@ -404,14 +404,14 @@
                 </div>
 
                 <!-- Important Notice -->
-                <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-xl p-4 mb-6">
                     <div class="flex items-start">
-                        <svg class="w-5 h-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-sidebar-green mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         <div>
-                            <h4 class="text-sm font-semibold text-red-800 mb-1">Important Notice</h4>
-                            <p class="text-sm text-red-700">The contact person will become the primary system user for this lender account. They will receive login credentials and have access to manage all loan applications and lender settings.</p>
+                            <h4 class="text-sm font-semibold text-sidebar-green-800 mb-1">Important Notice</h4>
+                            <p class="text-sm text-sidebar-green-light">The contact person will become the primary system user for this lender account. They will receive login credentials and have access to manage all loan applications and lender settings.</p>
                         </div>
                     </div>
                 </div>
@@ -422,18 +422,18 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
                             <input wire:model="company_name" type="text" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('company_name') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('company_name') border-sidebar-green @enderror" 
                                    placeholder="Enter company name">
-                            @error('company_name') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('company_name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- License Number -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">License Number</label>
                             <input wire:model="license_number" type="text" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('license_number') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('license_number') border-sidebar-green @enderror" 
                                    placeholder="Enter license number">
-                            @error('license_number') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('license_number') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Contact Person -->
@@ -441,21 +441,21 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Contact Person *
                                 <span class="inline-flex items-center ml-1">
-                                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                 </span>
                             </label>
                             <input wire:model="contact_person" type="text" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('contact_person') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('contact_person') border-sidebar-green @enderror" 
                                    placeholder="Enter contact person name">
-                            <p class="text-xs text-red-600 mt-1 flex items-center">
+                            <p class="text-xs text-sidebar-green mt-1 flex items-center">
                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                                 This person will become the system user
                             </p>
-                            @error('contact_person') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('contact_person') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Email -->
@@ -463,66 +463,66 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Email Address *
                                 <span class="inline-flex items-center ml-1">
-                                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                                     </svg>
                                 </span>
                             </label>
                             <input wire:model="email" type="email" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('email') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('email') border-sidebar-green @enderror" 
                                    placeholder="Enter email address">
-                            <p class="text-xs text-red-600 mt-1 flex items-center">
+                            <p class="text-xs text-sidebar-green mt-1 flex items-center">
                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"/>
                                 </svg>
                                 Login credentials will be sent to this email
                             </p>
-                            @error('email') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('email') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Phone -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
                             <input wire:model="phone" type="text" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('phone') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('phone') border-sidebar-green @enderror" 
                                    placeholder="Enter phone number">
-                            @error('phone') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('phone') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Website -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
                             <input wire:model="website" type="url" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('website') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('website') border-sidebar-green @enderror" 
                                    placeholder="https://example.com">
-                            @error('website') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('website') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- City -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
                             <input wire:model="city" type="text" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('city') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('city') border-sidebar-green @enderror" 
                                    placeholder="Enter city">
-                            @error('city') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('city') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Region -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Region *</label>
                             <input wire:model="region" type="text" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('region') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('region') border-sidebar-green @enderror" 
                                    placeholder="Enter region">
-                            @error('region') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('region') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Postal Code -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
                             <input wire:model="postal_code" type="text" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('postal_code') border-red-500 @enderror" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('postal_code') border-sidebar-green @enderror" 
                                    placeholder="Enter postal code">
-                            @error('postal_code') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                            @error('postal_code') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
@@ -530,18 +530,18 @@
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
                         <textarea wire:model="address" rows="3" 
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('address') border-red-500 @enderror" 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('address') border-sidebar-green @enderror" 
                                   placeholder="Enter full address"></textarea>
-                        @error('address') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                        @error('address') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Description -->
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                         <textarea wire:model="description" rows="3" 
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('description') border-red-500 @enderror" 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('description') border-sidebar-green @enderror" 
                                   placeholder="Brief description about the lender"></textarea>
-                        @error('description') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                        @error('description') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Document Uploads -->
@@ -552,24 +552,24 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Business License</label>
                                 <input wire:model="business_license" type="file" accept=".pdf,.jpg,.jpeg,.png" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('business_license') border-red-500 @enderror">
-                                @error('business_license') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('business_license') border-sidebar-green @enderror">
+                                @error('business_license') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <!-- Tax Certificate -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Tax Certificate</label>
                                 <input wire:model="tax_certificate" type="file" accept=".pdf,.jpg,.jpeg,.png" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('tax_certificate') border-red-500 @enderror">
-                                @error('tax_certificate') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('tax_certificate') border-sidebar-green @enderror">
+                                @error('tax_certificate') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <!-- Bank Statement -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Bank Statement</label>
                                 <input wire:model="bank_statement" type="file" accept=".pdf,.jpg,.jpeg,.png" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('bank_statement') border-red-500 @enderror">
-                                @error('bank_statement') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('bank_statement') border-sidebar-green @enderror">
+                                @error('bank_statement') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
                     </div>
@@ -581,7 +581,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="px-6 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="px-6 py-3 bg-sidebar-green text-white rounded-xl font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25 disabled:opacity-50 disabled:cursor-not-allowed"
                                 wire:loading.attr="disabled">
                             <span wire:loading.remove>Submit Application</span>
                             <span wire:loading>Submitting...</span>
@@ -637,7 +637,7 @@
                                         <div>
                                             <label class="text-sm font-medium text-gray-500">Website</label>
                                             <p class="text-gray-900">
-                                                <a href="{{ $selectedLender->website }}" target="_blank" class="text-red-600 hover:underline">{{ $selectedLender->website }}</a>
+                                                <a href="{{ $selectedLender->website }}" target="_blank" class="text-sidebar-green hover:underline">{{ $selectedLender->website }}</a>
                                             </p>
                                         </div>
                                     @endif
@@ -687,8 +687,8 @@
                                         @foreach($selectedLender->documents as $type => $path)
                                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
                                                 <div class="flex items-center space-x-3">
-                                                    <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
-                                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <div class="w-10 h-10 bg-sidebar-green-100 rounded-xl flex items-center justify-center">
+                                                        <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                                         </svg>
                                                     </div>
@@ -697,7 +697,7 @@
                                                         <p class="text-xs text-gray-500">Uploaded document</p>
                                                     </div>
                                                 </div>
-                                                <a href="{{ Storage::url($path) }}" target="_blank" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                                <a href="{{ Storage::url($path) }}" target="_blank" class="text-sidebar-green hover:text-sidebar-green-800 text-sm font-medium">
                                                     View
                                                 </a>
                                             </div>
@@ -717,7 +717,7 @@
                                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Application Timeline</h3>
                                 <div class="space-y-4">
                                     <div class="flex items-start space-x-3">
-                                        <div class="w-3 h-3 bg-red-500 rounded-full mt-2"></div>
+                                        <div class="w-3 h-3 bg-sidebar-green rounded-full mt-2"></div>
                                         <div>
                                             <p class="text-sm font-medium text-gray-900">Application Submitted</p>
                                             <p class="text-xs text-gray-500">{{ $selectedLender->created_at->format('M d, Y g:i A') }}</p>
@@ -743,14 +743,14 @@
                                             <div>
                                                 <p class="text-sm font-medium text-gray-900">Application Rejected</p>
                                                 <p class="text-xs text-gray-500">{{ $selectedLender->updated_at->format('M d, Y g:i A') }}</p>
-                                                <p class="text-sm text-red-600 mt-1">{{ $selectedLender->rejection_reason }}</p>
+                                                <p class="text-sm text-sidebar-green mt-1">{{ $selectedLender->rejection_reason }}</p>
                                             </div>
                                         </div>
                                     @endif
 
                                     @if($selectedLender->user)
                                         <div class="flex items-start space-x-3">
-                                            <div class="w-3 h-3 bg-red-400 rounded-full mt-2"></div>
+                                            <div class="w-3 h-3 bg-sidebar-green-400 rounded-full mt-2"></div>
                                             <div>
                                                 <p class="text-sm font-medium text-gray-900">User Account Created</p>
                                                 <p class="text-xs text-gray-500">{{ $selectedLender->user->created_at->format('M d, Y g:i A') }}</p>
@@ -771,7 +771,7 @@
                                             Approve Lender
                                         </button>
                                         <button onclick="document.getElementById('reject-action-modal').style.display='block'" 
-                                                class="flex-1 bg-red-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-red-700 transition-colors">
+                                                class="flex-1 bg-sidebar-green text-white py-2 px-4 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors">
                                             Reject Application
                                         </button>
                                     </div>
@@ -785,7 +785,7 @@
                                             <div class="mb-4">
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reason</label>
                                                 <textarea wire:model="rejection_reason" rows="3" 
-                                                          class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500" 
+                                                          class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" 
                                                           placeholder="Please provide a reason for rejection..."></textarea>
                                             </div>
                                             <div class="flex justify-end space-x-3">
@@ -795,7 +795,7 @@
                                                 </button>
                                                 <button wire:click="rejectLender({{ $selectedLender->id }})" 
                                                         onclick="document.getElementById('reject-action-modal').style.display='none'" 
-                                                        class="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors">
+                                                        class="px-4 py-2 bg-sidebar-green text-white rounded-xl hover:bg-sidebar-green-light transition-colors">
                                                     Reject
                                                 </button>
                                             </div>
@@ -827,8 +827,8 @@
                 <!-- Modal Header -->
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 bg-sidebar-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.348 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                             </svg>
                         </div>
@@ -845,14 +845,14 @@
                 </div>
 
                 <!-- Warning Message -->
-                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4 mb-6">
                     <div class="flex items-start space-x-3">
-                        <svg class="w-5 h-5 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-sidebar-green mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.348 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                         </svg>
                         <div>
-                            <h4 class="text-sm font-semibold text-red-800">Critical Action Warning</h4>
-                            <p class="text-sm text-red-700 mt-1">{{ $passwordConfirmMessage }}</p>
+                            <h4 class="text-sm font-semibold text-sidebar-green-800">Critical Action Warning</h4>
+                            <p class="text-sm text-sidebar-green-light mt-1">{{ $passwordConfirmMessage }}</p>
                         </div>
                     </div>
                 </div>
@@ -866,10 +866,10 @@
                         <input wire:model="currentPassword" 
                                type="password" 
                                placeholder="Your current password"
-                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 @error('currentPassword') border-red-500 @enderror"
+                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('currentPassword') border-sidebar-green @enderror"
                                autofocus>
                         @error('currentPassword') 
-                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
+                            <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> 
                         @enderror
                     </div>
 
@@ -881,7 +881,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 wire:loading.attr="disabled">
                             <span wire:loading.remove>Confirm Action</span>
                             <span wire:loading>Processing...</span>

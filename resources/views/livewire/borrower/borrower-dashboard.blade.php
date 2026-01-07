@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <!-- Apply Button -->
-                    <button wire:click="applyForLoan" class="w-full sm:w-auto bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg text-sm sm:text-base">
+                    <button wire:click="applyForLoan" class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg text-sm sm:text-base">
                         Apply for Loan
                     </button>
                 </div>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-between text-xs sm:text-sm">
-                    <div class="flex items-center space-x-1 text-red-600">
+                    <div class="flex items-center space-x-1 text-sidebar-green">
                         <svg class="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -64,14 +64,14 @@
             <!-- Approved Amount Card -->
             <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-red-600 rounded-lg flex items-center justify-center">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-sidebar-green rounded-lg flex items-center justify-center">
                         <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                     <div class="text-right">
                         <p class="text-xs sm:text-sm font-medium text-gray-500">Approved Amount</p>
-                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600">
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-sidebar-green">
                             @if($totalApprovedAmount >= 1000000)
                                 TSh {{ number_format($totalApprovedAmount/1000000, 1) }}M
                             @else
@@ -154,10 +154,10 @@
                                 <div class="flex items-center space-x-3">
                                     <div class="w-3 h-3 rounded-full 
                                         @if($status === 'approved') bg-green-500
-                                        @elseif($status === 'rejected') bg-red-500
+                                        @elseif($status === 'rejected') bg-sidebar-green
                                         @elseif($status === 'under_review') bg-yellow-500
                                         @elseif($status === 'submitted') bg-blue-500
-                                        @elseif($status === 'disbursed') bg-red-600
+                                        @elseif($status === 'disbursed') bg-sidebar-green
                                         @elseif($status === 'cancelled') bg-gray-500
                                         @else bg-gray-400
                                         @endif">
@@ -168,10 +168,10 @@
                                     <div class="w-20 sm:w-32 bg-gray-200 rounded-full h-2">
                                         <div class="h-2 rounded-full 
                                             @if($status === 'approved') bg-green-500
-                                            @elseif($status === 'rejected') bg-red-500
+                                            @elseif($status === 'rejected') bg-sidebar-green
                                             @elseif($status === 'under_review') bg-yellow-500
                                             @elseif($status === 'submitted') bg-blue-500
-                                            @elseif($status === 'disbursed') bg-red-600
+                                            @elseif($status === 'disbursed') bg-sidebar-green
                                             @elseif($status === 'cancelled') bg-gray-500
                                             @else bg-gray-400
                                             @endif" 
@@ -192,7 +192,7 @@
                         </div>
                         <h4 class="text-lg font-semibold text-black mb-2">No Applications Yet</h4>
                         <p class="text-gray-500 mb-4 text-sm sm:text-base">Start your borrowing journey by applying for your first loan.</p>
-                        <button wire:click="applyForLoan" class="bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors text-sm sm:text-base">
+                        <button wire:click="applyForLoan" class="bg-sidebar-green text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors text-sm sm:text-base">
                             Apply for Loan
                         </button>
                     </div>
@@ -234,7 +234,7 @@
                         <p class="text-gray-600 text-sm sm:text-base">Track the status and details of your loan applications</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button wire:click="applyForLoan" class="bg-red-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg text-sm sm:text-base">
+                        <button wire:click="applyForLoan" class="bg-sidebar-green text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg text-sm sm:text-base">
                             New Application
                         </button>
                     </div>
@@ -250,24 +250,24 @@
                                 <span class="text-sm font-bold text-black">TSh {{ number_format($application->requested_amount) }}</span>
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold 
                                     @if($application->status === 'approved') bg-green-100 text-green-800
-                                    @elseif($application->status === 'rejected') bg-red-100 text-red-800
+                                    @elseif($application->status === 'rejected') bg-sidebar-green-100 text-sidebar-green-800
                                     @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800
                                     @elseif($application->status === 'submitted') bg-blue-100 text-blue-800
-                                    @elseif($application->status === 'disbursed') bg-red-100 text-red-800
+                                    @elseif($application->status === 'disbursed') bg-sidebar-green-100 text-sidebar-green-800
                                     @else bg-gray-100 text-gray-800
                                     @endif">
                                     {{ ucfirst(str_replace('_', ' ', $application->status)) }}
                                 </span>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <!-- <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-1">
+                                <!-- <button wire:click="viewApplication({{ $application->id }})" class="text-sidebar-green hover:text-sidebar-green-light p-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                     </svg>
                                 </button> -->
                                 @if(in_array($application->status, ['submitted', 'under_review']))
-                                    <!-- <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-1">
+                                    <!-- <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-sidebar-green p-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
@@ -311,7 +311,7 @@
                         </div>
                         <h4 class="text-lg font-semibold text-black mb-2">No Applications Found</h4>
                         <p class="text-gray-500 mb-4 text-sm">You haven't submitted any loan applications yet.</p>
-                        <button wire:click="applyForLoan" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                        <button wire:click="applyForLoan" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
                             Apply for Your First Loan
                         </button>
                     </div>
@@ -340,13 +340,13 @@
                                     <div>
                                         <div class="text-sm font-bold text-black">TSh {{ number_format($application->requested_amount) }}</div>
                                         <div class="text-xs text-gray-500">{{ $application->requested_tenure_months }} months tenure</div>
-                                        <div class="text-xs text-red-600 font-medium mt-1">#{{ $application->application_number }}</div>
+                                        <div class="text-xs text-sidebar-green font-medium mt-1">#{{ $application->application_number }}</div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if($application->lender)
                                         <div class="flex items-center">
-                                            <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                                            <div class="w-8 h-8 bg-sidebar-green rounded-lg flex items-center justify-center">
                                                 <span class="text-white text-xs font-bold">{{ substr($application->lender->company_name, 0, 2) }}</span>
                                             </div>
                                             <div class="ml-3">
@@ -368,10 +368,10 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold 
                                         @if($application->status === 'approved') bg-green-100 text-green-800 border border-green-200
-                                        @elseif($application->status === 'rejected') bg-red-100 text-red-800 border border-red-200
+                                        @elseif($application->status === 'rejected') bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200
                                         @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800 border border-yellow-200
                                         @elseif($application->status === 'submitted') bg-blue-100 text-blue-800 border border-blue-200
-                                        @elseif($application->status === 'disbursed') bg-red-100 text-red-800 border border-red-200
+                                        @elseif($application->status === 'disbursed') bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200
                                         @else bg-gray-100 text-gray-800 border border-gray-200
                                         @endif">
                                         @if($application->status === 'approved')
@@ -396,14 +396,14 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
-                                        <!-- <button wire:click="viewApplication({{ $application->id }})" class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
+                                        <!-- <button wire:click="viewApplication({{ $application->id }})" class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
                                         </button> -->
                                         @if(in_array($application->status, ['submitted', 'under_review']))
-                                            <!-- <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-all duration-200">
+                                            <!-- <button wire:click="confirmWithdraw({{ $application->id }}, '{{ $application->application_number }}')" class="text-gray-400 hover:text-sidebar-green p-2 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                 </svg>
@@ -422,7 +422,7 @@
                                     </div>
                                     <h4 class="text-lg font-semibold text-black mb-2">No Applications Found</h4>
                                     <p class="text-gray-500 mb-4">You haven't submitted any loan applications yet.</p>
-                                    <button wire:click="applyForLoan" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                                    <button wire:click="applyForLoan" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
                                         Apply for Your First Loan
                                     </button>
                                 </td>
@@ -452,7 +452,7 @@
                     <div class="border-b border-gray-100 p-4 hover:bg-gray-50 transition-colors">
                         <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                                <div class="w-10 h-10 bg-sidebar-green rounded-lg flex items-center justify-center">
                                     <span class="text-white text-xs font-bold">{{ substr($product->name, 0, 2) }}</span>
                                 </div>
                                 <div>
@@ -461,12 +461,12 @@
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button wire:click="viewProductDetails({{ $product->id }})" class="text-red-600 hover:text-red-700 p-1">
+                                <button wire:click="viewProductDetails({{ $product->id }})" class="text-sidebar-green hover:text-sidebar-green-light p-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                 </button>
-                                <button wire:click="applyForLoan({{ $product->id }})" class="bg-red-600 text-white px-3 py-1 rounded text-xs font-semibold hover:bg-red-700 transition-colors">
+                                <button wire:click="applyForLoan({{ $product->id }})" class="bg-sidebar-green text-white px-3 py-1 rounded text-xs font-semibold hover:bg-sidebar-green-light transition-colors">
                                     Apply
                                 </button>
                             </div>
@@ -481,7 +481,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span>Interest:</span>
-                                <span class="font-medium text-red-600">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</span>
+                                <span class="font-medium text-sidebar-green">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</span>
                             </div>
                         </div>
                     </div>
@@ -516,13 +516,13 @@
                             <tr class="hover:bg-gray-50 transition-colors duration-200">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <div class="w-10 h-10 bg-sidebar-green rounded-lg flex items-center justify-center flex-shrink-0">
                                             <span class="text-white text-xs font-bold">{{ substr($product->name, 0, 2) }}</span>
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-bold text-black">{{ $product->name }}</div>
                                             @if($product->promotional_tag)
-                                                <span class="text-xs font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full">{{ $product->promotional_tag }}</span>
+                                                <span class="text-xs font-medium text-sidebar-green bg-sidebar-green-100 px-2 py-1 rounded-full">{{ $product->promotional_tag }}</span>
                                             @endif
                                         </div>
                                     </div>
@@ -541,7 +541,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-semibold text-red-600">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</div>
+                                    <div class="text-sm font-semibold text-sidebar-green">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</div>
                                     <div class="text-xs text-gray-500">{{ ucfirst($product->interest_type) }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -549,12 +549,12 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center space-x-2">
-                                        <button wire:click="viewProductDetails({{ $product->id }})" class="text-black hover:text-red-600 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="View Details">
+                                        <button wire:click="viewProductDetails({{ $product->id }})" class="text-black hover:text-sidebar-green p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="View Details">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
                                         </button>
-                                        <!-- <button wire:click="applyForLoan({{ $product->id }})" class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors text-sm">
+                                        <!-- <button wire:click="applyForLoan({{ $product->id }})" class="bg-sidebar-green text-white px-4 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors text-sm">
                                             Apply Now
                                         </button> -->
                                     </div>
@@ -589,7 +589,7 @@
             <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
+                        <div class="w-12 h-12 bg-sidebar-green rounded-lg flex items-center justify-center">
                             <span class="text-white text-sm font-bold">{{ substr($selectedProduct->name, 0, 2) }}</span>
                         </div>
                         <div>
@@ -627,7 +627,7 @@
                         <h4 class="text-sm font-semibold text-black mb-2">Interest Rate</h4>
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm text-gray-600">Rate:</span>
-                            <span class="text-sm font-bold text-red-600">{{ $selectedProduct->interest_rate_min }}% - {{ $selectedProduct->interest_rate_max }}%</span>
+                            <span class="text-sm font-bold text-sidebar-green">{{ $selectedProduct->interest_rate_min }}% - {{ $selectedProduct->interest_rate_max }}%</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-gray-600">Type:</span>
@@ -649,7 +649,7 @@
                         <div class="bg-gray-50 rounded-lg p-4">
                             <h4 class="text-sm font-semibold text-black mb-2">Max DSR</h4>
                             <div class="text-center">
-                                <span class="text-lg font-bold text-red-600">{{ $selectedProduct->minimum_dsr ?? 'N/A' }}%</span>
+                                <span class="text-lg font-bold text-sidebar-green">{{ $selectedProduct->minimum_dsr ?? 'N/A' }}%</span>
                             </div>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4">
@@ -675,12 +675,12 @@
 
                     <!-- Additional Features -->
                     @if($selectedProduct->promotional_tag)
-                        <div class="bg-red-50 rounded-lg p-4 border border-red-200">
+                        <div class="bg-sidebar-green-50 rounded-lg p-4 border border-sidebar-green-200">
                             <div class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                <span class="text-sm font-semibold text-red-700">{{ $selectedProduct->promotional_tag }}</span>
+                                <span class="text-sm font-semibold text-sidebar-green-light">{{ $selectedProduct->promotional_tag }}</span>
                             </div>
                         </div>
                     @endif
@@ -691,7 +691,7 @@
                     <button wire:click="closeProductModal" class="flex-1 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         Close
                     </button>
-                    <button wire:click="applyForLoan({{ $selectedProduct->id }})" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold">
+                    <button wire:click="applyForLoan({{ $selectedProduct->id }})" class="flex-1 px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors font-semibold">
                         Apply Now
                     </button>
                 </div>
@@ -705,8 +705,8 @@
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                 <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </div>
@@ -717,7 +717,7 @@
                     <button wire:click="closeWithdrawModal" class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         Cancel
                     </button>
-                    <button wire:click="withdrawApplication" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <button wire:click="withdrawApplication" class="px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors">
                         Withdraw Application
                     </button>
                 </div>

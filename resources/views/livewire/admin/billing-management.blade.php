@@ -9,12 +9,12 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-2 bg-white border border-gray-300 px-4 py-2 rounded-xl shadow-sm">
-                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                        <div class="w-2 h-2 bg-sidebar-green rounded-full animate-pulse"></div>
                         <span class="text-sm font-medium text-gray-700">Billing Active</span>
                     </div>
                     @if($activeTab === 'applications' && count($selectedApplications) > 0)
                         <button wire:click="createBillsForSelected" 
-                                class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg">
+                                class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>
@@ -68,9 +68,9 @@
                         <div class="text-lg font-bold text-yellow-700">TSh {{ number_format($lenderStats['pending_amount']) }}</div>
                     </div>
                     
-                    <div class="bg-red-50 rounded-lg p-3 border border-red-200">
-                        <div class="text-xs font-medium text-red-600 uppercase tracking-wide">Overdue Amount</div>
-                        <div class="text-lg font-bold text-red-700">TSh {{ number_format($lenderStats['overdue_amount']) }}</div>
+                    <div class="bg-sidebar-green-50 rounded-lg p-3 border border-sidebar-green-200">
+                        <div class="text-xs font-medium text-sidebar-green uppercase tracking-wide">Overdue Amount</div>
+                        <div class="text-lg font-bold text-sidebar-green-light">TSh {{ number_format($lenderStats['overdue_amount']) }}</div>
                     </div>
                     
                     <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
@@ -92,7 +92,7 @@
         @endif
 
         @if (session()->has('error'))
-            <div class="bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-xl mb-6 flex items-center space-x-3">
+            <div class="bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-800 px-6 py-4 rounded-xl mb-6 flex items-center space-x-3">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
@@ -105,14 +105,14 @@
             <div class="border-b border-gray-200">
                 <nav class="-mb-px flex space-x-8 px-8" aria-label="Tabs">
                     <button wire:click="setActiveTab('applications')" 
-                            class="border-transparent {{ $activeTab === 'applications' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
+                            class="border-transparent {{ $activeTab === 'applications' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                         Booked Applications
                     </button>
                     <button wire:click="setActiveTab('bills')" 
-                            class="border-transparent {{ $activeTab === 'bills' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
+                            class="border-transparent {{ $activeTab === 'bills' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
@@ -128,7 +128,7 @@
                     <div>
                         <label class="block text-sm font-medium text-black mb-1">Search</label>
                         <input wire:model.live="search" type="text" 
-                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                placeholder="Search applications or bills...">
                     </div>
 
@@ -136,7 +136,7 @@
                     @if($activeTab === 'bills')
                         <div>
                             <label class="block text-sm font-medium text-black mb-1">Status</label>
-                            <select wire:model.live="filterStatus" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <select wire:model.live="filterStatus" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <option value="all">All Status</option>
                                 <option value="pending">Pending</option>
                                 <option value="sent">Sent</option>
@@ -150,7 +150,7 @@
                     <!-- Lender Filter -->
                     <div>
                         <label class="block text-sm font-medium text-black mb-1">Lender</label>
-                        <select wire:model.live="filterLender" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                        <select wire:model.live="filterLender" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                             <option value="all">All Lenders</option>
                             @foreach($lenders as $lender)
                                 <option value="{{ $lender->id }}">{{ $lender->company_name }}</option>
@@ -162,14 +162,14 @@
                     <div>
                         <label class="block text-sm font-medium text-black mb-1">From Date</label>
                         <input wire:model.live="filterDateFrom" type="date" 
-                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     </div>
 
                     <!-- Date To -->
                     <div>
                         <label class="block text-sm font-medium text-black mb-1">To Date</label>
                         <input wire:model.live="filterDateTo" type="date" 
-                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                               class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
                                 <tr>
                                     <th class="px-6 py-4 text-left">
                                         <input wire:model.live="selectAll" type="checkbox" 
-                                               class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                     </th>
                                     <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Application</th>
                                     <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Applicant</th>
@@ -223,7 +223,7 @@
                                     <tr class="hover:bg-gray-50 transition-colors duration-200">
                                         <td class="px-6 py-4">
                                             <input wire:model.live="selectedApplications" type="checkbox" value="{{ $application->id }}" 
-                                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                                   class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div>
@@ -287,7 +287,7 @@
                                                 
                                                 @if(!$hasBill)
                                                     <button wire:click="createSingleBill({{ $application->id }})" 
-                                                            class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200"
+                                                            class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200"
                                                             title="Create Commission Bill">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -388,19 +388,19 @@
                                             @if($bill->total_paid > 0)
                                                 <div class="text-xs text-green-600">Paid: TSh {{ number_format($bill->total_paid) }}</div>
                                                 @if($bill->balance > 0)
-                                                    <div class="text-xs text-red-600">Balance: TSh {{ number_format($bill->balance) }}</div>
+                                                    <div class="text-xs text-sidebar-green">Balance: TSh {{ number_format($bill->balance) }}</div>
                                                 @endif
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
                                                 @if($bill->status === 'paid') bg-green-100 text-green-800 border border-green-200
-                                                @elseif($bill->status === 'overdue') bg-red-100 text-red-800 border border-red-200
+                                                @elseif($bill->status === 'overdue') bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200
                                                 @elseif($bill->status === 'sent') bg-blue-100 text-blue-800 border border-blue-200
                                                 @else bg-yellow-100 text-yellow-800 border border-yellow-200 @endif">
                                                 <div class="w-2 h-2 rounded-full mr-2
                                                     @if($bill->status === 'paid') bg-green-400
-                                                    @elseif($bill->status === 'overdue') bg-red-400
+                                                    @elseif($bill->status === 'overdue') bg-sidebar-green-400
                                                     @elseif($bill->status === 'sent') bg-blue-400
                                                     @else bg-yellow-400 @endif"></div>
                                                 {{ ucfirst($bill->status) }}
@@ -409,7 +409,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-black">{{ $bill->due_date->format('M d, Y') }}</div>
                                             @if($bill->is_overdue)
-                                                <div class="text-xs text-red-600">{{ $bill->days_overdue }} days overdue</div>
+                                                <div class="text-xs text-sidebar-green">{{ $bill->days_overdue }} days overdue</div>
                                             @else
                                                 <div class="text-xs text-gray-500">{{ $bill->due_date->diffForHumans() }}</div>
                                             @endif
@@ -418,7 +418,7 @@
                                             <div class="flex items-center space-x-2">
                                                 @if($bill->status !== 'paid')
                                                     <button wire:click="openPaymentModal({{ $bill->id }})" 
-                                                            class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200"
+                                                            class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200"
                                                             title="Record Payment">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -495,7 +495,7 @@
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-black mb-2">Notes (Optional)</label>
                         <textarea wire:model="billNotes" rows="3" 
-                                  class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                  class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                   placeholder="Add any notes for these commission bills..."></textarea>
                     </div>
 
@@ -505,7 +505,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
+                                class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors">
                             Create {{ count($selectedApplications) }} Bills
                         </button>
                     </div>
@@ -541,7 +541,7 @@
                         </div>
                         <div>
                             <span class="text-gray-600">Balance:</span>
-                            <span class="font-medium ml-2 text-red-600">TSh {{ number_format($selectedBill->balance) }}</span>
+                            <span class="font-medium ml-2 text-sidebar-green">TSh {{ number_format($selectedBill->balance) }}</span>
                         </div>
                         <div>
                             <span class="text-gray-600">Due Date:</span>
@@ -556,46 +556,46 @@
                             <label class="block text-sm font-medium text-black mb-2">Payment Amount *</label>
                             <div class="relative">
                                 <input wire:model="paymentAmount" type="number" step="0.01" min="0.01" 
-                                       class="w-full border border-gray-300 rounded-xl px-3 py-2 pl-12 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                       class="w-full border border-gray-300 rounded-xl px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <span class="absolute left-3 top-2 text-gray-500">TSh</span>
                             </div>
-                            @error('paymentAmount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @error('paymentAmount') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-black mb-2">Payment Method *</label>
-                            <select wire:model="paymentMethod" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                            <select wire:model="paymentMethod" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 <option value="bank_transfer">Bank Transfer</option>
                                 <option value="mobile_money">Mobile Money</option>
                                 <option value="cash">Cash</option>
                                 <option value="cheque">Cheque</option>
                                 <option value="other">Other</option>
                             </select>
-                            @error('paymentMethod') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @error('paymentMethod') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-black mb-2">Payment Date *</label>
                             <input wire:model="paymentDate" type="date" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                            @error('paymentDate') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                            @error('paymentDate') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-black mb-2">Payment Reference</label>
                             <input wire:model="paymentReference" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                    placeholder="Transaction ID, Cheque number, etc.">
-                            @error('paymentReference') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @error('paymentReference') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-black mb-2">Payment Notes</label>
                         <textarea wire:model="paymentNotes" rows="3" 
-                                  class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                  class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
                                   placeholder="Additional notes about this payment..."></textarea>
-                        @error('paymentNotes') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        @error('paymentNotes') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="flex justify-end space-x-4 pt-6">
@@ -604,7 +604,7 @@
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
+                                class="bg-sidebar-green text-white px-6 py-2 rounded-xl font-semibold hover:bg-sidebar-green-light transition-colors">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
@@ -665,7 +665,7 @@
                                     @if($selectedApplication->debt_to_income_ratio)
                                         <div class="flex justify-between py-2 border-b border-gray-200">
                                             <span class="text-gray-600">DSR:</span>
-                                            <span class="font-medium {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-600' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                            <span class="font-medium {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-600' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                                 {{ number_format($selectedApplication->debt_to_income_ratio, 1) }}%
                                             </span>
                                         </div>
@@ -703,7 +703,7 @@
                                             @case('submitted') bg-blue-100 text-blue-800 @break
                                             @case('under_review') bg-yellow-100 text-yellow-800 @break
                                             @case('approved') bg-green-100 text-green-800 @break
-                                            @case('rejected') bg-red-100 text-red-800 @break
+                                            @case('rejected') bg-sidebar-green-100 text-sidebar-green-800 @break
                                             @case('disbursed') bg-purple-100 text-purple-800 @break
                                             @default bg-gray-100 text-gray-800
                                         @endswitch">
@@ -755,7 +755,7 @@
                                                 <span class="text-sm font-medium text-black">{{ $bill->bill_number }}</span>
                                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
                                                     @if($bill->status === 'paid') bg-green-100 text-green-800
-                                                    @elseif($bill->status === 'overdue') bg-red-100 text-red-800
+                                                    @elseif($bill->status === 'overdue') bg-sidebar-green-100 text-sidebar-green-800
                                                     @elseif($bill->status === 'sent') bg-blue-100 text-blue-800
                                                     @else bg-yellow-100 text-yellow-800 @endif">
                                                     {{ ucfirst($bill->status) }}
@@ -787,7 +787,7 @@
                                                 </svg>
                                                 <span class="text-sm text-black">{{ $document->document_type }}</span>
                                             </div>
-                                            <button class="text-red-600 hover:text-red-800 text-sm">View</button>
+                                            <button class="text-sidebar-green hover:text-sidebar-green-800 text-sm">View</button>
                                         </div>
                                     @endforeach
                                 </div>
@@ -859,7 +859,7 @@
                                 <span class="text-gray-600">Status:</span>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                                     @if($selectedBillForView->status === 'paid') bg-green-100 text-green-800
-                                    @elseif($selectedBillForView->status === 'overdue') bg-red-100 text-red-800
+                                    @elseif($selectedBillForView->status === 'overdue') bg-sidebar-green-100 text-sidebar-green-800
                                     @elseif($selectedBillForView->status === 'sent') bg-blue-100 text-blue-800
                                     @else bg-yellow-100 text-yellow-800 @endif">
                                     {{ ucfirst($selectedBillForView->status) }}
@@ -867,7 +867,7 @@
                             </div>
                             <div class="flex justify-between py-2 border-b border-gray-200">
                                 <span class="text-gray-600">Due Date:</span>
-                                <span class="font-medium {{ $selectedBillForView->is_overdue ? 'text-red-600' : '' }}">
+                                <span class="font-medium {{ $selectedBillForView->is_overdue ? 'text-sidebar-green' : '' }}">
                                     {{ $selectedBillForView->due_date->format('M d, Y') }}
                                     @if($selectedBillForView->is_overdue)
                                         ({{ $selectedBillForView->days_overdue }} days overdue)
@@ -915,7 +915,7 @@
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Balance:</span>
-                                        <span class="font-medium {{ $selectedBillForView->balance > 0 ? 'text-red-600' : 'text-green-600' }}">
+                                        <span class="font-medium {{ $selectedBillForView->balance > 0 ? 'text-sidebar-green' : 'text-green-600' }}">
                                             TSh {{ number_format($selectedBillForView->balance) }}
                                         </span>
                                     </div>
@@ -946,7 +946,7 @@
                     <div class="flex items-center space-x-3">
                         @if($selectedBillForView->status !== 'paid')
                             <button wire:click="openPaymentModal({{ $selectedBillForView->id }})" 
-                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                    class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                                 </svg>
@@ -977,7 +977,7 @@
                         @if(in_array($selectedBillForView->status, ['pending', 'sent']) && $selectedBillForView->payments()->count() === 0)
                             <button wire:click="cancelBill({{ $selectedBillForView->id }})" 
                                     onclick="return confirm('Are you sure you want to cancel this bill?')"
-                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                    class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>

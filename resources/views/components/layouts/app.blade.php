@@ -208,11 +208,11 @@
             const searchInputs = document.querySelectorAll('input[type="text"]');
             searchInputs.forEach(input => {
                 input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('ring-2', 'ring-brand-red/50');
+                    this.parentElement.classList.add('ring-2', 'ring-sidebar-green/50');
                 });
                 
                 input.addEventListener('blur', function() {
-                    this.parentElement.classList.remove('ring-2', 'ring-brand-red/50');
+                    this.parentElement.classList.remove('ring-2', 'ring-sidebar-green/50');
                 });
 
                 // Add search suggestions (placeholder functionality)

@@ -4,7 +4,7 @@
         <div class="text-center">
             <!-- Logo -->
             <div class="text-3xl font-bold font-poppins text-black mb-2">
-                Lead<span class="text-brand-red">Generator</span>
+                Lead<span class="text-sidebar-green">Generator</span>
             </div>
             <h2 class="text-2xl font-semibold text-gray-900 mb-2">Set New Password</h2>
             <p class="text-gray-600">Create a strong password for your account</p>
@@ -15,8 +15,8 @@
             
             <!-- Description -->
             <div class="mb-6 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-red/10 rounded-full mb-4">
-                    <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-sidebar-green/10 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                     </svg>
                 </div>
@@ -75,7 +75,7 @@
                             type="password" 
                             autocomplete="new-password" 
                             required 
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Enter your new password"
                         >
                         <button 
@@ -108,7 +108,7 @@
                             type="password" 
                             autocomplete="new-password" 
                             required 
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Confirm your new password"
                         >
                         <button 
@@ -153,7 +153,7 @@
                 <div>
                     <button 
                         type="submit" 
-                        class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+                        class="w-full bg-sidebar-green text-white py-3 rounded-lg font-semibold hover:bg-sidebar-green-light focus:ring-4 focus:ring-sidebar-green/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
                     >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>

@@ -7,11 +7,11 @@
                 <p class="text-gray-600 text-lg">Manage your loan products and settings</p>
             </div>
             <div class="flex items-center space-x-3">
-                <div class="flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full">
-                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    <span class="text-sm font-medium text-red-700">{{ $stats['active'] ?? 0 }} Active Products</span>
+                <div class="flex items-center space-x-2 bg-sidebar-green-50 px-4 py-2 rounded-full">
+                    <div class="w-2 h-2 bg-sidebar-green rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium text-sidebar-green-light">{{ $stats['active'] ?? 0 }} Active Products</span>
                 </div>
-                <button wire:click="showCreateForm" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-sm">
+                <button wire:click="showCreateForm" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-sm">
                     + Create Product
                 </button>
             </div>
@@ -31,7 +31,7 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
+        <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-lg" role="alert">
             <div class="flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -63,9 +63,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600 mb-1">Active Products</p>
-                    <p class="text-3xl font-bold text-red-600">{{ $stats['active'] ?? 0 }}</p>
+                    <p class="text-3xl font-bold text-sidebar-green">{{ $stats['active'] ?? 0 }}</p>
                 </div>
-                <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
+                <div class="w-12 h-12 bg-sidebar-green rounded-lg flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -120,19 +120,19 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                     </div>
-                    <input wire:model.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-gray-500 text-black" placeholder="Search products...">
+                    <input wire:model.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green placeholder-gray-500 text-black" placeholder="Search products...">
                 </div>
             </div>
 
             <!-- Filters -->
             <div class="flex items-center space-x-4">
-                <select wire:model.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                <select wire:model.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                 </select>
 
-                <select wire:model.live="employmentFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                <select wire:model.live="employmentFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <option value="all">All Employment Types</option>
                     <option value="employed">Employed Only</option>
                     <option value="unemployed">Unemployed/Self-Employed</option>
@@ -161,7 +161,7 @@
                         <!-- Product Info -->
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <div class="w-10 h-10 bg-sidebar-green rounded-lg flex items-center justify-center flex-shrink-0">
                                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                                     </svg>
@@ -170,7 +170,7 @@
                                     <div class="flex items-center space-x-2">
                                         <p class="text-sm font-bold text-black">{{ $product->name }}</p>
                                         @if($product->promotional_tag)
-                                            <span class="bg-red-100 text-red-700 text-xs font-medium px-2 py-1 rounded-md">{{ $product->promotional_tag }}</span>
+                                            <span class="bg-sidebar-green-100 text-sidebar-green-light text-xs font-medium px-2 py-1 rounded-md">{{ $product->promotional_tag }}</span>
                                         @endif
                                     </div>
                                     <p class="text-xs text-gray-500">{{ $product->product_code }}</p>
@@ -185,7 +185,7 @@
 
                         <!-- Interest Rate -->
                         <td class="px-6 py-4">
-                            <span class="text-sm font-semibold text-red-600">{{ $product->interest_range }}</span>
+                            <span class="text-sm font-semibold text-sidebar-green">{{ $product->interest_range }}</span>
                         </td>
 
                         <!-- Tenure -->
@@ -207,7 +207,7 @@
                                 @endif
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" wire:click="confirmActivate({{ $product->id }}, '{{ $product->name }}')" {{ $product->is_active ? 'checked' : '' }} class="sr-only peer">
-                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-red-500/25 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600"></div>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-sidebar-green/25 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sidebar-green"></div>
                                 </label>
                             </div>
                         </td>
@@ -236,7 +236,7 @@
 
                                 <!-- Delete -->
                                 <button wire:click="confirmDelete({{ $product->id }}, '{{ $product->name }}')" 
-                                        class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors duration-200" 
+                                        class="text-sidebar-green hover:bg-sidebar-green-50 p-2 rounded-lg transition-colors duration-200" 
                                         title="Delete">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -249,14 +249,14 @@
                     <tr>
                         <td colspan="6" class="px-6 py-16 text-center">
                             <div class="flex flex-col items-center">
-                                <div class="w-16 h-16 bg-red-600 rounded-lg flex items-center justify-center mb-4">
+                                <div class="w-16 h-16 bg-sidebar-green rounded-lg flex items-center justify-center mb-4">
                                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                                     </svg>
                                 </div>
                                 <h3 class="text-lg font-semibold text-black mb-2">No loan products found</h3>
                                 <p class="text-gray-500 mb-4">Get started by creating your first loan product.</p>
-                                <button wire:click="showCreateForm" class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors duration-200">
+                                <button wire:click="showCreateForm" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-medium hover:bg-sidebar-green-light transition-colors duration-200">
                                     Create First Product
                                 </button>
                             </div>
@@ -276,8 +276,8 @@
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                 <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
                     </div>
@@ -288,7 +288,7 @@
                     <button wire:click="closeDeleteModal" class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         Cancel
                     </button>
-                    <button wire:click="deleteProduct" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <button wire:click="deleteProduct" class="px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors">
                         Delete Product
                     </button>
                 </div>
@@ -301,8 +301,8 @@
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                 <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
@@ -313,7 +313,7 @@
                     <button wire:click="closeActivateModal" class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         Cancel
                     </button>
-                    <button wire:click="toggleProductStatus" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <button wire:click="toggleProductStatus" class="px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors">
                         Confirm
                     </button>
                 </div>

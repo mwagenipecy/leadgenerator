@@ -52,7 +52,15 @@ class CompleteLoanApplication extends Component
         $this->userProfile = Auth::user()->profile;
         
         if (!$this->userProfile || $this->userProfile->profile_completion_percentage < 70) {
-            session()->flash('error', 'Please complete your profile first.');
+            session()->flash('error', 'Please complete your profile first. Your profile must be at least 70% complete to apply for a loan.');
+            return redirect()->route('loan-application.profile');
+        }
+        
+        // Check for mandatory emergency contact information
+        if (empty($this->userProfile->emergency_contact_name) || 
+            empty($this->userProfile->emergency_contact_relationship) || 
+            empty($this->userProfile->emergency_contact_phone)) {
+            session()->flash('error', 'Emergency contact information is required. Please complete the Emergency Contact section in your profile before applying for a loan.');
             return redirect()->route('loan-application.profile');
         }
 
@@ -136,12 +144,12 @@ class CompleteLoanApplication extends Component
             'account_type' => $this->userProfile->account_type,
             'years_with_bank' => $this->userProfile->years_with_bank,
             
-            // Emergency Contact
-            'emergency_contact_name' => $this->userProfile->emergency_contact_name,
-            'emergency_contact_relationship' => $this->userProfile->emergency_contact_relationship,
-            'emergency_contact_phone' => $this->userProfile->emergency_contact_phone,
-            'emergency_contact_address' => $this->userProfile->emergency_contact_address,
-            'preferred_disbursement_method' => $this->userProfile->preferred_disbursement_method,
+            // Emergency Contact (with fallback values)
+            'emergency_contact_name' => $this->userProfile->emergency_contact_name ?? 'Not Provided',
+            'emergency_contact_relationship' => $this->userProfile->emergency_contact_relationship ?? 'other',
+            'emergency_contact_phone' => $this->userProfile->emergency_contact_phone ?? 'Not Provided',
+            'emergency_contact_address' => $this->userProfile->emergency_contact_address ?? '',
+            'preferred_disbursement_method' => $this->userProfile->preferred_disbursement_method ?? 'bank_transfer',
             
             // Calculated values
             'debt_to_income_ratio' => $this->prequalificationData['calculated_dsr'] ?? 0,

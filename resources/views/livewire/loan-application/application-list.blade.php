@@ -191,7 +191,7 @@
             @endif
 
             @if (session()->has('error'))
-                <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl" role="alert">
+                <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-xl" role="alert">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -459,7 +459,7 @@
                             
                             <button wire:click="bulkReject" 
                                     wire:confirm="Are you sure you want to reject {{ count($selectedApplications) }} application(s)?"
-                                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors flex items-center">
+                                    class="bg-sidebar-green text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors flex items-center">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
@@ -652,7 +652,7 @@
                                             @if($application->debt_to_income_ratio && $isBooked)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                     {{ $application->debt_to_income_ratio <= 30 ? 'bg-green-100 text-green-800' : 
-                                                       ($application->debt_to_income_ratio <= 40 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                                       ($application->debt_to_income_ratio <= 40 ? 'bg-yellow-100 text-yellow-800' : 'bg-sidebar-green-100 text-sidebar-green-800') }}">
                                                     {{ number_format($application->debt_to_income_ratio, 1) }}%
                                                 </span>
                                             @elseif($isUnbooked)
@@ -667,7 +667,7 @@
                                                     @case('submitted') bg-blue-100 text-blue-800 @break
                                                     @case('under_review') bg-yellow-100 text-yellow-800 @break
                                                     @case('approved') bg-green-100 text-green-800 @break
-                                                    @case('rejected') bg-red-100 text-red-800 @break
+                                                    @case('rejected') bg-sidebar-green-100 text-sidebar-green-800 @break
                                                     @case('disbursed') bg-purple-100 text-purple-800 @break
                                                     @default bg-gray-100 text-gray-800
                                                 @endswitch">
@@ -718,7 +718,7 @@
                                                             </svg>
                                                         </button>
                                                         <button wire:click="rejectApplication({{ $application->id }})" 
-                                                                class="text-red-600 hover:text-red-900 p-1.5 rounded-lg hover:bg-red-50 transition-all duration-200"
+                                                                class="text-sidebar-green hover:text-sidebar-green-900 p-1.5 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200"
                                                                 title="Reject">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -787,7 +787,7 @@
                                             @case('submitted') bg-blue-100 text-blue-800 @break
                                             @case('under_review') bg-yellow-100 text-yellow-800 @break
                                             @case('approved') bg-green-100 text-green-800 @break
-                                            @case('rejected') bg-red-100 text-red-800 @break
+                                            @case('rejected') bg-sidebar-green-100 text-sidebar-green-800 @break
                                             @case('disbursed') bg-purple-100 text-purple-800 @break
                                             @default bg-gray-100 text-gray-800
                                         @endswitch">
@@ -835,7 +835,7 @@
                                 <div class="text-center p-3 bg-gray-50 rounded-lg">
                                     <div class="text-xs text-gray-500 mb-1">DSR</div>
                                     @if($application->debt_to_income_ratio && $isBooked)
-                                        <div class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                        <div class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                             {{ number_format($application->debt_to_income_ratio, 1) }}%
                                         </div>
                                     @elseif($isUnbooked)
@@ -914,7 +914,7 @@
                                                 </svg>
                                             </button>
                                             <button wire:click="rejectApplication({{ $application->id }})" 
-                                                    class="text-red-600 hover:text-red-800 p-1.5 rounded-lg hover:bg-red-100 transition-all duration-200"
+                                                    class="text-sidebar-green hover:text-sidebar-green-800 p-1.5 rounded-lg hover:bg-sidebar-green-100 transition-all duration-200"
                                                     title="Reject">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -1007,7 +1007,7 @@
                                                 @case('submitted') bg-blue-100 text-blue-800 @break
                                                 @case('under_review') bg-yellow-100 text-yellow-800 @break
                                                 @case('approved') bg-green-100 text-green-800 @break
-                                                @case('rejected') bg-red-100 text-red-800 @break
+                                                @case('rejected') bg-sidebar-green-100 text-sidebar-green-800 @break
                                                 @case('disbursed') bg-purple-100 text-purple-800 @break
                                                 @default bg-gray-100 text-gray-800
                                             @endswitch">
@@ -1087,7 +1087,7 @@
                                             <div class="flex justify-between py-2 border-b border-gray-100">
                                                 <span class="text-sm text-gray-600">DSR:</span>
                                                 @if($application->debt_to_income_ratio)
-                                                    <span class="text-sm font-semibold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                                    <span class="text-sm font-semibold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                                         {{ number_format($application->debt_to_income_ratio, 1) }}%
                                                     </span>
                                                 @else
@@ -1193,7 +1193,7 @@
                                                 Approve
                                             </button>
                                             <button wire:click="rejectApplication({{ $application->id }})" 
-                                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                                    class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                 </svg>
@@ -1257,7 +1257,7 @@
                         @case('submitted') bg-blue-100 text-blue-800 @break
                         @case('under_review') bg-yellow-100 text-yellow-800 @break
                         @case('approved') bg-green-100 text-green-800 @break
-                        @case('rejected') bg-red-100 text-red-800 @break
+                        @case('rejected') bg-sidebar-green-100 text-sidebar-green-800 @break
                         @case('disbursed') bg-purple-100 text-purple-800 @break
                         @default bg-gray-100 text-gray-800
                     @endswitch">
@@ -1285,7 +1285,7 @@
                             Approve
                         </button>
                         <button wire:click="rejectApplication({{ $selectedApplication->id }})" 
-                                class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
@@ -1352,11 +1352,11 @@
                         <div class="text-2xl font-bold text-green-600">TSh {{ number_format($selectedApplication->total_monthly_income/1000, 0) }}K</div>
                         <div class="text-sm text-green-700">Monthly Income</div>
                     </div>
-                    <div class="p-4 {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'bg-green-50' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'bg-yellow-50' : 'bg-red-50') }} rounded-lg">
-                        <div class="text-2xl font-bold {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-600' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                    <div class="p-4 {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'bg-green-50' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'bg-yellow-50' : 'bg-sidebar-green-50') }} rounded-lg">
+                        <div class="text-2xl font-bold {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-600' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                             {{ number_format($selectedApplication->debt_to_income_ratio ?? 0, 1) }}%
                         </div>
-                        <div class="text-sm {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-700' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-700' : 'text-red-700') }}">DSR</div>
+                        <div class="text-sm {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-700' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-700' : 'text-sidebar-green-light') }}">DSR</div>
                     </div>
                 </div>
             </div>
@@ -1467,7 +1467,7 @@
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                     <span class="text-sm font-medium text-gray-600">Debt-to-Income Ratio</span>
-                                    <span class="text-sm font-bold {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-600' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-red-600') }}">
+                                    <span class="text-sm font-bold {{ $selectedApplication->debt_to_income_ratio <= 30 ? 'text-green-600' : ($selectedApplication->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                         {{ number_format($selectedApplication->debt_to_income_ratio ?? 0, 1) }}%
                                     </span>
                                 </div>
@@ -1484,7 +1484,7 @@
                                     @php
                                         $dsr = $selectedApplication->debt_to_income_ratio ?? 0;
                                         $riskLevel = $dsr <= 30 ? 'Low' : ($dsr <= 40 ? 'Medium' : 'High');
-                                        $riskColor = $dsr <= 30 ? 'text-green-600' : ($dsr <= 40 ? 'text-yellow-600' : 'text-red-600');
+                                        $riskColor = $dsr <= 30 ? 'text-green-600' : ($dsr <= 40 ? 'text-yellow-600' : 'text-sidebar-green');
                                     @endphp
                                     <span class="text-sm font-bold {{ $riskColor }}">{{ $riskLevel }}</span>
                                 </div>
@@ -1691,7 +1691,7 @@
                             <div class="bg-gray-50 rounded-lg p-6 space-y-4">
                                 <div>
                                     <label class="text-sm font-medium text-gray-600">Total Monthly Obligations</label>
-                                    <p class="text-lg font-bold text-red-600 mt-1">TSh {{ number_format($selectedApplication->monthly_expenses ?? 0) }}</p>
+                                    <p class="text-lg font-bold text-sidebar-green mt-1">TSh {{ number_format($selectedApplication->monthly_expenses ?? 0) }}</p>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     
@@ -1844,8 +1844,8 @@
                                                         </svg>
                                                     </div>
                                                 @elseif($extension === 'pdf')
-                                                    <div class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
-                                                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <div class="h-12 w-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center">
+                                                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                                         </svg>
                                                     </div>
@@ -2021,7 +2021,7 @@
                                         <li class="p-4">
                                             <div class="flex items-center space-x-4">
                                                 <div class="flex-shrink-0">
-                                                    <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center">
+                                                    <span class="h-8 w-8 rounded-full bg-sidebar-green flex items-center justify-center">
                                                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                         </svg>
@@ -2033,7 +2033,7 @@
                                                     @if($selectedApplication->rejection_reasons && count($selectedApplication->rejection_reasons) > 0)
                                                         <div class="mt-2">
                                                             <p class="text-xs text-gray-600 mb-1">Rejection reasons:</p>
-                                                            <ul class="text-xs text-red-600 list-disc list-inside">
+                                                            <ul class="text-xs text-sidebar-green list-disc list-inside">
                                                                 @foreach($selectedApplication->rejection_reasons as $reason)
                                                                     <li>{{ $reason }}</li>
                                                                 @endforeach
@@ -2042,7 +2042,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="text-right">
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sidebar-green-100 text-sidebar-green-800">
                                                         Rejected
                                                     </span>
                                                 </div>
@@ -2080,16 +2080,16 @@
                         @if($selectedApplication->status === 'rejected' && $selectedApplication->rejection_reasons)
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Rejection Details</h3>
-                                <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                                <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-6">
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="h-5 w-5 text-sidebar-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
                                         </div>
                                         <div>
-                                            <h4 class="text-sm font-medium text-red-800 mb-2">Application was rejected for the following reasons:</h4>
-                                            <ul class="text-sm text-red-700 list-disc list-inside space-y-1">
+                                            <h4 class="text-sm font-medium text-sidebar-green-800 mb-2">Application was rejected for the following reasons:</h4>
+                                            <ul class="text-sm text-sidebar-green-light list-disc list-inside space-y-1">
                                                 @foreach($selectedApplication->rejection_reasons as $reason)
                                                     <li>{{ $reason }}</li>
                                                 @endforeach
@@ -2196,39 +2196,39 @@
 
                     <!-- Rejection Section -->
                     <div class="space-y-4">
-                        <h4 class="text-md font-medium text-red-700">Reject Application</h4>
-                        <div class="bg-red-50 rounded-lg p-4 space-y-4">
+                        <h4 class="text-md font-medium text-sidebar-green-light">Reject Application</h4>
+                        <div class="bg-sidebar-green-50 rounded-lg p-4 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Rejection Reasons</label>
                                 <div class="space-y-2">
                                     <label class="flex items-center">
                                         <input type="checkbox" wire:model="rejectionReasons" value="insufficient_income" 
-                                               class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                               class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm text-gray-700">Insufficient Income</span>
                                     </label>
                                     <label class="flex items-center">
                                         <input type="checkbox" wire:model="rejectionReasons" value="poor_credit_score" 
-                                               class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                               class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm text-gray-700">Poor Credit Score</span>
                                     </label>
                                     <label class="flex items-center">
                                         <input type="checkbox" wire:model="rejectionReasons" value="high_dsr" 
-                                               class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                               class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm text-gray-700">High Debt-to-Income Ratio</span>
                                     </label>
                                     <label class="flex items-center">
                                         <input type="checkbox" wire:model="rejectionReasons" value="incomplete_documentation" 
-                                               class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                               class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm text-gray-700">Incomplete Documentation</span>
                                     </label>
                                     <label class="flex items-center">
                                         <input type="checkbox" wire:model="rejectionReasons" value="employment_verification_failed" 
-                                               class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                               class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm text-gray-700">Employment Verification Failed</span>
                                     </label>
                                     <label class="flex items-center">
                                         <input type="checkbox" wire:model="rejectionReasons" value="other" 
-                                               class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                               class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm text-gray-700">Other</span>
                                     </label>
                                 </div>
@@ -2236,11 +2236,11 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Additional Notes</label>
                                 <textarea wire:model="applicationNotes" rows="3" 
-                                          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500"
+                                          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sidebar-green"
                                           placeholder="Add rejection notes..."></textarea>
                             </div>
                             <button wire:click="rejectApplication({{ $selectedApplication->id }})" 
-                                    class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                    class="w-full inline-flex justify-center items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>

@@ -18,7 +18,7 @@
         
         <div class="flex items-center space-x-3">
             @if($isAvailable)
-                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-sidebar-green-100 text-sidebar-green-800">
                     Available Lead
                 </span>
             @else
@@ -27,7 +27,7 @@
             
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium
                     @switch($this->application->status)
-                        @case('under_review') bg-red-100 text-red-800 @break
+                        @case('under_review') bg-sidebar-green-100 text-sidebar-green-800 @break
                         @case('approved') bg-green-100 text-green-800 @break
                         @case('rejected') bg-gray-100 text-gray-800 @break
                         @default bg-gray-100 text-gray-800
@@ -40,7 +40,7 @@
             <div class="flex items-center space-x-2">
                 @if($isAvailable)
                     <button wire:click="bookLead" 
-                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                            class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                         </svg>
@@ -56,7 +56,7 @@
                             Approve
                         </button>
                         <button wire:click="processLead('reject')" 
-                                class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
@@ -88,7 +88,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
         <div class="flex items-start justify-between">
             <div class="flex items-center space-x-6">
-                <div class="h-20 w-20 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-red-400 to-red-600 blur-sm' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
+                <div class="h-20 w-20 rounded-full {{ $isAvailable ? 'bg-gradient-to-br from-sidebar-green-400 to-sidebar-green blur-sm' : 'bg-gradient-to-br from-gray-400 to-gray-600' }} flex items-center justify-center">
                     <span class="text-2xl font-bold text-white">
                         {{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}
                     </span>
@@ -122,15 +122,15 @@
             
             <!-- Key Metrics -->
             <div class="grid grid-cols-3 gap-6 text-center">
-                <div class="p-4 bg-red-50 rounded-lg">
-                    <div class="text-2xl font-bold text-red-600 {{ $isAvailable ? '-sm' : '' }}">
+                <div class="p-4 bg-sidebar-green-50 rounded-lg">
+                    <div class="text-2xl font-bold text-sidebar-green {{ $isAvailable ? '-sm' : '' }}">
                         @if($isAvailable)
                         TSh {{ number_format($application->requested_amount, 1) }}
                         @else
                             TSh {{ number_format($application->requested_amount, 1) }}
                         @endif
                     </div>
-                    <div class="text-sm text-red-700">Requested Amount</div>
+                    <div class="text-sm text-sidebar-green-light">Requested Amount</div>
                 </div>
                 <div class="p-4 bg-gray-50 rounded-lg">
                     <div class="text-2xl font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
@@ -142,11 +142,11 @@
                     </div>
                     <div class="text-sm text-gray-700">Monthly Income</div>
                 </div>
-                <div class="p-4 {{ $application->credit_score >= 650 ? 'bg-green-50' : ($application->credit_score >= 550 ? 'bg-yellow-50' : 'bg-red-50') }} rounded-lg">
-                    <div class="text-2xl font-bold {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-red-600') }}">
+                <div class="p-4 {{ $application->credit_score >= 650 ? 'bg-green-50' : ($application->credit_score >= 550 ? 'bg-yellow-50' : 'bg-sidebar-green-50') }} rounded-lg">
+                    <div class="text-2xl font-bold {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                         {{ $application->credit_score ?? 'N/A' }}
                     </div>
-                    <div class="text-sm {{ $application->credit_score >= 650 ? 'text-green-700' : ($application->credit_score >= 550 ? 'text-yellow-700' : 'text-red-700') }}">CRB Score</div>
+                    <div class="text-sm {{ $application->credit_score >= 650 ? 'text-green-700' : ($application->credit_score >= 550 ? 'text-yellow-700' : 'text-sidebar-green-light') }}">CRB Score</div>
                 </div>
             </div>
         </div>
@@ -158,37 +158,37 @@
         <div class="border-b border-gray-200">
             <nav class="flex space-x-8 px-6" aria-label="Tabs">
                 <button wire:click="switchTab('overview')" 
-                        class="@if($activeTab == 'overview') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'overview') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                     Overview
                 </button>
                 <button wire:click="switchTab('personal')" 
-                        class="@if($activeTab == 'personal') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'personal') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                     Personal Details
                 </button>
                 <button wire:click="switchTab('financial')" 
-                        class="@if($activeTab == 'financial') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'financial') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                     Financial Information
                 </button>
                 <button wire:click="switchTab('employment')" 
-                        class="@if($activeTab == 'employment') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'employment') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                     Employment
                 </button>
                 <button wire:click="switchTab('documents')" 
-                        class="@if($activeTab == 'documents') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'documents') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                     Documents
                     <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ $application->documents->count() ?? 0 }}</span>
                 </button>
                 <button wire:click="switchTab('history')" 
-                        class="@if($activeTab == 'history') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'history') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                     Timeline
                 </button>
                 <button wire:click="switchTab('creditReport')" 
-                        class="@if($activeTab == 'creditReport') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'creditReport') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                     CRB Report
                 </button>
 
                 <button wire:click="switchTab('statementAnalyser')" 
-                        class="@if($activeTab == 'statementAnalyser') border-b-2 border-red-500 text-red-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
+                        class="@if($activeTab == 'statementAnalyser') border-b-2 border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif py-4 px-1 text-sm font-medium transition-colors">
                    Statement Analyser
                 </button>
             </nav>
@@ -265,16 +265,16 @@
 
                 <!-- Rejection Section -->
                 <div class="space-y-4">
-                    <h4 class="text-md font-medium text-red-700">Reject Lead</h4>
-                    <div class="bg-red-50 rounded-lg p-4 space-y-4">
+                    <h4 class="text-md font-medium text-sidebar-green-light">Reject Lead</h4>
+                    <div class="bg-sidebar-green-50 rounded-lg p-4 space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Rejection Reason</label>
                             <textarea wire:model="leadNotes" rows="6" 
-                                      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500"
+                                      class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sidebar-green"
                                       placeholder="Please provide reason for rejection..."></textarea>
                         </div>
                         <button wire:click="processLead('reject')" 
-                                class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                                class="w-full inline-flex justify-center items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>

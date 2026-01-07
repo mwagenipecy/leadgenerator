@@ -22,7 +22,7 @@
             <!-- Logo -->
             <div class="flex justify-center mb-8">
                 <a href="/" class="flex items-center">
-                    <svg class="h-10 w-10 text-red-600" viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="h-10 w-10 text-sidebar-green" viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40Z"/>
                         <path d="M12 12L28 28M12 28L28 12" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -46,11 +46,11 @@
             <!-- Validation Errors -->
             @if ($errors->any())
                 <div class="mb-4">
-                    <div class="font-medium text-red-600">
+                    <div class="font-medium text-sidebar-green">
                         {{ __('Whoops! Something went wrong.') }}
                     </div>
 
-                    <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+                    <ul class="mt-3 list-disc list-inside text-sm text-sidebar-green">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -72,7 +72,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        <input id="email" class="block w-full pl-10 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="your.email@example.com" />
+                        <input id="email" class="block w-full pl-10 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-sidebar-green focus:border-sidebar-green sm:text-sm" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="your.email@example.com" />
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
                         </div>
-                        <input id="password" class="block w-full pl-10 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm" type="password" name="password" required autocomplete="current-password" placeholder="••••••••" />
+                        <input id="password" class="block w-full pl-10 mt-1 border-gray-300 rounded-md shadow-sm focus:ring-sidebar-green focus:border-sidebar-green sm:text-sm" type="password" name="password" required autocomplete="current-password" placeholder="••••••••" />
                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                             <button type="button" id="password-toggle" class="text-gray-400 hover:text-gray-500 focus:outline-none">
                                 <svg id="show-password" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,14 +105,14 @@
                 <!-- Remember Me -->
                 <div class="mt-4 flex items-center justify-between">
                     <div class="flex items-center">
-                        <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" name="remember">
+                        <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-sidebar-green shadow-sm focus:border-sidebar-green-300 focus:ring focus:ring-sidebar-green-200 focus:ring-opacity-50" name="remember">
                         <label for="remember_me" class="ml-2 block text-sm text-gray-700">
                             {{ __('Remember me') }}
                         </label>
                     </div>
 
                     @if (Route::has('password.request'))
-                        <a class="text-sm text-red-600 hover:text-red-900" href="{{ route('password.request') }}">
+                        <a class="text-sm text-sidebar-green hover:text-sidebar-green-900" href="{{ route('password.request') }}">
                             {{ __('Forgot your password?') }}
                         </a>
                     @endif
@@ -120,9 +120,9 @@
 
                 <!-- Login Button -->
                 <div class="mt-6">
-                    <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                    <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-sidebar-green hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green transition duration-150 ease-in-out">
                         <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                            <svg class="h-5 w-5 text-red-500 group-hover:text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <svg class="h-5 w-5 text-sidebar-green group-hover:text-sidebar-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                             </svg>
                         </span>
@@ -172,7 +172,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     Don't have an account?
-                    <a href="{{ route('register') }}" class="font-medium text-red-600 hover:text-red-500">
+                    <a href="{{ route('register') }}" class="font-medium text-sidebar-green hover:text-sidebar-green">
                         Sign up now
                     </a>
                 </p>

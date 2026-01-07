@@ -2,7 +2,7 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <h3 class="text-lg font-semibold text-black">Uploaded Documents</h3>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sidebar-green-100 text-sidebar-green-800">
             {{ $application->documents->count() ?? 0 }} Documents
         </span>
     </div>
@@ -27,8 +27,8 @@
                     @for($i = 0; $i < 3; $i++)
                         <div class="bg-white rounded-lg p-4 border border-gray-200 blur-sm">
                             <div class="flex items-center space-x-3">
-                                <div class="h-10 w-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="h-10 w-10 bg-sidebar-green-100 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
                                 </div>
@@ -60,8 +60,8 @@
                                         </svg>
                                     </div>
                                 @elseif($extension === 'pdf')
-                                    <div class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="h-12 w-12 bg-sidebar-green-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                         </svg>
                                     </div>
@@ -93,7 +93,7 @@
                             <div class="flex items-center justify-between">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
                                     {{ $document->verification_status === 'verified' ? 'bg-green-100 text-green-800' : 
-                                       ($document->verification_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                       ($document->verification_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-sidebar-green-100 text-sidebar-green-800') }}">
                                     {{ ucfirst($document->verification_status ?? 'pending') }}
                                 </span>
                                 <span class="text-xs text-gray-500">
@@ -104,7 +104,7 @@
                             <!-- Document Actions -->
                             <div class="flex items-center justify-between pt-2 border-t border-gray-100">
                                 <button wire:click="downloadDocument({{ $document->id }})" 
-                                        class="text-red-600 hover:text-red-800 text-sm font-medium flex items-center">
+                                        class="text-sidebar-green hover:text-sidebar-green-800 text-sm font-medium flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>

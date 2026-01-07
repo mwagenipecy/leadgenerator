@@ -4,10 +4,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <svg class="w-8 h-8 text-brand-red mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-8 h-8 text-sidebar-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
-                    <span class="text-xl font-bold text-gray-900">Lead<span class="text-brand-red">Generator</span></span>
+                    <span class="text-xl font-bold text-gray-900">Lead<span class="text-sidebar-green">Generator</span></span>
                 </div>
                 @auth
                     <form method="POST" action="{{ route('logout') }}">
@@ -35,8 +35,8 @@
         @endif
 
         @if (session()->has('error'))
-            <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p class="text-red-800 text-sm">{{ session('error') }}</p>
+            <div class="mb-4 p-4 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg">
+                <p class="text-sidebar-green-800 text-sm">{{ session('error') }}</p>
             </div>
         @endif
 
@@ -44,7 +44,7 @@
         @if($isTanzania && $step === 1)
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6" wire:poll.5s="checkNidaStatus">
             <div class="flex items-center mb-4">
-                <div class="flex-shrink-0 w-10 h-10 bg-brand-red text-white rounded-full flex items-center justify-center font-bold">
+                <div class="flex-shrink-0 w-10 h-10 bg-sidebar-green text-white rounded-full flex items-center justify-center font-bold">
                     1
                 </div>
                 <div class="ml-4">
@@ -64,7 +64,7 @@
                 </div>
                 <div class="mt-4">
                     <p class="text-sm text-gray-600 mb-4">You can now proceed to upload your company documents.</p>
-                    <button wire:click="$set('step', 2)" class="bg-brand-red text-white px-6 py-2 rounded-lg hover:bg-brand-dark-red transition">
+                    <button wire:click="$set('step', 2)" class="bg-sidebar-green text-white px-6 py-2 rounded-lg hover:bg-brand-dark-red transition">
                         Continue to Document Upload
                     </button>
                 </div>
@@ -84,7 +84,7 @@
                     <div class="flex items-center space-x-3">
                         <a 
                             href="{{ route('verification.options') }}"
-                            class="bg-brand-red text-white px-6 py-2 rounded-lg hover:bg-brand-dark-red transition inline-block">
+                            class="bg-sidebar-green text-white px-6 py-2 rounded-lg hover:bg-brand-dark-red transition inline-block">
                             Start NIDA Verification
                         </a>
                         <button 
@@ -106,7 +106,7 @@
         @if($step === 2)
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
             <div class="flex items-center mb-6">
-                <div class="flex-shrink-0 w-10 h-10 bg-brand-red text-white rounded-full flex items-center justify-center font-bold">
+                <div class="flex-shrink-0 w-10 h-10 bg-sidebar-green text-white rounded-full flex items-center justify-center font-bold">
                     {{ $isTanzania ? '2' : '1' }}
                 </div>
                 <div class="ml-4">
@@ -132,15 +132,15 @@
                                     </svg>
                                     <span class="text-sm text-gray-700">{{ $uploadedDocuments['brela']['name'] }}</span>
                                 </div>
-                                <button wire:click="removeDocument('brela')" class="text-red-600 hover:text-red-800 text-sm">
+                                <button wire:click="removeDocument('brela')" class="text-sidebar-green hover:text-sidebar-green-800 text-sm">
                                     Remove
                                 </button>
                             </div>
                         @else
-                            <input type="file" wire:model="brelaDocument" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-red file:text-white hover:file:bg-brand-dark-red">
-                            @error('brelaDocument') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <input type="file" wire:model="brelaDocument" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-brand-dark-red">
+                            @error('brelaDocument') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                             @if($brelaDocument)
-                                <button wire:click="uploadDocument('brela')" wire:loading.attr="disabled" wire:target="uploadDocument,brelaDocument" class="mt-2 bg-brand-red text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
+                                <button wire:click="uploadDocument('brela')" wire:loading.attr="disabled" wire:target="uploadDocument,brelaDocument" class="mt-2 bg-sidebar-green text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
                                     <span wire:loading.remove wire:target="uploadDocument,brelaDocument">Upload BRELA Document</span>
                                     <span wire:loading wire:target="uploadDocument,brelaDocument">Uploading...</span>
                                 </button>
@@ -162,15 +162,15 @@
                                     </svg>
                                     <span class="text-sm text-gray-700">{{ $uploadedDocuments['tin_certificate']['name'] }}</span>
                                 </div>
-                                <button wire:click="removeDocument('tin_certificate')" class="text-red-600 hover:text-red-800 text-sm">
+                                <button wire:click="removeDocument('tin_certificate')" class="text-sidebar-green hover:text-sidebar-green-800 text-sm">
                                     Remove
                                 </button>
                             </div>
                         @else
-                            <input type="file" wire:model="tinCertificate" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-red file:text-white hover:file:bg-brand-dark-red">
-                            @error('tinCertificate') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <input type="file" wire:model="tinCertificate" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-brand-dark-red">
+                            @error('tinCertificate') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                             @if($tinCertificate)
-                                <button wire:click="uploadDocument('tin_certificate')" wire:loading.attr="disabled" wire:target="uploadDocument,tinCertificate" class="mt-2 bg-brand-red text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
+                                <button wire:click="uploadDocument('tin_certificate')" wire:loading.attr="disabled" wire:target="uploadDocument,tinCertificate" class="mt-2 bg-sidebar-green text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
                                     <span wire:loading.remove wire:target="uploadDocument,tinCertificate">Upload TIN Certificate</span>
                                     <span wire:loading wire:target="uploadDocument,tinCertificate">Uploading...</span>
                                 </button>
@@ -193,15 +193,15 @@
                                     </svg>
                                     <span class="text-sm text-gray-700">{{ $uploadedDocuments['passport']['name'] }}</span>
                                 </div>
-                                <button wire:click="removeDocument('passport')" class="text-red-600 hover:text-red-800 text-sm">
+                                <button wire:click="removeDocument('passport')" class="text-sidebar-green hover:text-sidebar-green-800 text-sm">
                                     Remove
                                 </button>
                             </div>
                         @else
-                            <input type="file" wire:model="passportDocument" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-red file:text-white hover:file:bg-brand-dark-red">
-                            @error('passportDocument') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <input type="file" wire:model="passportDocument" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-brand-dark-red">
+                            @error('passportDocument') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                             @if($passportDocument)
-                                <button wire:click="uploadDocument('passport')" wire:loading.attr="disabled" wire:target="uploadDocument,passportDocument" class="mt-2 bg-brand-red text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
+                                <button wire:click="uploadDocument('passport')" wire:loading.attr="disabled" wire:target="uploadDocument,passportDocument" class="mt-2 bg-sidebar-green text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
                                     <span wire:loading.remove wire:target="uploadDocument,passportDocument">Upload Passport</span>
                                     <span wire:loading wire:target="uploadDocument,passportDocument">Uploading...</span>
                                 </button>
@@ -223,15 +223,15 @@
                                     </svg>
                                     <span class="text-sm text-gray-700">{{ $uploadedDocuments['company_documents']['name'] }}</span>
                                 </div>
-                                <button wire:click="removeDocument('company_documents')" class="text-red-600 hover:text-red-800 text-sm">
+                                <button wire:click="removeDocument('company_documents')" class="text-sidebar-green hover:text-sidebar-green-800 text-sm">
                                     Remove
                                 </button>
                             </div>
                         @else
-                            <input type="file" wire:model="companyDocuments" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-red file:text-white hover:file:bg-brand-dark-red">
-                            @error('companyDocuments') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <input type="file" wire:model="companyDocuments" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-brand-dark-red">
+                            @error('companyDocuments') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                             @if($companyDocuments)
-                                <button wire:click="uploadDocument('company_documents')" wire:loading.attr="disabled" wire:target="uploadDocument,companyDocuments" class="mt-2 bg-brand-red text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
+                                <button wire:click="uploadDocument('company_documents')" wire:loading.attr="disabled" wire:target="uploadDocument,companyDocuments" class="mt-2 bg-sidebar-green text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
                                     <span wire:loading.remove wire:target="uploadDocument,companyDocuments">Upload Company Documents</span>
                                     <span wire:loading wire:target="uploadDocument,companyDocuments">Uploading...</span>
                                 </button>
@@ -253,15 +253,15 @@
                                     </svg>
                                     <span class="text-sm text-gray-700">{{ $uploadedDocuments['personal_kyc']['name'] }}</span>
                                 </div>
-                                <button wire:click="removeDocument('personal_kyc')" class="text-red-600 hover:text-red-800 text-sm">
+                                <button wire:click="removeDocument('personal_kyc')" class="text-sidebar-green hover:text-sidebar-green-800 text-sm">
                                     Remove
                                 </button>
                             </div>
                         @else
-                            <input type="file" wire:model="personalKyc" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-red file:text-white hover:file:bg-brand-dark-red">
-                            @error('personalKyc') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <input type="file" wire:model="personalKyc" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-brand-dark-red">
+                            @error('personalKyc') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
                             @if($personalKyc)
-                                <button wire:click="uploadDocument('personal_kyc')" wire:loading.attr="disabled" wire:target="uploadDocument,personalKyc" class="mt-2 bg-brand-red text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
+                                <button wire:click="uploadDocument('personal_kyc')" wire:loading.attr="disabled" wire:target="uploadDocument,personalKyc" class="mt-2 bg-sidebar-green text-white px-4 py-2 rounded-lg hover:bg-brand-dark-red transition text-sm disabled:opacity-50">
                                     <span wire:loading.remove wire:target="uploadDocument,personalKyc">Upload Personal KYC</span>
                                     <span wire:loading wire:target="uploadDocument,personalKyc">Uploading...</span>
                                 </button>
@@ -272,7 +272,7 @@
 
                 <!-- Submit Button -->
                 <div class="pt-4">
-                    <button wire:click="completeKyc" class="w-full bg-brand-red text-white px-6 py-3 rounded-lg hover:bg-brand-dark-red transition font-semibold">
+                    <button wire:click="completeKyc" class="w-full bg-sidebar-green text-white px-6 py-3 rounded-lg hover:bg-brand-dark-red transition font-semibold">
                         Submit for Verification
                     </button>
                 </div>
@@ -294,7 +294,7 @@
             <div class="mt-6">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="text-brand-red hover:text-brand-dark-red font-medium">
+                    <button type="submit" class="text-sidebar-green hover:text-brand-dark-red font-medium">
                         Logout
                     </button>
                 </form>

@@ -4,21 +4,21 @@
         <!-- Main Card -->
         <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
             <!-- Header Section -->
-            <div class="bg-gradient-to-r from-red-500 to-red-600 p-8 text-center">
+            <div class="bg-gradient-to-r from-sidebar-green to-sidebar-green p-8 text-center">
                 <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                     </svg>
                 </div>
                 <h1 class="text-3xl font-bold text-white mb-2">Access Restricted</h1>
-                <p class="text-red-100 text-lg">You don't have permission to access this page</p>
+                <p class="text-sidebar-green-100 text-lg">You don't have permission to access this page</p>
             </div>
 
             <!-- Content Section -->
             <div class="p-8">
                 <div class="text-center mb-8">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-16 h-16 bg-sidebar-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
                         </svg>
                     </div>
@@ -85,7 +85,7 @@
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <button 
                         wire:click="goHome" 
-                        class="bg-red-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25 flex items-center justify-center">
+                        class="bg-sidebar-green text-white px-8 py-3 rounded-xl font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25 flex items-center justify-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
@@ -134,7 +134,7 @@
 
     <!-- Background Animation -->
     <div class="fixed inset-0 -z-10 overflow-hidden">
-        <div class="absolute -top-40 -right-32 w-80 h-80 bg-red-100 rounded-full opacity-20 animate-pulse"></div>
+        <div class="absolute -top-40 -right-32 w-80 h-80 bg-sidebar-green-100 rounded-full opacity-20 animate-pulse"></div>
         <div class="absolute -bottom-40 -left-32 w-80 h-80 bg-gray-100 rounded-full opacity-20 animate-pulse" style="animation-delay: 2s;"></div>
     </div>
 </div>

@@ -13,8 +13,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-red': '#C40F12',
-                        'brand-dark-red': '#A00E11',
+                        'sidebar-green': '#1D753F',
+                        'brand-dark-red': '#186432',
                         'dark-bg': '#0F0F0F',
                         'dark-card': '#1A1A1A',
                         'dark-hover': '#2A2A2A',
@@ -34,7 +34,7 @@
         <!-- Sidebar -->
         <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-dark-card shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 border-r border-dark-border">
             <!-- Logo -->
-            <div class="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-brand-red via-brand-dark-red to-red-900 relative overflow-hidden">
+            <div class="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-sidebar-green via-brand-dark-red to-sidebar-green-900 relative overflow-hidden">
                 <!-- Animated background -->
                 <div class="absolute inset-0 opacity-10">
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent transform -skew-x-12 animate-pulse"></div>
@@ -46,7 +46,7 @@
                         </svg>
                     </div>
                     <h1 class="text-xl font-bold font-poppins text-white">
-                        Lead<span class="text-red-200">Generator</span>
+                        Lead<span class="text-sidebar-green-200">Generator</span>
                     </h1>
                 </div>
             </div>
@@ -55,27 +55,27 @@
             <nav class="mt-8 px-4">
                 <div class="space-y-2">
                     <!-- Dashboard -->
-                    <a href="#" class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl bg-gradient-to-r from-brand-red/20 to-brand-dark-red/10 text-brand-red border border-brand-red/30 shadow-lg shadow-brand-red/10">
+                    <a href="#" class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl bg-gradient-to-r from-sidebar-green/20 to-brand-dark-red/10 text-sidebar-green border border-sidebar-green/30 shadow-lg shadow-sidebar-green/10">
                         <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"/>
                         </svg>
                         Dashboard
-                        <div class="ml-auto w-2 h-2 bg-brand-red rounded-full animate-pulse"></div>
+                        <div class="ml-auto w-2 h-2 bg-sidebar-green rounded-full animate-pulse"></div>
                     </a>
 
                     <!-- Leads -->
                     <a href="#" class="group flex items-center px-4 py-3 text-sm font-medium text-gray-300 rounded-xl hover:bg-dark-hover hover:text-white transition-all duration-200 hover:shadow-lg">
-                        <svg class="mr-3 h-5 w-5 group-hover:text-brand-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mr-3 h-5 w-5 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                         Leads
-                        <span class="ml-auto bg-gradient-to-r from-brand-red to-brand-dark-red text-white text-xs px-2.5 py-1 rounded-full font-semibold shadow-md">24</span>
+                        <span class="ml-auto bg-gradient-to-r from-sidebar-green to-brand-dark-red text-white text-xs px-2.5 py-1 rounded-full font-semibold shadow-md">24</span>
                     </a>
 
                     <!-- Analytics -->
                     <a href="#" class="group flex items-center px-4 py-3 text-sm font-medium text-gray-300 rounded-xl hover:bg-dark-hover hover:text-white transition-all duration-200 hover:shadow-lg">
-                        <svg class="mr-3 h-5 w-5 group-hover:text-brand-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mr-3 h-5 w-5 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                         Analytics
@@ -83,7 +83,7 @@
 
                     <!-- NIDA Verification -->
                     <a href="#" class="group flex items-center px-4 py-3 text-sm font-medium text-gray-300 rounded-xl hover:bg-dark-hover hover:text-white transition-all duration-200 hover:shadow-lg">
-                        <svg class="mr-3 h-5 w-5 group-hover:text-brand-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mr-3 h-5 w-5 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                         </svg>
                         NIDA Verification
@@ -91,7 +91,7 @@
 
                     <!-- Reports -->
                     <a href="#" class="group flex items-center px-4 py-3 text-sm font-medium text-gray-300 rounded-xl hover:bg-dark-hover hover:text-white transition-all duration-200 hover:shadow-lg">
-                        <svg class="mr-3 h-5 w-5 group-hover:text-brand-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mr-3 h-5 w-5 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                         Reports
@@ -99,7 +99,7 @@
 
                     <!-- Settings -->
                     <a href="#" class="group flex items-center px-4 py-3 text-sm font-medium text-gray-300 rounded-xl hover:bg-dark-hover hover:text-white transition-all duration-200 hover:shadow-lg">
-                        <svg class="mr-3 h-5 w-5 group-hover:text-brand-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mr-3 h-5 w-5 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
@@ -109,10 +109,10 @@
 
                 <!-- Support Section -->
                 <div class="mt-8 pt-8 border-t border-dark-border">
-                    <div class="bg-gradient-to-br from-brand-red/10 via-brand-dark-red/5 to-transparent rounded-xl p-4 border border-brand-red/20 backdrop-blur-sm">
+                    <div class="bg-gradient-to-br from-sidebar-green/10 via-brand-dark-red/5 to-transparent rounded-xl p-4 border border-sidebar-green/20 backdrop-blur-sm">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-brand-red/20 to-brand-dark-red/10 rounded-xl flex items-center justify-center border border-brand-red/30">
-                                <svg class="w-5 h-5 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-10 h-10 bg-gradient-to-br from-sidebar-green/20 to-brand-dark-red/10 rounded-xl flex items-center justify-center border border-sidebar-green/30">
+                                <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </div>
@@ -121,7 +121,7 @@
                                 <p class="text-xs text-gray-400">24/7 Support Available</p>
                             </div>
                         </div>
-                        <button class="w-full mt-3 bg-gradient-to-r from-brand-red to-brand-dark-red text-white text-sm font-medium py-2 rounded-lg hover:shadow-lg hover:shadow-brand-red/25 transition-all duration-200">
+                        <button class="w-full mt-3 bg-gradient-to-r from-sidebar-green to-brand-dark-red text-white text-sm font-medium py-2 rounded-lg hover:shadow-lg hover:shadow-sidebar-green/25 transition-all duration-200">
                             Contact Support
                         </button>
                     </div>
@@ -135,7 +135,7 @@
             <header class="bg-dark-card shadow-2xl border-b border-dark-border backdrop-blur-xl">
                 <div class="flex items-center justify-between px-6 py-4">
                     <!-- Mobile menu button -->
-                    <button id="mobile-menu-button" class="lg:hidden p-2 rounded-xl text-gray-400 hover:text-brand-red hover:bg-dark-hover transition-all duration-200">
+                    <button id="mobile-menu-button" class="lg:hidden p-2 rounded-xl text-gray-400 hover:text-sidebar-green hover:bg-dark-hover transition-all duration-200">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
@@ -149,25 +149,25 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                 </svg>
                             </div>
-                            <input type="text" class="block w-full pl-12 pr-4 py-3 bg-dark-hover border border-dark-border rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red placeholder-gray-500 text-white text-sm transition-all duration-200" placeholder="Search leads, reports, or settings...">
+                            <input type="text" class="block w-full pl-12 pr-4 py-3 bg-dark-hover border border-dark-border rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green placeholder-gray-500 text-white text-sm transition-all duration-200" placeholder="Search leads, reports, or settings...">
                         </div>
                     </div>
 
                     <!-- Header Actions -->
                     <div class="flex items-center space-x-4">
                         <!-- Theme Toggle -->
-                        <button class="p-2 text-gray-400 hover:text-brand-red hover:bg-dark-hover rounded-xl transition-all duration-200">
+                        <button class="p-2 text-gray-400 hover:text-sidebar-green hover:bg-dark-hover rounded-xl transition-all duration-200">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
                             </svg>
                         </button>
 
                         <!-- Notifications -->
-                        <button class="relative p-2 text-gray-400 hover:text-brand-red hover:bg-dark-hover rounded-xl transition-all duration-200">
+                        <button class="relative p-2 text-gray-400 hover:text-sidebar-green hover:bg-dark-hover rounded-xl transition-all duration-200">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                             </svg>
-                            <span class="absolute -top-1 -right-1 h-5 w-5 bg-gradient-to-r from-brand-red to-brand-dark-red rounded-full flex items-center justify-center">
+                            <span class="absolute -top-1 -right-1 h-5 w-5 bg-gradient-to-r from-sidebar-green to-brand-dark-red rounded-full flex items-center justify-center">
                                 <span class="text-white text-xs font-bold">3</span>
                             </span>
                         </button>
@@ -175,14 +175,14 @@
                         <!-- User Menu -->
                         <div class="relative">
                             <button class="flex items-center space-x-3 p-2 rounded-xl hover:bg-dark-hover transition-all duration-200 group">
-                                <div class="w-10 h-10 bg-gradient-to-br from-brand-red via-brand-dark-red to-red-900 rounded-xl flex items-center justify-center shadow-lg shadow-brand-red/25">
+                                <div class="w-10 h-10 bg-gradient-to-br from-sidebar-green via-brand-dark-red to-sidebar-green-900 rounded-xl flex items-center justify-center shadow-lg shadow-sidebar-green/25">
                                     <span class="text-white text-sm font-bold">JD</span>
                                 </div>
                                 <div class="hidden md:block text-left">
-                                    <p class="text-sm font-semibold text-white group-hover:text-brand-red transition-colors">John Doe</p>
+                                    <p class="text-sm font-semibold text-white group-hover:text-sidebar-green transition-colors">John Doe</p>
                                     <p class="text-xs text-gray-400">Administrator</p>
                                 </div>
-                                <svg class="h-4 w-4 text-gray-500 group-hover:text-brand-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="h-4 w-4 text-gray-500 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
                                 </svg>
                             </button>
@@ -197,7 +197,7 @@
                     <!-- Page Header -->
                     <div class="mb-8">
                         <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-12 h-12 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-xl flex items-center justify-center shadow-lg shadow-brand-red/25">
+                            <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-brand-dark-red rounded-xl flex items-center justify-center shadow-lg shadow-sidebar-green/25">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                                 </svg>
@@ -216,11 +216,11 @@
                     <!-- Stats Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <!-- Total Leads -->
-                        <div class="bg-dark-card rounded-2xl shadow-2xl p-6 border border-dark-border hover:shadow-brand-red/10 hover:shadow-2xl transition-all duration-300 group hover:border-brand-red/30">
+                        <div class="bg-dark-card rounded-2xl shadow-2xl p-6 border border-dark-border hover:shadow-sidebar-green/10 hover:shadow-2xl transition-all duration-300 group hover:border-sidebar-green/30">
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm font-medium text-gray-400 group-hover:text-gray-300">Total Leads</p>
-                                    <p class="text-4xl font-bold text-white mt-2 group-hover:text-brand-red transition-colors">1,249</p>
+                                    <p class="text-4xl font-bold text-white mt-2 group-hover:text-sidebar-green transition-colors">1,249</p>
                                     <div class="flex items-center mt-3">
                                         <div class="flex items-center space-x-1 text-green-400">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,8 +231,8 @@
                                         <span class="text-sm text-gray-500 ml-2">vs last month</span>
                                     </div>
                                 </div>
-                                <div class="w-16 h-16 bg-gradient-to-br from-brand-red/20 to-brand-dark-red/10 rounded-2xl flex items-center justify-center border border-brand-red/20 group-hover:scale-110 transition-transform duration-300">
-                                    <svg class="w-8 h-8 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-16 h-16 bg-gradient-to-br from-sidebar-green/20 to-brand-dark-red/10 rounded-2xl flex items-center justify-center border border-sidebar-green/20 group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                                     </svg>
                                 </div>
@@ -322,7 +322,7 @@
                                     <p class="text-gray-400 text-sm mt-1">Performance analytics over time</p>
                                 </div>
                                 <div class="flex space-x-2">
-                                    <button class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-brand-red to-brand-dark-red rounded-xl shadow-lg shadow-brand-red/25 hover:shadow-brand-red/40 transition-all duration-200">7D</button>
+                                    <button class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-sidebar-green to-brand-dark-red rounded-xl shadow-lg shadow-sidebar-green/25 hover:shadow-sidebar-green/40 transition-all duration-200">7D</button>
                                     <button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-hover rounded-xl transition-all duration-200">30D</button>
                                     <button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-hover rounded-xl transition-all duration-200">90D</button>
                                 </div>
@@ -333,8 +333,8 @@
                                     <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25px 25px, rgba(196, 15, 18, 0.3) 2px, transparent 0), radial-gradient(circle at 75px 75px, rgba(196, 15, 18, 0.2) 1px, transparent 0); background-size: 50px 50px;"></div>
                                 </div>
                                 <div class="text-center relative z-10">
-                                    <div class="w-20 h-20 bg-gradient-to-br from-brand-red/20 to-brand-dark-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-brand-red/20">
-                                        <svg class="w-10 h-10 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-20 h-20 bg-gradient-to-br from-sidebar-green/20 to-brand-dark-red/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-sidebar-green/20">
+                                        <svg class="w-10 h-10 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                                         </svg>
                                     </div>
@@ -357,13 +357,13 @@
                                 <!-- Activity Item 1 -->
                                 <div class="flex items-start space-x-4 group">
                                     <div class="relative">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-brand-red/20 to-brand-dark-red/10 rounded-xl flex items-center justify-center border border-brand-red/30 group-hover:scale-110 transition-transform duration-200">
-                                            <div class="w-3 h-3 bg-brand-red rounded-full animate-pulse"></div>
+                                        <div class="w-10 h-10 bg-gradient-to-br from-sidebar-green/20 to-brand-dark-red/10 rounded-xl flex items-center justify-center border border-sidebar-green/30 group-hover:scale-110 transition-transform duration-200">
+                                            <div class="w-3 h-3 bg-sidebar-green rounded-full animate-pulse"></div>
                                         </div>
                                         <div class="absolute -bottom-2 -right-2 w-4 h-4 bg-green-400 rounded-full border-2 border-dark-card"></div>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-semibold text-white group-hover:text-brand-red transition-colors">New Lead Verified</p>
+                                        <p class="text-sm font-semibold text-white group-hover:text-sidebar-green transition-colors">New Lead Verified</p>
                                         <p class="text-xs text-gray-400 mt-1">John Smith - NIDA verification completed</p>
                                         <div class="flex items-center space-x-2 mt-2">
                                             <span class="text-xs text-gray-500">2 min ago</span>
@@ -404,7 +404,7 @@
                                         <div class="flex items-center space-x-2 mt-2">
                                             <span class="text-xs text-gray-500">1 hour ago</span>
                                             <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
-                                            <button class="text-xs text-brand-red hover:text-brand-dark-red font-medium">Download</button>
+                                            <button class="text-xs text-sidebar-green hover:text-brand-dark-red font-medium">Download</button>
                                         </div>
                                     </div>
                                 </div>
@@ -456,7 +456,7 @@
                                     <h3 class="text-xl font-bold text-white">Recent Leads</h3>
                                     <p class="text-gray-400 text-sm mt-1">Latest lead acquisitions and status updates</p>
                                 </div>
-                                <button class="bg-gradient-to-r from-brand-red to-brand-dark-red text-white px-4 py-2 rounded-xl font-semibold hover:shadow-lg hover:shadow-brand-red/25 transition-all duration-200">
+                                <button class="bg-gradient-to-r from-sidebar-green to-brand-dark-red text-white px-4 py-2 rounded-xl font-semibold hover:shadow-lg hover:shadow-sidebar-green/25 transition-all duration-200">
                                     View All Leads
                                 </button>
                             </div>
@@ -478,13 +478,13 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="relative">
-                                                    <div class="w-12 h-12 bg-gradient-to-br from-brand-red via-brand-dark-red to-red-900 rounded-xl flex items-center justify-center shadow-lg">
+                                                    <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green via-brand-dark-red to-sidebar-green-900 rounded-xl flex items-center justify-center shadow-lg">
                                                         <span class="text-white text-sm font-bold">JS</span>
                                                     </div>
                                                     <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-dark-card"></div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-semibold text-white group-hover:text-brand-red transition-colors">John Smith</div>
+                                                    <div class="text-sm font-semibold text-white group-hover:text-sidebar-green transition-colors">John Smith</div>
                                                     <div class="text-xs text-gray-400">Lead ID: #L001234</div>
                                                     <div class="text-xs text-gray-500 mt-1">Premium Prospect</div>
                                                 </div>
@@ -516,7 +516,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex items-center space-x-2">
-                                                <button class="text-brand-red hover:text-brand-dark-red p-2 rounded-lg hover:bg-dark-hover transition-all duration-200">
+                                                <button class="text-sidebar-green hover:text-brand-dark-red p-2 rounded-lg hover:bg-dark-hover transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -573,7 +573,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex items-center space-x-2">
-                                                <button class="text-brand-red hover:text-brand-dark-red p-2 rounded-lg hover:bg-dark-hover transition-all duration-200">
+                                                <button class="text-sidebar-green hover:text-brand-dark-red p-2 rounded-lg hover:bg-dark-hover transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -630,7 +630,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex items-center space-x-2">
-                                                <button class="text-brand-red hover:text-brand-dark-red p-2 rounded-lg hover:bg-dark-hover transition-all duration-200">
+                                                <button class="text-sidebar-green hover:text-brand-dark-red p-2 rounded-lg hover:bg-dark-hover transition-all duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>

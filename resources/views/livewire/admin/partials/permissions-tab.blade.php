@@ -56,7 +56,7 @@
                                     'lenders' => 'from-orange-500 to-orange-600',
                                     'products' => 'from-pink-500 to-pink-600',
                                     'reports' => 'from-indigo-500 to-indigo-600',
-                                    'system' => 'from-red-500 to-red-600',
+                                    'system' => 'from-sidebar-green to-sidebar-green',
                                     'financial' => 'from-yellow-500 to-yellow-600',
                                     'general' => 'from-gray-500 to-gray-600'
                                 ];
@@ -109,7 +109,7 @@
                                         </p>
                                     </div>
                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                        {{ $permission['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $permission['is_active'] ? 'bg-green-100 text-green-800' : 'bg-sidebar-green-100 text-sidebar-green-800' }}">
                                         {{ $permission['is_active'] ? 'Active' : 'Inactive' }}
                                     </span>
                                 </div>
@@ -187,7 +187,7 @@
                                             'lenders' => 'from-orange-500 to-orange-600',
                                             'products' => 'from-pink-500 to-pink-600',
                                             'reports' => 'from-indigo-500 to-indigo-600',
-                                            'system' => 'from-red-500 to-red-600',
+                                            'system' => 'from-sidebar-green to-sidebar-green',
                                             'financial' => 'from-yellow-500 to-yellow-600',
                                             'general' => 'from-gray-500 to-gray-600'
                                         ];
@@ -216,7 +216,7 @@
                                         'lenders' => 'bg-orange-100 text-orange-800',
                                         'products' => 'bg-pink-100 text-pink-800',
                                         'reports' => 'bg-indigo-100 text-indigo-800',
-                                        'system' => 'bg-red-100 text-red-800',
+                                        'system' => 'bg-sidebar-green-100 text-sidebar-green-800',
                                         'financial' => 'bg-yellow-100 text-yellow-800',
                                         default => 'bg-gray-100 text-gray-800'
                                     };
@@ -241,8 +241,8 @@
                             </td>
                             <td class="px-6 py-6 whitespace-nowrap">
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                    {{ $permission->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
-                                    <div class="w-2 h-2 rounded-full mr-2 {{ $permission->is_active ? 'bg-green-400' : 'bg-red-400' }}"></div>
+                                    {{ $permission->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200' }}">
+                                    <div class="w-2 h-2 rounded-full mr-2 {{ $permission->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
                                     {{ $permission->is_active ? 'Active' : 'Inactive' }}
                                 </span>
                             </td>
@@ -294,7 +294,7 @@
                         'lenders' => 'text-orange-600 bg-orange-100',
                         'products' => 'text-pink-600 bg-pink-100',
                         'reports' => 'text-indigo-600 bg-indigo-100',
-                        'system' => 'text-red-600 bg-red-100',
+                        'system' => 'text-sidebar-green bg-sidebar-green-100',
                         'financial' => 'text-yellow-600 bg-yellow-100',
                         'general' => 'text-gray-600 bg-gray-100'
                     ];

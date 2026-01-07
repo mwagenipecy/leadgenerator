@@ -32,20 +32,20 @@
         <!-- Key Performance Metrics -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- New Applications Card -->
-            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center group-hover:bg-red-100 transition-colors">
-                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-14 h-14 bg-sidebar-green-50 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green-100 transition-colors">
+                        <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
                     </div>
                     <div class="text-right">
                         <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">New Applications</p>
-                        <p class="text-2xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ number_format($newApplications) }}</p>
+                        <p class="text-2xl font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($newApplications) }}</p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-1 text-red-600">
+                    <div class="flex items-center space-x-1 text-sidebar-green">
                         <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -104,16 +104,16 @@
             </div>
 
             <!-- Total Disbursed Card -->
-            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-red-500/20">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-all duration-300 group hover:border-sidebar-green/20">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center group-hover:bg-red-100 transition-colors">
-                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-14 h-14 bg-sidebar-green-50 rounded-2xl flex items-center justify-center group-hover:bg-sidebar-green-100 transition-colors">
+                        <svg class="w-7 h-7 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                         </svg>
                     </div>
                     <div class="text-right">
                         <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Total Disbursed</p>
-                        <p class="text-2xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+                        <p class="text-2xl font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">
                             @if($totalDisbursed >= 1000000000)
                                 TSh {{ number_format($totalDisbursed/1000000000, 1) }}B
                             @elseif($totalDisbursed >= 1000000)
@@ -159,7 +159,7 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center space-x-2">
-                            <div class="w-3 h-3 bg-red-600 rounded-full"></div>
+                            <div class="w-3 h-3 bg-sidebar-green rounded-full"></div>
                             <span class="text-sm font-medium text-gray-600">Applications</span>
                         </div>
                         <div class="flex items-center space-x-2">
@@ -205,7 +205,7 @@
                     <div class="space-y-4">
                         @php
                             $statuses = [
-                                'submitted' => ['name' => 'Submitted', 'color' => '#dc2626', 'count' => $applicationsByStatus['submitted'] ?? 0],
+                                'submitted' => ['name' => 'Submitted', 'color' => '#1D753F', 'count' => $applicationsByStatus['submitted'] ?? 0],
                                 'under_review' => ['name' => 'Under Review', 'color' => '#f59e0b', 'count' => $applicationsByStatus['under_review'] ?? 0],
                                 'approved' => ['name' => 'Approved', 'color' => '#000000', 'count' => $applicationsByStatus['approved'] ?? 0],
                                 'disbursed' => ['name' => 'Disbursed', 'color' => '#6b7280', 'count' => $applicationsByStatus['disbursed'] ?? 0],
@@ -319,7 +319,7 @@
                         <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                             Filter
                         </button> -->
-                        <a  href="{{ route('application.list') }}" class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
+                        <a  href="{{ route('application.list') }}" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                             View All Applications
                         </a>
                         
@@ -343,7 +343,7 @@
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="relative">
-                                            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-md">
+                                            <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-2xl flex items-center justify-center shadow-md">
                                                 <span class="text-white text-sm font-bold">{{ substr($application->first_name, 0, 1) }}{{ substr($application->last_name, 0, 1) }}</span>
                                             </div>
                                             @if($application->user && $application->user->nida_verified_at)
@@ -351,7 +351,7 @@
                                             @endif
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-bold text-gray-900 group-hover:text-red-600 transition-colors">{{ $application->first_name }} {{ $application->last_name }}</div>
+                                            <div class="text-sm font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ $application->first_name }} {{ $application->last_name }}</div>
                                             <div class="text-xs text-gray-500">{{ $application->email }}</div>
                                             <div class="text-xs text-blue-600 font-medium mt-1">#{{ $application->application_number }}</div>
                                         </div>
@@ -373,7 +373,7 @@
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold 
                                         @if($application->status === 'approved') bg-green-100 text-green-800 border border-green-200
-                                        @elseif($application->status === 'rejected') bg-red-100 text-red-800 border border-red-200
+                                        @elseif($application->status === 'rejected') bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200
                                         @elseif($application->status === 'under_review') bg-yellow-100 text-yellow-800 border border-yellow-200
                                         @elseif($application->status === 'submitted') bg-blue-100 text-blue-800 border border-blue-200
                                         @elseif($application->status === 'disbursed') bg-purple-100 text-purple-800 border border-purple-200
@@ -436,11 +436,11 @@
                                 45, 52, 38, 65, 72, 58, 63, 71, 55, 68, 74, 82
                             @endif
                         ],
-                        borderColor: '#dc2626',
-                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderColor: '#1D753F',
+                        backgroundColor: 'rgba(29, 117, 63, 0.1)',
                         tension: 0.4,
                         fill: false,
-                        pointBackgroundColor: '#dc2626',
+                        pointBackgroundColor: '#1D753F',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 5
@@ -533,7 +533,7 @@
                                 24, 18, 15, 12, 8
                             @endif
                         ],
-                        backgroundColor: '#dc2626',
+                        backgroundColor: '#1D753F',
                         borderRadius: 6
                     }, {
                         label: 'Approved',
@@ -589,7 +589,7 @@
                             {{ $applicationsByStatus['rejected'] ?? 8 }}
                         ],
                         backgroundColor: [
-                            '#dc2626',
+                            '#1D753F',
                             '#f59e0b',
                             '#000000',
                             '#6b7280',
