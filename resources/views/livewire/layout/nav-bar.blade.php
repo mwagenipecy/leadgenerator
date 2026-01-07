@@ -1,104 +1,126 @@
-<header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
-        <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-            <!-- Mobile Menu Button & Desktop Toggle -->
-            <div class="flex items-center space-x-3">
-                <!-- Mobile Menu Button -->
-                <button 
-                    id="mobile-menu-button"
-                    class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    onclick="toggleMobileSidebar()"
-                    aria-label="Toggle menu"
-                >
-                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-                
-                <!-- Desktop Sidebar Toggle -->
-                <button 
-                    onclick="if (window.Livewire) { Livewire.dispatch('toggle-sidebar'); } else { window.dispatchEvent(new CustomEvent('toggle-sidebar')); }"
-                    class="hidden lg:flex p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    aria-label="Toggle sidebar"
-                >
-                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-                
-                <!-- App Name/Logo -->
-                <div>
-                    <h1 class="text-xl font-bold text-gray-900">Dashboard</h1>
-                </div>
+<header class="h-20 bg-white border-b border-gray-200 flex items-center justify-end px-4 sm:px-6 lg:px-8 gap-4 sm:gap-6 sticky top-0 z-30">
+    <!-- Mobile Menu Button (Left Side) -->
+    <button 
+        id="mobile-menu-button"
+        class="lg:hidden absolute left-4 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        onclick="toggleMobileSidebar()"
+        aria-label="Toggle menu">
+        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </button>
+
+    <!-- SMS Credits -->
+    @if(auth()->user()->role=='lender' || auth()->user()->role=='super_admin')
+    <div class="hidden sm:flex items-center gap-2">
+        <span class="text-gray-600 font-medium text-sm">SMS</span>
+        @php
+            $smsBalance = auth()->user()->role == 'lender' 
+                ? (auth()->user()->lender->sms_balance ?? 0)
+                : 0;
+        @endphp
+        <span class="text-sidebar-green font-bold text-lg">{{ number_format($smsBalance) }}</span>
+    </div>
+    @endif
+
+    <!-- Message Icon -->
+    <button class="hidden sm:flex p-2 hover:bg-gray-100 rounded-lg transition-colors relative" title="Messages">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+        </svg>
+    </button>
+
+    <!-- Notification Bell -->
+    <button class="hidden sm:flex p-2 hover:bg-gray-100 rounded-lg transition-colors relative" title="Notifications">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <!-- Notification Badge -->
+        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+    </button>
+
+    <!-- User Profile Dropdown -->
+    <div class="relative">
+        <button 
+            id="profile-menu-button" 
+            class="flex items-center gap-2 sm:gap-3 p-1 sm:p-2 rounded-lg hover:bg-gray-100 transition-all duration-200 group"
+            onclick="toggleDropdown()">
+            <!-- User Info (Hidden on mobile) -->
+            <div class="hidden md:block text-right">
+                <div class="text-sidebar-green font-semibold text-sm">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</div>
+                <div class="text-gray-500 text-xs capitalize">{{ auth()->user()->role }}</div>
+            </div>
+            <!-- Avatar -->
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-sidebar-green rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
+                {{ strtoupper(substr(auth()->user()->first_name, 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name ?? auth()->user()->first_name, 0, 1)) }}
+            </div>
+            <!-- Dropdown Arrow (Hidden on mobile) -->
+            <svg class="hidden sm:block h-4 w-4 text-gray-500 transition-transform duration-200" 
+                 id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div 
+            id="profile-dropdown" 
+            class="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-40 hidden">
+            <!-- User Info in Dropdown -->
+            <div class="px-4 py-3 border-b border-gray-100">
+                <p class="text-sm font-semibold text-gray-900">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
+                <p class="text-xs text-gray-500 mt-0.5">{{ auth()->user()->email }}</p>
+                <p class="text-xs text-sidebar-green font-medium mt-1 capitalize">{{ auth()->user()->role }}</p>
             </div>
 
-            <!-- Profile Menu with Dropdown -->
-            <div class="relative">
-                <button 
-                    id="profile-menu-button" 
-                    class="flex items-center space-x-2 lg:space-x-3 p-1 lg:p-2 rounded-lg lg:rounded-xl hover:bg-gray-100 transition-all duration-200 group"
-                    onclick="toggleDropdown()"
-                >
-                    <div class="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-brand-red to-brand-dark-red rounded-lg lg:rounded-xl flex items-center justify-center shadow-md">
-                        <span class="text-white text-xs lg:text-sm font-bold uppercase "> {{ substr( auth()->user()->name,0,2) }} </span>
-                    </div>
-                    <div class="text-left">
-                        <p class="text-sm font-semibold text-gray-900 group-hover:text-brand-red transition-colors">{{ auth()->user()->name }}</p>
-                        <p class="text-xs text-gray-500">User</p>
-                    </div>
-                    <svg class="h-4 w-4 text-gray-500 group-hover:text-brand-red transition-all duration-200" 
-                         id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            <!-- Menu Items -->
+            <div class="py-1">
+                <a href="{{ route('user.setting') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
-                </button>
+                    <span>Settings</span>
+                </a>
+            </div>
 
-                <!-- Dropdown Menu -->
-                <div 
-                    id="profile-dropdown" 
-                    class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-40 hidden"
-                >
-                    <div class="px-4 py-2 border-b border-gray-100">
-                        <p class="text-sm font-semibold text-gray-900">{{ auth()->user()->name }}</p>
-                        <p class="text-xs text-gray-500"> {{ auth()->user()->email }}</p>
-                    </div>
-
-                    <!-- <a href="{{ route('user.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a> -->
-                    <a href="{{ route('user.setting') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                         
-
-                    
-                    <!-- Laravel Logout Form -->
-                    <form method="POST" action="{{ route('logout') }}" class="block">
-                        @csrf
-                        <button 
-                            type="submit" 
-                            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 flex items-center space-x-2"
-                        >
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                            </svg>
-                            <span>Logout</span>
-                        </button>
-                    </form>
-                </div>
+            <div class="border-t border-gray-100 py-1">
+                <!-- Logout Form -->
+                <form method="POST" action="{{ route('logout') }}" class="block">
+                    @csrf
+                    <button 
+                        type="submit" 
+                        class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </div>
         </div>
+    </div>
 
-
-        <script>
+    <script>
         function toggleDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const arrow = document.getElementById('dropdown-arrow');
             
             dropdown.classList.toggle('hidden');
-            arrow.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            if (arrow) {
+                arrow.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
         }
 
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+            if (sidebar) {
+                sidebar.classList.toggle('-translate-x-full');
+            }
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+            }
             document.body.classList.toggle('overflow-hidden');
         }
 
@@ -106,14 +128,24 @@
         document.addEventListener('click', function(event) {
             const button = document.getElementById('profile-menu-button');
             const dropdown = document.getElementById('profile-dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
             
-            if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+            if (button && dropdown && !button.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.classList.add('hidden');
-                document.getElementById('dropdown-arrow').style.transform = 'rotate(0deg)';
+                if (arrow) {
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+        });
+
+        // Close mobile sidebar when clicking overlay
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.getElementById('sidebar-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    toggleMobileSidebar();
+                });
             }
         });
     </script>
-
-
-
-    </header>
+</header>

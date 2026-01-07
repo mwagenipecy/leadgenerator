@@ -176,12 +176,14 @@ Route::middleware(['auth', 'otp.required', 'nida.verified'])->group(function () 
     //ONBOARDING ROUTES OR LOGIN
     Route::get('register',[OnboardingController::class,'registerNewUser'])->name('user.register');
     Route::get('register/company',[OnboardingController::class,'registerCompany'])->name('company.register');
+    
+    // QR Code verification link - Must be accessible without auth for mobile login
+    Route::get('/verification/phone-photo_', [OnboardingController::class,'phoneVerificationByLink'])->name('verification.phone-photo.link');
 
 Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), ])->group(function () {
     Route::group(['prefix'=>'onboarding'],function(){
     Route::get('verification/option',[OnboardingController::class,'verificationOption'])->name('verification.options');
     Route::get('/verification/phone-photo', [OnboardingController::class,'phoneVerification'])->name('verification.phone-photo');
-    Route::get('/verification/phone-photo_', [OnboardingController::class,'phoneVerificationByLink'])->name('verification.phone-photo.link');
     Route::get('/verification/qr-code', [OnboardingController::class,'qrCodeVerification'])->name('verification.qr-code');
     Route::get('/verification/questionnaire', [OnboardingController::class,'questionnaireVerification'])->name('verification.questionnaire');
     });

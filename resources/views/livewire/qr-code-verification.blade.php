@@ -3,14 +3,14 @@
     <header class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="text-2xl font-bold font-poppins text-black">
-                    Lead<span class="text-brand-red">Generator</span>
+                <div>
+                    <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Logo" class="h-12 w-auto">
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm text-gray-500">Welcome, {{ auth()->user()->first_name ?? "" }}</span>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
-                        <button type="submit" class="text-sm text-brand-red hover:text-red-700 transition-colors">
+                        <button type="submit" class="text-sm text-brand-green hover:text-brand-green-light transition-colors">
                             Logout
                         </button>
                     </form>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="w-16 h-0.5 bg-gray-300"></div>
                 <div class="flex items-center">
-                    <div class="w-8 h-8 {{ $isVerified ? 'bg-green-500' : 'bg-brand-red' }} rounded-full flex items-center justify-center mr-2">
+                    <div class="w-8 h-8 {{ $isVerified ? 'bg-green-500' : 'bg-brand-green' }} rounded-full flex items-center justify-center mr-2">
                         @if($isVerified)
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -60,8 +60,8 @@
 
         <!-- Header Section -->
         <div class="text-center mb-8">
-            <div class="mx-auto w-20 h-20 bg-brand-red/10 rounded-2xl flex items-center justify-center mb-6">
-                <svg class="w-10 h-10 text-brand-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mx-auto w-20 h-20 bg-brand-green/10 rounded-2xl flex items-center justify-center mb-6">
+                <svg class="w-10 h-10 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                 </svg>
             </div>
@@ -157,7 +157,7 @@
                                         
                                         <!-- Time remaining progress bar -->
                                         <div class="w-full bg-gray-200 rounded-full h-2">
-                                            <div id="timer-progress" class="bg-brand-red h-2 rounded-full transition-all duration-1000" style="width: 100%"></div>
+                                            <div id="timer-progress" class="bg-brand-green h-2 rounded-full transition-all duration-1000" style="width: 100%"></div>
                                         </div>
                                     </div>
 
@@ -165,7 +165,7 @@
                                     <div class="mt-4 space-y-3">
                                         <button 
                                             wire:click="regenerateQRCode"
-                                            class="text-brand-red hover:text-red-700 font-medium text-sm"
+                                            class="text-brand-green hover:text-brand-green-light font-medium text-sm"
                                         >
                                             🔄 Generate New Code
                                         </button>
@@ -174,7 +174,7 @@
                                     <!-- Loading State -->
                                     <div class="w-64 h-64 mx-auto border-2 border-gray-200 rounded-lg flex items-center justify-center">
                                         <div class="text-center">
-                                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-red mx-auto mb-4"></div>
+                                            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-green mx-auto mb-4"></div>
                                             <p class="text-gray-500 text-sm">Generating secure code...</p>
                                         </div>
                                     </div>
@@ -236,7 +236,7 @@
                                 </button>
                                 <button 
                                     onclick="navigator.share ? navigator.share({url: '{{ $this->getQRCodeUrl() }}', title: 'NIDA Verification'}) : window.open('{{ $this->getQRCodeUrl() }}', '_blank')"
-                                    class="text-brand-red hover:text-red-700 text-sm font-medium px-4 py-2 border border-brand-red rounded-lg hover:bg-red-50 transition-colors"
+                                    class="text-brand-green hover:text-brand-green-light text-sm font-medium px-4 py-2 border border-brand-green rounded-lg hover:bg-green-50 transition-colors"
                                 >
                                     Open Link Manually
                                 </button>
@@ -403,7 +403,7 @@
                         } else if (progressPercent < 50) {
                             progressEl.className = 'bg-yellow-500 h-2 rounded-full transition-all duration-1000';
                         } else {
-                            progressEl.className = 'bg-brand-red h-2 rounded-full transition-all duration-1000';
+                            progressEl.className = 'bg-brand-green h-2 rounded-full transition-all duration-1000';
                         }
                     }
 

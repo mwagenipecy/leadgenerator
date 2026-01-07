@@ -11,6 +11,13 @@
   
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    
+    <style>
+        :root {
+            --brand-green: #19733B;
+            --brand-green-light: #1a7f40;
+        }
+    </style>
 
 </head>
 <body class="bg-gray-50 font-inter">

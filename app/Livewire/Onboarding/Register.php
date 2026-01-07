@@ -118,8 +118,8 @@ class Register extends Component
                     'registration_type' => $this->type,
                     'password' => Hash::make($this->password),
                     'email_verified_at' => now(),
-                    'verification_status' => $this->type === 'individual' ? 'pending' : 'pending',
-                    'company_verification_status' => $this->type === 'company' ? 'pending' : null,
+                    'verification_status' => 'pending',
+                    // company_verification_status will use database default 'pending'
                     'role' => 'borrower',
                 ]);
     
