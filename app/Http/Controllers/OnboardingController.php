@@ -19,12 +19,33 @@ class OnboardingController extends Controller
 
     public function verificationOption()
     {
+        $user = auth()->user();
+        
+        // Restrict admin and lender from accessing verification options
+        $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+        $isLender = $user->isLender() || $user->hasRole('lender');
+        
+        if ($isAdmin || $isLender) {
+            return redirect()->route('dashboard')
+                ->with('info', 'Verification is not required for admin and lender accounts.');
+        }
 
         return view('pages.onboarding.verification-method');
     }
 
 
     public function phoneVerification(){
+        $user = auth()->user();
+        
+        // Restrict admin and lender from accessing phone verification
+        $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+        $isLender = $user->isLender() || $user->hasRole('lender');
+        
+        if ($isAdmin || $isLender) {
+            return redirect()->route('dashboard')
+                ->with('info', 'Verification is not required for admin and lender accounts.');
+        }
+        
         return view('pages.onboarding.phone-verification');
     }
 
@@ -93,7 +114,19 @@ class OnboardingController extends Controller
             'user_agent' => $request->userAgent()
         ]);
         
-        // Redirect to verification options page
+        // Check if user is admin or lender - redirect to dashboard instead
+        $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+        $isLender = $user->isLender() || $user->hasRole('lender');
+        
+        if ($isAdmin || $isLender) {
+            // Set OTP verified flag for admin/lender
+            \Illuminate\Support\Facades\Session::put('otp_verified', true);
+            
+            return redirect()->route('dashboard')
+                ->with('success', 'Successfully logged in! Welcome back.');
+        }
+        
+        // Regular users go to verification options
         return redirect()->route('verification.options')
             ->with('success', 'Successfully logged in! Please choose your verification method to continue.');
     }
@@ -103,12 +136,32 @@ class OnboardingController extends Controller
 
 
     public function qrCodeVerification(){
-
+        $user = auth()->user();
+        
+        // Restrict admin and lender from accessing QR code verification
+        $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+        $isLender = $user->isLender() || $user->hasRole('lender');
+        
+        if ($isAdmin || $isLender) {
+            return redirect()->route('dashboard')
+                ->with('info', 'Verification is not required for admin and lender accounts.');
+        }
+        
         return view('pages.onboarding.qr-code');
     }
 
     public function questionnaireVerification(){
-
+        $user = auth()->user();
+        
+        // Restrict admin and lender from accessing questionnaire verification
+        $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+        $isLender = $user->isLender() || $user->hasRole('lender');
+        
+        if ($isAdmin || $isLender) {
+            return redirect()->route('dashboard')
+                ->with('info', 'Verification is not required for admin and lender accounts.');
+        }
+        
         return view('pages.onboarding.questionnaire');
     }
 }

@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'outlook'),
 
     /*
     |--------------------------------------------------------------------------
@@ -82,7 +82,7 @@ return [
         'failover' => [
             'transport' => 'failover',
             'mailers' => [
-                'smtp',
+                'outlook',
                 'log',
             ],
             'retry_after' => 60,
@@ -95,6 +95,10 @@ return [
                 'postmark',
             ],
             'retry_after' => 60,
+        ],
+
+        'outlook' => [
+            'transport' => 'outlook',
         ],
 
     ],
@@ -111,8 +115,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('FROM_EMAIL', env('MAIL_FROM_ADDRESS', 'tza.no-reply@creditinfo.co.tz')),
+        'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Lead Generator')),
     ],
 
 ];

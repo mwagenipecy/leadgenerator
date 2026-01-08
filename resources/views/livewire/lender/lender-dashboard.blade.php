@@ -178,7 +178,7 @@
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-2">Product Performance</h3>
-                        <p class="text-gray-600">Applications by loan product</p>
+                        <p class="text-gray-600">Applications by lender's products</p>
                     </div>
                     <div class="text-sm font-medium text-gray-500">Total: {{ number_format($totalApplications) }}</div>
                 </div>

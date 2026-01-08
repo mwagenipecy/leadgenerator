@@ -206,7 +206,7 @@
                                     </span>
                                 @endif
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" wire:click="confirmActivate({{ $product->id }}, '{{ $product->name }}')" {{ $product->is_active ? 'checked' : '' }} class="sr-only peer">
+                                    <input type="checkbox" wire:click="confirmActivate('{{ $product->id }}', @js($product->name))" {{ $product->is_active ? 'checked' : '' }} class="sr-only peer">
                                     <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-sidebar-green/25 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sidebar-green"></div>
                                 </label>
                             </div>
@@ -216,7 +216,7 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center space-x-1">
                                 <!-- View -->
-                                <button wire:click="viewProduct({{ $product->id }})" 
+                                <button wire:click="viewProduct('{{ $product->id }}')" 
                                         class="text-black hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200" 
                                         title="View Details">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,7 +226,7 @@
                                 </button>
 
                                 <!-- Edit -->
-                                <button wire:click="editProduct({{ $product->id }})" 
+                                <button wire:click="editProduct('{{ $product->id }}')" 
                                         class="text-black hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200" 
                                         title="Edit">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,7 +235,7 @@
                                 </button>
 
                                 <!-- Delete -->
-                                <button wire:click="confirmDelete({{ $product->id }}, '{{ $product->name }}')" 
+                                <button wire:click="confirmDelete('{{ $product->id }}', @js($product->name))" 
                                         class="text-sidebar-green hover:bg-sidebar-green-50 p-2 rounded-lg transition-colors duration-200" 
                                         title="Delete">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

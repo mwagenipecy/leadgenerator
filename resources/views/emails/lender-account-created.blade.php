@@ -26,7 +26,7 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #C40F12, #A00E11);
+            background: linear-gradient(135deg, #2563EB, #1E40AF);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -40,28 +40,32 @@
             padding: 40px 30px;
         }
         .welcome-box {
-            background: #F0FDF4;
-            border: 2px solid #BBF7D0;
+            background: #EFF6FF;
+            border: 2px solid #DBEAFE;
             border-radius: 16px;
             padding: 20px;
             margin: 20px 0;
         }
         .credentials-box {
-            background: #FEF2F2;
-            border: 2px solid #FECACA;
+            background: #FEF3C7;
+            border: 2px solid #FDE68A;
             border-radius: 16px;
             padding: 20px;
             margin: 20px 0;
         }
         .btn {
             display: inline-block;
-            background: #C40F12;
+            background: #2563EB;
             color: white;
             text-decoration: none;
             padding: 12px 24px;
             border-radius: 12px;
             font-weight: 600;
             margin: 20px 0;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background: #1E40AF;
         }
         .footer {
             background: #F9FAFB;
@@ -83,7 +87,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1> Welcome to Lead Generator!</h1>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="display: inline-block; background-color: #ffffff; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" style="max-width: 200px; height: auto; display: block;">
+                </div>
+            </div>
+            <h1>Welcome to Lead Generator!</h1>
             <p>Your lender account has been approved and created</p>
         </div>
         

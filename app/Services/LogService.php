@@ -227,6 +227,66 @@ class LogService
     }
 
     /**
+     * Log loan product creation
+     */
+    public static function logLoanProductCreated($product): SystemLog
+    {
+        return self::log(
+            'loan_product_created',
+            "Loan product '{$product->name}' was created",
+            'high',
+            $product,
+            null,
+            $product->toArray()
+        );
+    }
+
+    /**
+     * Log loan product update
+     */
+    public static function logLoanProductUpdated($product, array $oldValues, array $newValues): SystemLog
+    {
+        return self::log(
+            'loan_product_updated',
+            "Loan product '{$product->name}' was updated",
+            'medium',
+            $product,
+            $oldValues,
+            $newValues
+        );
+    }
+
+    /**
+     * Log loan product deletion
+     */
+    public static function logLoanProductDeleted($product): SystemLog
+    {
+        return self::log(
+            'loan_product_deleted',
+            "Loan product '{$product->name}' was deleted",
+            'critical',
+            $product,
+            $product->toArray(),
+            ['status' => 'deleted', 'is_active' => false]
+        );
+    }
+
+    /**
+     * Log loan product status change
+     */
+    public static function logLoanProductStatusChanged($product, bool $isActive): SystemLog
+    {
+        return self::log(
+            'loan_product_status_changed',
+            "Loan product '{$product->name}' status changed to " . ($isActive ? 'active' : 'inactive'),
+            'high',
+            $product,
+            ['is_active' => !$isActive, 'status' => !$isActive ? 'active' : 'inactive'],
+            ['is_active' => $isActive, 'status' => $isActive ? 'active' : 'inactive']
+        );
+    }
+
+    /**
      * Get default description based on action
      */
     private static function getDefaultDescription(string $action, $model = null): string
@@ -244,6 +304,10 @@ class LogService
             'application_status_changed' => 'Application status was changed',
             'lender_approved' => 'Lender was approved',
             'lender_rejected' => 'Lender was rejected',
+            'loan_product_created' => 'Loan product was created',
+            'loan_product_updated' => 'Loan product was updated',
+            'loan_product_deleted' => 'Loan product was deleted',
+            'loan_product_status_changed' => 'Loan product status was changed',
         ];
 
         return $descriptions[$action] ?? ucfirst(str_replace('_', ' ', $action));

@@ -109,6 +109,7 @@ class LenderManagement extends Component
     public function render()
     {
         $lenders = Lender::query()
+            ->with(['createdBy', 'updatedBy'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('company_name', 'like', '%' . $this->search . '%')
@@ -185,8 +186,21 @@ class LenderManagement extends Component
                     'website' => $this->website,
                     'description' => $this->description,
                     'documents' => $documents,
-                    'status' => 'pending'
+                    'status' => 'pending',
+                    'created_by' => auth()->id()
                 ]);
+
+                // Log the activity using LogService
+                if (class_exists(\App\Services\LogService::class)) {
+                    \App\Services\LogService::log(
+                        'lender_created',
+                        "Lender {$lender->company_name} was created",
+                        'high',
+                        $lender,
+                        null,
+                        $lender->toArray()
+                    );
+                }
 
                 Log::info('Lender application created', [
                     'lender_id' => $lender->id,
@@ -214,8 +228,7 @@ class LenderManagement extends Component
 
     public function viewLender($id)
     {
-        $this->selectedLender = Lender::findOrFail($id);
-        $this->showViewModal = true;
+        return redirect()->route('lenders.view', $id);
     }
 
     public function closeViewModal()
@@ -285,7 +298,8 @@ class LenderManagement extends Component
             if ($lender->isPending()) {
                 $lender->update([
                     'status' => 'rejected',
-                    'rejection_reason' => $this->rejection_reason
+                    'rejection_reason' => $this->rejection_reason,
+                    'updated_by' => auth()->id()
                 ]);
                 
                 Log::info('Lender application rejected', [
@@ -379,7 +393,10 @@ class LenderManagement extends Component
         $lender = Lender::findOrFail($id);
         
         if ($lender->isApproved()) {
-            $lender->update(['status' => 'suspended']);
+            $lender->update([
+                'status' => 'suspended',
+                'updated_by' => auth()->id()
+            ]);
             
             // Suspend the user account too
             if ($lender->user) {
@@ -436,7 +453,10 @@ class LenderManagement extends Component
             $lender = Lender::findOrFail($id);
             
             if ($lender->isSuspended()) {
-                $lender->update(['status' => 'approved']);
+                $lender->update([
+                    'status' => 'approved',
+                    'updated_by' => auth()->id()
+                ]);
                 
                 // Reactivate user account
                 if ($lender->user) {

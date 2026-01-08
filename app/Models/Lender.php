@@ -32,7 +32,9 @@ class Lender extends Model
         'rejection_reason',
         'approved_at',
         'approved_by',
-        'user_id'
+        'user_id',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -172,12 +174,27 @@ class Lender extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    // Get all users associated with this lender
+    public function users()
+    {
+        return User::where('lender_id', $this->id)->get();
+    }
    
 
 
 
     // Create default user account for approved lender
-    public function createUserAccount(int $approvedById): User
+    public function createUserAccount(string $approvedById): User
     {
         $password = $this->generateSecurePassword();
         
@@ -250,6 +267,13 @@ class Lender extends Model
         // Reactivate user account
         if ($this->user) {
             $this->user->update(['is_active' => true]);
+        }
+
+        // Send reactivation email
+        try {
+            Mail::to($this->email)->send(new LenderApplicationStatusChanged($this, 'approved'));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send lender reactivation email: ' . $e->getMessage());
         }
     }
 

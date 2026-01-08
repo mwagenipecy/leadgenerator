@@ -114,24 +114,32 @@ class LenderDashboard extends Component
                 ];
             });
 
-        // Top performing products with enhanced data
+        // Top performing products with enhanced data - only lender's products
         $this->topPerformingProducts = LoanProduct::where('lender_id', $lender->id)
             ->withCount([
-                'applications',
-                'applications as approved_count' => function ($query) {
-                    $query->where('status', 'approved');
+                'applications' => function ($query) use ($lender) {
+                    $query->where('lender_id', $lender->id);
                 },
-                'applications as rejected_count' => function ($query) {
-                    $query->where('status', 'rejected');
+                'applications as approved_count' => function ($query) use ($lender) {
+                    $query->where('lender_id', $lender->id)
+                          ->where('status', 'approved');
                 },
-                'applications as pending_count' => function ($query) {
-                    $query->whereIn('status', ['submitted', 'under_review']);
+                'applications as rejected_count' => function ($query) use ($lender) {
+                    $query->where('lender_id', $lender->id)
+                          ->where('status', 'rejected');
+                },
+                'applications as pending_count' => function ($query) use ($lender) {
+                    $query->where('lender_id', $lender->id)
+                          ->whereIn('status', ['submitted', 'under_review']);
                 }
             ])
-            ->having('applications_count', '>', 0)
-            ->orderBy('applications_count', 'desc')
-            ->limit(5)
-            ->get();
+            ->get()
+            ->filter(function ($product) {
+                return $product->applications_count > 0;
+            })
+            ->sortByDesc('applications_count')
+            ->take(5)
+            ->values();
 
         // Monthly application trends (last 6 months)
         $this->applicationTrends = $this->getMonthlyTrends($lender->id);

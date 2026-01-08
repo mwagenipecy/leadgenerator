@@ -130,14 +130,14 @@
 
 
                         <div>
-                                <label class="block text-sm font-medium text-black mb-2">Loan Type </label>
+                                <label class="block text-sm font-medium text-black mb-2">Loan Type *</label>
                                 <div class="flex items-center space-x-4 pt-3">
                                     <label class="flex items-center cursor-pointer">
-                                        <input wire:model.live="loan_type" type="radio" value="unsecured" class="text-sidebar-green focus:ring-sidebar-green">
+                                        <input wire:model.live="loan_type" type="radio" name="loan_type" value="unsecured" class="text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm font-medium text-black">Unsecured</span>
                                     </label>
                                     <label class="flex items-center cursor-pointer">
-                                        <input wire:model.live="loan_type" type="radio" value="secured" class="text-sidebar-green focus:ring-sidebar-green">
+                                        <input wire:model.live="loan_type" type="radio" name="loan_type" value="secured" class="text-sidebar-green focus:ring-sidebar-green">
                                         <span class="ml-2 text-sm font-medium text-black">Secured</span>
                                     </label>
                                 </div>
@@ -277,7 +277,6 @@
                                     <label class="block text-sm font-medium text-black mb-2">Interest Type *</label>
                                     <select wire:model.live="interest_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                         <option value="reducing">Reducing Balance</option>
-                                        <option value="flat">Flat Rate</option>
                                         <option value="fixed">Fixed Rate</option>
                                     </select>
                                     @error('interest_type') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
@@ -335,8 +334,8 @@
                                     <label class="block text-sm font-medium text-black mb-2">Employment Type *</label>
                                     <select wire:model.live="employment_requirement" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                         <option value="all">All Employment Types</option>
-                                        <option value="employed">Employed Only</option>
-                                        <option value="unemployed">Unemployed/Self-Employed</option>
+                                        <option value="employed">Employed</option>
+                                        <option value="business">Business</option>
                                     </select>
                                     @error('employment_requirement') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
@@ -378,11 +377,6 @@
                                         <input wire:model.live="min_monthly_income" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                         @error('min_monthly_income') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-black mb-2">Max Debt-to-Income Ratio (%)</label>
-                                        <input wire:model.live="max_debt_to_income_ratio" type="number" step="0.1" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
-                                        @error('max_debt_to_income_ratio') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
-                                    </div>
                                 </div>
                             </div>
 
@@ -393,12 +387,6 @@
                                         <label class="block text-sm font-medium text-black mb-2">Minimum Credit Score</label>
                                         <input wire:model.live="min_credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                         @error('min_credit_score') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="flex items-center">
-                                        <label class="flex items-center cursor-pointer bg-white p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors w-full">
-                                            <input wire:model.live="allow_bad_credit" type="checkbox" class="text-sidebar-green focus:ring-sidebar-green rounded h-5 w-5">
-                                            <span class="ml-3 text-sm font-medium text-black">Accept applications with bad credit history</span>
-                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -586,14 +574,14 @@
                     <!-- Previous Button -->
                     <div>
                         @if($currentStep > 1)
-                            <button type="button" wire:click="previousStep" class="bg-gray-100 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
+                            <button type="button" wire:click="previousStep" @click.prevent class="bg-gray-100 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                 </svg>
                                 Previous Step
                             </button>
                         @else
-                            <button type="button" wire:click="cancel" class="bg-gray-100 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
+                            <button type="button" wire:click="cancel" @click.prevent class="bg-gray-100 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                 </svg>
@@ -615,7 +603,7 @@
                     <!-- Next/Save Button -->
                     <div>
                         @if($currentStep < 4)
-                            <button type="button" wire:click="nextStep" class="bg-sidebar-green text-white px-6 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg flex items-center">
+                            <button type="button" wire:click="nextStep" @click.prevent class="bg-sidebar-green text-white px-6 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg flex items-center">
                                 Next Step
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -623,10 +611,10 @@
                             </button>
                         @else
                             <div class="flex items-center space-x-3">
-                                <button type="button" wire:click="cancel" class="bg-gray-100 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                                <button type="button" wire:click="cancel" @click.prevent class="bg-gray-100 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
                                     Cancel
                                 </button>
-                                <button type="submit" wire:click="saveProduct" class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-bold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg flex items-center">
+                                <button type="submit" class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-bold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                     </svg>

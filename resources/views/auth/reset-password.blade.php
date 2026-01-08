@@ -10,8 +10,31 @@
             <p class="text-gray-600">Create a strong password for your account</p>
         </div>
 
-        <!-- Reset Password Form -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        <!-- Initial Message with Button to Load Form -->
+        <div id="initial-message" class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Ready to Reset Your Password?</h3>
+            <p class="text-sm text-gray-600 mb-6">
+                Click the button below to proceed with setting your new password.
+            </p>
+            <button 
+                type="button" 
+                onclick="loadResetForm()"
+                class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 focus:ring-4 focus:ring-green-300 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+            >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                </svg>
+                Continue to Reset Password
+            </button>
+        </div>
+
+        <!-- Reset Password Form (Hidden Initially) -->
+        <div id="reset-form" class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hidden">
             
             <!-- Description -->
             <div class="mb-6 text-center">
@@ -153,7 +176,7 @@
                 <div>
                     <button 
                         type="submit" 
-                        class="w-full bg-sidebar-green text-white py-3 rounded-lg font-semibold hover:bg-sidebar-green-light focus:ring-4 focus:ring-sidebar-green/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+                        class="w-full bg-green-700 text-white py-3 rounded-lg font-semibold hover:bg-sidebar-green-light focus:ring-4 focus:ring-sidebar-green/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
                     >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
@@ -178,6 +201,18 @@
     </x-authentication-card>
 
     <script>
+        function loadResetForm() {
+            const initialMessage = document.getElementById('initial-message');
+            const resetForm = document.getElementById('reset-form');
+            
+            // Hide initial message and show form with smooth transition
+            initialMessage.classList.add('hidden');
+            resetForm.classList.remove('hidden');
+            
+            // Smooth scroll to form
+            resetForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
             const icon = document.getElementById(fieldId + '-eye-icon');

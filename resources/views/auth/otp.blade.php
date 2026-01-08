@@ -126,7 +126,7 @@
                     <button 
                         type="submit" 
                         id="verifyBtn"
-                        class="w-full bg-brand-green text-white py-3 rounded-lg font-semibold hover:bg-brand-green-light focus:ring-4 focus:ring-brand-green/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-full bg-green-700 text-white py-3 rounded-lg font-semibold hover:bg-brand-green-light focus:ring-4 focus:ring-brand-green/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled
                     >
                         {{ __('Verify Code') }}

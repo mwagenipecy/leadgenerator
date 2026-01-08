@@ -26,6 +26,20 @@ class RequireNidaVerification
         $user = Auth::user();
         $routeName = $request->route()?->getName();
 
+        // Skip NIDA verification for admin and lender roles
+        $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+        $isLender = $user->isLender() || $user->hasRole('lender');
+        
+        if ($isAdmin || $isLender) {
+            Log::info('Skipping NIDA verification check for admin/lender', [
+                'user_id' => $user->id,
+                'is_admin' => $isAdmin,
+                'is_lender' => $isLender,
+                'route' => $routeName,
+            ]);
+            return $next($request);
+        }
+
         // Define routes that should be accessible even without NIDA verification
         $allowedRoutes = [
             'verification.options',

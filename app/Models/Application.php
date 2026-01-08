@@ -342,7 +342,7 @@ class Application extends Model
     {
         $employmentMap = [
             'employed' => ['employed'],
-            'unemployed' => ['unemployed', 'self_employed'],
+            'business' => ['unemployed', 'self_employed'],
             'all' => ['employed', 'unemployed', 'self_employed', 'retired'],
         ];
 

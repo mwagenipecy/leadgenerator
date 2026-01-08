@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'outlook' => [
+        'client_id' => env('OUTLOOK_CLIENT_ID'),
+        'client_secret' => env('OUTLOOK_CLIENT_SECRET'),
+        'tenant_id' => env('TENANT_ID'),
+        'shared_mailbox' => env('SHARED_MAILBOX'),
+        'from_email' => env('FROM_EMAIL'),
+    ],
+
 ];

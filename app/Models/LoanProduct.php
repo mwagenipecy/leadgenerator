@@ -5,14 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class LoanProduct extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'lender_id',
+        'created_by',
+        'updated_by',
         'name',
         'description',
         'product_code',
@@ -44,6 +51,7 @@ class LoanProduct extends Model
         'disbursement_time_days',
         'disbursement_methods',
         'is_active',
+        'status',
         'auto_approval_eligible',
         'auto_approval_max_amount',
         'terms_and_conditions',
@@ -71,6 +79,7 @@ class LoanProduct extends Model
         'requires_guarantor' => 'boolean',
         'allow_bad_credit' => 'boolean',
         'is_active' => 'boolean',
+        'status' => 'string',
         'auto_approval_eligible' => 'boolean',
         'required_documents' => 'array',
         'collateral_types' => 'array',
@@ -85,7 +94,15 @@ class LoanProduct extends Model
         return $this->belongsTo(Lender::class);
     }
 
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 
     public function applications()
     {
@@ -119,7 +136,12 @@ class LoanProduct extends Model
     // Scopes
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', true)->where('status', '!=', 'deleted');
+    }
+
+    public function scopeNotDeleted($query)
+    {
+        return $query->where('status', '!=', 'deleted');
     }
 
     public function scopeForEmploymentType($query, string $employmentType)
@@ -180,7 +202,7 @@ class LoanProduct extends Model
     {
         return match($this->employment_requirement) {
             'employed' => 'Employed Only',
-            'unemployed' => 'Unemployed/Self-Employed',
+            'business' => 'Business',
             'all' => 'All Employment Types',
             default => 'All Employment Types'
         };
@@ -234,9 +256,9 @@ class LoanProduct extends Model
                 if ($this->employment_requirement === 'employed' && $applicantData['employment_status'] !== 'employed') {
                     $eligible = false;
                     $reasons[] = "Only employed individuals are eligible";
-                } elseif ($this->employment_requirement === 'unemployed' && $applicantData['employment_status'] === 'employed') {
+                } elseif ($this->employment_requirement === 'business' && !in_array($applicantData['employment_status'], ['self_employed', 'unemployed'])) {
                     $eligible = false;
-                    $reasons[] = "Only unemployed/self-employed individuals are eligible";
+                    $reasons[] = "Only business/self-employed individuals are eligible";
                 }
             }
         }

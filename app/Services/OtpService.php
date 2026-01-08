@@ -50,8 +50,8 @@ class OtpService
             $mailDriver = config('mail.default');
             Log::info('Mail configuration', [
                 'driver' => $mailDriver,
-                'host' => config('mail.mailers.smtp.host'),
-                'from_address' => config('mail.from.address')
+                'from_address' => config('mail.from.address'),
+                'outlook_configured' => !empty(config('services.outlook.client_id'))
             ]);
 
             // Send OTP via email
@@ -69,7 +69,7 @@ class OtpService
                     'error' => $mailException->getMessage(),
                     'mail_config' => [
                         'driver' => config('mail.default'),
-                        'host' => config('mail.mailers.smtp.host')
+                        'outlook_configured' => !empty(config('services.outlook.client_id'))
                     ]
                 ]);
        

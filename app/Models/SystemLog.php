@@ -67,7 +67,7 @@ class SystemLog extends Model
     /**
      * Scope a query to only include logs for a specific user
      */
-    public function scopeForUser($query, int $userId)
+    public function scopeForUser($query, string $userId)
     {
         return $query->where('user_id', $userId);
     }
@@ -75,11 +75,11 @@ class SystemLog extends Model
     /**
      * Scope a query to only include logs for a specific model
      */
-    public function scopeForModel($query, string $modelType, int $modelId = null)
+    public function scopeForModel($query, string $modelType, string|int $modelId = null)
     {
         $query->where('model_type', $modelType);
         if ($modelId) {
-            $query->where('model_id', $modelId);
+            $query->where('model_id', (string)$modelId);
         }
         return $query;
     }

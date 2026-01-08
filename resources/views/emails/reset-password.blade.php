@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify your email address</title>
+    <title>Reset Password - Lead Generator</title>
     <style>
         * {
             margin: 0;
@@ -70,40 +70,26 @@
             text-align: left;
         }
         
-        /* Verification code section */
-        .code-section {
+        /* Button */
+        .button-container {
             text-align: center;
             margin: 40px 0;
-            padding: 30px 20px;
-            background-color: #f9f9f9;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #10b981;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 32px;
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .code-label {
-            font-size: 14px;
             font-weight: 600;
-            color: #666666;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         
-        .otp-code {
-            font-size: 48px;
-            font-weight: 700;
-            color: #1a1a1a;
-            letter-spacing: 8px;
-            font-family: 'Courier New', monospace;
-            margin: 15px 0;
-            user-select: all;
-        }
-        
-        .code-validity {
-            font-size: 13px;
-            color: #888888;
-            margin-top: 15px;
-            font-style: italic;
+        .button:hover {
+            background-color: #059669;
         }
         
         /* Security notice */
@@ -120,6 +106,18 @@
             color: #555555;
             margin: 0;
             line-height: 1.6;
+        }
+        
+        .url-fallback {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-size: 13px;
+            color: #666666;
+            font-family: 'Courier New', monospace;
         }
         
         /* Footer */
@@ -168,11 +166,6 @@
                 font-size: 20px;
             }
             
-            .otp-code {
-                font-size: 36px;
-                letter-spacing: 4px;
-            }
-            
             .footer {
                 padding: 20px;
             }
@@ -190,23 +183,34 @@
         
         <!-- Main Content -->
         <div class="content">
-            <h1 class="title">Verify your email address</h1>
+            <h1 class="title">Reset Your Password</h1>
             
             <p class="message">
-                Thanks for using Lead Generator. We want to make sure it's really you. Please enter the following verification code when prompted. If you didn't request this code, you can ignore this message.
+                You are receiving this email because we received a password reset request for your account.
             </p>
             
-            <!-- Verification Code -->
-            <div class="code-section">
-                <div class="code-label">Verification Code</div>
-                <div class="otp-code">{{ $otp }}</div>
-                <div class="code-validity">(This code is valid for 10 minutes)</div>
+            <div class="button-container">
+                <a href="{{ $url }}" class="button">Reset Password</a>
+            </div>
+            
+            <p class="message">
+                This password reset link will expire in {{ $expiration }} minutes.
+            </p>
+            
+            <p class="message">
+                If you did not request a password reset, no further action is required.
+            </p>
+            
+            <!-- URL Fallback -->
+            <div class="url-fallback">
+                <strong>If the button doesn't work, copy and paste this URL into your browser:</strong><br>
+                {{ $url }}
             </div>
             
             <!-- Security Notice -->
             <div class="security-notice">
                 <p>
-                    <strong>Security Notice:</strong> Lead Generator will never email you and ask you to disclose or verify your password, credit card, or banking account number.
+                    <strong>Security Notice:</strong> If you did not request this password reset, please ignore this email. Your password will remain unchanged.
                 </p>
             </div>
         </div>
@@ -215,10 +219,8 @@
         <div class="footer">
             <p class="footer-company">Lead Generator Team</p>
             <p>This message was produced and distributed by Lead Generator. &copy; {{ date('Y') }} Lead Generator. All rights reserved.</p>
-            <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-                If you did not attempt to log in or create an account, please disregard this email.
-            </p>
         </div>
     </div>
 </body>
 </html>
+

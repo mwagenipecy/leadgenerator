@@ -4,7 +4,9 @@ namespace App\Livewire\LoanProduct;
 
 use App\Models\LoanProduct;
 use App\Models\Application;
+use App\Models\SystemLog;
 use Livewire\Component;
+use App\Services\LogService;
 
 class LoanProductOverview extends Component
 {
@@ -27,6 +29,14 @@ class LoanProductOverview extends Component
         $applicationStats = $this->getApplicationStats();
         $performanceMetrics = $this->getPerformanceMetrics();
         
+        // Get activity logs for this product
+        $activityLogs = SystemLog::where('model_type', LoanProduct::class)
+            ->where('model_id', $this->productId)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->limit(50)
+            ->get();
+        
         return view('livewire.loan-product.loan-product-overview', [
             'product' => $this->product,
             'applicationStats' => $applicationStats,
@@ -34,6 +44,7 @@ class LoanProductOverview extends Component
             'documentTypes' => LoanProduct::getAvailableDocumentTypes(),
             'collateralTypes' => LoanProduct::getAvailableCollateralTypes(),
             'businessSectors' => LoanProduct::getAvailableBusinessSectors(),
+            'activityLogs' => $activityLogs,
         ]);
     }
 
@@ -231,20 +242,41 @@ class LoanProductOverview extends Component
 
     public function deleteProduct()
     {
-        $this->product->delete();
+        $this->product->update([
+            'status' => 'deleted',
+            'is_active' => false,
+            'updated_by' => auth()->id()
+        ]);
+        
+        // Log the deletion
+        if (class_exists(LogService::class)) {
+            LogService::logLoanProductDeleted($this->product);
+        }
+        
         session()->flash('message', 'Product deleted successfully!');
         return redirect()->route('loan.product.index');
     }
 
     public function toggleProductStatus()
     {
-        $this->product->update(['is_active' => !$this->product->is_active]);
-        $status = $this->product->is_active ? 'activated' : 'deactivated';
-        session()->flash('message', "Product {$status} successfully!");
-        $this->closeActivateModal();
+        $oldStatus = $this->product->is_active;
+        $this->product->update([
+            'is_active' => !$this->product->is_active,
+            'status' => !$this->product->is_active ? 'active' : 'inactive',
+            'updated_by' => auth()->id()
+        ]);
         
         // Refresh product data
         $this->product = $this->product->fresh();
+        
+        // Log the status change
+        if (class_exists(LogService::class)) {
+            LogService::logLoanProductStatusChanged($this->product, $this->product->is_active);
+        }
+        
+        $status = $this->product->is_active ? 'activated' : 'deactivated';
+        session()->flash('message', "Product {$status} successfully!");
+        $this->closeActivateModal();
     }
 
     public function closeDeleteModal()

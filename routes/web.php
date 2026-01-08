@@ -83,13 +83,44 @@ Route::middleware('guest')->group(function () {
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
             
-            Log::info('Authentication successful, starting OTP flow', [
+            Log::info('Authentication successful', [
                 'user_id' => $user->id,
-                'email' => $user->email
+                'email' => $user->email,
+                'role' => $user->role
             ]);
 
             // Regenerate session for security
             $request->session()->regenerate();
+
+            // Check if user is admin or lender - skip OTP for these roles
+            $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+            $isLender = $user->isLender() || $user->hasRole('lender');
+
+            if ($isAdmin || $isLender) {
+                Log::info('Admin/Lender login - skipping OTP verification', [
+                    'user_id' => $user->id,
+                    'is_admin' => $isAdmin,
+                    'is_lender' => $isLender
+                ]);
+
+                // Set OTP verified flag for admin/lender (they don't need OTP)
+                Session::put('otp_verified', true);
+
+                // Log the login
+                if (class_exists(\App\Services\LogService::class)) {
+                    \App\Services\LogService::logLogin($user);
+                }
+
+                // Redirect directly to dashboard
+                return redirect()->intended(route('dashboard'))
+                    ->with('success', 'Login successful! Welcome back.');
+            }
+
+            // Regular users need OTP verification
+            Log::info('Regular user login - starting OTP flow', [
+                'user_id' => $user->id,
+                'email' => $user->email
+            ]);
 
             // Store user before logout
             $userId = $user->id;
@@ -245,7 +276,14 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
     /// lender managenent section
     Route::get('lender-list',[LenderManagementController::class,'index'])->name('lenders.index');
+    Route::get('lenders/{lender}/view', [LenderManagementController::class,'viewLender'])->name('lenders.view');
     Route::get('lenders/{lender}/dashboard', [LenderManagementController::class,'viewLender'])->name('lender.dashboard');
+    Route::post('lenders/{lender}/approve', [LenderManagementController::class,'approveLender'])->name('lenders.approve');
+    Route::post('lenders/{lender}/reject', [LenderManagementController::class,'rejectLender'])->name('lenders.reject');
+    Route::post('lenders/{lender}/suspend', [LenderManagementController::class,'suspendLender'])->name('lenders.suspend');
+    Route::post('lenders/{lender}/reactivate', [LenderManagementController::class,'reactivateLender'])->name('lenders.reactivate');
+    Route::post('lenders/{lender}/add-user', [LenderManagementController::class,'addUser'])->name('lenders.add-user');
+    Route::delete('lenders/{lender}/delete', [LenderManagementController::class,'deleteLender'])->name('lenders.delete');
 
     // Loan product management
     Route::get('loan-product/list',[LoanProductManagementController::class,'index'])->name('loan.product.index');

@@ -3,14 +3,16 @@
 namespace App\Mail;
 
 use App\Models\Lender;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LenderApplicationStatusChanged extends Mailable
+class LenderApplicationStatusChanged extends Mailable implements ShouldQueue
 {
-    use SerializesModels;
+    use Queueable, SerializesModels;
 
     public function __construct(
         public Lender $lender,
@@ -20,7 +22,7 @@ class LenderApplicationStatusChanged extends Mailable
     public function envelope(): Envelope
     {
         $subject = match($this->status) {
-            'approved' => 'Application Approved - Lead Generator',
+            'approved' => 'Account Reactivated - Lead Generator',
             'rejected' => 'Application Update - Lead Generator',
             'suspended' => 'Account Suspended - Lead Generator',
             default => 'Application Status Update - Lead Generator'

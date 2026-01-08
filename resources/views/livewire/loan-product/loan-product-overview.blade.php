@@ -382,6 +382,129 @@
         </div>
     </div>
 
+    <!-- Activity Log Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mt-8">
+        <div class="p-6 border-b border-gray-100 bg-gray-50">
+            <h3 class="text-xl font-bold text-black flex items-center">
+                <svg class="w-6 h-6 text-sidebar-green mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Activity Log
+            </h3>
+            <p class="text-sm text-gray-600 mt-1">Recent actions and changes for this loan product</p>
+        </div>
+        <div class="p-6">
+            @if($activityLogs && $activityLogs->count() > 0)
+                <div class="space-y-4">
+                    @foreach($activityLogs as $log)
+                        <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border-l-4 
+                            @if($log->severity === 'critical') border-red-500
+                            @elseif($log->severity === 'high') border-orange-500
+                            @elseif($log->severity === 'medium') border-blue-500
+                            @else border-gray-300
+                            @endif">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center
+                                    @if($log->action === 'created' || $log->action === 'loan_product_created') bg-green-100 text-green-600
+                                    @elseif($log->action === 'updated' || $log->action === 'loan_product_updated') bg-blue-100 text-blue-600
+                                    @elseif($log->action === 'deleted' || $log->action === 'loan_product_deleted') bg-red-100 text-red-600
+                                    @elseif(str_contains($log->action, 'activate') || str_contains($log->action, 'status')) bg-yellow-100 text-yellow-600
+                                    @else bg-gray-100 text-gray-600
+                                    @endif">
+                                    @if($log->action === 'created' || $log->action === 'loan_product_created')
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                        </svg>
+                                    @elseif($log->action === 'updated' || $log->action === 'loan_product_updated')
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                    @elseif($log->action === 'deleted' || $log->action === 'loan_product_deleted')
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    @else
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-1">
+                                    <p class="text-sm font-semibold text-black">
+                                        {{ ucwords(str_replace('_', ' ', $log->action)) }}
+                                    </p>
+                                    <span class="text-xs text-gray-500">{{ $log->created_at->diffForHumans() }}</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">{{ $log->description ?? 'No description available' }}</p>
+                                <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                    @if($log->user)
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                            {{ $log->user->name ?? $log->user->email ?? 'System' }}
+                                        </span>
+                                    @else
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                            </svg>
+                                            System
+                                        </span>
+                                    @endif
+                                    @if($log->ip_address)
+                                        <span class="flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                                            </svg>
+                                            {{ $log->ip_address }}
+                                        </span>
+                                    @endif
+                                    <span class="px-2 py-0.5 rounded text-xs font-medium
+                                        @if($log->severity === 'critical') bg-red-100 text-red-800
+                                        @elseif($log->severity === 'high') bg-orange-100 text-orange-800
+                                        @elseif($log->severity === 'medium') bg-blue-100 text-blue-800
+                                        @else bg-gray-100 text-gray-800
+                                        @endif">
+                                        {{ ucfirst($log->severity) }}
+                                    </span>
+                                </div>
+                                @if($log->new_values && count($log->new_values) > 0)
+                                    <div class="mt-2 p-2 bg-white rounded text-xs">
+                                        <p class="font-semibold text-gray-700 mb-1">Changes:</p>
+                                        <ul class="space-y-1 text-gray-600">
+                                            @foreach(array_slice($log->new_values, 0, 3) as $key => $value)
+                                                <li><span class="font-medium">{{ ucwords(str_replace('_', ' ', $key)) }}:</span> 
+                                                    @if(is_bool($value))
+                                                        {{ $value ? 'Yes' : 'No' }}
+                                                    @elseif(is_array($value))
+                                                        {{ count($value) }} item(s)
+                                                    @else
+                                                        {{ strlen($value) > 50 ? substr($value, 0, 50) . '...' : $value }}
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-12">
+                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <p class="text-gray-500 text-lg font-medium mb-2">No Activity Logs</p>
+                    <p class="text-gray-400 text-sm">No activity has been recorded for this loan product yet.</p>
+                </div>
+            @endif
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     @if($showDeleteModal)
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -126,6 +126,22 @@ class OtpController extends Controller
                 'nida_verified_at' => $user->nida_verified_at,
             ]);
             
+            // Check if user is admin or lender - skip NIDA verification
+            $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
+            $isLender = $user->isLender() || $user->hasRole('lender');
+            
+            // Admin and lender don't need NIDA verification
+            if ($isAdmin || $isLender) {
+                Log::info('Admin/Lender user - skipping NIDA verification', [
+                    'user_id' => $user->id,
+                    'is_admin' => $isAdmin,
+                    'is_lender' => $isLender,
+                ]);
+                
+                return redirect()->intended(route('dashboard'))
+                    ->with('success', 'Login successful! Welcome back.');
+            }
+            
             // Check if user is NIDA verified
             // If not verified, redirect to verification options page
             if (!$user->isNidaVerified()) {

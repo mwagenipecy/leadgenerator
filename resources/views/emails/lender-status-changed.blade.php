@@ -41,6 +41,9 @@
 <body>
     <div class="container">
         <div class="header">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" style="max-width: 200px; height: auto;">
+            </div>
             <h1>Application Status Update</h1>
             <p>{{ $lender->company_name }}</p>
         </div>
