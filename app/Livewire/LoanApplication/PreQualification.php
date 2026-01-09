@@ -3,6 +3,7 @@
 namespace App\Livewire\LoanApplication;
 
 use App\Models\LoanProduct;
+use App\Models\LoanCategory;
 use App\Models\UserProfile;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
@@ -29,7 +30,7 @@ class PreQualification extends Component
     // Financial Data (can be overridden)
     #[Rule('required|numeric|min:1')]
     public $monthly_income = 0;
-    
+
     #[Rule('required|numeric|min:0')]
     public $existing_loans = 0;
     
@@ -51,47 +52,69 @@ class PreQualification extends Component
     public function mount()
     {
         $this->userProfile = Auth::user()->profile;
-        
-        if ($this->userProfile) {
-            $this->monthly_income = $this->userProfile->total_monthly_income;
-            $this->existing_loans = $this->userProfile->existing_loan_payments;
-        }
     }
 
     public function render()
     {
         return view('livewire.loan-application.pre-qualification', [
-            'loanCategories' => LoanProduct::getLoanCategories(),
+            'loanCategories' => LoanCategory::active()->ordered()->get(),
             'loanTypes' => LoanProduct::getLoanTypes(),
             'availableProducts' => $this->getFilteredProducts(),
         ]);
     }
 
-    public function selectLoanCategory($category)
+    public function selectLoanCategory($categorySlugOrName)
     {
-        $this->loan_category = $category;
+        // Accept either slug or name for backward compatibility
+        $category = LoanCategory::where('slug', $categorySlugOrName)
+            ->orWhere('name', $categorySlugOrName)
+            ->first();
+        
+        if ($category) {
+            $this->loan_category = $category->name; // Store category name for querying products
+        } else {
+            $this->loan_category = $categorySlugOrName; // Fallback for backward compatibility
+        }
         $this->currentStep = 'criteria'; // Go directly to criteria after selecting category
     }
 
     public function toggleProfileData()
     {
         $this->use_profile_data = !$this->use_profile_data;
-        
-        if ($this->use_profile_data && $this->userProfile) {
-            $this->monthly_income = $this->userProfile->total_monthly_income;
-            $this->existing_loans = $this->userProfile->existing_loan_payments;
-        }
     }
 
     public function calculateEligibility()
     {
+        \Log::info('PreQualification calculateEligibility - Before validation', [
+            'monthly_income' => $this->monthly_income,
+            'existing_loans' => $this->existing_loans,
+            'requested_amount' => $this->requested_amount,
+            'requested_tenure' => $this->requested_tenure,
+            'loan_category' => $this->loan_category,
+        ]);
+
         $this->validate([
             'loan_category' => 'required|string',
             'requested_amount' => 'required|numeric|min:1000',
             'requested_tenure' => 'required|integer|min:1|max:120',
             'monthly_income' => 'required|numeric|min:1',
             'existing_loans' => 'required|numeric|min:0',
+        ], [
+            'monthly_income.required' => 'Please enter your monthly income.',
+            'monthly_income.min' => 'Monthly income must be at least TSh 1.',
+            'monthly_income.numeric' => 'Monthly income must be a valid number.',
         ]);
+
+        \Log::info('PreQualification calculateEligibility - After validation', [
+            'monthly_income' => $this->monthly_income,
+            'existing_loans' => $this->existing_loans,
+        ]);
+
+        // Ensure monthly_income is a positive number
+        if (empty($this->monthly_income) || $this->monthly_income <= 0) {
+            session()->flash('error', 'Please enter a valid monthly income (minimum TSh 1).');
+            return;
+        }
 
         // Find matching products with DSR calculation
         $this->findMatchingProducts();
@@ -130,15 +153,60 @@ class PreQualification extends Component
 
     private function findMatchingProducts()
     {
-        // Get all products that match basic criteria
-        $products = LoanProduct::with('lender')
+        // Validate that loan category is selected
+        if (empty($this->loan_category)) {
+            $this->matching_products = [];
+            return;
+        }
+        
+        // Get category by name or slug (more precise matching)
+        $category = LoanCategory::where(function($query) {
+            $query->where('name', $this->loan_category)
+                  ->orWhere('slug', $this->loan_category);
+        })
+        ->where('is_active', true)
+        ->first();
+        
+        if (!$category) {
+            // If category not found, try case-insensitive match
+            $category = LoanCategory::whereRaw('LOWER(name) = ?', [strtolower($this->loan_category)])
+                ->orWhereRaw('LOWER(slug) = ?', [strtolower($this->loan_category)])
+                ->where('is_active', true)
+                ->first();
+        }
+        
+        // Start base query with relationships
+        $productsQuery = LoanProduct::with(['lender', 'loanCategory'])
             ->where('is_active', true)
-            ->where('loan_category', $this->loan_category)
+            ->where('status', '!=', 'deleted');
+        
+        // CRITICAL: Filter by loan category ID - this ensures only products matching the selected category are returned
+        if ($category) {
+            $productsQuery->where('loan_category_id', $category->id);
+        } else {
+            // If no category found, return empty results (category is required)
+            $this->matching_products = [];
+            session()->flash('error', 'Selected loan category not found. Please select a valid category.');
+            return;
+        }
+        
+        // Get all products that match basic criteria with improved filtering
+        $products = $productsQuery
+            // Amount range matching
             ->where('min_amount', '<=', $this->requested_amount)
             ->where('max_amount', '>=', $this->requested_amount)
+            // Tenure range matching
             ->where('min_tenure_months', '<=', $this->requested_tenure)
             ->where('max_tenure_months', '>=', $this->requested_tenure)
-            ->where('min_monthly_income', '<=', $this->monthly_income)
+            // Monthly income requirement (null means no minimum)
+            ->where(function($query) {
+                $query->whereNull('min_monthly_income')
+                      ->orWhere('min_monthly_income', '<=', $this->monthly_income);
+            })
+            // Ensure lender is active
+            ->whereHas('lender', function($query) {
+                $query->where('status', 'approved');
+            })
             ->get();
 
         $this->matching_products = $products->map(function ($product) {
@@ -155,22 +223,84 @@ class PreQualification extends Component
             // Get additional eligibility data from the product model
             $additionalEligibility = $product->checkEligibility($profile, $this->requested_amount, $this->requested_tenure);
             
+            // Check individual criteria to identify why a product might not be eligible
+            $eligibilityReasons = [];
+            $basicEligible = true;
+
+            // Amount check
+            if ($this->requested_amount < $product->min_amount || $this->requested_amount > $product->max_amount) {
+                $eligibilityReasons[] = "Requested amount (TSh " . number_format($this->requested_amount) . ") is outside the product range (TSh " . number_format($product->min_amount) . " - TSh " . number_format($product->max_amount) . ")";
+                $basicEligible = false;
+            }
+
+            // Tenure check
+            if ($this->requested_tenure < $product->min_tenure_months || $this->requested_tenure > $product->max_tenure_months) {
+                $eligibilityReasons[] = "Requested tenure ({$this->requested_tenure} months) is outside the product range ({$product->min_tenure_months} - {$product->max_tenure_months} months)";
+                $basicEligible = false;
+            }
+
+            // Income check
+            if ($product->min_monthly_income && $this->monthly_income < $product->min_monthly_income) {
+                $eligibilityReasons[] = "Monthly income (TSh " . number_format($this->monthly_income) . ") is below minimum required (TSh " . number_format($product->min_monthly_income) . ")";
+                $basicEligible = false;
+            }
+
+            // DSR check
+            if (!$dsrData['eligible']) {
+                $eligibilityReasons[] = "DSR of " . number_format($dsrData['dsr'], 1) . "% exceeds maximum allowed " . $product->minimum_dsr . "%";
+            }
+
+            // Additional eligibility issues
+            if (isset($additionalEligibility['issues']) && !empty($additionalEligibility['issues'])) {
+                $eligibilityReasons = array_merge($eligibilityReasons, $additionalEligibility['issues']);
+            }
+
             // Combine DSR eligibility with other eligibility factors
-            $finalEligibility = $dsrData['eligible'] && $additionalEligibility['eligible'];
+            $finalEligibility = $dsrData['eligible'] && $additionalEligibility['eligible'] && $basicEligible;
             
-            // Calculate eligibility score
+            // Calculate eligibility score with category matching bonus
             $score = 0;
             if ($finalEligibility) {
                 $score += 50; // Base score for being eligible
                 
-                // Bonus points for lower DSR (closer to 0% gets more points)
-                $score += max(0, (50 - $dsrData['dsr'])) * 0.5;
+                // BONUS: Category match ensures products are from the selected category (already filtered)
+                // Additional verification that product category matches selection
+                $categoryMatch = false;
+                if ($product->loanCategory) {
+                    $categoryMatch = ($product->loanCategory->name === $this->loan_category) || 
+                                   ($product->loanCategory->slug === $this->loan_category);
+                }
+                if ($categoryMatch) {
+                    $score += 10; // Bonus for exact category match
+                }
                 
-                // Bonus points for lower interest rate
-                $score += max(0, (30 - $product->interest_rate_max)) * 0.5;
+                // Bonus points for lower DSR (closer to 0% gets more points, max 50% DSR gets full points)
+                $dsrBonus = max(0, (50 - min(50, $dsrData['dsr']))) * 0.6;
+                $score += $dsrBonus;
                 
-                // Bonus points for faster processing
-                $score += max(0, (30 - $product->approval_time_days)) * 0.3;
+                // Bonus points for lower interest rate (max 30% rate, lower is better)
+                $interestBonus = max(0, (30 - min(30, $product->interest_rate_max))) * 0.6;
+                $score += $interestBonus;
+                
+                // Bonus points for faster processing (max 30 days, faster is better)
+                $processingBonus = max(0, (30 - min(30, $product->approval_time_days))) * 0.4;
+                $score += $processingBonus;
+                
+                // Bonus for faster disbursement
+                $disbursementBonus = max(0, (15 - min(15, $product->disbursement_time_days))) * 0.2;
+                $score += $disbursementBonus;
+                
+                // Bonus for lower processing fees
+                $feePercentage = $product->processing_fee_percentage ?? 0;
+                $feeBonus = max(0, (10 - min(10, $feePercentage))) * 0.2;
+                $score += $feeBonus;
+            } else {
+                // Even for ineligible products, give partial score based on how close they are
+                if ($dsrData['dsr'] <= ($product->minimum_dsr + 10)) {
+                    $score += 20; // Close to eligible
+                } elseif ($dsrData['dsr'] <= ($product->minimum_dsr + 20)) {
+                    $score += 10; // Somewhat close
+                }
             }
             
             return [
@@ -178,7 +308,7 @@ class PreQualification extends Component
                 'product_name' => $product->name,
                 'lender_name' => $product->lender->company_name,
                 'lender_id' => $product->lender->id,
-                'loan_category' => $product->loan_category,
+                'loan_category' => $product->loanCategory ? $product->loanCategory->name : ($product->loan_category ?? ''),
                 'loan_type' => $product->loan_type,
                 'is_secured' => $product->loan_type === 'secured',
                 'interest_rate_min' => $product->interest_rate_min,
@@ -192,10 +322,14 @@ class PreQualification extends Component
                 'disbursement_time_days' => $product->disbursement_time_days,
                 'eligible' => $finalEligibility,
                 'eligibility_score' => min(100, max(0, $score)), // Cap at 100
-                'eligibility_issues' => $finalEligibility ? [] : array_merge(
-                    $dsrData['eligible'] ? [] : ["DSR of " . number_format($dsrData['dsr'], 1) . "% exceeds maximum allowed " . $product->maximum_dsr . "%"],
-                    $additionalEligibility['issues'] ?? []
-                ),
+                'eligibility_issues' => $eligibilityReasons ?? [],
+                'eligibility_reasons' => $eligibilityReasons ?? [],
+                'category_match' => $product->loanCategory ? (
+                    ($product->loanCategory->name === $this->loan_category) || 
+                    ($product->loanCategory->slug === $this->loan_category)
+                ) : false,
+                'category_id' => $product->loanCategory ? $product->loanCategory->id : null,
+                'category_name' => $product->loanCategory ? $product->loanCategory->name : null,
                 'collateral_required' => $product->loan_type === 'secured',
                 'collateral_requirements' => $product->collateral_requirements,
                 'features' => $product->features,
@@ -208,11 +342,11 @@ class PreQualification extends Component
                 'is_lender_selected' => in_array($product->lender->id, $this->selected_lenders),
             ];
         })
-        ->filter(function ($product) {
-            // Only show eligible products
-            return $product['eligible'];
+        // Don't filter - show all products, both eligible and ineligible
+        ->sortByDesc(function ($product) {
+            // Sort eligible products first, then by score
+            return [$product['eligible'] ? 1 : 0, $product['eligibility_score']];
         })
-        ->sortByDesc('eligibility_score')
         ->values()
         ->toArray();
     }
@@ -342,6 +476,19 @@ class PreQualification extends Component
             ->whereIn('product_id', $this->selected_products)
             ->toArray();
 
+        // Validate that we have the required income data
+        if (empty($this->monthly_income) || $this->monthly_income <= 0) {
+            session()->flash('error', 'Please enter your monthly income to proceed with the application.');
+            return;
+        }
+
+        \Log::info('Storing prequalification data in session', [
+            'monthly_income' => $this->monthly_income,
+            'existing_loans' => $this->existing_loans,
+            'requested_amount' => $this->requested_amount,
+            'requested_tenure' => $this->requested_tenure,
+        ]);
+
         // Store data in session and redirect to application
         session([
             'prequalification_data' => [
@@ -349,8 +496,8 @@ class PreQualification extends Component
                 'loan_type' => $this->loan_type ?? 'unsecured', // Default loan type
                 'requested_amount' => $this->requested_amount,
                 'requested_tenure' => $this->requested_tenure,
-                'monthly_income' => $this->monthly_income,
-                'existing_loans' => $this->existing_loans,
+                'monthly_income' => (float)$this->monthly_income,
+                'existing_loans' => (float)($this->existing_loans ?? 0),
                 'selected_products' => $this->selected_products,
                 'selected_lenders' => $this->selected_lenders,
                 'selected_product_details' => $selectedProductDetails,
@@ -401,8 +548,18 @@ class PreQualification extends Component
         }
     }
 
-    public function getLoanCategoryDescription($category): string
+    public function getLoanCategoryDescription($categorySlugOrName): string
     {
+        // Try to get description from database first
+        $category = LoanCategory::where('slug', $categorySlugOrName)
+            ->orWhere('name', $categorySlugOrName)
+            ->first();
+        
+        if ($category && $category->description) {
+            return $category->description;
+        }
+        
+        // Fallback to hardcoded descriptions for backward compatibility
         $descriptions = [
             'personal' => 'General purpose loans for personal expenses, emergencies, or other individual needs.',
             'business' => 'Loans to support business operations, expansion, or equipment purchase.',
@@ -414,7 +571,7 @@ class PreQualification extends Component
             'debt_consolidation' => 'Loans to combine multiple debts into a single payment with better terms.',
         ];
 
-        return $descriptions[$category] ?? 'Loan for specific financial needs.';
+        return $descriptions[$categorySlugOrName] ?? 'Loan for specific financial needs.';
     }
 
     public function getLoanTypeDescription($type): string

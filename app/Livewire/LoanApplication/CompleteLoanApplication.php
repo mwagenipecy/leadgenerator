@@ -42,10 +42,24 @@ class CompleteLoanApplication extends Component
     {
         // Load pre-qualification data
         $this->prequalificationData = session('prequalification_data', []);
-        
+
+        \Log::info('CompleteLoanApplication mount - Prequalification data loaded', [
+            'has_data' => !empty($this->prequalificationData),
+            'monthly_income' => $this->prequalificationData['monthly_income'] ?? 'NOT SET',
+            'existing_loans' => $this->prequalificationData['existing_loans'] ?? 'NOT SET',
+            'all_keys' => array_keys($this->prequalificationData),
+        ]);
+
         if (empty($this->prequalificationData)) {
             session()->flash('error', 'No pre-qualification data found. Please start from pre-qualification.');
-            return redirect()->route('loan-application.prequalify');
+            return redirect()->route('loan-application.create');
+        }
+
+        // Validate that we have monthly income
+        if (empty($this->prequalificationData['monthly_income']) || $this->prequalificationData['monthly_income'] <= 0) {
+            \Log::warning('CompleteLoanApplication mount - Missing monthly income', [
+                'prequalificationData' => $this->prequalificationData,
+            ]);
         }
 
         // Load user profile
@@ -57,10 +71,17 @@ class CompleteLoanApplication extends Component
         }
         
         // Check for mandatory emergency contact information
-        if (empty($this->userProfile->emergency_contact_name) || 
-            empty($this->userProfile->emergency_contact_relationship) || 
+        if (empty($this->userProfile->emergency_contact_name) ||
+            empty($this->userProfile->emergency_contact_relationship) ||
             empty($this->userProfile->emergency_contact_phone)) {
             session()->flash('error', 'Emergency contact information is required. Please complete the Emergency Contact section in your profile before applying for a loan.');
+            return redirect()->route('loan-application.profile');
+        }
+
+        // Re-calculate and verify profile completion percentage
+        $actualCompletion = $this->userProfile->calculateCompletionPercentage();
+        if ($actualCompletion < 70) {
+            session()->flash('error', 'Please complete your profile first. Your profile must be at least 70% complete to apply for a loan. Current completion: ' . $actualCompletion . '%.');
             return redirect()->route('loan-application.profile');
         }
 
@@ -81,6 +102,14 @@ class CompleteLoanApplication extends Component
 
     private function prepareApplicationData()
     {
+        // Use isset() to properly check if key exists (even if value is 0)
+        $monthlyIncomeFromPrequal = isset($this->prequalificationData['monthly_income']) 
+            ? (float)$this->prequalificationData['monthly_income'] 
+            : null;
+        $existingLoansFromPrequal = isset($this->prequalificationData['existing_loans']) 
+            ? (float)$this->prequalificationData['existing_loans'] 
+            : null;
+
         $this->applicationData = [
             // Loan Details (from pre-qualification)
             'loan_category' => $this->prequalificationData['loan_category'],
@@ -94,8 +123,8 @@ class CompleteLoanApplication extends Component
             'middle_name' => $this->userProfile->middle_name,
             'last_name' => $this->userProfile->last_name,
             'date_of_birth' => $this->userProfile->date_of_birth,
-            'gender' => $this->userProfile->gender,
-            'marital_status' => $this->userProfile->marital_status,
+            'gender' => $this->userProfile->gender ?? 'other',
+            'marital_status' => $this->userProfile->marital_status ?? 'single',
             'national_id' => $this->userProfile->national_id,
             'phone_number' => $this->userProfile->phone_number,
             'email' => $this->userProfile->email,
@@ -111,8 +140,10 @@ class CompleteLoanApplication extends Component
             'permanent_city' => $this->userProfile->permanent_city,
             'permanent_region' => $this->userProfile->permanent_region,
             
-            // Employment Information
-            'employment_status' => $this->userProfile->employment_status,
+            // Employment Information (ensure valid enum value)
+            'employment_status' => in_array($this->userProfile->employment_status ?? null, ['employed', 'self_employed', 'unemployed', 'retired', 'student'])
+                ? $this->userProfile->employment_status
+                : 'unemployed',
             'employer_name' => $this->userProfile->employer_name,
             'job_title' => $this->userProfile->job_title,
             'employment_sector' => $this->userProfile->employment_sector,
@@ -126,13 +157,17 @@ class CompleteLoanApplication extends Component
             'years_in_business' => $this->userProfile->years_in_business,
             'business_address' => $this->userProfile->business_address,
             
-            // Financial Information
-            'monthly_salary' => $this->userProfile->monthly_salary,
-            'other_monthly_income' => $this->userProfile->other_monthly_income,
-            'monthly_business_income' => $this->userProfile->monthly_business_income,
-            'total_monthly_income' => $this->userProfile->total_monthly_income,
-            'monthly_expenses' => $this->userProfile->monthly_expenses,
-            'existing_loan_payments' => $this->userProfile->existing_loan_payments,
+            // Financial Information (use prequalification data if available, fallback to profile, ensure non-null values)
+            'monthly_salary' => $monthlyIncomeFromPrequal ?? ($this->userProfile->monthly_salary ?? 0),
+            'other_monthly_income' => $this->userProfile->other_monthly_income ?? 0,
+            'monthly_business_income' => $this->userProfile->monthly_business_income ?? 0,
+            'total_monthly_income' => $monthlyIncomeFromPrequal ?? 
+                                     ($this->userProfile->total_monthly_income ?? 
+                                      (($this->userProfile->monthly_salary ?? 0) + 
+                                       ($this->userProfile->other_monthly_income ?? 0) + 
+                                       ($this->userProfile->monthly_business_income ?? 0)) ?: 0),
+            'monthly_expenses' => $this->userProfile->monthly_expenses ?? 0,
+            'existing_loan_payments' => $existingLoansFromPrequal ?? ($this->userProfile->existing_loan_payments ?? 0),
             'credit_score' => $this->userProfile->credit_score,
             'has_bad_credit_history' => $this->userProfile->has_bad_credit_history,
             
@@ -339,6 +374,16 @@ class CompleteLoanApplication extends Component
         return $descriptions[$docType] ?? 'Required document for loan application';
     }
 
+    public function updatedDocuments()
+    {
+        // Auto-upload when a file is selected
+        foreach ($this->documents as $documentType => $file) {
+            if ($file && !$this->requiredDocuments[$documentType]['uploaded']) {
+                $this->uploadDocument($documentType);
+            }
+        }
+    }
+
     public function uploadDocument($documentType)
     {
         $this->validate([
@@ -350,7 +395,7 @@ class CompleteLoanApplication extends Component
         try {
             $file = $this->documents[$documentType];
             $path = $file->store('application-documents', 'public');
-            
+
             // Generate file hash for integrity checking
             $fileHash = hash_file('sha256', $file->getRealPath());
 
@@ -389,7 +434,7 @@ class CompleteLoanApplication extends Component
         }
 
         $this->isUploading = false;
-        
+
         // Reset the file input
         unset($this->documents[$documentType]);
     }
@@ -458,11 +503,23 @@ class CompleteLoanApplication extends Component
         try {
             DB::beginTransaction();
 
-            // Create the main application record
-            $this->finalApplication = Application::create([
+            // Validate required data before creating application
+            if (empty($this->prequalificationData['selected_product_details'] ?? [])) {
+                throw new \Exception('No loan products selected. Please go back and select products.');
+            }
+
+            if (count($this->uploadedDocuments) === 0) {
+                throw new \Exception('No documents uploaded. Please upload required documents.');
+            }
+
+            // Ensure user has a profile
+            if (!$this->userProfile) {
+                throw new \Exception('User profile not found. Please complete your profile first.');
+            }
+
+            // Prepare application data with validation
+            $applicationData = [
                 'user_id' => Auth::id(),
-                'loan_category' => $this->applicationData['loan_category'],
-                'loan_type' => $this->applicationData['loan_type'],
                 'requested_amount' => $this->applicationData['requested_amount'],
                 'requested_tenure_months' => $this->applicationData['requested_tenure_months'],
                 'loan_purpose' => $this->applicationData['loan_purpose'],
@@ -484,23 +541,23 @@ class CompleteLoanApplication extends Component
                 'permanent_address' => $this->applicationData['permanent_address'],
                 'permanent_city' => $this->applicationData['permanent_city'],
                 'permanent_region' => $this->applicationData['permanent_region'],
-                'employment_status' => $this->applicationData['employment_status'],
-                'employer_name' => $this->applicationData['employer_name'],
-                'job_title' => $this->applicationData['job_title'],
-                'employment_sector' => $this->applicationData['employment_sector'],
-                'years_of_employment' => $this->applicationData['years_of_employment'],
-                'months_with_current_employer' => $this->applicationData['months_with_current_employer'],
+                'employment_status' => $this->applicationData['employment_status'] ?? 'unemployed',
+                'employer_name' => !empty($this->applicationData['employer_name']) ? $this->applicationData['employer_name'] : null,
+                'job_title' => !empty($this->applicationData['job_title']) ? $this->applicationData['job_title'] : null,
+                'employment_sector' => !empty($this->applicationData['employment_sector']) ? $this->applicationData['employment_sector'] : null,
+                'years_of_employment' => !empty($this->applicationData['years_of_employment']) ? $this->applicationData['years_of_employment'] : null,
+                'months_with_current_employer' => !empty($this->applicationData['months_with_current_employer']) ? $this->applicationData['months_with_current_employer'] : null,
                 'business_name' => $this->applicationData['business_name'],
                 'business_type' => $this->applicationData['business_type'],
                 'business_registration_number' => $this->applicationData['business_registration_number'],
                 'years_in_business' => $this->applicationData['years_in_business'],
                 'business_address' => $this->applicationData['business_address'],
-                'monthly_salary' => $this->applicationData['monthly_salary'],
-                'other_monthly_income' => $this->applicationData['other_monthly_income'],
-                'monthly_business_income' => $this->applicationData['monthly_business_income'],
-                'total_monthly_income' => $this->applicationData['total_monthly_income'],
-                'monthly_expenses' => $this->applicationData['monthly_expenses'],
-                'existing_loan_payments' => $this->applicationData['existing_loan_payments'],
+                'monthly_salary' => (float)($this->applicationData['monthly_salary'] ?? 0),
+                'other_monthly_income' => (float)($this->applicationData['other_monthly_income'] ?? 0),
+                'monthly_business_income' => (float)($this->applicationData['monthly_business_income'] ?? 0),
+                'total_monthly_income' => (float)($this->applicationData['total_monthly_income'] ?? 0),
+                'monthly_expenses' => (float)($this->applicationData['monthly_expenses'] ?? 0),
+                'existing_loan_payments' => (float)($this->applicationData['existing_loan_payments'] ?? 0),
                 'credit_score' => $this->applicationData['credit_score'],
                 'has_bad_credit_history' => $this->applicationData['has_bad_credit_history'],
                 'has_bank_account' => $this->applicationData['has_bank_account'],
@@ -522,7 +579,71 @@ class CompleteLoanApplication extends Component
                 'application_source' => $this->applicationData['application_source'],
                 'status' => 'submitted',
                 'submitted_at' => now(),
+            ];
+
+            // Validate required fields (be more lenient with some fields that might be optional for certain loan types)
+            $criticalFields = ['first_name', 'last_name', 'national_id', 'phone_number', 'email', 'current_address'];
+            foreach ($criticalFields as $field) {
+                if (empty($applicationData[$field])) {
+                    throw new \Exception("Required field '{$field}' is missing or empty.");
+                }
+            }
+
+            // Ensure employment_status is set and valid (handle null, empty string, and invalid values)
+            $validEmploymentStatuses = ['employed', 'self_employed', 'unemployed', 'retired', 'student'];
+            $employmentStatus = trim($applicationData['employment_status'] ?? '');
+            
+            if (empty($employmentStatus) || !in_array($employmentStatus, $validEmploymentStatuses)) {
+                \Log::warning('Invalid or missing employment_status, setting to unemployed', [
+                    'employment_status' => $applicationData['employment_status'] ?? 'NOT SET',
+                    'trimmed_value' => $employmentStatus,
+                    'user_id' => Auth::id(),
+                    'user_profile_employment_status' => $this->userProfile->employment_status ?? 'NOT SET',
+                ]);
+                $applicationData['employment_status'] = 'unemployed';
+            } else {
+                $applicationData['employment_status'] = $employmentStatus;
+            }
+
+            // Ensure total_monthly_income is set and is numeric (allow 0 as valid value)
+            if (!isset($applicationData['total_monthly_income']) || !is_numeric($applicationData['total_monthly_income'])) {
+                // Calculate from individual income sources if total is missing
+                $calculatedTotal = (float)($applicationData['monthly_salary'] ?? 0) + 
+                                  (float)($applicationData['other_monthly_income'] ?? 0) + 
+                                  (float)($applicationData['monthly_business_income'] ?? 0);
+                $applicationData['total_monthly_income'] = $calculatedTotal;
+            }
+
+            // Ensure it's at least 0 (can't be negative)
+            $applicationData['total_monthly_income'] = max(0, (float)$applicationData['total_monthly_income']);
+
+            \Log::info('Application data before creation', [
+                'total_monthly_income' => $applicationData['total_monthly_income'],
+                'monthly_salary' => $applicationData['monthly_salary'] ?? null,
+                'other_monthly_income' => $applicationData['other_monthly_income'] ?? null,
+                'monthly_business_income' => $applicationData['monthly_business_income'] ?? null,
+                'prequalification_monthly_income' => $this->prequalificationData['monthly_income'] ?? null,
             ]);
+
+            \Log::info('Creating application with data:', [
+                'data_count' => count($applicationData),
+                'employment_status' => $applicationData['employment_status'] ?? 'NOT SET',
+                'employment_status_type' => gettype($applicationData['employment_status'] ?? null),
+                'gender' => $applicationData['gender'] ?? 'NOT SET',
+                'marital_status' => $applicationData['marital_status'] ?? 'NOT SET',
+            ]);
+
+            // Create the main application record
+            try {
+                $this->finalApplication = Application::create($applicationData);
+            } catch (\Exception $createException) {
+                \Log::error('Application::create() failed', [
+                    'error' => $createException->getMessage(),
+                    'employment_status' => $applicationData['employment_status'] ?? 'NOT SET',
+                    'all_data' => $applicationData,
+                ]);
+                throw $createException;
+            }
 
             // Update document records with application ID
             foreach ($this->uploadedDocuments as $document) {
@@ -533,8 +654,25 @@ class CompleteLoanApplication extends Component
 
             // Create lender submissions based on selected products
             $selectedProducts = collect($this->prequalificationData['selected_product_details'] ?? []);
-            
+
+            if ($selectedProducts->isEmpty()) {
+                throw new \Exception('No products selected for submission.');
+            }
+
             foreach ($selectedProducts as $product) {
+                // Check for existing submission to avoid duplicates
+                $existingSubmission = ApplicationLenderSubmission::where('application_id', $this->finalApplication->id)
+                    ->where('lender_id', $product['lender_id'])
+                    ->first();
+
+                if ($existingSubmission) {
+                    \Log::warning('Skipping duplicate submission', [
+                        'application_id' => $this->finalApplication->id,
+                        'lender_id' => $product['lender_id']
+                    ]);
+                    continue;
+                }
+
                 $submission = ApplicationLenderSubmission::create([
                     'user_id' => Auth::id(),
                     'application_id' => $this->finalApplication->id,
@@ -563,6 +701,23 @@ class CompleteLoanApplication extends Component
 
             DB::commit();
 
+            // Update user's profile with the income they entered during application
+            if (!empty($this->prequalificationData['monthly_income'])) {
+                $user = Auth::user();
+                if ($user->profile) {
+                    $user->profile->update([
+                        'total_monthly_income' => $this->prequalificationData['monthly_income'],
+                        'existing_loan_payments' => $this->prequalificationData['existing_loans'] ?? 0,
+                    ]);
+
+                    \Log::info('Updated user profile with application income data', [
+                        'user_id' => $user->id,
+                        'monthly_income' => $this->prequalificationData['monthly_income'],
+                        'existing_loans' => $this->prequalificationData['existing_loans'] ?? 0,
+                    ]);
+                }
+            }
+
             // Clear session data
             session()->forget('prequalification_data');
 
@@ -571,8 +726,34 @@ class CompleteLoanApplication extends Component
 
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Error submitting application. Please try again.');
-            \Log::error('Application submission error: ' . $e->getMessage());
+
+            // Log detailed error information
+            \Log::error('Application submission error: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'application_data' => $this->applicationData,
+                'selected_products_count' => count($this->prequalificationData['selected_product_details'] ?? []),
+                'uploaded_documents_count' => count($this->uploadedDocuments),
+                'exception' => $e,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Show more specific error message if possible
+            $errorMessage = 'Error submitting application. Please try again.';
+
+            if (str_contains($e->getMessage(), 'foreign key constraint')) {
+                $errorMessage = 'Database constraint error. Please contact support.';
+            } elseif (str_contains($e->getMessage(), 'unique constraint')) {
+                $errorMessage = 'Duplicate application detected. Please try again.';
+            } elseif (str_contains($e->getMessage(), 'required')) {
+                $errorMessage = 'Missing required information. Please complete all fields.';
+            } elseif (str_contains($e->getMessage(), 'employment_status')) {
+                $errorMessage = 'Employment information is required. Please complete your employment details in your profile.';
+            } elseif (str_contains($e->getMessage(), 'total_monthly_income') || str_contains($e->getMessage(), 'monthly income')) {
+                // This shouldn't happen anymore since we're setting defaults, but just in case
+                $errorMessage = 'Please enter your monthly income on the application form to proceed.';
+            }
+
+            session()->flash('error', $errorMessage);
         }
 
         $this->isSubmitting = false;

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\LoanCategory;
 
 class LoanProduct extends Model
 {
@@ -60,7 +61,8 @@ class LoanProduct extends Model
         'promotional_tag',
         'key_features',
         'minimum_dsr',
-        'loan_type'
+        'loan_type',
+        'loan_category_id'
     ];
 
     protected $casts = [
@@ -102,6 +104,11 @@ class LoanProduct extends Model
     public function updatedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function loanCategory(): BelongsTo
+    {
+        return $this->belongsTo(LoanCategory::class, 'loan_category_id');
     }
 
     public function applications()

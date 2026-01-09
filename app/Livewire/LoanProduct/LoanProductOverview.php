@@ -20,7 +20,7 @@ class LoanProductOverview extends Component
     public function mount($productId)
     {
         $this->productId = $productId;
-        $this->product = LoanProduct::findOrFail($productId);
+        $this->product = LoanProduct::with('loanCategory')->findOrFail($productId);
     }
 
     public function render()

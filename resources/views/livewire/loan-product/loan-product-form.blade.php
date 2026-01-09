@@ -105,15 +105,13 @@
                         <div class="flex space-x-4">
                             <div class="w-1/2">
                                 <label class="block text-sm font-medium text-black mb-2">Loan Category *</label>
-                                <select wire:model.live="loan_category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                    <option value="">Select Loan Type</option>
-                                    <option value="personal">Personal Loan</option>
-                                    <option value="business">Business Loan</option>
-                                    <option value="mortgage">Mortgage Loan</option>
-                                    <option value="auto">Auto Loan</option>
-                                    <option value="student">Student Loan</option>
+                                <select wire:model.live="loan_category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                                    <option value="">Select Loan Category</option>
+                                    @foreach($loanCategories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
-                                @error('loan_category') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
+                                @error('loan_category_id') <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="w-1/2">

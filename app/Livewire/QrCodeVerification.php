@@ -317,6 +317,14 @@ class QrCodeVerification extends Component
         // Update user record
         $user->update($updateData);
 
+        // Dispatch credit score fetch job for individual users after NIDA verification
+        if ($user->registration_type === 'individual' && !empty($user->nida_number)) {
+            \App\Jobs\FetchCreditScore::dispatch($user->id);
+            \Illuminate\Support\Facades\Log::info('QrCodeVerification: Dispatched FetchCreditScore job after NIDA verification', [
+                'user_id' => $user->id,
+            ]);
+        }
+
         $this->isVerified = true;
         $this->verificationStep = 'complete';
         

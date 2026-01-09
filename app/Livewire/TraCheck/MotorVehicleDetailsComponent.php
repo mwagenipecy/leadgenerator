@@ -11,7 +11,6 @@ use Exception;
 class MotorVehicleDetailsComponent extends Component
 {
     public $vehicleRegistrationPlate = '';
-    public $dateOfRegistration = '';
     public $isLoading = false;
     public $response = null;
     public $error = null;
@@ -21,7 +20,6 @@ class MotorVehicleDetailsComponent extends Component
     {
         // Set default values for testing
         $this->vehicleRegistrationPlate = 'T115DYF';
-        $this->dateOfRegistration = '2021-12-21';
     }
     
     /**
@@ -60,7 +58,6 @@ class MotorVehicleDetailsComponent extends Component
     {
         $this->validate([
             'vehicleRegistrationPlate' => 'required|string|min:3',
-            'dateOfRegistration' => 'required|date'
         ]);
         
         // Validate SOAP configuration
@@ -120,7 +117,6 @@ class MotorVehicleDetailsComponent extends Component
         $password = htmlspecialchars($password, ENT_XML1, 'UTF-8');
         $connectorId = htmlspecialchars($connectorId, ENT_XML1, 'UTF-8');
         $vehiclePlate = htmlspecialchars($this->vehicleRegistrationPlate, ENT_XML1, 'UTF-8');
-        $dateOfRegistration = htmlspecialchars($this->dateOfRegistration, ENT_XML1, 'UTF-8');
         
         return '<?xml version="1.0" encoding="UTF-8"?>
     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mul="http://creditinfo.com/schemas/2012/09/MultiConnector" xmlns:req="http://creditinfo.com/schemas/2012/09/MultiConnector/Messages/Request">
@@ -141,7 +137,6 @@ class MotorVehicleDetailsComponent extends Component
                       <req:data id="' . $dataId . '">
                          <request xmlns="http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/TZA/TRAGetMotorVehicleDetails/Request">
                             <VehicleRegistrationPlate>' . $vehiclePlate . '</VehicleRegistrationPlate>
-                            <DateOfRegistration>' . $dateOfRegistration . '</DateOfRegistration>
                          </request>
                       </req:data>
                    </req:connector>

@@ -102,32 +102,26 @@
                     <div class="text-right">
                         <p class="text-xs sm:text-sm font-medium text-gray-500">Credit Score</p>
                         <p class="text-2xl sm:text-3xl font-bold text-black">
-                            @php
-                                // Ensure creditScore is displayed as a number, not an array
-                                if (is_array($creditScore)) {
-                                    $creditScore = $creditScore['_value'] ?? ($creditScore[0] ?? 'N/A');
-                                }
-                                echo is_numeric($creditScore) ? number_format((float)$creditScore, 0) : ($creditScore ?? 'N/A');
-                            @endphp
+                            @if($creditScore)
+                                {{ number_format((float)$creditScore, 0) }}
+                            @else
+                                Waiting
+                            @endif
                         </p>
                     </div>
                 </div>
                 <div class="flex items-center justify-between text-xs sm:text-sm">
-                    @php
-                        // Ensure creditScore is numeric for the color/label methods
-                        $numericCreditScore = is_array($creditScore) 
-                            ? ($creditScore['_value'] ?? ($creditScore[0] ?? null))
-                            : $creditScore;
-                        $numericCreditScore = is_numeric($numericCreditScore) ? (float)$numericCreditScore : null;
-                    @endphp
-                    @if($numericCreditScore)
+                    @if($creditScore)
+                        @php
+                            $rating = auth()->user()->credit_score_rating ?? $this->getCreditScoreLabel();
+                        @endphp
                         <div class="flex items-center space-x-1 text-{{ $this->getCreditScoreColor() }}-600">
                             <div class="w-2 h-2 sm:w-3 sm:h-3 bg-{{ $this->getCreditScoreColor() }}-500 rounded-full"></div>
-                            <span class="font-semibold">{{ $this->getCreditScoreLabel() }}</span>
+                            <span class="font-semibold">{{ $rating }}</span>
                         </div>
                         <span class="text-gray-500">rating</span>
                     @else
-                        <span class="text-gray-500 text-xs">No credit data</span>
+                        <span class="text-gray-500 text-xs">Waiting</span>
                     @endif
                 </div>
             </div>
@@ -461,12 +455,12 @@
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button wire:click="viewProductDetails({{ $product->id }})" class="text-sidebar-green hover:text-sidebar-green-light p-1">
+                                <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-sidebar-green hover:text-sidebar-green-light p-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                 </button>
-                                <button wire:click="applyForLoan({{ $product->id }})" class="bg-sidebar-green text-white px-3 py-1 rounded text-xs font-semibold hover:bg-sidebar-green-light transition-colors">
+                                <button wire:click="applyForLoan('{{ $product->id }}')" class="bg-sidebar-green text-white px-3 py-1 rounded text-xs font-semibold hover:bg-sidebar-green-light transition-colors">
                                     Apply
                                 </button>
                             </div>
@@ -549,12 +543,12 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center space-x-2">
-                                        <button wire:click="viewProductDetails({{ $product->id }})" class="text-black hover:text-sidebar-green p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="View Details">
+                                        <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-black hover:text-sidebar-green p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="View Details">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
                                         </button>
-                                        <!-- <button wire:click="applyForLoan({{ $product->id }})" class="bg-sidebar-green text-white px-4 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors text-sm">
+                                        <!-- <button wire:click="applyForLoan('{{ $product->id }}')" class="bg-sidebar-green text-white px-4 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors text-sm">
                                             Apply Now
                                         </button> -->
                                     </div>
@@ -691,7 +685,7 @@
                     <button wire:click="closeProductModal" class="flex-1 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                         Close
                     </button>
-                    <button wire:click="applyForLoan({{ $selectedProduct->id }})" class="flex-1 px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors font-semibold">
+                    <button wire:click="applyForLoan('{{ $selectedProduct->id }}')" class="flex-1 px-4 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light transition-colors font-semibold">
                         Apply Now
                     </button>
                 </div>

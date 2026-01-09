@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             // UserPermissionSeeder::class,
             RolesAndPermissionsSeeder::class,
             AdminUserSeeder::class,
+            LoanCategorySeeder::class,
+            LoanProductSeeder::class,
         ]);
     }
 }

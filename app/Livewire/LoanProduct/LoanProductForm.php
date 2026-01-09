@@ -3,6 +3,7 @@
 namespace App\Livewire\LoanProduct;
 
 use App\Models\LoanProduct;
+use App\Models\LoanCategory;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Log;
@@ -69,8 +70,8 @@ class LoanProductForm extends Component
     #[Rule('required|integer|min:18|max:100')]
     public $min_age = 18;
 
-    #[Rule('required|in:personal,business,mortgage,auto,student')]
-    public $loan_category;
+    #[Rule('required|uuid|exists:loan_categories,id')]
+    public $loan_category_id;
 
     #[Rule('required|integer|gte:min_age|max:100')]
     public $max_age = 65;
@@ -178,8 +179,10 @@ class LoanProductForm extends Component
 
     public function render()
     {
+        $loanCategories = LoanCategory::active()->ordered()->get();
 
         return view('livewire.Loan-product.loan-product-form', [
+            'loanCategories' => $loanCategories,
             'documentTypes' => LoanProduct::getAvailableDocumentTypes(),
             'collateralTypes' => LoanProduct::getAvailableCollateralTypes(),
             'businessSectors' => LoanProduct::getAvailableBusinessSectors(),
@@ -229,7 +232,7 @@ class LoanProductForm extends Component
                     'description' => 'nullable|string|max:5000',
                     'promotional_tag' => 'nullable|string|max:50|regex:/^[a-zA-Z0-9\s\-,!]+$/',
                     'loan_type' => 'required|in:secured,unsecured',
-                    'loan_category' => 'required|in:personal,business,mortgage,auto,student',
+                    'loan_category_id' => 'required|uuid|exists:loan_categories,id',
                 ]);
                 break;
             case 2:
@@ -361,7 +364,7 @@ class LoanProductForm extends Component
         // Sanitize all string properties
         $stringProperties = [
             'name', 'description', 'promotional_tag', 'loan_type', 
-            'loan_category', 'interest_type', 'employment_requirement',
+            'interest_type', 'employment_requirement',
             'terms_and_conditions', 'eligibility_criteria', 'newKeyFeature'
         ];
 
@@ -501,7 +504,7 @@ class LoanProductForm extends Component
         $this->description = $product->description;
         $this->promotional_tag = $product->promotional_tag;
         $this->loan_type = $product->loan_type ?? 'secured';
-        $this->loan_category = $product->loan_category ?? 'personal';
+        $this->loan_category_id = $product->loan_category_id;
         
         // Amount & Terms
         $this->min_amount = $product->min_amount;
@@ -566,7 +569,7 @@ class LoanProductForm extends Component
             'description' => $this->description ? trim(strip_tags($this->description)) : null,
             'promotional_tag' => $this->promotional_tag ? trim(strip_tags($this->promotional_tag)) : null,
             'loan_type' => $this->loan_type,
-            'loan_category' => $this->loan_category,
+            'loan_category_id' => $this->loan_category_id,
             'min_amount' => (float) ($this->min_amount ?? 0),
             'max_amount' => (float) ($this->max_amount ?? 0),
             'min_tenure_months' => (int) ($this->min_tenure_months ?? 1),
@@ -636,7 +639,7 @@ class LoanProductForm extends Component
         // Sanitize string fields
         $stringFields = [
             'name', 'description', 'promotional_tag', 'loan_type', 
-            'loan_category', 'interest_type', 'employment_requirement',
+            'interest_type', 'employment_requirement',
             'terms_and_conditions', 'eligibility_criteria', 'newKeyFeature'
         ];
 
@@ -655,17 +658,26 @@ class LoanProductForm extends Component
                 $this->$propertyName = preg_replace('/[^a-zA-Z0-9\s\-,!]/', '', $this->$propertyName);
             }
             
-            if (in_array($propertyName, ['loan_type', 'loan_category', 'interest_type', 'employment_requirement'])) {
+            if (in_array($propertyName, ['loan_type', 'interest_type', 'employment_requirement'])) {
                 // For enum fields, ensure only valid values
                 $validValues = [
                     'loan_type' => ['secured', 'unsecured'],
-                    'loan_category' => ['personal', 'business', 'mortgage', 'auto', 'student'],
                     'interest_type' => ['fixed', 'reducing'],
                     'employment_requirement' => ['employed', 'business', 'all']
                 ];
                 
                 if (isset($validValues[$propertyName]) && !in_array($this->$propertyName, $validValues[$propertyName])) {
                     $this->$propertyName = $validValues[$propertyName][0] ?? '';
+                }
+            }
+            
+            if ($propertyName === 'loan_category_id') {
+                // Validate that the category ID exists and is active
+                $category = LoanCategory::active()->find($this->loan_category_id);
+                if (!$category) {
+                    // Reset to first active category if invalid
+                    $firstCategory = LoanCategory::active()->ordered()->first();
+                    $this->loan_category_id = $firstCategory ? $firstCategory->id : null;
                 }
             }
         }

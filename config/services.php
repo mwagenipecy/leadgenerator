@@ -43,4 +43,18 @@ return [
         'from_email' => env('FROM_EMAIL'),
     ],
 
+    'creditinfo' => [
+        'endpoint' => env('CREDITINFO_ENDPOINT'),
+        'username' => env('CREDITINFO_USERNAME'),
+        'password' => env('CREDITINFO_PASSWORD'),
+        'strategy_id' => env('CREDITINFO_STRATEGY_ID'),
+        'connector_id' => env('CREDITINFO_CONNECTOR_ID'),
+    ],
+
+    'soap' => [
+        'url' => env('SOAP_URL'),
+        'username' => env('SOAP_USERNAME'),
+        'password' => env('SOAP_PASSWORD'),
+    ],
+
 ];

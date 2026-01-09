@@ -382,6 +382,14 @@ class QuestionnaireVerification extends Component
             $this->createOrUpdateUserProfile($user);
         }
         
+        // Dispatch credit score fetch job for individual users after NIDA verification
+        if ($user->registration_type === 'individual' && !empty($user->nida_number)) {
+            \App\Jobs\FetchCreditScore::dispatch($user->id);
+            \Illuminate\Support\Facades\Log::info('QuestionnaireVerification: Dispatched FetchCreditScore job after NIDA verification', [
+                'user_id' => $user->id,
+            ]);
+        }
+        
         $this->isVerified = true;
         
         // Different messages for company vs individual users

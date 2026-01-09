@@ -19,8 +19,18 @@
                         </span>
                     @endif
                 </div>
-                <p class="text-gray-600 text-lg">Product Code: {{ $product->product_code }}</p>
-                <p class="text-gray-500 text-sm">Created {{ $product->created_at->diffForHumans() }}</p>
+                <div class="flex items-center space-x-4 mt-2">
+                    <p class="text-gray-600 text-lg">Product Code: {{ $product->product_code }}</p>
+                    @if($product->loanCategory)
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                            </svg>
+                            {{ $product->loanCategory->name }}
+                        </span>
+                    @endif
+                </div>
+                <p class="text-gray-500 text-sm mt-2">Created {{ $product->created_at->diffForHumans() }}</p>
             </div>
             <div class="flex items-center space-x-3">
                 <button wire:click="editProduct" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-sm flex items-center">
@@ -116,6 +126,23 @@
                     </h3>
                 </div>
                 <div class="p-6 space-y-6">
+                    @if($product->loanCategory)
+                        <div>
+                            <h4 class="text-sm font-semibold text-black mb-2">Loan Category</h4>
+                            <div class="flex items-center">
+                                <span class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-800 border border-blue-200">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                    </svg>
+                                    {{ $product->loanCategory->name }}
+                                </span>
+                                @if($product->loanCategory->description)
+                                    <p class="text-sm text-gray-600 ml-3">{{ $product->loanCategory->description }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
                     @if($product->description)
                         <div>
                             <h4 class="text-sm font-semibold text-black mb-2">Description</h4>

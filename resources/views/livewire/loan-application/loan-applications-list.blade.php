@@ -334,7 +334,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex items-center justify-end space-x-2">
                                         <!-- View Button -->
-                                        <button wire:click="viewApplication({{ $application->id }})" 
+                                        <button wire:click="viewApplication('{{ $application->id }}')" 
                                                 class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-all" 
                                                 title="View Details">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -345,7 +345,7 @@
 
                                         <!-- Edit Button (Draft only) -->
                                         @if($application->status === 'draft')
-                                            <button wire:click="editApplication({{ $application->id }})" 
+                                            <button wire:click="editApplication('{{ $application->id }}')" 
                                                     class="text-gray-700 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-all" 
                                                     title="Edit Draft">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -355,7 +355,7 @@
                                         @endif
 
                                         <!-- Download PDF -->
-                                        <button wire:click="downloadApplication({{ $application->id }})" 
+                                        <button wire:click="downloadApplication('{{ $application->id }}')" 
                                                 class="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50 transition-all" 
                                                 title="Download PDF">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -365,7 +365,7 @@
 
                                         <!-- Cancel Button (Draft/Submitted only) -->
                                         @if(in_array($application->status, ['draft', 'submitted']))
-                                            <button wire:click="showCancelConfirmation({{ $application->id }})" 
+                                            <button wire:click="showCancelConfirmation('{{ $application->id }}')" 
                                                     class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-all" 
                                                     title="Cancel Application">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -376,7 +376,7 @@
 
                                         <!-- Delete Button (Draft only) -->
                                         @if($application->status === 'draft')
-                                            <button wire:click="showDeleteConfirmation({{ $application->id }})" 
+                                            <button wire:click="showDeleteConfirmation('{{ $application->id }}')" 
                                                     class="text-orange-600 hover:text-orange-900 p-2 rounded-lg hover:bg-orange-50 transition-all" 
                                                     title="Delete Draft">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,7 +445,7 @@
                             <!-- Mobile Actions -->
                             <div class="flex items-center justify-end gap-2">
                                 <!-- View Button -->
-                                <button wire:click="viewApplication({{ $application->id }})" 
+                                <button wire:click="viewApplication('{{ $application->id }}')" 
                                         class="flex items-center justify-center w-10 h-10 text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all"
                                         title="View Details">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -456,7 +456,7 @@
 
                                 <!-- Edit Button (Draft only) -->
                                 @if($application->status === 'draft')
-                                    <button wire:click="editApplication({{ $application->id }})" 
+                                    <button wire:click="editApplication('{{ $application->id }}')" 
                                             class="flex items-center justify-center w-10 h-10 text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
                                             title="Edit Draft">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -466,7 +466,7 @@
                                 @endif
 
                                 <!-- Download Button -->
-                                <button wire:click="downloadApplication({{ $application->id }})" 
+                                <button wire:click="downloadApplication('{{ $application->id }}')" 
                                         class="flex items-center justify-center w-10 h-10 text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100 rounded-lg transition-all"
                                         title="Download PDF">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -476,7 +476,7 @@
 
                                 <!-- Cancel Button (Draft/Submitted only) -->
                                 @if(in_array($application->status, ['draft', 'submitted']))
-                                    <button wire:click="showCancelConfirmation({{ $application->id }})" 
+                                    <button wire:click="showCancelConfirmation('{{ $application->id }}')" 
                                             class="flex items-center justify-center w-10 h-10 text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 rounded-lg transition-all"
                                             title="Cancel Application">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -487,7 +487,7 @@
 
                                 <!-- Delete Button (Draft only) -->
                                 @if($application->status === 'draft')
-                                    <button wire:click="showDeleteConfirmation({{ $application->id }})" 
+                                    <button wire:click="showDeleteConfirmation('{{ $application->id }}')" 
                                             class="flex items-center justify-center w-10 h-10 text-orange-600 hover:text-orange-800 bg-orange-50 hover:bg-orange-100 rounded-lg transition-all"
                                             title="Delete Draft">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -523,7 +523,7 @@
                             Clear Filters
                         </button>
                     @endif
-                    <a href="" 
+                    <a href="{{ route('loan-application.create') }}" 
                        class="bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white px-8 py-3 rounded-lg font-bold hover:from-sidebar-green-light hover:to-sidebar-green-800 transition-all duration-200 shadow-lg">
                         Start Application
                     </a>

@@ -68,6 +68,9 @@ class User extends Authenticatable
         'company_verified_at',
         'company_verified_by',
         'company_verification_notes',
+        'credit_score',
+        'credit_score_updated_at',
+        'credit_score_rating',
     ];
 
     /**
@@ -102,6 +105,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'nida_verified_at' => 'datetime',
             'company_verified_at' => 'datetime',
+            'credit_score_updated_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

@@ -63,10 +63,10 @@
             @endif
 
             @if (session()->has('error'))
-                <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-4 py-3 rounded-lg" role="alert">
+                <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                         </svg>
                         {{ session('error') }}
                     </div>
@@ -209,20 +209,24 @@
                                             </div>
                                         @else
                                             <div class="space-y-3">
-                                                <input type="file" 
-                                                       wire:model="documents.{{ $type }}" 
-                                                       accept=".pdf,.jpg,.jpeg,.png" 
-                                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-sidebar-green-light">
-                                                
-                                                @if(isset($documents[$type]))
-                                                    <button wire:click="uploadDocument('{{ $type }}')" 
-                                                            wire:loading.attr="disabled"
-                                                            wire:target="uploadDocument('{{ $type }}')"
-                                                            class="w-full bg-sidebar-green text-white py-2 px-4 rounded-lg font-medium hover:bg-sidebar-green-light disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                                                        <span wire:loading.remove wire:target="uploadDocument('{{ $type }}')">Upload Document</span>
-                                                        <span wire:loading wire:target="uploadDocument('{{ $type }}')">Uploading...</span>
-                                                    </button>
-                                                @endif
+                                                <input type="file"
+                                                       wire:model="documents.{{ $type }}"
+                                                       accept=".pdf,.jpg,.jpeg,.png"
+                                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sidebar-green file:text-white hover:file:bg-sidebar-green-light disabled:opacity-50"
+                                                       wire:loading.attr="disabled"
+                                                       wire:target="documents.{{ $type }}">
+
+                                                <!-- Auto-upload status indicator -->
+                                                <div class="text-xs text-gray-500 mt-1">
+                                                    @if(isset($documents[$type]))
+                                                        <div class="flex items-center space-x-2 text-blue-600">
+                                                            <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                                                            <span>Uploading document...</span>
+                                                        </div>
+                                                    @else
+                                                        Select a file to upload automatically
+                                                    @endif
+                                                </div>
                                             </div>
                                         @endif
                                         

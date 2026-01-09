@@ -65,11 +65,11 @@
                         </div>
                     </div>
                     
-                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $type === 'company' ? 'Register Your Company' : 'Create Your Account' }}</h2>
-                    <p class="text-gray-600">{{ $type === 'company' ? 'Company onboarding to connect with borrowers' : 'Sign up to start generating quality leads' }}</p>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $type === 'company' ? 'Register Your Business' : 'Create Your Account' }}</h2>
+                    <p class="text-gray-600">{{ $type === 'company' ? 'Business onboarding to connect with borrowers' : 'Sign up to start generating quality leads' }}</p>
                     <div class="mt-6 inline-flex bg-gray-100 p-1 rounded-lg">
                         <button type="button" wire:click="$set('type','individual')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='individual' ? 'bg-white shadow text-black' : 'text-gray-600' }}">Individual</button>
-                        <button type="button" wire:click="$set('type','company')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">Company</button>
+                        <button type="button" wire:click="$set('type','company')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">Business</button>
                     </div>
                 </div>
 
@@ -81,8 +81,8 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="mb-4 p-4 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg">
-            <p class="text-sidebar-green-800 text-sm">{{ session('error') }}</p>
+        <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p class="text-red-800 text-sm">{{ session('error') }}</p>
         </div>
     @endif
 
@@ -99,11 +99,11 @@
                     wire:model.live="first_name"
                     type="text" 
                     required 
-                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('first_name') border-sidebar-green ring-1 ring-sidebar-green @enderror"
+                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('first_name') border-red-500 ring-1 ring-red-500 @enderror"
                     placeholder="John"
                 >
                 @error('first_name')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
             <div>
@@ -115,11 +115,11 @@
                     wire:model.live="last_name"
                     type="text" 
                     required 
-                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('last_name') border-sidebar-green ring-1 ring-sidebar-green @enderror"
+                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('last_name') border-red-500 ring-1 ring-red-500 @enderror"
                     placeholder="Doe"
                 >
                 @error('last_name')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
         </div>
@@ -141,12 +141,12 @@
                     type="email" 
                     autocomplete="email" 
                     required 
-                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('email') border-sidebar-green ring-1 ring-sidebar-green @enderror"
+                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('email') border-red-500 ring-1 ring-red-500 @enderror"
                     placeholder="john.doe@example.com"
                 >
             </div>
             @error('email')
-                <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
 
@@ -167,12 +167,12 @@
                         wire:model.live="phone"
                         type="tel" 
                         required 
-                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('phone') border-sidebar-green ring-1 ring-sidebar-green @enderror"
+                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('phone') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="+255 XXX XXX XXX"
                     >
                 </div>
                 @error('phone')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
             
@@ -193,20 +193,20 @@
                         type="text" 
                         required 
                         maxlength="20"
-                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('nida_number') border-sidebar-green ring-1 ring-sidebar-green @enderror"
+                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('nida_number') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="19XXXXXXXXXXXXXXXX"
                     >
                 </div>
                 @error('nida_number')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
             @else
             <div>
                 <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">Company Name *</label>
-                <input id="company_name" wire:model.live="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-sidebar-green ring-1 ring-sidebar-green @enderror" placeholder="Acme Ltd">
+                <input id="company_name" wire:model.live="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-red-500 ring-1 ring-red-500 @enderror" placeholder="Acme Ltd">
                 @error('company_name')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
             @endif
@@ -219,7 +219,7 @@
             <!-- Country Selection -->
             <div>
                 <label for="country" class="block text-sm font-medium text-gray-700 mb-1.5">Country *</label>
-                <select id="country" wire:model.live="country" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent text-sm @error('country') border-sidebar-green ring-1 ring-sidebar-green @enderror">
+                <select id="country" wire:model.live="country" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent text-sm @error('country') border-red-500 ring-1 ring-red-500 @enderror">
                     <option value="">Select Country</option>
                     <option value="Tanzania">Tanzania</option>
                     <option value="Kenya">Kenya</option>
@@ -228,33 +228,33 @@
                     <option value="Other">Other</option>
                 </select>
                 @error('country')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="company_tin" class="block text-sm font-medium text-gray-700 mb-1.5">Company TIN *</label>
-                    <input id="company_tin" wire:model.live="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-sidebar-green ring-1 ring-sidebar-green @enderror" placeholder="123-456-789">
+                    <input id="company_tin" wire:model.live="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-red-500 ring-1 ring-red-500 @enderror" placeholder="123-456-789">
                     @error('company_tin')
-                        <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 
                 @if(strtolower($country ?? '') === 'tanzania')
                 <div>
                     <label for="company_contact_nida" class="block text-sm font-medium text-gray-700 mb-1.5">Representative NIDA *</label>
-                    <input id="company_contact_nida" wire:model.live="company_contact_nida" maxlength="20" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-sidebar-green ring-1 ring-sidebar-green @enderror" placeholder="19XXXXXXXXXXXXXXXX">
+                    <input id="company_contact_nida" wire:model.live="company_contact_nida" maxlength="20" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19XXXXXXXXXXXXXXXX">
                     @error('company_contact_nida')
-                        <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 @elseif($country && strtolower($country) !== 'tanzania')
                 <div>
                     <label for="passport_number" class="block text-sm font-medium text-gray-700 mb-1.5">Passport Number *</label>
-                    <input id="passport_number" wire:model.live="passport_number" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('passport_number') border-sidebar-green ring-1 ring-sidebar-green @enderror" placeholder="A12345678">
+                    <input id="passport_number" wire:model.live="passport_number" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('passport_number') border-red-500 ring-1 ring-red-500 @enderror" placeholder="A12345678">
                     @error('passport_number')
-                        <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 @endif
@@ -280,7 +280,7 @@
                         type="password" 
                         autocomplete="new-password" 
                         required 
-                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password') border-sidebar-green ring-1 ring-sidebar-green @enderror"
+                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="••••••••"
                     >
                     <button 
@@ -295,7 +295,7 @@
                     </button>
                 </div>
                 @error('password')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
             
@@ -315,7 +315,7 @@
                         type="password" 
                         autocomplete="new-password" 
                         required 
-                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password_confirmation') border-sidebar-green ring-1 ring-sidebar-green @enderror"
+                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password_confirmation') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="••••••••"
                     >
                     <button 
@@ -330,7 +330,7 @@
                     </button>
                 </div>
                 @error('password_confirmation')
-                    <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
         </div>
@@ -356,7 +356,7 @@
             </div>
         </div>
         @error('terms')
-            <p class="text-sidebar-green text-xs mt-1">{{ $message }}</p>
+            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
         @enderror
 
         <!-- Submit Button -->
@@ -367,7 +367,7 @@
                 wire:target="register"
                 class="w-full bg-brand-green text-white py-3.5 px-4 rounded-lg font-semibold hover:bg-brand-green-light focus:ring-4 focus:ring-brand-green/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                <span wire:loading.remove wire:target="register">{{ $type==='company' ? 'Continue as Company' : 'Create Account' }}</span>
+                <span wire:loading.remove wire:target="register">{{ $type==='company' ? 'Continue as Business' : 'Create Account' }}</span>
                 <span wire:loading wire:target="register">Creating Account...</span>
             </button>
         </div>

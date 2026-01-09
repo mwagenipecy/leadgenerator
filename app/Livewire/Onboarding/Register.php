@@ -32,24 +32,24 @@ class Register extends Component
         $isCompany = $this->type === 'company';
 
         $rules = [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', 'string', 'max:20','unique:users'],
+            'first_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\'\.]+$/'],
+            'last_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\'\.]+$/'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
+            'phone' => ['required', 'string', 'max:20', 'unique:users', 'regex:/^[\+]?[0-9\s\-\(\)]+$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required'],
             'terms' => ['required', 'accepted'],
         ];
 
         if ($isCompany) {
-            $rules['company_name'] = ['required', 'string', 'max:255'];
-            $rules['company_tin'] = ['required', 'string', 'max:50'];
-            $rules['country'] = ['required', 'string', 'max:255'];
+            $rules['company_name'] = ['required', 'string', 'max:255', 'regex:/^[a-zA-Z0-9\s\-\'\.&,()]+$/'];
+            $rules['company_tin'] = ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9\-\s]+$/'];
+            $rules['country'] = ['required', 'string', 'max:255', 'in:Tanzania,Kenya,Uganda,Rwanda,Other'];
             // If Tanzania, require NIDA; if not, require passport
             if (strtolower($this->country ?? '') === 'tanzania') {
                 $rules['company_contact_nida'] = ['required', 'string', 'size:20', 'regex:/^[0-9]{20}$/'];
             } else {
-                $rules['passport_number'] = ['required', 'string', 'max:50'];
+                $rules['passport_number'] = ['required', 'string', 'max:50', 'regex:/^[a-zA-Z0-9]+$/'];
             }
         } else {
             $rules['nida_number'] = ['required', 'string', 'size:20', 'unique:users', 'regex:/^[0-9]{20}$/'];
@@ -84,11 +84,81 @@ class Register extends Component
 
     public function updated($propertyName)
     {
+        // Sanitize input before validation
+        $this->sanitizeInput($propertyName);
         $this->validateOnly($propertyName);
+    }
+
+    /**
+     * Sanitize a single input field
+     */
+    protected function sanitizeInput($propertyName)
+    {
+        if (!property_exists($this, $propertyName)) {
+            return;
+        }
+
+        $value = $this->$propertyName;
+
+        // Skip sanitization for boolean and password fields
+        if (in_array($propertyName, ['terms', 'password', 'password_confirmation'])) {
+            return;
+        }
+
+        if (is_string($value)) {
+            // Strip HTML tags
+            $value = strip_tags($value);
+            
+            // Trim whitespace
+            $value = trim($value);
+            
+            // Remove null bytes and other dangerous characters
+            $value = str_replace(["\0", "\r", "\n"], '', $value);
+            
+            // Prevent SQL injection patterns (basic check)
+            $dangerousPatterns = [
+                '/(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT|JAVASCRIPT|ONLOAD|ONERROR)\b)/i',
+                '/(<script|<\/script>|javascript:|on\w+\s*=)/i',
+            ];
+            
+            foreach ($dangerousPatterns as $pattern) {
+                if (preg_match($pattern, $value)) {
+                    $value = preg_replace($pattern, '', $value);
+                }
+            }
+            
+            $this->$propertyName = $value;
+        }
+    }
+
+    /**
+     * Sanitize all inputs before processing
+     */
+    protected function sanitizeAllInputs()
+    {
+        $fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'nida_number',
+            'company_name',
+            'company_tin',
+            'company_contact_nida',
+            'country',
+            'passport_number',
+        ];
+
+        foreach ($fields as $field) {
+            $this->sanitizeInput($field);
+        }
     }
 
     public function register()
     {
+        // Sanitize all inputs before validation
+        $this->sanitizeAllInputs();
+        
         $this->validate();
     
         try {

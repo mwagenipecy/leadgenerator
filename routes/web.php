@@ -322,6 +322,17 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     /*********************************** USERMANAGEMENT ****************************************/
     Route::get('user-management',[UserManagementController::class,'index'])->name('user.management');
     Route::get('company-verification',[CompanyVerificationController::class,'index'])->name('admin.company.verification');
+    
+    /*********************************** LOAN CATEGORIES ****************************************/
+    Route::resource('loan-categories', \App\Http\Controllers\Admin\LoanCategoryController::class)->names([
+        'index' => 'admin.loan-categories.index',
+        'create' => 'admin.loan-categories.create',
+        'store' => 'admin.loan-categories.store',
+        'show' => 'admin.loan-categories.show',
+        'edit' => 'admin.loan-categories.edit',
+        'update' => 'admin.loan-categories.update',
+        'destroy' => 'admin.loan-categories.destroy',
+    ]);
     Route::get('user-management/roles', function () {
         return view('pages.user-management.roles');
     })->name('user.management.roles');

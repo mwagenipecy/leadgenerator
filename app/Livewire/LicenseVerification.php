@@ -53,15 +53,29 @@ class LicenseVerification extends Component
             
             $soapRequest = $this->buildSoapRequest($messageId, $dataId, $this->licenseNumber);
             
+            // Get SOAP configuration
+            $soapUrl = config('services.soap.url') ?? env('SOAP_URL');
+            $soapUsername = config('services.soap.username') ?? env('SOAP_USERNAME');
+            $soapPassword = config('services.soap.password') ?? env('SOAP_PASSWORD');
+            
+            // Validate configuration
+            if (empty($soapUrl)) {
+                throw new \Exception('SOAP_URL is not configured. Please check your .env file.');
+            }
+            
+            if (empty($soapUsername) || empty($soapPassword)) {
+                throw new \Exception('SOAP credentials are not configured. Please check your .env file.');
+            }
+            
             $response = Http::withHeaders([
                 'Content-Type' => 'text/xml;charset=UTF-8',
                 'SOAPAction' => 'http://creditinfo.com/schemas/2012/09/MultiConnector/MultiConnectorService/Query',
                 'Authorization' => 'WSSE profile="UsernameToken"',
-                'Username' => env('SOAP_USERNAME'),
-                'Password' => env('SOAP_PASSWORD'),
+                'Username' => $soapUsername,
+                'Password' => $soapPassword,
             ])->timeout(80)
               ->withBody($soapRequest, 'text/xml')
-              ->post( env('SOAP_URL'));
+              ->post($soapUrl);
 
             if ($response->successful()) {
                 $parsedResult = $this->parseResponse($response->body());

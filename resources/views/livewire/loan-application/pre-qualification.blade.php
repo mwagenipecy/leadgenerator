@@ -14,13 +14,13 @@
 
                 <!-- Loan Categories Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    @foreach($loanCategories as $key => $name)
-                        <div wire:click="selectLoanCategory('{{ $key }}')" 
-                             class="bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-sidebar-green hover:shadow-lg transition-all duration-300 cursor-pointer group {{ $loan_category === $key ? 'border-sidebar-green bg-sidebar-green-50' : '' }}">
+                    @foreach($loanCategories as $category)
+                        <div wire:click="selectLoanCategory('{{ $category->slug }}')" 
+                             class="bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-sidebar-green hover:shadow-lg transition-all duration-300 cursor-pointer group {{ $loan_category === $category->name || $loan_category === $category->slug ? 'border-sidebar-green bg-sidebar-green-50' : '' }}">
                             <div class="text-center">
                                 <!-- Category Icon -->
-                                <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center {{ $loan_category === $key ? 'bg-sidebar-green text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-sidebar-green group-hover:text-white' }} transition-colors">
-                                    @switch($key)
+                                <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center {{ ($loan_category === $category->name || $loan_category === $category->slug) ? 'bg-sidebar-green text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-sidebar-green group-hover:text-white' }} transition-colors">
+                                    @switch($category->slug)
                                         @case('personal')
                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -59,15 +59,15 @@
                                             @break
                                         @default
                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                                             </svg>
                                     @endswitch
                                 </div>
                                 
-                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $name }}</h3>
-                                <p class="text-sm text-gray-600 leading-relaxed">{{ $this->getLoanCategoryDescription($key) }}</p>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $category->name }}</h3>
+                                <p class="text-sm text-gray-600 leading-relaxed">{{ $category->description ?: $this->getLoanCategoryDescription($category->slug) }}</p>
                                 
-                                @if($loan_category === $key)
+                                @if($loan_category === $category->name || $loan_category === $category->slug)
                                     <div class="mt-4">
                                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-sidebar-green text-white">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +91,10 @@
                         <h1 class="text-4xl font-bold text-gray-900 mb-2">Loan Requirements</h1>
                         <p class="text-gray-600 text-lg">Enter your loan details to find matching lenders</p>
                         <div class="mt-2 flex items-center space-x-4 text-sm">
-                            <span class="text-gray-500">Category: <span class="font-medium text-sidebar-green">{{ $loanCategories[$loan_category] ?? '' }}</span></span>
+                            @php
+                                $selectedCategory = $loanCategories->firstWhere('name', $loan_category) ?? $loanCategories->firstWhere('slug', $loan_category);
+                            @endphp
+                            <span class="text-gray-500">Category: <span class="font-medium text-sidebar-green">{{ $selectedCategory->name ?? $loan_category }}</span></span>
                         </div>
                     </div>
                     <button wire:click="backToCategory" class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
@@ -166,12 +169,12 @@
                                     <p class="text-gray-600 text-sm">Your income and existing obligations</p>
                                 </div>
                                 @if($userProfile)
-                                    <button wire:click="toggleProfileData" 
-                                            class="text-sm {{ $use_profile_data ? 'text-green-600' : 'text-gray-600' }} hover:text-green-800 flex items-center">
+                                    <button wire:click="toggleProfileData"
+                                            class="text-sm {{ $use_profile_data ? 'text-green-600' : 'text-gray-600' }} hover:text-green-800 flex items-center transition-colors">
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $use_profile_data ? 'M5 13l4 4L19 7' : 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' }}"/>
                                         </svg>
-                                        {{ $use_profile_data ? 'Using Profile Data' : 'Use Profile Data' }}
+                                        {{ $use_profile_data ? 'Using Profile Data (Editable)' : 'Load Profile Data' }}
                                     </button>
                                 @endif
                             </div>
@@ -185,20 +188,16 @@
                                 </label>
                                 <div class="relative">
                                     <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                    <input wire:model.live="monthly_income" 
-                                           type="number" 
-                                           step="1000" 
-                                           min="0" 
-                                           {{ $use_profile_data && $userProfile ? 'readonly' : '' }}
-                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold {{ $use_profile_data && $userProfile ? 'bg-gray-100' : 'bg-gray-50' }}"
+                                    <input wire:model.live="monthly_income"
+                                           type="number"
+                                           step="1000"
+                                           min="0"
+                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold bg-gray-50"
                                            placeholder="500,000">
                                 </div>
                                 @error('monthly_income') 
-                                    <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> 
+                                    <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> 
                                 @enderror
-                                @if($use_profile_data && $userProfile)
-                                    <p class="text-sm text-blue-600 mt-1">From your profile</p>
-                                @endif
                             </div>
 
                             <!-- Existing Loans -->
@@ -208,20 +207,16 @@
                                 </label>
                                 <div class="relative">
                                     <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                                    <input wire:model.live="existing_loans" 
-                                           type="number" 
-                                           step="1000" 
-                                           min="0" 
-                                           {{ $use_profile_data && $userProfile ? 'readonly' : '' }}
-                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold {{ $use_profile_data && $userProfile ? 'bg-gray-100' : 'bg-gray-50' }}"
+                                    <input wire:model.live="existing_loans"
+                                           type="number"
+                                           step="1000"
+                                           min="0"
+                                           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold bg-gray-50"
                                            placeholder="0">
                                 </div>
                                 @error('existing_loans') 
-                                    <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> 
+                                    <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span> 
                                 @enderror
-                                @if($use_profile_data && $userProfile)
-                                    <p class="text-sm text-blue-600 mt-1">From your profile</p>
-                                @endif
                             </div>
 
                             <!-- Profile Status -->
@@ -291,8 +286,30 @@
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900">Eligible Products</h3>
-                            <p class="text-sm text-gray-600">{{ count($availableProducts) }} products meet your DSR and criteria requirements</p>
+                            <h3 class="text-lg font-bold text-gray-900">Available Products</h3>
+                            @php
+                                $eligibleCount = collect($availableProducts)->where('eligible', true)->count();
+                                $ineligibleCount = collect($availableProducts)->where('eligible', false)->count();
+                            @endphp
+                            <div class="text-sm text-gray-600">
+                                <div class="mb-2">
+                                    <strong>Your criteria:</strong><br>
+                                    Amount: TSh {{ number_format($requested_amount) }} |
+                                    Period: {{ $requested_tenure }} months |
+                                    Income: TSh {{ number_format($monthly_income) }}
+                                </div>
+                                <div>
+                                    {{ count($availableProducts) }} products found
+                                    @if($eligibleCount > 0)
+                                        - {{ $eligibleCount }} match your criteria
+                                    @endif
+                                    @if($ineligibleCount > 0 && $eligibleCount > 0)
+                                        , {{ $ineligibleCount }} shown for reference
+                                    @elseif($ineligibleCount > 0 && $eligibleCount === 0)
+                                        - none match, showing similar options
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-3">
                             <!-- Sort Options -->
@@ -326,7 +343,7 @@
                                     @if(in_array($product['product_id'], $selected_products))
                                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                             {{ $product['lender_name'] }} - {{ $product['product_name'] }}
-                                            <button wire:click="selectProduct({{ $product['product_id'] }})" class="ml-2 text-green-600 hover:text-green-800">
+                                            <button wire:click="selectProduct('{{ $product['product_id'] }}')" class="ml-2 text-green-600 hover:text-green-800">
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                 </svg>
@@ -346,13 +363,15 @@
                             @php
                                 $isSelected = in_array($product['product_id'], $selected_products);
                                 $isLenderSelected = $product['is_lender_selected'] ?? false;
-                                $isTopMatch = $index === 0;
-                                $isDisabled = $isLenderSelected && !$isSelected;
+                                $isTopMatch = $index === 0 && $product['eligible'];
+                                $isDisabled = ($isLenderSelected && !$isSelected) || !$product['eligible'];
+                                $isEligible = $product['eligible'] ?? false;
                             @endphp
                             
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 
                                         {{ $isSelected ? 'ring-2 ring-sidebar-green' : '' }}
-                                        {{ $isDisabled ? 'opacity-50' : '' }}">
+                                        {{ $isDisabled || !$isEligible ? 'opacity-75' : '' }}
+                                        {{ !$isEligible ? 'border-red-200' : '' }}">
                                 
                                 <!-- Product Header -->
                                 <div class="p-6 {{ $isTopMatch ? 'bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white' : 'bg-gradient-to-r from-gray-50 to-gray-100' }}">
@@ -365,11 +384,13 @@
                                                 {{ $product['product_name'] }}
                                             </p>
                                         </div>
-                                        <div class="flex items-center space-x-2">
-                                            @if($isTopMatch)
+                                        <div class="flex items-center space-x-2 flex-wrap">
+                                            @if(!$isEligible)
+                                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">NOT ELIGIBLE</span>
+                                            @elseif($isTopMatch)
                                                 <span class="bg-white text-sidebar-green px-3 py-1 rounded-full text-xs font-bold">BEST MATCH</span>
                                             @endif
-                                            @if($isLenderSelected && !$isSelected)
+                                            @if($isLenderSelected && !$isSelected && $isEligible)
                                                 <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold">LENDER SELECTED</span>
                                             @endif
                                             <!-- Security Type Badge -->
@@ -464,32 +485,63 @@
                                         @endif
 
                                         <!-- Eligibility Status -->
-                                        <div class="bg-green-50 rounded-lg p-3">
-                                            <div class="flex items-center space-x-2">
-                                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                                <span class="text-green-700 font-medium text-sm">You qualify for this product</span>
+                                        @if($isEligible)
+                                            <div class="bg-green-50 rounded-lg p-3">
+                                                <div class="flex items-center space-x-2">
+                                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                                    </svg>
+                                                    <span class="text-green-700 font-medium text-sm">You qualify for this product</span>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @else
+                                            <div class="bg-red-50 rounded-lg p-3 border border-red-200">
+                                                <div class="flex items-start space-x-2 mb-2">
+                                                    <svg class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                                    </svg>
+                                                    <div class="flex-1">
+                                                        <span class="text-red-800 font-medium text-sm block mb-1">Not Eligible - Criteria Not Met</span>
+                                                        @if(!empty($product['eligibility_issues']))
+                                                            <ul class="text-xs text-red-700 space-y-1 mt-1">
+                                                                @foreach($product['eligibility_issues'] as $issue)
+                                                                    <li class="flex items-start">
+                                                                        <span class="mr-1">•</span>
+                                                                        <span>{{ $issue }}</span>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                            <p class="text-xs text-red-600 mt-1">You do not meet the eligibility criteria for this product.</p>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
 
                                         <!-- Action Buttons -->
                                         <div class="flex space-x-3 pt-2">
                                             <!-- Selection Checkbox -->
-                                            <label class="flex items-center cursor-pointer flex-1 {{ $isDisabled ? 'cursor-not-allowed' : '' }}">
-                                                <input type="checkbox" 
-                                                       wire:click="selectProduct({{ $product['product_id'] }})"
+                                            <label class="flex items-center flex-1 {{ !$isEligible || $isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer' }}">
+                                                <input type="checkbox"
+                                                       wire:click="selectProduct('{{ $product['product_id'] }}')"
                                                        {{ $isSelected ? 'checked' : '' }}
-                                                       {{ $isDisabled ? 'disabled' : '' }}
-                                                       class="text-sidebar-green focus:ring-sidebar-green rounded {{ $isDisabled ? 'cursor-not-allowed' : '' }}">
-                                                <span class="ml-3 text-sm font-medium text-gray-700">
-                                                    {{ $isDisabled ? 'Another product selected from this lender' : 'Select for application' }}
+                                                       {{ !$isEligible || $isDisabled ? 'disabled' : '' }}
+                                                       class="text-sidebar-green focus:ring-sidebar-green rounded {{ !$isEligible || $isDisabled ? 'cursor-not-allowed' : '' }}">
+                                                <span class="ml-3 text-sm font-medium {{ !$isEligible ? 'text-gray-500' : 'text-gray-700' }}">
+                                                    @if(!$isEligible)
+                                                        Cannot select - criteria not met
+                                                    @elseif($isDisabled)
+                                                        Another product selected from this lender
+                                                    @else
+                                                        Select for application
+                                                    @endif
                                                 </span>
                                             </label>
                                             
                                             <!-- View Details Button -->
                                             <button wire:click="showProductDetails({{ $product['product_id'] }})"
-                                                    class="text-sidebar-green hover:text-sidebar-green-light text-sm font-medium flex items-center">
+                                                    class="text-sidebar-green hover:text-sidebar-green-light text-sm font-medium flex items-center {{ !$isEligible ? 'opacity-60' : '' }}">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                 </svg>
@@ -744,7 +796,7 @@
 
                 <!-- Modal Actions -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t border-gray-200">
-                    <button wire:click="selectProduct({{ $selectedProductForDetails['product_id'] }})"
+                    <button wire:click="selectProduct('{{ $selectedProductForDetails['product_id'] }}')"
                             class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-bold hover:bg-sidebar-green-light transition-colors flex items-center justify-center">
                         @if(in_array($selectedProductForDetails['product_id'], $selected_products))
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
