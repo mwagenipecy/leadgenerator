@@ -370,16 +370,15 @@
                             <div class="space-y-2 text-sm">
                                 <div class="flex justify-between">
                                     <span class="text-gray-500">CRB Score:</span>
-                                    @if($application->credit_score && !$isAvailable)
-                                        <span class="font-medium {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-sidebar-green') }}">
-                                            {{ $application->credit_score }}
+                                    @if($application->user && $application->user->credit_score)
+                                        <span class="font-medium {{ $application->user->credit_score >= 650 ? 'text-green-600' : ($application->user->credit_score >= 550 ? 'text-yellow-600' : 'text-sidebar-green') }}">
+                                            {{ $application->user->credit_score }}
+                                            @if($application->user->credit_score_rating)
+                                                <span class="text-xs text-gray-500">({{ $application->user->credit_score_rating }})</span>
+                                            @endif
                                         </span>
-                                    @elseif($isAvailable)
-                                    <span class="font-medium {{ $application->credit_score >= 650 ? 'text-green-600' : ($application->credit_score >= 550 ? 'text-yellow-600' : 'text-sidebar-green') }}">
-                                            {{ $application->credit_score }}
-                                        </span>
-                                        
-                                     
+                                    @else
+                                        <span class="font-medium text-gray-400">Waiting</span>
                                     @endif
                                 </div>
                                 <div class="flex justify-between">
@@ -388,7 +387,7 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-500">Product:</span>
-                                    <span class="font-medium text-xs">{{ $application->loanProduct->name ?? 'N/A' }}</span>
+                                    <span class="font-medium text-xs">{{ $submission->loanProduct->name ?? 'N/A' }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-500">Applied:</span>
@@ -401,7 +400,7 @@
                         <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
                             @if($isAvailable)
                                 <div class="flex justify-center">
-                                    <button wire:click="openBookingModal({{ $application->id }})" 
+                                    <button wire:click="openBookingModal('{{ $application->id }}')" 
                                             class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-all duration-200">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -563,20 +562,21 @@
                                         <div class="text-xs text-gray-500">Monthly</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($application->credit_score && !$isAvailable)
+                                        @if($application->user && $application->user->credit_score)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                                {{ $application->credit_score >= 650 ? 'bg-green-100 text-green-800' : 
-                                                   ($application->credit_score >= 550 ? 'bg-yellow-100 text-yellow-800' : 'bg-sidebar-green-100 text-sidebar-green-800') }}">
-                                                {{ $application->credit_score }}
+                                                {{ $application->user->credit_score >= 650 ? 'bg-green-100 text-green-800' : 
+                                                   ($application->user->credit_score >= 550 ? 'bg-yellow-100 text-yellow-800' : 'bg-sidebar-green-100 text-sidebar-green-800') }}">
+                                                {{ $application->user->credit_score }}
+                                                @if($application->user->credit_score_rating)
+                                                    <span class="ml-1 text-xs">({{ $application->user->credit_score_rating }})</span>
+                                                @endif
                                             </span>
-                                        @elseif($isAvailable)
-                                            <span class="text-gray-400 text-sm "> {{ $application->credit_score }}</span>
                                         @else
-                                            <span class="text-gray-400 text-sm">{{ $application->credit_score }}</span>
+                                            <span class="text-gray-400 text-sm">Waiting</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-black">{{ $application->loanProduct->name ?? 'N/A' }}</div>
+                                        <div class="text-sm text-black">{{ $submission->loanProduct->name ?? 'N/A' }}</div>
                                     </td>
                                     @if($leadTypeFilter === 'booked')
                                         <td class="px-6 py-4 whitespace-nowrap">
@@ -597,7 +597,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         @if($isAvailable)
-                                            <button wire:click="openBookingModal({{ $application->id }})" 
+                                            <button wire:click="openBookingModal('{{ $application->id }}')" 
                                                     class="inline-flex items-center px-3 py-1.5 bg-sidebar-green text-white rounded-lg text-xs font-medium hover:bg-sidebar-green-light transition-all duration-200">
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -694,7 +694,13 @@
                                         </div>
                                         <div>
                                             <label class="text-xs font-medium text-gray-500">Product</label>
-                                            <p class="text-sm font-bold text-black">{{ $selectedLead->loanProduct->name ?? 'N/A' }}</p>
+                                            <p class="text-sm font-bold text-black">
+                                                @php
+                                                    // Get product from submission if available, otherwise from application
+                                                    $product = $selectedLead->lenderSubmissions()->where('lender_id', Auth::user()->lender_id)->with('loanProduct')->first()?->loanProduct ?? $selectedLead->loanProduct;
+                                                @endphp
+                                                {{ $product->name ?? 'N/A' }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -725,9 +731,18 @@
                     </div>
                     <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                         <button wire:click="confirmBooking" 
+                                wire:loading.attr="disabled"
+                                wire:target="confirmBooking"
                                 type="button" 
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm">
-                            Confirm Booking
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading.remove wire:target="confirmBooking">Confirm Booking</span>
+                            <span wire:loading wire:target="confirmBooking" class="flex items-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Processing...
+                            </span>
                         </button>
                         <button wire:click="closeBookingModal" 
                                 type="button" 

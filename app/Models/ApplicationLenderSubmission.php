@@ -21,11 +21,14 @@ class ApplicationLenderSubmission extends Model
         'submission_data' => 'array',
         'lender_response' => 'array',
         'offered_terms' => 'array',
-        'submitted_at' => 'timestamp',
-        'reviewed_at' => 'timestamp',
-        'decision_at' => 'timestamp',
+        'submitted_at' => 'datetime',
+        'reviewed_at' => 'datetime',
+        'decision_at' => 'datetime',
+        'booked_at' => 'datetime',
+        'cancelled_at' => 'datetime',
         'offered_amount' => 'decimal:2',
         'offered_interest_rate' => 'decimal:2',
+        'booking_fee' => 'decimal:2',
     ];
 
     public function user(): BelongsTo

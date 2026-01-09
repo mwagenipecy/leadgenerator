@@ -35,7 +35,7 @@ class ApplicationList extends Component
     // View states
     public $currentStep = 'list';
     public $selectedApplication = null;
-    public $viewMode = 'grid'; // grid, table, detailed
+    public $viewMode = 'table'; // grid, table, detailed
     public $showFilters = false;
     
     // Bulk actions
@@ -126,6 +126,7 @@ class ApplicationList extends Component
             'lender', 
             'user', 
             'documents',
+            'lenderSubmissions.loanProduct' // Load submissions with their products
            // 'reviewedByUser'
         ])->find($applicationId);
         $this->currentStep = 'view';
@@ -273,7 +274,13 @@ $this->tabName=$tabName;
     // Data properties
     public function getApplicationsProperty()
     {
-        $query = Application::with(['loanProduct', 'lender', 'user', 'documents'])
+        $query = Application::with([
+            'loanProduct', 
+            'lender', 
+            'user', 
+            'documents',
+            'lenderSubmissions.loanProduct' // Load submissions with their products
+        ])
             ->when(Auth::user()->role === 'lender', function ($q) {
                 return $q->where('lender_id', Auth::user()->lender_id);
             });

@@ -127,4 +127,63 @@ class LenderCommissionSetting extends Model
 
         return $commission;
     }
+
+    /**
+     * Get booking fee for a lender based on commission settings
+     * Calculates booking fee using lender's commission settings (percentage or fixed)
+     * Falls back to default commission settings if lender doesn't have custom settings
+     * 
+     * @param int|string|null $lenderId
+     * @param float $loanAmount The loan amount to calculate booking fee from
+     * @return float
+     */
+    public static function getBookingFeeForLender($lenderId = null, $loanAmount = 0): float
+    {
+        // Get lender's commission settings
+        $lenderSetting = null;
+        if ($lenderId) {
+            $lenderSetting = static::getForLender($lenderId);
+        }
+        
+        // If lender has commission settings configured, use them to calculate booking fee
+        if ($lenderSetting && $lenderSetting->is_active) {
+            $fee = $lenderSetting->calculateCommission($loanAmount);
+            \Log::info('Booking fee calculated from lender settings', [
+                'lender_id' => $lenderId,
+                'loan_amount' => $loanAmount,
+                'commission_type' => $lenderSetting->commission_type,
+                'calculated_fee' => $fee,
+            ]);
+            return $fee;
+        }
+        
+        // If lender doesn't have commission settings, use default commission settings
+        $defaults = static::getDefaultSettings();
+        
+        // Calculate booking fee based on default commission type
+        if ($defaults['commission_type'] === 'percentage') {
+            $bookingFee = ($loanAmount * $defaults['commission_percentage']) / 100;
+        } else {
+            $bookingFee = $defaults['commission_fixed_amount'];
+        }
+        
+        // Apply minimum limit
+        if ($defaults['minimum_amount'] && $bookingFee < $defaults['minimum_amount']) {
+            $bookingFee = $defaults['minimum_amount'];
+        }
+        
+        // Apply maximum limit
+        if ($defaults['maximum_amount'] && $bookingFee > $defaults['maximum_amount']) {
+            $bookingFee = $defaults['maximum_amount'];
+        }
+        
+        \Log::info('Booking fee calculated from default settings', [
+            'lender_id' => $lenderId,
+            'loan_amount' => $loanAmount,
+            'default_commission_type' => $defaults['commission_type'],
+            'calculated_fee' => $bookingFee,
+        ]);
+        
+        return (float) $bookingFee;
+    }
 }

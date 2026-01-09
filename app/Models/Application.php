@@ -115,6 +115,54 @@ class Application extends Model
         return $this->hasMany(ApplicationDocument::class);
     }
 
+    public function lenderSubmissions(): HasMany
+    {
+        return $this->hasMany(ApplicationLenderSubmission::class);
+    }
+
+    /**
+     * Get the loan product - either from direct relationship or from lender submissions
+     * 
+     * @param string|null $lenderId Optional lender ID to get product from specific lender's submission
+     * @return LoanProduct|null
+     */
+    public function getProduct(?string $lenderId = null)
+    {
+        // First try direct relationship (if no specific lender requested)
+        if (!$lenderId && $this->relationLoaded('loanProduct') && $this->loanProduct) {
+            return $this->loanProduct;
+        }
+        
+        // Get product from lender submissions
+        if ($this->relationLoaded('lenderSubmissions')) {
+            $submissions = $this->lenderSubmissions;
+            
+            // If lender ID is provided, filter by that lender
+            if ($lenderId) {
+                $submission = $submissions->firstWhere('lender_id', $lenderId);
+            } else {
+                // Otherwise, get the first submission
+                $submission = $submissions->first();
+            }
+            
+            if ($submission) {
+                // Load product if not already loaded
+                if (!$submission->relationLoaded('loanProduct')) {
+                    $submission->load('loanProduct');
+                }
+                return $submission->loanProduct;
+            }
+        }
+        
+        // Fallback: query directly if not loaded
+        $query = $this->lenderSubmissions()->with('loanProduct');
+        if ($lenderId) {
+            $query->where('lender_id', $lenderId);
+        }
+        $submission = $query->first();
+        return $submission?->loanProduct;
+    }
+
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by');

@@ -62,6 +62,25 @@
                     @endif
                 @endif
             </a>
+
+            <!-- Reports (Lender) -->
+            <a href="{{ route('reports.booking') }}"
+               class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('reports.*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
+               title="{{ $isCollapsed ? 'Reports' : '' }}">
+                <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    @if(!$isCollapsed)
+                    <span class="font-medium">Reports</span>
+                    @endif
+                </div>
+                @if(!$isCollapsed && request()->routeIs('reports.*'))
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+                @endif
+            </a>
             @endif
 
             <!-- User Profile & Loan Applications (Borrower) -->
@@ -174,6 +193,25 @@
 
             <!-- Super Admin Menu Items -->
             @if(auth()->user()->role=='super_admin')
+            <!-- Reports (Admin) -->
+            <a href="{{ route('reports.booking') }}"
+               class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('reports.*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
+               title="{{ $isCollapsed ? 'Reports' : '' }}">
+                <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    @if(!$isCollapsed)
+                    <span class="font-medium">Reports</span>
+                    @endif
+                </div>
+                @if(!$isCollapsed && request()->routeIs('reports.*'))
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+                @endif
+            </a>
+
             <a href="{{ route('user.management') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('user*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }} relative"
                title="{{ $isCollapsed ? 'User Management' : '' }}">

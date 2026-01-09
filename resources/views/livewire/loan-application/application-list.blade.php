@@ -2,7 +2,7 @@
 {{-- SECTION 1: HEADER AND STATS --}}
 <div class="min-h-screen bg-gray-50">
     {{-- Header Section --}}
-    <div class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-4">
@@ -578,14 +578,20 @@
                                     <tr class="hover:bg-gray-50 transition-colors duration-150 {{ in_array($application->id, $selectedApplications) ? 'bg-blue-50 border-l-4 border-blue-500' : '' }} {{ $isUnbooked ? 'opacity-75' : '' }}">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <input type="checkbox" 
-                                                   wire:click="toggleApplicationSelection({{ $application->id }})"
+                                                   wire:click="toggleApplicationSelection('{{ $application->id }}')"
                                                    {{ in_array($application->id, $selectedApplications) ? 'checked' : '' }}
                                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                    {{ $isUnbooked ? 'disabled' : '' }}>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900">{{ $application->application_number }}</div>
-                                            <div class="text-sm text-gray-500">{{ $application->loanProduct->name ?? 'No Product' }}</div>
+                                            <div class="text-sm text-gray-500">
+                                                @php
+                                                    $lenderId = Auth::user()->role === 'lender' ? Auth::user()->lender_id : null;
+                                                    $product = $application->getProduct($lenderId);
+                                                @endphp
+                                                {{ $product?->name ?? 'No Product' }}
+                                            </div>
                                             @if($isUnbooked)
                                                 <div class="mt-1">
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
@@ -682,7 +688,7 @@
                                             <div class="flex items-center space-x-2">
                                                 @if($isUnbooked)
                                                     {{-- Book Application Button --}}
-                                                    <button wire:click="bookApplication({{ $application->id }})" 
+                                                    <button wire:click="bookApplication('{{ $application->id }}')" 
                                                             class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all duration-200">
                                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -691,7 +697,7 @@
                                                     </button>
                                                 @else
                                                     {{-- Regular Action Buttons (only for booked applications) --}}
-                                                    <button wire:click="viewApplication({{ $application->id }})" 
+                                                    <button wire:click="viewApplication('{{ $application->id }}')" 
                                                             class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-lg hover:bg-indigo-50 transition-all duration-200"
                                                             title="View Details">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -700,7 +706,7 @@
                                                     </button>
                                                     
                                                     @if($application->status === 'submitted')
-                                                        <button wire:click="startReview({{ $application->id }})" 
+                                                        <button wire:click="startReview('{{ $application->id }}')" 
                                                                 class="text-blue-600 hover:text-blue-900 p-1.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
                                                                 title="Start Review">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -710,14 +716,14 @@
                                                     @endif
 
                                                     @if(in_array($application->status, ['submitted', 'under_review']))
-                                                        <button wire:click="approveApplication({{ $application->id }})" 
+                                                        <button wire:click="approveApplication('{{ $application->id }}')" 
                                                                 class="text-green-600 hover:text-green-900 p-1.5 rounded-lg hover:bg-green-50 transition-all duration-200"
                                                                 title="Approve">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                             </svg>
                                                         </button>
-                                                        <button wire:click="rejectApplication({{ $application->id }})" 
+                                                        <button wire:click="rejectApplication('{{ $application->id }}')" 
                                                                 class="text-sidebar-green hover:text-sidebar-green-900 p-1.5 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200"
                                                                 title="Reject">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -727,7 +733,7 @@
                                                     @endif
 
                                                     @if($application->status === 'approved')
-                                                        <button wire:click="markDisbursed({{ $application->id }})" 
+                                                        <button wire:click="markDisbursed('{{ $application->id }}')" 
                                                                 class="text-purple-600 hover:text-purple-900 p-1.5 rounded-lg hover:bg-purple-50 transition-all duration-200"
                                                                 title="Mark as Disbursed">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -771,7 +777,7 @@
                             <div class="flex items-start justify-between mb-4">
                                 <div class="flex items-center space-x-3">
                                     <input type="checkbox" 
-                                        wire:click="toggleApplicationSelection({{ $application->id }})"
+                                        wire:click="toggleApplicationSelection('{{ $application->id }}')"
                                         {{ in_array($application->id, $selectedApplications) ? 'checked' : '' }}
                                         class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                         {{ $isUnbooked ? 'disabled' : '' }}>
@@ -864,7 +870,13 @@
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-500">Product:</span>
-                                    <span class="font-medium text-xs">{{ $application->loanProduct->name ?? 'N/A' }}</span>
+                                    <span class="font-medium text-xs">
+                                        @php
+                                            $lenderId = Auth::user()->role === 'lender' ? Auth::user()->lender_id : null;
+                                            $product = $application->getProduct($lenderId);
+                                        @endphp
+                                        {{ $product?->name ?? 'N/A' }}
+                                    </span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-gray-500">Applied:</span>
@@ -963,7 +975,7 @@
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center space-x-4">
                                     <input type="checkbox" 
-                                        wire:click="toggleApplicationSelection({{ $application->id }})"
+                                        wire:click="toggleApplicationSelection('{{ $application->id }}')"
                                         {{ in_array($application->id, $selectedApplications) ? 'checked' : '' }}
                                         class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mt-1"
                                         {{ $isUnbooked ? 'disabled' : '' }}>
@@ -1063,7 +1075,13 @@
                                             </div>
                                             <div class="flex justify-between py-2 border-b border-gray-100">
                                                 <span class="text-sm text-gray-600">Product:</span>
-                                                <span class="text-sm font-semibold text-gray-900">{{ $application->loanProduct->name ?? 'N/A' }}</span>
+                                                <span class="text-sm font-semibold text-gray-900">
+                                                    @php
+                                                        $lenderId = Auth::user()->role === 'lender' ? Auth::user()->lender_id : null;
+                                                        $product = $application->getProduct($lenderId);
+                                                    @endphp
+                                                    {{ $product?->name ?? 'N/A' }}
+                                                </span>
                                             </div>
                                             <div class="flex justify-between py-2 border-b border-gray-100">
                                                 <span class="text-sm text-gray-600">Purpose:</span>
@@ -1096,7 +1114,20 @@
                                             </div>
                                             <div class="flex justify-between py-2 border-b border-gray-100">
                                                 <span class="text-sm text-gray-600">Credit Score:</span>
-                                                <span class="text-sm font-semibold text-gray-900">{{ $application->credit_score ?? 'N/A' }}</span>
+                                                <span class="text-sm font-semibold text-gray-900">
+                                                    @if($application->user)
+                                                        @if($application->user->credit_score)
+                                                            {{ $application->user->credit_score }}
+                                                            @if($application->user->credit_score_rating)
+                                                                <span class="text-xs text-gray-500">({{ $application->user->credit_score_rating }})</span>
+                                                            @endif
+                                                        @else
+                                                            <span class="text-gray-400">Waiting</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-gray-400">N/A</span>
+                                                    @endif
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -1267,7 +1298,7 @@
                 <!-- Quick Actions -->
                 <div class="flex items-center space-x-2">
                     @if($selectedApplication->status === 'submitted')
-                        <button wire:click="startReview({{ $selectedApplication->id }})" 
+                                    <button wire:click="startReview('{{ $selectedApplication->id }}')"
                                 class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
@@ -1277,14 +1308,14 @@
                     @endif
 
                     @if(in_array($selectedApplication->status, ['submitted', 'under_review']))
-                        <button wire:click="approveApplication({{ $selectedApplication->id }})" 
+                        <button wire:click="approveApplication('{{ $selectedApplication->id }}')" 
                                 class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                             Approve
                         </button>
-                        <button wire:click="rejectApplication({{ $selectedApplication->id }})" 
+                        <button wire:click="rejectApplication('{{ $selectedApplication->id }}')" 
                                 class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -1294,7 +1325,7 @@
                     @endif
 
                     @if($selectedApplication->status === 'approved')
-                        <button wire:click="markDisbursed({{ $selectedApplication->id }})" 
+                        <button wire:click="markDisbursed('{{ $selectedApplication->id }}')" 
                                 class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
@@ -1436,7 +1467,13 @@
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                     <span class="text-sm font-medium text-gray-600">Loan Product</span>
-                                    <span class="text-sm font-bold text-gray-900">{{ $selectedApplication->loanProduct->name ?? 'N/A' }}</span>
+                                    <span class="text-sm font-bold text-gray-900">
+                                        @php
+                                            $lenderId = Auth::user()->role === 'lender' ? Auth::user()->lender_id : null;
+                                            $product = $selectedApplication->getProduct($lenderId);
+                                        @endphp
+                                        {{ $product?->name ?? 'N/A' }}
+                                    </span>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                     <span class="text-sm font-medium text-gray-600">Requested Amount</span>
@@ -1463,7 +1500,20 @@
                             <div class="bg-gray-50 rounded-lg p-6 space-y-4">
                                 <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                     <span class="text-sm font-medium text-gray-600">Credit Score</span>
-                                    <span class="text-sm font-bold text-gray-900">{{ $selectedApplication->credit_score ?? 'N/A' }}</span>
+                                    <span class="text-sm font-bold text-gray-900">
+                                        @if($selectedApplication->user)
+                                            @if($selectedApplication->user->credit_score)
+                                                {{ $selectedApplication->user->credit_score }}
+                                                @if($selectedApplication->user->credit_score_rating)
+                                                    <span class="text-xs text-gray-500">({{ $selectedApplication->user->credit_score_rating }})</span>
+                                                @endif
+                                            @else
+                                                <span class="text-gray-400">Waiting</span>
+                                            @endif
+                                        @else
+                                            <span class="text-gray-400">N/A</span>
+                                        @endif
+                                    </span>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-200">
                                     <span class="text-sm font-medium text-gray-600">Debt-to-Income Ratio</span>
@@ -2184,7 +2234,7 @@
                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500"
                                           placeholder="Add approval notes..."></textarea>
                             </div>
-                            <button wire:click="approveApplication({{ $selectedApplication->id }})" 
+                            <button wire:click="approveApplication('{{ $selectedApplication->id }}')" 
                                     class="w-full inline-flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -2239,7 +2289,7 @@
                                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-sidebar-green"
                                           placeholder="Add rejection notes..."></textarea>
                             </div>
-                            <button wire:click="rejectApplication({{ $selectedApplication->id }})" 
+                            <button wire:click="rejectApplication('{{ $selectedApplication->id }}')" 
                                     class="w-full inline-flex justify-center items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

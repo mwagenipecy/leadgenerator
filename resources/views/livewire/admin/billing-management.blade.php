@@ -276,7 +276,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center space-x-2">
-                                                <button wire:click="viewApplication({{ $application->id }})" 
+                                                <button wire:click="viewApplication('{{ $application->id }}')" 
                                                         class="text-gray-600 hover:text-black p-2 rounded-xl hover:bg-gray-50 transition-all duration-200"
                                                         title="View Application Details">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,7 +286,7 @@
                                                 </button>
                                                 
                                                 @if(!$hasBill)
-                                                    <button wire:click="createSingleBill({{ $application->id }})" 
+                                                    <button wire:click="createSingleBill('{{ $application->id }}')" 
                                                             class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200"
                                                             title="Create Commission Bill">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,7 +294,7 @@
                                                         </svg>
                                                     </button>
                                                 @else
-                                                    <button wire:click="viewApplicationBill({{ $application->id }})" 
+                                                    <button wire:click="viewApplicationBill('{{ $application->id }}')" 
                                                             class="text-black hover:text-gray-700 p-2 rounded-xl hover:bg-gray-50 transition-all duration-200"
                                                             title="View Commission Bill">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -417,7 +417,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center space-x-2">
                                                 @if($bill->status !== 'paid')
-                                                    <button wire:click="openPaymentModal({{ $bill->id }})" 
+                                                    <button wire:click="openPaymentModal('{{ $bill->id }}')" 
                                                             class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200"
                                                             title="Record Payment">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -425,7 +425,7 @@
                                                         </svg>
                                                     </button>
                                                 @endif
-                                                <button wire:click="viewBillDetails({{ $bill->id }})" 
+                                                <button wire:click="viewBillDetails('{{ $bill->id }}')" 
                                                         class="text-black hover:text-gray-700 p-2 rounded-xl hover:bg-gray-50 transition-all duration-200"
                                                         title="View Bill Details">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -945,7 +945,7 @@
                 <div class="mt-6 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         @if($selectedBillForView->status !== 'paid')
-                            <button wire:click="openPaymentModal({{ $selectedBillForView->id }})" 
+                            <button wire:click="openPaymentModal('{{ $selectedBillForView->id }}')" 
                                     class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -955,7 +955,7 @@
                         @endif
                         
                         @if($selectedBillForView->status === 'pending')
-                            <button wire:click="sendBillNotification({{ $selectedBillForView->id }})" 
+                            <button wire:click="sendBillNotification('{{ $selectedBillForView->id }}')" 
                                     class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -966,7 +966,7 @@
                     </div>
                     
                     <div class="flex items-center space-x-3">
-                        <button wire:click="downloadBillPdf({{ $selectedBillForView->id }})" 
+                        <button wire:click="downloadBillPdf('{{ $selectedBillForView->id }}')" 
                                 class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -975,7 +975,7 @@
                         </button>
                         
                         @if(in_array($selectedBillForView->status, ['pending', 'sent']) && $selectedBillForView->payments()->count() === 0)
-                            <button wire:click="cancelBill({{ $selectedBillForView->id }})" 
+                            <button wire:click="cancelBill('{{ $selectedBillForView->id }}')" 
                                     onclick="return confirm('Are you sure you want to cancel this bill?')"
                                     class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

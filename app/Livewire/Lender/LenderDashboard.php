@@ -43,23 +43,27 @@ class LenderDashboard extends Component
             return;
         }
 
-        // Basic application counts
-        $this->totalApplications = Application::where('lender_id', $lender->id)->count();
-        $this->newApplications = Application::where('lender_id', $lender->id)
+        // All counts should come from application_lender_submissions table
+        // New applications: status = 'submitted' (not approved yet)
+        $this->newApplications = ApplicationLenderSubmission::where('lender_id', $lender->id)
             ->where('status', 'submitted')
             ->count();
+
+        // Total applications submitted to this lender
+        $this->totalApplications = ApplicationLenderSubmission::where('lender_id', $lender->id)->count();
+
+        // Pending applications (submitted or under_review)
         $this->pendingApplications = ApplicationLenderSubmission::where('lender_id', $lender->id)
-            ->where('status', 'submitted')
+            ->whereIn('status', ['submitted', 'under_review'])
             ->count();
 
-
-
-
-        $this->approvedApplications = Application::where('lender_id', $lender->id)
+        // Approved applications
+        $this->approvedApplications = ApplicationLenderSubmission::where('lender_id', $lender->id)
             ->where('status', 'approved')
             ->count();
             
-        $this->rejectedApplications = Application::where('lender_id', $lender->id)
+        // Rejected applications
+        $this->rejectedApplications = ApplicationLenderSubmission::where('lender_id', $lender->id)
             ->where('status', 'rejected')
             ->count();
 
@@ -68,39 +72,89 @@ class LenderDashboard extends Component
             ? round(($this->approvedApplications / $this->totalApplications) * 100, 1) 
             : 0;
 
-        // Disbursement amounts
-        $this->totalDisbursed = Application::where('lender_id', $lender->id)
+        // Disbursement amounts - get from applications linked via application_lender_submissions
+        $approvedSubmissionIds = ApplicationLenderSubmission::where('lender_id', $lender->id)
+            ->where('status', 'approved')
+            ->pluck('application_id');
+            
+        $this->totalDisbursed = Application::whereIn('id', $approvedSubmissionIds)
             ->where('status', 'disbursed')
             ->sum('requested_amount');
 
-        $this->monthlyDisbursed = Application::where('lender_id', $lender->id)
+        $this->monthlyDisbursed = Application::whereIn('id', $approvedSubmissionIds)
             ->where('status', 'disbursed')
             ->whereMonth('disbursed_at', now()->month)
             ->whereYear('disbursed_at', now()->year)
             ->sum('requested_amount');
 
-        // Recent applications
-        $this->recentApplications = Application::with(['user', 'loanProduct'])
+        // Recent applications from application_lender_submissions
+        // Get the applications linked to submissions and attach submission status
+        $submissions = ApplicationLenderSubmission::with(['application.user', 'loanProduct'])
             ->where('lender_id', $lender->id)
+            ->orderBy('submitted_at', 'desc')
             ->orderBy('created_at', 'desc')
             ->limit(8)
-            ->get();
+            ->get()
+            ->filter(function ($submission) {
+                return $submission->application !== null;
+            });
 
-        // Loan products
+        $this->recentApplications = $submissions->map(function ($submission) {
+            $application = $submission->application;
+            // Attach submission status and loan product to the application object
+            $application->submission_status = $submission->status;
+            $application->loanProduct = $submission->loanProduct;
+            $application->submitted_at = $submission->submitted_at ?? $submission->created_at;
+            return $application;
+        });
+
+        // Loan products with real counts from application_lender_submissions
         $this->loanProducts = LoanProduct::where('lender_id', $lender->id)
-            ->withCount('applications')
-            ->get();
+            ->get()
+            ->map(function ($product) use ($lender) {
+                $submissions = ApplicationLenderSubmission::where('lender_id', $lender->id)
+                    ->where('loan_product_id', $product->id)
+                    ->get();
+                    
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'applications_count' => $submissions->count(),
+                ];
+            });
 
-        // Applications by status
-        $this->applicationsByStatus = Application::where('lender_id', $lender->id)
+        // Applications by status from application_lender_submissions
+        $submissionStatuses = ApplicationLenderSubmission::where('lender_id', $lender->id)
             ->select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
             ->get()
             ->pluck('count', 'status')
             ->toArray();
 
-        // Applications by product with product details
-        $this->applicationsByProduct = Application::where('lender_id', $lender->id)
+        // Get disbursed count from Application model where submission is approved
+        $approvedSubmissionIds = ApplicationLenderSubmission::where('lender_id', $lender->id)
+            ->where('status', 'approved')
+            ->pluck('application_id');
+            
+        $disbursedCount = Application::whereIn('id', $approvedSubmissionIds)
+            ->where('status', 'disbursed')
+            ->count();
+
+        // Initialize all expected statuses with 0, then merge with actual data
+        $this->applicationsByStatus = [
+            'submitted' => $submissionStatuses['submitted'] ?? 0,
+            'under_review' => $submissionStatuses['under_review'] ?? 0,
+            'approved' => $submissionStatuses['approved'] ?? 0,
+            'rejected' => $submissionStatuses['rejected'] ?? 0,
+            'disbursed' => $disbursedCount,
+            // Include other statuses that might exist
+            'pending' => $submissionStatuses['pending'] ?? 0,
+            'withdrawn' => $submissionStatuses['withdrawn'] ?? 0,
+            'expired' => $submissionStatuses['expired'] ?? 0,
+        ];
+
+        // Applications by product with product details - from application_lender_submissions
+        $this->applicationsByProduct = ApplicationLenderSubmission::where('lender_id', $lender->id)
             ->with('loanProduct')
             ->select('loan_product_id', DB::raw('count(*) as count'))
             ->whereNotNull('loan_product_id')
@@ -114,26 +168,28 @@ class LenderDashboard extends Component
                 ];
             });
 
-        // Top performing products with enhanced data - only lender's products
+        // Top performing products with real data from application_lender_submissions
         $this->topPerformingProducts = LoanProduct::where('lender_id', $lender->id)
-            ->withCount([
-                'applications' => function ($query) use ($lender) {
-                    $query->where('lender_id', $lender->id);
-                },
-                'applications as approved_count' => function ($query) use ($lender) {
-                    $query->where('lender_id', $lender->id)
-                          ->where('status', 'approved');
-                },
-                'applications as rejected_count' => function ($query) use ($lender) {
-                    $query->where('lender_id', $lender->id)
-                          ->where('status', 'rejected');
-                },
-                'applications as pending_count' => function ($query) use ($lender) {
-                    $query->where('lender_id', $lender->id)
-                          ->whereIn('status', ['submitted', 'under_review']);
-                }
-            ])
             ->get()
+            ->map(function ($product) use ($lender) {
+                $submissions = ApplicationLenderSubmission::where('lender_id', $lender->id)
+                    ->where('loan_product_id', $product->id)
+                    ->get();
+                    
+                $approvedCount = $submissions->where('status', 'approved')->count();
+                $rejectedCount = $submissions->where('status', 'rejected')->count();
+                $pendingCount = $submissions->whereIn('status', ['submitted', 'under_review'])->count();
+                $totalCount = $submissions->count();
+                
+                return (object) [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'applications_count' => $totalCount,
+                    'approved_count' => $approvedCount,
+                    'rejected_count' => $rejectedCount,
+                    'pending_count' => $pendingCount,
+                ];
+            })
             ->filter(function ($product) {
                 return $product->applications_count > 0;
             })
@@ -141,10 +197,10 @@ class LenderDashboard extends Component
             ->take(5)
             ->values();
 
-        // Monthly application trends (last 6 months)
+        // Monthly application trends (last 6 months) - from application_lender_submissions
         $this->applicationTrends = $this->getMonthlyTrends($lender->id);
 
-        // Product performance insights
+        // Product performance insights - from application_lender_submissions
         $this->productInsights = $this->getProductInsights($lender->id);
     }
 
@@ -158,18 +214,26 @@ class LenderDashboard extends Component
             $year = $date->year;
             $month = $date->month;
 
-            $totalApps = Application::where('lender_id', $lenderId)
-                ->whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
+            // Get submissions from application_lender_submissions
+            $totalApps = ApplicationLenderSubmission::where('lender_id', $lenderId)
+                ->whereYear('submitted_at', $year)
+                ->whereMonth('submitted_at', $month)
                 ->count();
 
-            $approvedApps = Application::where('lender_id', $lenderId)
-                ->whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)
+            $approvedApps = ApplicationLenderSubmission::where('lender_id', $lenderId)
+                ->whereYear('submitted_at', $year)
+                ->whereMonth('submitted_at', $month)
                 ->where('status', 'approved')
                 ->count();
 
-            $disbursedAmount = Application::where('lender_id', $lenderId)
+            // Get disbursed amount from linked applications
+            $approvedSubmissionIds = ApplicationLenderSubmission::where('lender_id', $lenderId)
+                ->whereYear('submitted_at', $year)
+                ->whereMonth('submitted_at', $month)
+                ->where('status', 'approved')
+                ->pluck('application_id');
+                
+            $disbursedAmount = Application::whereIn('id', $approvedSubmissionIds)
                 ->whereYear('disbursed_at', $year)
                 ->whereMonth('disbursed_at', $month)
                 ->where('status', 'disbursed')
@@ -190,20 +254,24 @@ class LenderDashboard extends Component
     private function getProductInsights($lenderId)
     {
         return LoanProduct::where('lender_id', $lenderId)
-            ->withCount([
-                'applications',
-                'applications as approved_count' => function ($query) {
-                    $query->where('status', 'approved');
-                },
-                'applications as recent_count' => function ($query) {
-                    $query->where('created_at', '>=', Carbon::now()->subDays(30));
-                }
-            ])
-            ->withAvg('applications as avg_amount', 'requested_amount')
             ->get()
-            ->map(function ($product) {
-                $approvalRate = $product->applications_count > 0 
-                    ? round(($product->approved_count / $product->applications_count) * 100, 1) 
+            ->map(function ($product) use ($lenderId) {
+                // Get all submissions for this product
+                $submissions = ApplicationLenderSubmission::where('lender_id', $lenderId)
+                    ->where('loan_product_id', $product->id)
+                    ->get();
+                    
+                $totalCount = $submissions->count();
+                $approvedCount = $submissions->where('status', 'approved')->count();
+                $recentCount = $submissions->where('submitted_at', '>=', Carbon::now()->subDays(30))->count();
+                
+                // Get average amount from linked applications
+                $applicationIds = $submissions->pluck('application_id');
+                $avgAmount = Application::whereIn('id', $applicationIds)
+                    ->avg('requested_amount') ?? 0;
+                
+                $approvalRate = $totalCount > 0 
+                    ? round(($approvedCount / $totalCount) * 100, 1) 
                     : 0;
 
                 $performance = 'average';
@@ -211,18 +279,18 @@ class LenderDashboard extends Component
                     $performance = 'excellent';
                 } elseif ($approvalRate >= 50) {
                     $performance = 'good';
-                } elseif ($approvalRate < 30 && $product->applications_count > 5) {
+                } elseif ($approvalRate < 30 && $totalCount > 5) {
                     $performance = 'poor';
                 }
 
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
-                    'applications_count' => $product->applications_count,
-                    'approved_count' => $product->approved_count,
-                    'recent_count' => $product->recent_count,
+                    'applications_count' => $totalCount,
+                    'approved_count' => $approvedCount,
+                    'recent_count' => $recentCount,
                     'approval_rate' => $approvalRate,
-                    'avg_amount' => $product->avg_amount ?? 0,
+                    'avg_amount' => round($avgAmount, 2),
                     'performance' => $performance,
                     'min_amount' => $product->min_amount,
                     'max_amount' => $product->max_amount,

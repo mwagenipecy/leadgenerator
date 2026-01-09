@@ -8,6 +8,8 @@ use Livewire\WithPagination;
 use App\Models\Application;
 use App\Models\ApplicationLenderSubmission;
 use App\Models\LoanProduct;
+use App\Models\LenderCommissionSetting;
+use App\Models\SystemSetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -27,13 +29,13 @@ class LeadListing extends Component
     public $leadTypeFilter = 'available'; // available, booked
     
     // View states
-    public $viewMode = 'grid'; // grid, table
+    public $viewMode = 'table'; // grid, table
     public $showFilters = false;
     
     // Booking modal states
     public $showBookingModal = false;
     public $selectedLead = null;
-    public $bookingFee = 50000; // Default booking fee in TSh
+    public $bookingFee = 50000; // Will be set dynamically based on lender settings
 
     protected $paginationTheme = 'tailwind';
 
@@ -75,6 +77,22 @@ class LeadListing extends Component
             return;
         }
         
+        // Calculate booking fee based on lender's commission settings or default
+        // Uses percentage of loan amount or fixed amount based on commission configuration
+        $loanAmount = (float) ($this->selectedLead->requested_amount ?? 0);
+        $this->bookingFee = LenderCommissionSetting::getBookingFeeForLender(
+            Auth::user()->lender_id,
+            $loanAmount
+        );
+        
+        // Log for debugging
+        Log::info('Booking modal opened', [
+            'application_id' => $applicationId,
+            'lender_id' => Auth::user()->lender_id,
+            'loan_amount' => $loanAmount,
+            'calculated_booking_fee' => $this->bookingFee,
+        ]);
+        
         $this->showBookingModal = true;
     }
 
@@ -89,11 +107,26 @@ class LeadListing extends Component
         // Early validation
         if (!$this->selectedLead) {
             session()->flash('error', 'No lead selected for booking.');
+            $this->dispatch('booking-error', ['message' => 'No lead selected for booking.']);
             return;
         }
     
+        // Recalculate booking fee to ensure it's current
+        $loanAmount = (float) ($this->selectedLead->requested_amount ?? 0);
+        $this->bookingFee = LenderCommissionSetting::getBookingFeeForLender(
+            Auth::user()->lender_id,
+            $loanAmount
+        );
+    
         if (!$this->bookingFee || $this->bookingFee <= 0) {
-            session()->flash('error', 'Invalid booking fee amount.');
+            $errorMsg = 'Invalid booking fee amount. Please ensure commission settings are configured in system settings.';
+            session()->flash('error', $errorMsg);
+            Log::warning('Booking failed: Invalid booking fee', [
+                'lender_id' => Auth::user()->lender_id,
+                'loan_amount' => $loanAmount,
+                'calculated_booking_fee' => $this->bookingFee,
+            ]);
+            $this->dispatch('booking-error', ['message' => $errorMsg]);
             return;
         }
     
@@ -224,6 +257,7 @@ class LeadListing extends Component
             }
             
             session()->flash('error', $errorMessage);
+            $this->dispatch('booking-error', ['message' => $errorMessage]);
         }
     }
     
@@ -483,18 +517,16 @@ private function generateCommissionBill(Application $application)
             'application_id' => $application->id,
             'lender_id' => $application->lender_id,
             'bill_number' => $this->generateBillNumber(),
-            'commission_amount' => $commissionData['total_amount'],
-            'total_amount' => $commissionData['total_amount'],
-
-            'commission_rate' => $commissionData['commission_rate'],
-            'base_amount' => $commissionData['base_amount'],
+            'commission_type' => $commissionData['type'],
+            'commission_rate' => $commissionData['rate'],
+            'loan_amount' => $application->requested_amount,
+            'commission_amount' => $commissionData['commission_amount'],
             'tax_amount' => $commissionData['tax_amount'],
+            'total_amount' => $commissionData['total_amount'],
             'status' => 'pending',
             'due_date' => now()->addDays(30), // 30 days from booking
             'created_by' => Auth::id(),
-            'loan_amount' => $application->requested_amount,
-            'generated_at' => now(),
-            'description' => "Commission for application {$application->application_number}",
+            'notes' => "Commission for application {$application->application_number}",
             // 'metadata' => [
             //     'application_number' => $application->application_number,
             //     'loan_amount' => $application->requested_amount,
@@ -530,20 +562,51 @@ private function generateCommissionBill(Application $application)
 
 private function calculateCommission(Application $application)
 {
-    // Get commission rate from system settings or lender configuration
-    $commissionRate = $application->lender->commission_rate ?? 0.05; // Default 5%
+    // Get lender-specific commission settings or default
+    $lenderSetting = LenderCommissionSetting::where('lender_id', $application->lender_id)->first();
     
-    $baseAmount = $application->requested_amount;
-    $commissionAmount = $baseAmount * $commissionRate;
-    
-    // Calculate tax (e.g., VAT)
-    $taxRate = config('billing.tax_rate', 0.18); // 18% VAT
-    $taxAmount = $commissionAmount * $taxRate;
-    
+    if ($lenderSetting && $lenderSetting->is_active) {
+        $commissionType = $lenderSetting->commission_type;
+        $commissionRate = $lenderSetting->commission_type === 'percentage' 
+            ? $lenderSetting->commission_percentage 
+            : $lenderSetting->commission_fixed_amount;
+        $minimumAmount = $lenderSetting->minimum_amount;
+        $maximumAmount = $lenderSetting->maximum_amount;
+    } else {
+        // Use default settings
+        $defaultType = SystemSetting::where('key', 'default_commission_type')->value('value') ?: 'percentage';
+        $commissionType = $defaultType;
+        $commissionRate = $defaultType === 'percentage' 
+            ? (float) (SystemSetting::where('key', 'default_commission_percentage')->value('value') ?: 5.0)
+            : (float) (SystemSetting::where('key', 'default_commission_fixed_amount')->value('value') ?: 0);
+        $minimumAmount = (float) (SystemSetting::where('key', 'minimum_commission_amount')->value('value') ?: 100);
+        $maximumAmount = SystemSetting::where('key', 'maximum_commission_amount')->value('value');
+    }
+
+    // Calculate commission amount
+    if ($commissionType === 'percentage') {
+        $commissionAmount = ($application->requested_amount * $commissionRate) / 100;
+    } else {
+        $commissionAmount = $commissionRate;
+    }
+
+    // Apply limits
+    if ($minimumAmount && $commissionAmount < $minimumAmount) {
+        $commissionAmount = $minimumAmount;
+    }
+    if ($maximumAmount) {
+        $commissionAmount = min($commissionAmount, (float) $maximumAmount);
+    }
+
+    // Calculate tax
+    $taxRate = (float) (SystemSetting::where('key', 'tax_rate')->value('value') ?: 18.0);
+    $taxAmount = ($commissionAmount * $taxRate) / 100;
     $totalAmount = $commissionAmount + $taxAmount;
 
     return [
-        'base_amount' => $baseAmount,
+        'type' => $commissionType,
+        'rate' => $commissionRate,
+        'base_amount' => $application->requested_amount,
         'commission_rate' => $commissionRate,
         'commission_amount' => $commissionAmount,
         'tax_amount' => $taxAmount,
@@ -700,7 +763,7 @@ private function generateBillNumber()
         
         // Get submissions from application_lender_submissions table for this lender
         // that are in 'submitted' status and the application hasn't been booked by any lender yet
-        $query = ApplicationLenderSubmission::with(['application.loanProduct', 'application.user', 'lender', 'loanProduct'])
+        $query = ApplicationLenderSubmission::with(['application.user', 'lender', 'loanProduct'])
             ->where('lender_id', $lenderId)
             ->where('status', 'submitted')
             ->whereHas('application', function($subquery) {
@@ -717,7 +780,7 @@ private function generateBillNumber()
 
     private function getBookedLeads()
     {
-        $query = ApplicationLenderSubmission::with(['application.loanProduct', 'application.user', 'lender'])
+        $query = ApplicationLenderSubmission::with(['application.user', 'lender', 'loanProduct'])
               ->where('application_lender_submissions.status', 'approved')
             ->whereHas('application', function($subquery) {
                 $subquery->where('lender_id', Auth::user()->lender_id);

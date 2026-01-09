@@ -26,33 +26,19 @@
     <!-- Right Section: Actions & User -->
     <div class="flex items-center gap-4 sm:gap-6">
     <!-- SMS Credits -->
-    @if(auth()->user()->role=='lender' || auth()->user()->role=='super_admin')
-    <div class="hidden sm:flex items-center gap-2">
-        <span class="text-gray-600 font-medium text-sm">SMS</span>
-        @php
-            $smsBalance = auth()->user()->role == 'lender' 
-                ? (auth()->user()->lender->sms_balance ?? 0)
-                : 0;
-        @endphp
-        <span class="text-sidebar-green font-bold text-lg">{{ number_format($smsBalance) }}</span>
-    </div>
-    @endif
+   
 
     <!-- Message Icon -->
-    <button class="hidden sm:flex p-2 hover:bg-gray-100 rounded-lg transition-colors relative" title="Messages">
-        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-        </svg>
-    </button>
+    
 
     <!-- Notification Bell -->
-    <button class="hidden sm:flex p-2 hover:bg-gray-100 rounded-lg transition-colors relative" title="Notifications">
-        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- <button class="hidden sm:flex p-2 hover:bg-gray-100 rounded-lg transition-colors relative" title="Notifications"> -->
+        <!-- <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-        </svg>
+        </svg> -->
         <!-- Notification Badge -->
-        <span class="absolute top-1 right-1 w-2 h-2 bg-sidebar-green rounded-full"></span>
-    </button>
+        <!-- <span class="absolute top-1 right-1 w-2 h-2 bg-sidebar-green rounded-full"></span> -->
+    <!-- </button> -->
 
         <!-- User Profile Dropdown -->
         <div class="relative">

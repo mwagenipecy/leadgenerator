@@ -296,6 +296,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     // LOAN APPLICATION MANAGEMENT 
     Route::get('loanApplication',[LoanApplicationController::class,'index'])->name('user.loan.application');
     Route::get('application-list',[LoanApplicationController::class,'applicationList'])->name('application.list');
+    
+    // REPORTS
+    Route::get('reports/booking', \App\Livewire\Reports\BookingReports::class)->name('reports.booking');
     Route::get('application/{id}/view',[LoanApplicationController::class,'applicationView'])->name('loan-applications.view');
 
     Route::group(['prefix'=> 'application'], function () {
