@@ -38,13 +38,24 @@
                 <span wire:loading wire:target="verifyLicense">Verifying...</span>
             </button>
             
-            <button 
-                wire:click="resetForm" 
+            <button
+                wire:click="resetForm"
                 class="bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition duration-200"
             >
                 Reset
             </button>
         </div>
+
+        @if($verificationResult || $error || $rawResponse)
+            <div class="flex gap-3 mt-4">
+                <button
+                    wire:click="clearResults"
+                    class="bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition duration-200"
+                >
+                    Clear Results
+                </button>
+            </div>
+        @endif
     </div>
 
     <!-- Loading State -->
@@ -169,6 +180,16 @@
                     </div>
                 </div>
             </div>
+        </div>
+    @endif
+
+    <!-- Raw Response (for debugging) -->
+    @if($rawResponse && config('app.debug'))
+        <div class="mb-6">
+            <details class="bg-gray-50 border border-gray-300 rounded-lg p-4">
+                <summary class="cursor-pointer text-black font-medium">Raw Response (Debug Mode)</summary>
+                <pre class="mt-3 text-xs text-gray-700 whitespace-pre-wrap overflow-x-auto">{{ $rawResponse }}</pre>
+            </details>
         </div>
     @endif
 </div>
