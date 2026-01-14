@@ -187,14 +187,7 @@
     @endif
 
     <!-- Raw Response (for debugging) -->
-    @if($rawResponse && config('app.debug'))
-        <div class="mb-6">
-            <details class="bg-gray-50 border border-gray-300 rounded-lg p-4">
-                <summary class="cursor-pointer text-black font-medium">Raw Response (Debug Mode)</summary>
-                <pre class="mt-3 text-xs text-gray-700 whitespace-pre-wrap overflow-x-auto">{{ $rawResponse }}</pre>
-            </details>
-        </div>
-    @endif
+   
 </div>
 
 <style>
