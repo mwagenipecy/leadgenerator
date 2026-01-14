@@ -32,7 +32,8 @@ class CompanyKyc extends Component
     
     public function mount()
     {
-        $this->user = Auth::user();
+        // Get fresh user from database
+        $this->user = Auth::user()->fresh();
         
         // Check if user is company type
         if ($this->user->registration_type !== 'company') {
@@ -52,17 +53,65 @@ class CompanyKyc extends Component
         // Check NIDA verification status for Tanzania
         $this->checkNidaStatus();
         
+        // Determine step based on current state
+        $this->determineStep();
+        
         // If there's a success message from NIDA verification, refresh status
         if (session()->has('success') && str_contains(session('success'), 'NIDA')) {
             $this->checkNidaStatus();
+            $this->determineStep();
         }
     }
     
     public function updated($propertyName)
     {
         // Auto-refresh when component updates if returning from verification
-        if ($propertyName === 'step' || $propertyName === 'nidaVerificationCompleted') {
+        if ($propertyName === 'nidaVerificationCompleted') {
             $this->checkNidaStatus();
+            $this->determineStep();
+        }
+    }
+    
+    /**
+     * Auto-upload document when file is selected (using Livewire hooks)
+     */
+    public function updatedBrelaDocument()
+    {
+        \Log::info('updatedBrelaDocument called', ['file' => $this->brelaDocument ? 'exists' : 'null']);
+        if ($this->brelaDocument) {
+            $this->uploadDocument('brela');
+        }
+    }
+    
+    public function updatedTinCertificate()
+    {
+        \Log::info('updatedTinCertificate called', ['file' => $this->tinCertificate ? 'exists' : 'null']);
+        if ($this->tinCertificate) {
+            $this->uploadDocument('tin_certificate');
+        }
+    }
+    
+    public function updatedPassportDocument()
+    {
+        \Log::info('updatedPassportDocument called', ['file' => $this->passportDocument ? 'exists' : 'null']);
+        if ($this->passportDocument) {
+            $this->uploadDocument('passport');
+        }
+    }
+    
+    public function updatedCompanyDocuments()
+    {
+        \Log::info('updatedCompanyDocuments called', ['file' => $this->companyDocuments ? 'exists' : 'null']);
+        if ($this->companyDocuments) {
+            $this->uploadDocument('company_documents');
+        }
+    }
+    
+    public function updatedPersonalKyc()
+    {
+        \Log::info('updatedPersonalKyc called', ['file' => $this->personalKyc ? 'exists' : 'null']);
+        if ($this->personalKyc) {
+            $this->uploadDocument('personal_kyc');
         }
     }
     
@@ -75,13 +124,46 @@ class CompanyKyc extends Component
             // Check if NIDA is verified - for company users, check both nida_number and company_contact_nida
             $this->nidaVerificationCompleted = $this->user->isNidaVerified() || 
                 (!empty($this->user->company_contact_nida) && !empty($this->user->nida_verified_at));
-            
-            if ($this->nidaVerificationCompleted) {
-                $this->step = 2;
-            }
         } else {
-            $this->step = 2; // Skip NIDA for non-Tanzania
+            // Non-Tanzania users don't need NIDA verification
+            $this->nidaVerificationCompleted = true;
         }
+    }
+    
+    /**
+     * Determine the current step based on user's verification state.
+     */
+    protected function determineStep()
+    {
+        // Check if user has submitted documents and is pending review
+        $requiredDocs = $this->isTanzania 
+            ? ['brela', 'tin_certificate'] 
+            : ['passport', 'company_documents', 'personal_kyc'];
+        
+        $hasAllDocuments = true;
+        foreach ($requiredDocs as $docType) {
+            if (!isset($this->uploadedDocuments[$docType])) {
+                $hasAllDocuments = false;
+                break;
+            }
+        }
+        
+        // If all required documents are uploaded and status is pending, show step 3
+        if ($hasAllDocuments && $this->user->company_verification_status === 'pending') {
+            $this->step = 3;
+            return;
+        }
+        
+        // For Tanzania: Check NIDA first
+        if ($this->isTanzania) {
+            if (!$this->nidaVerificationCompleted) {
+                $this->step = 1;
+                return;
+            }
+        }
+        
+        // Default to step 2 (document upload)
+        $this->step = 2;
     }
     
     public function refreshStatus()
@@ -89,12 +171,18 @@ class CompanyKyc extends Component
         // Refresh NIDA status - called after returning from NIDA verification
         $this->checkNidaStatus();
         $this->loadDocuments();
+        $this->determineStep();
     }
 
     protected function loadDocuments()
     {
-        $documents = $this->user->companyVerificationDocuments;
-        foreach ($documents as $doc) {
+        // Reset and reload documents fresh from database
+        $this->uploadedDocuments = [];
+        
+        // Force reload the relationship to get fresh data
+        $this->user->load('companyVerificationDocuments');
+        
+        foreach ($this->user->companyVerificationDocuments as $doc) {
             $this->uploadedDocuments[$doc->document_type] = [
                 'id' => $doc->id,
                 'name' => $doc->document_name,
@@ -106,6 +194,8 @@ class CompanyKyc extends Component
 
     public function uploadDocument($documentType)
     {
+        \Log::info('uploadDocument called', ['documentType' => $documentType]);
+        
         try {
             $property = match($documentType) {
                 'brela' => 'brelaDocument',
@@ -122,8 +212,11 @@ class CompanyKyc extends Component
                 return;
             }
 
+            \Log::info('Property determined', ['property' => $property, 'hasFile' => $this->$property ? 'yes' : 'no']);
+
             if (!$this->$property) {
                 session()->flash('error', 'Please select a file to upload.');
+                \Log::warning('No file found for property', ['property' => $property]);
                 return;
             }
 
@@ -190,8 +283,12 @@ class CompanyKyc extends Component
             $this->dispatch('document-uploaded');
             
         } catch (\Illuminate\Validation\ValidationException $e) {
-            session()->flash('error', $e->getMessage());
-            throw $e;
+            // Validation errors are automatically shown via @error directive
+            // Reset file input on validation failure
+            if (isset($property) && $property) {
+                $this->$property = null;
+            }
+            return;
         } catch (\Exception $e) {
             \Log::error('Error uploading document', [
                 'user_id' => $this->user->id ?? null,
@@ -200,6 +297,11 @@ class CompanyKyc extends Component
                 'trace' => $e->getTraceAsString()
             ]);
             session()->flash('error', 'Error uploading document: ' . $e->getMessage());
+            
+            // Reset file input on error
+            if (isset($property) && $property) {
+                $this->$property = null;
+            }
         }
     }
 

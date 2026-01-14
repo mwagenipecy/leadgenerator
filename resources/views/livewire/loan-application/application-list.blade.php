@@ -684,13 +684,13 @@
                                             <div class="text-sm text-gray-900">{{ $application->created_at->format('M d, Y') }}</div>
                                             <div class="text-xs text-gray-500">{{ $application->created_at->diffForHumans() }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <div class="flex items-center space-x-2">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex items-center gap-1.5">
                                                 @if($isUnbooked)
                                                     {{-- Book Application Button --}}
                                                     <button wire:click="bookApplication('{{ $application->id }}')" 
-                                                            class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all duration-200">
-                                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-all duration-200 shadow-sm">
+                                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                                         </svg>
                                                         Book
@@ -698,47 +698,53 @@
                                                 @else
                                                     {{-- Regular Action Buttons (only for booked applications) --}}
                                                     <button wire:click="viewApplication('{{ $application->id }}')" 
-                                                            class="text-indigo-600 hover:text-indigo-900 p-1.5 rounded-lg hover:bg-indigo-50 transition-all duration-200"
+                                                            class="inline-flex items-center px-2.5 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-medium hover:bg-indigo-100 border border-indigo-200 transition-all duration-200"
                                                             title="View Details">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                                         </svg>
+                                                        View
                                                     </button>
                                                     
                                                     @if($application->status === 'submitted')
                                                         <button wire:click="startReview('{{ $application->id }}')" 
-                                                                class="text-blue-600 hover:text-blue-900 p-1.5 rounded-lg hover:bg-blue-50 transition-all duration-200"
+                                                                class="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 border border-blue-200 transition-all duration-200"
                                                                 title="Start Review">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                                                             </svg>
+                                                            Review
                                                         </button>
                                                     @endif
 
                                                     @if(in_array($application->status, ['submitted', 'under_review']))
                                                         <button wire:click="approveApplication('{{ $application->id }}')" 
-                                                                class="text-green-600 hover:text-green-900 p-1.5 rounded-lg hover:bg-green-50 transition-all duration-200"
+                                                                class="inline-flex items-center px-2.5 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium hover:bg-green-100 border border-green-200 transition-all duration-200"
                                                                 title="Approve">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                             </svg>
+                                                            Approve
                                                         </button>
                                                         <button wire:click="rejectApplication('{{ $application->id }}')" 
-                                                                class="text-sidebar-green hover:text-sidebar-green-900 p-1.5 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200"
+                                                                class="inline-flex items-center px-2.5 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-medium hover:bg-red-100 border border-red-200 transition-all duration-200"
                                                                 title="Reject">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                             </svg>
+                                                            Reject
                                                         </button>
                                                     @endif
 
                                                     @if($application->status === 'approved')
                                                         <button wire:click="markDisbursed('{{ $application->id }}')" 
-                                                                class="text-purple-600 hover:text-purple-900 p-1.5 rounded-lg hover:bg-purple-50 transition-all duration-200"
+                                                                class="inline-flex items-center px-2.5 py-1.5 bg-purple-50 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-100 border border-purple-200 transition-all duration-200"
                                                                 title="Mark as Disbursed">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                                                             </svg>
+                                                            Disburse
                                                         </button>
                                                     @endif
                                                 @endif
@@ -890,8 +896,8 @@
                             @if($isUnbooked)
                                 {{-- Book Application Button --}}
                                 <div class="flex justify-center">
-                                    <button wire:click="bookApplication({{ $application->id }})" 
-                                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all duration-200">
+                                    <button wire:click="bookApplication('{{ $application->id }}')" 
+                                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-all duration-200 shadow-sm">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                         </svg>
@@ -900,50 +906,52 @@
                                 </div>
                             @else
                                 {{-- Regular Actions for Booked Applications --}}
-                                <div class="flex items-center justify-between">
-                                    <button wire:click="viewApplication({{ $application->id }})" 
-                                            class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
-                                        View Details
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <button wire:click="viewApplication('{{ $application->id }}')" 
+                                            class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-medium hover:bg-indigo-100 border border-indigo-200 transition-all duration-200">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                        View
                                     </button>
                                     
-                                    <div class="flex items-center space-x-2">
-                                        @if($application->status === 'submitted')
-                                            <button wire:click="startReview({{ $application->id }})" 
-                                                    class="text-blue-600 hover:text-blue-800 p-1.5 rounded-lg hover:bg-blue-100 transition-all duration-200"
-                                                    title="Start Review">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                                </svg>
-                                            </button>
-                                        @endif
+                                    @if($application->status === 'submitted')
+                                        <button wire:click="startReview('{{ $application->id }}')" 
+                                                class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium hover:bg-blue-100 border border-blue-200 transition-all duration-200">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                            </svg>
+                                            Review
+                                        </button>
+                                    @endif
 
-                                        @if(in_array($application->status, ['submitted', 'under_review']))
-                                            <button wire:click="approveApplication({{ $application->id }})" 
-                                                    class="text-green-600 hover:text-green-800 p-1.5 rounded-lg hover:bg-green-100 transition-all duration-200"
-                                                    title="Approve">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                            </button>
-                                            <button wire:click="rejectApplication({{ $application->id }})" 
-                                                    class="text-sidebar-green hover:text-sidebar-green-800 p-1.5 rounded-lg hover:bg-sidebar-green-100 transition-all duration-200"
-                                                    title="Reject">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                </svg>
-                                            </button>
-                                        @endif
+                                    @if(in_array($application->status, ['submitted', 'under_review']))
+                                        <button wire:click="approveApplication('{{ $application->id }}')" 
+                                                class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium hover:bg-green-100 border border-green-200 transition-all duration-200">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Approve
+                                        </button>
+                                        <button wire:click="rejectApplication('{{ $application->id }}')" 
+                                                class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-medium hover:bg-red-100 border border-red-200 transition-all duration-200">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                            Reject
+                                        </button>
+                                    @endif
 
-                                        @if($application->status === 'approved')
-                                            <button wire:click="markDisbursed({{ $application->id }})" 
-                                                    class="text-purple-600 hover:text-purple-800 p-1.5 rounded-lg hover:bg-purple-100 transition-all duration-200"
-                                                    title="Mark as Disbursed">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                                                </svg>
-                                            </button>
-                                        @endif
-                                    </div>
+                                    @if($application->status === 'approved')
+                                        <button wire:click="markDisbursed('{{ $application->id }}')" 
+                                                class="inline-flex items-center px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-100 border border-purple-200 transition-all duration-200">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                                            </svg>
+                                            Disburse
+                                        </button>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -1195,19 +1203,20 @@
 
                             <!-- Actions Footer for Booked Applications -->
                             <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                                <div class="flex items-center justify-between">
-                                    <button wire:click="viewApplication({{ $application->id }})" 
-                                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <button wire:click="viewApplication('{{ $application->id }}')" 
+                                            class="inline-flex items-center px-4 py-2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                         </svg>
                                         View Full Details
                                     </button>
                                     
-                                    <div class="flex items-center space-x-2">
+                                    <div class="flex flex-wrap items-center gap-2">
                                         @if($application->status === 'submitted')
-                                            <button wire:click="startReview({{ $application->id }})" 
-                                                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                                            <button wire:click="startReview('{{ $application->id }}')" 
+                                                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                                                 </svg>
@@ -1216,15 +1225,15 @@
                                         @endif
 
                                         @if(in_array($application->status, ['submitted', 'under_review']))
-                                            <button wire:click="approveApplication({{ $application->id }})" 
-                                                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                                            <button wire:click="approveApplication('{{ $application->id }}')" 
+                                                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors shadow-sm">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                 </svg>
                                                 Approve
                                             </button>
-                                            <button wire:click="rejectApplication({{ $application->id }})" 
-                                                    class="inline-flex items-center px-4 py-2 bg-sidebar-green text-white rounded-lg text-sm font-medium hover:bg-sidebar-green-light transition-colors">
+                                            <button wire:click="rejectApplication('{{ $application->id }}')" 
+                                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors shadow-sm">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                 </svg>
@@ -1233,12 +1242,12 @@
                                         @endif
 
                                         @if($application->status === 'approved')
-                                            <button wire:click="markDisbursed({{ $application->id }})" 
-                                                    class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
+                                            <button wire:click="markDisbursed('{{ $application->id }}')" 
+                                                    class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors shadow-sm">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                                                 </svg>
-                                                Mark Disbursed
+                                                Disburse
                                             </button>
                                         @endif
                                     </div>
@@ -2182,7 +2191,7 @@
 
                 {{ $applicationId }}
 
-                <livewire:credit-info-component  :applicationId="$applicationId" />
+                <livewire:application-credit-info  :applicationId="$applicationId" />
 
                 </div>
                 </div>

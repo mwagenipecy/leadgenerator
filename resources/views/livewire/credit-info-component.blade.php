@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.10s="refreshList">
 
 <div class="max-w-7xl mx-auto p-6">
     <!-- Header -->
@@ -213,13 +213,28 @@
                             
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($request->status === 'success')
-                                    <span class="text-green-700 font-semibold">Success</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        Completed
+                                    </span>
                                 @elseif($request->status === 'failed')
-                                    <span class="text-sidebar-green-light font-semibold">Failed</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                        Failed
+                                    </span>
                                 @else
-                                    <span class="text-yellow-700 font-semibold">Pending</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                                        <svg class="w-3.5 h-3.5 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v2m0 12v2m8-10h-2M6 12H4m13.657 6.657l-1.414-1.414M7.757 7.757L6.343 6.343m0 11.314l1.414-1.414M16.243 7.757l1.414-1.414"/>
+                                        </svg>
+                                        Pending
+                                    </span>
                                 @endif
-                                
+
                                 @if($request->error_message)
                                     <div class="text-xs text-sidebar-green mt-1">
                                         {{ Str::limit($request->error_message, 50) }}

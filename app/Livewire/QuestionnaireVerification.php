@@ -344,6 +344,11 @@ class QuestionnaireVerification extends Component
             $nidaNumber = $user->company_contact_nida;
         }
         
+        // Cast match_score to integer for database compatibility
+        $matchScore = isset($verificationResult['match_score']) 
+            ? (int) round($verificationResult['match_score']) 
+            : null;
+        
         NidaVerification::updateOrCreate(
             ['user_id' => Auth::id()],
             [
@@ -353,7 +358,7 @@ class QuestionnaireVerification extends Component
                 'verification_method' => 'questionnaire',
                 'questionnaire_answers' => $this->questionnaireAnswers,
                 'nida_response' => $verificationResult,
-                'match_score' => $verificationResult['match_score'] ?? null,
+                'match_score' => $matchScore,
                 'expires_at' => now()->addYears(5), // Verification valid for 5 years
             ]
         );

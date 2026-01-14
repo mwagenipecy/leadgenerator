@@ -37,6 +37,8 @@
         const passwordInput = document.getElementById(fieldId);
         const eyeIcon = document.getElementById(fieldId + '-eye');
         
+        if (!passwordInput || !eyeIcon) return;
+        
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
             eyeIcon.innerHTML = `
@@ -51,51 +53,59 @@
         }
     }
 
-    // Phone number formatting
-    document.getElementById('phone').addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.startsWith('255')) {
-            value = '+' + value;
-        } else if (value.startsWith('0')) {
-            value = '+255' + value.substring(1);
-        } else if (value.length > 0 && !value.startsWith('+')) {
-            value = '+255' + value;
-        }
-        e.target.value = value;
-    });
+    // Phone number formatting - only if element exists
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.startsWith('255')) {
+                value = '+' + value;
+            } else if (value.startsWith('0')) {
+                value = '+255' + value.substring(1);
+            } else if (value.length > 0 && !value.startsWith('+')) {
+                value = '+255' + value;
+            }
+            e.target.value = value;
+        });
+    }
 
-    // NIDA number formatting
-    document.getElementById('nida_number').addEventListener('input', function(e) {
-        e.target.value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-    });
+    // NIDA number formatting - only if element exists
+    const nidaInput = document.getElementById('nida_number');
+    if (nidaInput) {
+        nidaInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+        });
+    }
 
-    // Real-time form validation
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const password = document.getElementById('password').value;
-        const passwordConfirmation = document.getElementById('password_confirmation').value;
-        
-        if (password !== passwordConfirmation) {
-            e.preventDefault();
-            document.getElementById('password_confirmation').focus();
-            document.getElementById('password_confirmation').classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
-            return false;
-        }
-    });
+    // Real-time form validation - only if elements exist
+    const passwordInput = document.getElementById('password');
+    const passwordConfirmation = document.getElementById('password_confirmation');
+    const registrationForm = document.querySelector('form:not([wire\\:submit])');
+    
+    if (registrationForm && passwordInput && passwordConfirmation) {
+        registrationForm.addEventListener('submit', function(e) {
+            if (passwordInput.value !== passwordConfirmation.value) {
+                e.preventDefault();
+                passwordConfirmation.focus();
+                passwordConfirmation.classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
+                return false;
+            }
+        });
 
-    // Password match validation
-    document.getElementById('password_confirmation').addEventListener('input', function() {
-        const password = document.getElementById('password').value;
-        const confirmation = this.value;
-        
-        if (confirmation && password !== confirmation) {
-            this.classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
-        } else {
-            this.classList.remove('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
-        }
-    });
+        // Password match validation
+        passwordConfirmation.addEventListener('input', function() {
+            const confirmation = this.value;
+            
+            if (confirmation && passwordInput.value !== confirmation) {
+                this.classList.add('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
+            } else {
+                this.classList.remove('border-sidebar-green', 'ring-1', 'ring-sidebar-green');
+            }
+        });
+    }
 
-    // Input validation feedback
-    document.querySelectorAll('input[required]').forEach(input => {
+    // Input validation feedback - only for non-Livewire inputs
+    document.querySelectorAll('input[required]:not([wire\\:model])').forEach(input => {
         input.addEventListener('blur', function() {
             if (this.value.trim()) {
                 this.classList.remove('border-sidebar-green', 'ring-1', 'ring-sidebar-green');

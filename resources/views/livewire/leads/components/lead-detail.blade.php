@@ -209,7 +209,7 @@
             @elseif($activeTab == 'history')
                 <livewire:leads.components.lead-timeline :application="$application" :lead="$lead" :isAvailable="$isAvailable" />
             @elseif($activeTab == 'creditReport')
-                <livewire:credit-info-component  :applicationId="$application->id" :isAvailable="$isAvailable" />
+                <livewire:application-credit-info :applicationId="$application->id" :isAvailable="$isAvailable" />
           @elseif($activeTab == 'statementAnalyser')
           <livewire:component.transaction-analysis-component />
 

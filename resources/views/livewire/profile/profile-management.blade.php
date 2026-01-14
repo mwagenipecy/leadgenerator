@@ -66,6 +66,9 @@
         <select wire:model.live="currentStep" 
                 class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-sm sm:text-base">
             <option value="overview">Overview</option>
+            @if(auth()->user()->registration_type === 'company')
+                <option value="company">Company Details</option>
+            @endif
             <option value="personal">Personal Info</option>
             <option value="address">Address</option>
             <option value="employment">Employment</option>
@@ -95,6 +98,13 @@
                             'bank' => ['name' => 'Banking', 'icon' => 'M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z'],
                             'emergency' => ['name' => 'Emergency Contact', 'icon' => 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z']
                         ];
+                        
+                        // Add company section for company users
+                        if (auth()->user()->registration_type === 'company') {
+                            $sections = array_slice($sections, 0, 1, true) + 
+                                ['company' => ['name' => 'Company Details', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4']] + 
+                                array_slice($sections, 1, null, true);
+                        }
                     @endphp
 
                     @foreach($sections as $key => $section)
@@ -163,56 +173,42 @@
                             @endforeach
                         </div>
 
-                        <!-- Company Information (if company user) -->
+                        <!-- Company Quick Card (if company user) -->
                         @if(auth()->user()->registration_type === 'company')
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-base sm:text-lg font-bold text-gray-900">Company Information</h3>
-                                @if(auth()->user()->isCompanyVerified())
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Verified</span>
-                                @elseif(auth()->user()->isCompanyVerificationPending())
-                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">Pending Verification</span>
-                                @elseif(auth()->user()->isCompanyVerificationRejected())
-                                    <span class="px-3 py-1 bg-sidebar-green-100 text-sidebar-green-800 text-xs font-semibold rounded-full">Rejected</span>
-                                @endif
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">Company Name</label>
-                                    <p class="text-gray-900 font-medium">{{ auth()->user()->company_name ?? 'N/A' }}</p>
+                        <div wire:click="goToStep('company')" 
+                             class="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl p-5 mb-6 cursor-pointer hover:shadow-md transition-all duration-200 border border-teal-200">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 bg-teal-100 rounded-xl flex items-center justify-center">
+                                        <svg class="w-7 h-7 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 text-lg">{{ auth()->user()->company_name ?? 'Company Details' }}</h3>
+                                        <p class="text-sm text-gray-600">View and manage your company information</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">Company TIN</label>
-                                    <p class="text-gray-900 font-medium">{{ auth()->user()->company_tin ?? 'N/A' }}</p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">Country</label>
-                                    <p class="text-gray-900 font-medium">{{ auth()->user()->country ?? 'N/A' }}</p>
-                                </div>
-                                @if(auth()->user()->isFromTanzania())
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">Representative NIDA</label>
-                                    <p class="text-gray-900 font-medium">{{ auth()->user()->company_contact_nida ?? 'N/A' }}</p>
-                                </div>
-                                @else
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-500 mb-1">Passport Number</label>
-                                    <p class="text-gray-900 font-medium">{{ auth()->user()->passport_number ?? 'N/A' }}</p>
-                                </div>
-                                @endif
-                            </div>
-                            @if(auth()->user()->isCompanyVerificationPending())
-                                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                                    <p class="text-sm text-yellow-800">Your company verification is pending admin review. You will be notified once verification is complete.</p>
-                                </div>
-                            @elseif(auth()->user()->isCompanyVerificationRejected())
-                                <div class="mt-4 p-4 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg">
-                                    <p class="text-sm text-sidebar-green-800">Your company verification was rejected. Please contact support for more information.</p>
-                                    @if(auth()->user()->company_verification_notes)
-                                        <p class="text-sm text-sidebar-green-light mt-2 font-medium">Reason: {{ auth()->user()->company_verification_notes }}</p>
+                                <div class="flex items-center gap-3">
+                                    @if(auth()->user()->isCompanyVerified())
+                                        <span class="px-3 py-1.5 bg-green-100 text-green-800 text-xs font-semibold rounded-full flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Verified
+                                        </span>
+                                    @elseif(auth()->user()->isCompanyVerificationPending())
+                                        <span class="px-3 py-1.5 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">Pending</span>
+                                    @elseif(auth()->user()->isCompanyVerificationRejected())
+                                        <span class="px-3 py-1.5 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Rejected</span>
+                                    @else
+                                        <span class="px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">Not Verified</span>
                                     @endif
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
                                 </div>
-                            @endif
+                            </div>
                         </div>
                         @endif
 
@@ -236,6 +232,212 @@
                                 </a>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+            {{-- COMPANY DETAILS (Only for Company Users) --}}
+            @elseif($currentStep === 'company' && auth()->user()->registration_type === 'company')
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Company Details</h2>
+                                <p class="text-sm sm:text-base text-gray-600">Your registered company information</p>
+                            </div>
+                            @if(auth()->user()->isCompanyVerified())
+                                <span class="px-4 py-2 bg-green-100 text-green-800 text-sm font-semibold rounded-full flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Verified
+                                </span>
+                            @elseif(auth()->user()->isCompanyVerificationPending())
+                                <span class="px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-semibold rounded-full flex items-center gap-2">
+                                    <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Pending Review
+                                </span>
+                            @elseif(auth()->user()->isCompanyVerificationRejected())
+                                <span class="px-4 py-2 bg-red-100 text-red-800 text-sm font-semibold rounded-full flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Rejected
+                                </span>
+                            @else
+                                <span class="px-4 py-2 bg-gray-100 text-gray-800 text-sm font-semibold rounded-full">Not Verified</span>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 sm:p-5 lg:p-6 space-y-6">
+                        <!-- Company Basic Info -->
+                        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                                Company Information
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-white rounded-lg p-4 border border-gray-100">
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Company Name</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->company_name ?? 'Not Provided' }}</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-4 border border-gray-100">
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Company TIN</label>
+                                    <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->company_tin ?? 'Not Provided' }}</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-4 border border-gray-100">
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Country of Registration</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->country ?? 'Not Provided' }}</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-4 border border-gray-100">
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Registration Type</label>
+                                    <p class="text-gray-900 font-semibold text-lg capitalize">{{ auth()->user()->registration_type ?? 'Not Provided' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Company Representative Info -->
+                        <div class="bg-blue-50 rounded-xl p-5 border border-blue-200">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                Company Representative
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-white rounded-lg p-4 border border-blue-100">
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Representative Name</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-4 border border-blue-100">
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Email Address</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->email }}</p>
+                                </div>
+                                @if(auth()->user()->isFromTanzania())
+                                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Representative NIDA Number</label>
+                                        <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->company_contact_nida ?? 'Not Provided' }}</p>
+                                    </div>
+                                @else
+                                    <div class="bg-white rounded-lg p-4 border border-blue-100">
+                                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Passport Number</label>
+                                        <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->passport_number ?? 'Not Provided' }}</p>
+                                    </div>
+                                @endif
+                                <div class="bg-white rounded-lg p-4 border border-blue-100">
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Phone Number</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->phone ?? 'Not Provided' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Verification Status Details -->
+                        <div class="rounded-xl p-5 border {{ auth()->user()->isCompanyVerified() ? 'bg-green-50 border-green-200' : (auth()->user()->isCompanyVerificationPending() ? 'bg-yellow-50 border-yellow-200' : (auth()->user()->isCompanyVerificationRejected() ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200')) }}">
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 {{ auth()->user()->isCompanyVerified() ? 'text-green-600' : (auth()->user()->isCompanyVerificationPending() ? 'text-yellow-600' : 'text-gray-600') }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                Verification Status
+                            </h3>
+                            
+                            @if(auth()->user()->isCompanyVerified())
+                                <div class="bg-white rounded-lg p-4 border border-green-100">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-green-800 font-bold text-lg">Company Verified</p>
+                                            <p class="text-green-600 text-sm">Your company has been verified and approved</p>
+                                        </div>
+                                    </div>
+                                    @if(auth()->user()->company_verified_at)
+                                        <p class="text-sm text-gray-600 mt-2">
+                                            <span class="font-medium">Verified on:</span> 
+                                            {{ \Carbon\Carbon::parse(auth()->user()->company_verified_at)->format('F d, Y \a\t h:i A') }}
+                                        </p>
+                                    @endif
+                                </div>
+                            @elseif(auth()->user()->isCompanyVerificationPending())
+                                <div class="bg-white rounded-lg p-4 border border-yellow-100">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-yellow-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-yellow-800 font-bold text-lg">Verification Pending</p>
+                                            <p class="text-yellow-600 text-sm">Your documents are being reviewed by our team</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2">This usually takes 1-3 business days. You will be notified once the review is complete.</p>
+                                </div>
+                            @elseif(auth()->user()->isCompanyVerificationRejected())
+                                <div class="bg-white rounded-lg p-4 border border-red-100">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-red-800 font-bold text-lg">Verification Rejected</p>
+                                            <p class="text-red-600 text-sm">Your company verification was not approved</p>
+                                        </div>
+                                    </div>
+                                    @if(auth()->user()->company_verification_notes)
+                                        <div class="mt-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                                            <p class="text-sm font-medium text-red-800">Reason:</p>
+                                            <p class="text-sm text-red-700 mt-1">{{ auth()->user()->company_verification_notes }}</p>
+                                        </div>
+                                    @endif
+                                    <a href="{{ route('company.kyc') }}" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                        </svg>
+                                        Re-submit Documents
+                                    </a>
+                                </div>
+                            @else
+                                <div class="bg-white rounded-lg p-4 border border-gray-200">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-800 font-bold text-lg">Not Yet Verified</p>
+                                            <p class="text-gray-600 text-sm">Please complete company verification to access all features</p>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('company.kyc') }}" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        Start Verification
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
+                        <button wire:click="goToStep('overview')" 
+                                class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
+                            Back to Overview
+                        </button>
+                        <button wire:click="goToStep('personal')" 
+                                class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
+                            Continue to Personal Info
+                        </button>
                     </div>
                 </div>
 

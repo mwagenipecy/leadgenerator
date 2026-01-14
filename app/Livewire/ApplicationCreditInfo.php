@@ -4,12 +4,12 @@ namespace App\Livewire;
 
 use App\Models\Application;
 use App\Models\CreditInfoRequest;
-use App\Services\CreditInfoService;
+use App\Jobs\RequestCreditReport;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Log;
 
-class CreditInfoComponent extends Component
+class ApplicationCreditInfo extends Component
 {
     use WithPagination;
 
@@ -36,10 +36,7 @@ class CreditInfoComponent extends Component
     protected $rules = [
         'application_id' => 'required|exists:applications,id',
     ];
-    
-    /**
-     * Update application_id when applicationId changes
-     */
+
     public function updatedApplicationId()
     {
         if ($this->applicationId) {
@@ -47,7 +44,7 @@ class CreditInfoComponent extends Component
             $this->loadApplicationData();
         }
     }
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -62,9 +59,10 @@ class CreditInfoComponent extends Component
     {
         $this->resetPage();
     }
-    
+
     /**
-     * Refresh the component after a credit report is created
+     * Refresh the component after a credit report is created.
+     * Used by wire:poll on the loan details page.
      */
     public function refreshList()
     {
@@ -72,24 +70,18 @@ class CreditInfoComponent extends Component
         $this->loadApplicationData();
     }
 
-
     public function mount($applicationId = null, $isAvailable = false)
     {
         $this->applicationId = $applicationId;
         $this->isAvailable = $isAvailable;
         
-        // Load and cache application data if applicationId is provided
         if ($this->applicationId) {
             $this->loadApplicationData();
         } else {
-            // Set default application when component is mounted (only if no applicationId provided)
             $this->setDefaultApplication();
         }
     }
     
-    /**
-     * Load and cache application data
-     */
     protected function loadApplicationData()
     {
         if ($this->applicationId) {
@@ -109,9 +101,95 @@ class CreditInfoComponent extends Component
         }
     }
 
-    // NOTE: The admin/global CreditInfoComponent keeps its original synchronous
-    // behaviour. The job-based, application-specific logic now lives in the
-    // separate ApplicationCreditInfo component used on loan/lead pages.
+    public function requestNewReport()
+    {
+        $this->isLoading = true;
+
+        try {
+            $application = $this->resolveApplicationForRequest();
+
+            if (!$application->national_id) {
+                throw new \Exception('Application does not have a NIDA number. Cannot request credit report.');
+            }
+
+            // 1) Create a pending record immediately so the table shows the request
+            $creditRequest = CreditInfoRequest::create([
+                'loan_id' => $application->id,
+                'application_number' => $application->application_number,
+                'national_id' => $application->national_id,
+                'first_name' => $application->first_name,
+                'last_name' => $application->last_name,
+                'full_name' => trim($application->first_name . ' ' . ($application->middle_name ? $application->middle_name . ' ' : '') . $application->last_name),
+                'date_of_birth' => $application->date_of_birth,
+                'phone_number' => $application->phone_number,
+                'status' => 'pending',
+                'request_payload' => [
+                    'loan_id' => $application->id,
+                    'application_number' => $application->application_number,
+                    'national_id' => $application->national_id,
+                ],
+                'requested_at' => now(),
+            ]);
+
+            // 2) Dispatch background job to fetch the credit report and update this record
+            RequestCreditReport::dispatch($creditRequest->id);
+
+            // Reset pagination and filters so new reports will be visible once the job finishes
+            $this->resetPage();
+            $this->statusFilter = '';
+
+            // Close the form
+            $this->showRequestForm = false;
+
+            Log::info('ApplicationCreditInfo: Credit report job dispatched', [
+                'credit_info_request_id' => $creditRequest->id,
+                'application_id' => $application->id,
+                'application_number' => $application->application_number,
+                'viewing_application_id' => $this->applicationId,
+            ]);
+
+            session()->flash(
+                'message',
+                'Credit report request queued for ' . $application->application_number . '. It will appear in the list once processing is complete.'
+            );
+        } catch (\Exception $e) {
+            session()->flash('error', 'An error occurred: ' . $e->getMessage());
+            Log::error('ApplicationCreditInfo: Credit info request failed', [
+                'application_id' => $this->application_id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        } finally {
+            $this->isLoading = false;
+        }
+    }
+
+    /**
+     * Re-check credit info for a specific application (from the table action).
+     * Also uses the queued job.
+     */
+    public function checkCreditInfo($applicationId)
+    {
+        $this->applicationId = $applicationId;
+        $this->application_id = $applicationId;
+
+        // Simply reuse the same flow as a fresh request (create pending row + job)
+        $this->requestNewReport();
+    }
+
+    protected function resolveApplicationForRequest(): Application
+    {
+        if ($this->applicationId) {
+            $application = Application::findOrFail($this->applicationId);
+            $this->application_id = $this->applicationId;
+            $this->loadApplicationData();
+        } else {
+            $this->validate();
+            $application = Application::findOrFail($this->application_id);
+        }
+
+        return $application;
+    }
 
     public function viewDetails($requestId)
     {
@@ -143,16 +221,11 @@ class CreditInfoComponent extends Component
     {
         $this->showRequestForm = !$this->showRequestForm;
         if ($this->showRequestForm) {
-            // If we're in a specific application context, ALWAYS use that application
-            // This ensures the form can only request reports for the application being viewed
             if ($this->applicationId) {
-                // Force application_id to match applicationId
                 $this->application_id = $this->applicationId;
-                // Reload application data to ensure NIDA number is cached
                 $this->loadApplicationData();
-                
-                // Log for debugging
-                Log::info('Request form opened', [
+
+                Log::info('ApplicationCreditInfo: Request form opened', [
                     'applicationId' => $this->applicationId,
                     'application_id' => $this->application_id,
                     'nationalId' => $this->nationalId
@@ -165,13 +238,9 @@ class CreditInfoComponent extends Component
         }
     }
     
-    /**
-     * Called when the form is shown to ensure application_id is set correctly
-     */
     public function updatingShowRequestForm($value)
     {
         if ($value && $this->applicationId) {
-            // When showing the form, ensure we're using the correct application
             $this->application_id = $this->applicationId;
             $this->loadApplicationData();
         }
@@ -180,7 +249,6 @@ class CreditInfoComponent extends Component
     public function resetForm()
     {
         if ($this->applicationId) {
-            // If in application context, reset to that application
             $this->application_id = $this->applicationId;
         } else {
             $this->reset(['application_id']);
@@ -190,35 +258,27 @@ class CreditInfoComponent extends Component
 
     public function render()
     {
-        // Ensure application_id matches applicationId when in application context
         if ($this->applicationId && $this->application_id != $this->applicationId) {
             $this->application_id = $this->applicationId;
         }
         
-        // Reload application data if applicationId is set but nationalId is not cached
         if ($this->applicationId && !$this->nationalId) {
             $this->loadApplicationData();
         }
         
         $query = CreditInfoRequest::with('application');
         
-        // If applicationId is provided, filter by the application's NIDA number only
         if ($this->applicationId && $this->nationalId) {
-            // Filter by NIDA number only - this ensures we only show reports for this specific applicant
-            // This is the key requirement: show only credit reports for this applicant by NIDA number
             $query->where('national_id', $this->nationalId);
         } elseif ($this->applicationId && !$this->nationalId) {
-            // If application exists but has no NIDA number, try to reload it
             $this->loadApplicationData();
             if ($this->nationalId) {
                 $query->where('national_id', $this->nationalId);
             } else {
-                // If still no NIDA number, return empty results
-                $query->whereRaw('1 = 0'); // Force empty result
+                $query->whereRaw('1 = 0');
             }
         }
         
-        // Apply additional filters (search should work within the NIDA filter)
         $query->when($this->search, function ($query) {
             $query->where(function ($q) {
                 $q->where('national_id', 'like', '%' . $this->search . '%')
@@ -238,14 +298,12 @@ class CreditInfoComponent extends Component
 
         $creditRequests = $query->paginate(10);
         
-        // Only show applications list if we're not in a specific application context
+        // On loan details / lead pages we are always in an application context,
+        // so we don't need to expose a separate applications list here.
         $applications = [];
-        if (!$this->applicationId) {
-            $applications = Application::select('id', 'application_number', 'first_name', 'last_name')
-                ->orderBy('created_at', 'desc')
-                ->get();
-        }
 
-        return view('livewire.credit-info-component', compact('creditRequests', 'applications'));
+        return view('livewire.application-credit-info', compact('creditRequests', 'applications'));
     }
 }
+
+

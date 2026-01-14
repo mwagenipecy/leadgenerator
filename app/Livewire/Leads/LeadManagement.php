@@ -424,6 +424,127 @@ class LeadManagement extends Component
             ->get();
     }
 
+    /**
+     * Export current leads (respecting filters and lead type) as CSV
+     */
+    public function export()
+    {
+        $filename = 'leads_' . now()->format('Ymd_His') . '.csv';
+
+        if ($this->leadTypeFilter === 'available') {
+            // Build query for available leads (same filters as getAvailableLeads)
+            $query = Application::with(['loanProduct', 'user'])
+                ->where('booking_status', 'unbooked')
+                ->where('status', 'submitted')
+                ->whereNotIn('id', function ($subquery) {
+                    $subquery->select('application_id')
+                        ->from('application_lender_submissions')
+                        ->where('lender_id', Auth::user()->lender_id)
+                        ->where('status', 'rejected');
+                });
+
+            if ($this->search) {
+                $query->where(function ($q) {
+                    $q->where('application_number', 'like', '%' . $this->search . '%')
+                        ->orWhere('first_name', 'like', '%' . $this->search . '%')
+                        ->orWhere('last_name', 'like', '%' . $this->search . '%');
+                });
+            }
+
+            if ($this->dateRange !== 'all') {
+                $query->where('created_at', '>=', $this->getDateRangeStart());
+            }
+
+            if ($this->amountRange !== 'all') {
+                [$min, $max] = $this->getAmountRange();
+                $query->whereBetween('requested_amount', [$min, $max]);
+            }
+
+            if ($this->crbScoreRange !== 'all') {
+                [$min, $max] = $this->getCrbScoreRange();
+                $query->whereBetween('credit_score', [$min, $max]);
+            }
+
+            $query->orderBy($this->sortBy, $this->sortDirection);
+
+            $rows = $query->get()->map(function (Application $app) {
+                return [
+                    'Application Number' => $app->application_number,
+                    'Applicant Name'     => trim($app->first_name . ' ' . $app->last_name),
+                    'Email'              => $app->email,
+                    'Phone'              => $app->phone_number,
+                    'Requested Amount'   => $app->requested_amount,
+                    'CRB Score'          => $app->credit_score,
+                    'Tenure (months)'    => $app->requested_tenure_months,
+                    'Product'            => optional($app->loanProduct)->name,
+                    'Status'             => 'Available',
+                    'Applied At'         => optional($app->created_at)->toDateTimeString(),
+                ];
+            });
+        } else {
+            // Booked leads export (similar to getBookedLeads)
+            $query = ApplicationLenderSubmission::with(['application.loanProduct', 'application.user', 'lender'])
+                ->where('lender_id', Auth::user()->lender_id);
+
+            if ($this->statusFilter !== 'all') {
+                $query->where('status', $this->statusFilter);
+            }
+
+            if ($this->search) {
+                $query->whereHas('application', function ($q) {
+                    $q->where('application_number', 'like', '%' . $this->search . '%')
+                        ->orWhere('first_name', 'like', '%' . $this->search . '%')
+                        ->orWhere('last_name', 'like', '%' . $this->search . '%');
+                });
+            }
+
+            if ($this->dateRange !== 'all') {
+                $query->where('created_at', '>=', $this->getDateRangeStart());
+            }
+
+            $query->orderBy($this->sortBy, $this->sortDirection);
+
+            $rows = $query->get()->map(function (ApplicationLenderSubmission $sub) {
+                $app = $sub->application;
+
+                return [
+                    'Application Number' => $app?->application_number,
+                    'Applicant Name'     => $app ? trim($app->first_name . ' ' . $app->last_name) : null,
+                    'Email'              => $app?->email,
+                    'Phone'              => $app?->phone_number,
+                    'Requested Amount'   => $app?->requested_amount,
+                    'CRB Score'          => $app?->credit_score,
+                    'Tenure (months)'    => $app?->requested_tenure_months,
+                    'Product'            => optional($app?->loanProduct)->name,
+                    'Status'             => $sub->status,
+                    'Applied At'         => optional($app?->created_at)->toDateTimeString(),
+                    'Decision At'        => optional($sub->decision_at)->toDateTimeString(),
+                ];
+            });
+        }
+
+        if ($rows->isEmpty()) {
+            $this->dispatch('show-alert', [
+                'type'    => 'warning',
+                'message' => 'No leads found to export for the current filters.',
+            ]);
+            return;
+        }
+
+        $headers = array_keys($rows->first());
+
+        return response()->streamDownload(function () use ($rows, $headers) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, $headers);
+            foreach ($rows as $row) {
+                fputcsv($handle, array_values($row));
+            }
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/csv',
+        ]);
+    }
+
     // Helper methods
     private function getDateRangeStart()
     {

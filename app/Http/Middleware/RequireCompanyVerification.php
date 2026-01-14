@@ -24,6 +24,12 @@ class RequireCompanyVerification
 
         $user = Auth::user();
         $routeName = $request->route()?->getName();
+        $path = $request->path();
+
+        // Always allow Livewire internal routes (file uploads, updates, etc.)
+        if (str_starts_with($path, 'livewire/')) {
+            return $next($request);
+        }
 
         // Define routes that should be accessible even without company verification
         $allowedRoutes = [
@@ -35,6 +41,10 @@ class RequireCompanyVerification
             'verification.qr-code',
             'verification.questionnaire',
             'mobile.verification',
+            // Livewire routes
+            'livewire.update',
+            'livewire.upload-file',
+            'livewire.preview-file',
         ];
 
         // Allow access to KYC and verification routes

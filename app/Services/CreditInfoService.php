@@ -78,11 +78,16 @@ class CreditInfoService
               ->timeout(60)
               ->post($this->endpoint);
 
+              Log::info('CreditInfo: Response', [
+                'response' => json_encode($response->body()),
+              ]);
+
             // Log response details
             Log::info('CreditInfo: Response received', [
                 'status' => $response->status(),
                 'successful' => $response->successful(),
                 'response_length' => strlen($response->body()),
+                'response_body' => json_encode($response->body()),
             ]);
             
             // Save response to file for debugging (first 2000 chars)
@@ -106,7 +111,7 @@ class CreditInfoService
                 return null;
             }
 
-            // Parse SOAP response
+            // Parse SOAP response into normalized structure
             $result = $this->parseSoapResponse($response->body());
 
             Log::info('CreditInfo: Response received', [
@@ -209,6 +214,10 @@ XML;
                 throw new \Exception('Failed to parse XML response');
             }
 
+            // Default values
+            $cipScore = null;
+            $rating = null;
+
             // Use XPath with local-name() to ignore namespaces
             $xml->registerXPathNamespace('s', 'http://schemas.xmlsoap.org/soap/envelope/');
             
@@ -217,61 +226,187 @@ XML;
             
             if (!empty($scoringNodes)) {
                 $scoringNode = $scoringNodes[0];
-                $cipScore = (string) $scoringNode->CIPScore;
-                $rating = (string) $scoringNode->CIPRiskGrade;
+                $cipScoreRaw = (string) $scoringNode->CIPScore;
+                $ratingRaw = (string) $scoringNode->CIPRiskGrade;
                 
                 Log::info('CreditInfo: Found and extracted score via XPath', [
-                    'cip_score' => $cipScore,
-                    'rating' => $rating,
+                    'cip_score' => $cipScoreRaw,
+                    'rating' => $ratingRaw,
                 ]);
                 
-                if (!empty($cipScore) && is_numeric($cipScore)) {
-                    return [
-                        'cip_score' => (int) $cipScore,
-                        'rating' => !empty($rating) ? $rating : null,
-                        'raw_response' => json_decode(json_encode((array) $xml), true),
-                    ];
+                if (!empty($cipScoreRaw) && is_numeric($cipScoreRaw)) {
+                    $cipScore = (int) $cipScoreRaw;
+                    $rating = !empty($ratingRaw) ? $ratingRaw : null;
                 }
             } else {
                 Log::warning('CreditInfo: XPath could not find ScoringAnalysis node');
             }
 
-            // Convert to array for easier access (fallback)
+            // Convert full XML to array for raw_parsed (do this first to preserve everything)
             $array = json_decode(json_encode((array) $xml), true);
 
-            // Extract CIP Score from nested structure
-            $cipScore = null;
-            $rating = null;
-
-            // Log the structure for debugging
-            Log::debug('CreditInfo: Response structure', [
-                'top_level_keys' => array_keys($array),
-                'has_body' => isset($array['s:Body']),
-            ]);
-
-            // Try multiple paths to find the response data
+            // Use XPath to directly find the response node (ignoring namespaces)
+            $xml->registerXPathNamespace('s', 'http://schemas.xmlsoap.org/soap/envelope/');
+            $xml->registerXPathNamespace('mul', 'http://creditinfo.com/schemas/2012/09/MultiConnector');
+            $xml->registerXPathNamespace('req', 'http://creditinfo.com/schemas/2012/09/MultiConnector/Messages/Response');
+            $xml->registerXPathNamespace('conn', 'http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/INT/IdmStrategy/Response');
+            
+            // Try to find the response node using XPath
+            // Look for response node that has status and hitcount children
+            $responseNodes = $xml->xpath('//*[local-name()="response"][*[local-name()="status"]][*[local-name()="hitcount"]]');
+            
             $responsePath = null;
-            
-            // Path 1: Standard structure
-            $responsePath = $array['s:Body']['QueryResponse']['QueryResult']['ResponseXml']['response']['connector']['data']['response'] ?? null;
-            
-            // Path 2: Without s: prefix
-            if (!$responsePath) {
-                $responsePath = $array['Body']['QueryResponse']['QueryResult']['ResponseXml']['response']['connector']['data']['response'] ?? null;
-            }
-            
-            // Path 3: Direct response
-            if (!$responsePath) {
-                $responsePath = $array['response'] ?? $array['ResponseXml']['response'] ?? null;
+            if (!empty($responseNodes)) {
+                // Get the innermost response node (the actual data response)
+                $responseNode = end($responseNodes);
+                // Convert SimpleXMLElement to array properly
+                $responsePath = json_decode(json_encode((array) $responseNode), true);
+                
+                // If conversion resulted in numeric keys, try to get the actual data
+                if (is_array($responsePath) && isset($responsePath[0]) && is_array($responsePath[0])) {
+                    $responsePath = $responsePath[0];
+                }
             }
 
-            if ($responsePath) {
+            // Log what we found
+            if ($responsePath && is_array($responsePath)) {
+                Log::info('CreditInfo: Found response path via XPath', [
+                    'response_keys' => array_keys($responsePath),
+                    'has_status' => isset($responsePath['status']),
+                    'has_general_info' => isset($responsePath['GeneralInformation']),
+                    'has_tza_cb5' => isset($responsePath['TzaCb5_data']),
+                ]);
+            } else {
+                // Fallback: try to find response in array structure
+                Log::warning('CreditInfo: XPath did not find response, trying array traversal');
+                
+                // Try recursive search for response node
+                $findResponse = function($arr, $depth = 0) use (&$findResponse) {
+                    if ($depth > 15 || !is_array($arr)) return null;
+                    
+                    // Check if this looks like the response node
+                    if (isset($arr['status']) && (isset($arr['hitcount']) || isset($arr['GeneralInformation']))) {
+                        return $arr;
+                    }
+                    
+                    foreach ($arr as $value) {
+                        if (is_array($value)) {
+                            $result = $findResponse($value, $depth + 1);
+                            if ($result) return $result;
+                        }
+                    }
+                    return null;
+                };
+                
+                $responsePath = $findResponse($array);
+                
+                if ($responsePath) {
+                    Log::info('CreditInfo: Found response via recursive search');
+                } else {
+                    Log::error('CreditInfo: Could not find response path in XML structure');
+                }
+            }
+
+            // Initialize credit_data with all possible sections
+            $creditData = [
+                'status' => null,
+                'hitcount' => null,
+                'infomsg' => null,
+                'currency' => null,
+                'general_information' => null,
+                'personal_information' => null,
+                'scoring_analysis' => null,
+                'inquiries_analysis' => null,
+                'current_contracts' => null,
+                'past_due_information' => null,
+                'repayment_information' => null,
+                'policy_rules' => null,
+                'tza_cb5_data' => null,
+                'extract' => null,
+                'strategy' => null,
+            ];
+
+            if ($responsePath && is_array($responsePath)) {
                 Log::debug('CreditInfo: Found response path', [
-                    'response_keys' => is_array($responsePath) ? array_keys($responsePath) : 'not_array',
+                    'response_keys' => array_keys($responsePath),
+                    'sample_data' => json_encode(array_slice($responsePath, 0, 5, true)),
                 ]);
 
+                // Helper to extract value (handles both direct values and _value wrapper)
+                $extractValue = function($data, $key) {
+                    if (!isset($data[$key])) return null;
+                    $value = $data[$key];
+                    if (is_array($value)) {
+                        // Check for _value wrapper
+                        if (isset($value['_value'])) {
+                            return $value['_value'];
+                        }
+                        // Check for @attributes (XML attributes)
+                        if (isset($value['@attributes'])) {
+                            return $value;
+                        }
+                        // Return array as-is
+                        return $value;
+                    }
+                    return $value;
+                };
+
+                // Extract top-level fields
+                $creditData['status'] = $extractValue($responsePath, 'status');
+                $creditData['hitcount'] = $extractValue($responsePath, 'hitcount');
+                $creditData['infomsg'] = $extractValue($responsePath, 'infomsg');
+                $creditData['currency'] = $extractValue($responsePath, 'Currency') ?? $extractValue($responsePath, 'currency');
+
+                // Map all sections into normalized credit_data structure
+                // Try multiple key variations for each section
+                $creditData['general_information'] = $extractValue($responsePath, 'GeneralInformation') 
+                    ?? $extractValue($responsePath, 'generalInformation')
+                    ?? $extractValue($responsePath, 'general_information');
+                    
+                $creditData['personal_information'] = $extractValue($responsePath, 'PersonalInformation')
+                    ?? $extractValue($responsePath, 'personalInformation')
+                    ?? $extractValue($responsePath, 'personal_information');
+                    
+                $creditData['scoring_analysis'] = $extractValue($responsePath, 'ScoringAnalysis')
+                    ?? $extractValue($responsePath, 'scoringAnalysis')
+                    ?? $extractValue($responsePath, 'scoring_analysis');
+                    
+                $creditData['inquiries_analysis'] = $extractValue($responsePath, 'InquiriesAnalysis')
+                    ?? $extractValue($responsePath, 'inquiriesAnalysis')
+                    ?? $extractValue($responsePath, 'inquiries_analysis');
+                    
+                $creditData['current_contracts'] = $extractValue($responsePath, 'CurrentContracts')
+                    ?? $extractValue($responsePath, 'currentContracts')
+                    ?? $extractValue($responsePath, 'current_contracts');
+                    
+                $creditData['past_due_information'] = $extractValue($responsePath, 'PastDueInformation')
+                    ?? $extractValue($responsePath, 'pastDueInformation')
+                    ?? $extractValue($responsePath, 'past_due_information');
+                    
+                $creditData['repayment_information'] = $extractValue($responsePath, 'RepaymentInformation')
+                    ?? $extractValue($responsePath, 'repaymentInformation')
+                    ?? $extractValue($responsePath, 'repayment_information');
+                    
+                $creditData['policy_rules'] = $extractValue($responsePath, 'PolicyRules')
+                    ?? $extractValue($responsePath, 'policyRules')
+                    ?? $extractValue($responsePath, 'policy_rules');
+                    
+                $creditData['tza_cb5_data'] = $extractValue($responsePath, 'TzaCb5_data')
+                    ?? $extractValue($responsePath, 'tzaCb5_data')
+                    ?? $extractValue($responsePath, 'TzaCb5Data')
+                    ?? $extractValue($responsePath, 'tzaCb5Data');
+                    
+                $creditData['extract'] = $extractValue($responsePath, 'Extract')
+                    ?? $extractValue($responsePath, 'extract');
+                    
+                $creditData['strategy'] = $extractValue($responsePath, 'Strategy')
+                    ?? $extractValue($responsePath, 'strategy');
+
+                // Extract scoring analysis for score extraction
+                $scoringAnalysis = $creditData['scoring_analysis'];
+                $extract = $creditData['extract'];
+
                 // Try to get CIP Score from ScoringAnalysis
-                $scoringAnalysis = $responsePath['ScoringAnalysis'] ?? $responsePath['scoringAnalysis'] ?? null;
                 if ($scoringAnalysis) {
                     $cipScore = $scoringAnalysis['CIPScore'] ?? $scoringAnalysis['CipScore'] ?? $scoringAnalysis['cipScore'] ?? null;
                     if ($cipScore !== null) {
@@ -315,9 +450,11 @@ XML;
             }
 
             return [
+                'success' => $cipScore !== null,
                 'cip_score' => $cipScore,
                 'rating' => $rating,
-                'raw_response' => $array,
+                'credit_data' => $creditData,
+                'raw_parsed' => $array,
             ];
 
         } catch (\Exception $e) {
@@ -325,9 +462,11 @@ XML;
                 'error' => $e->getMessage(),
             ]);
             return [
+                'success' => false,
                 'cip_score' => null,
                 'rating' => null,
-                'raw_response' => null,
+                'credit_data' => null,
+                'raw_parsed' => null,
             ];
         }
     }
