@@ -527,6 +527,9 @@ class CreditReportSearch extends Component
             $messageId = Str::uuid()->toString();
             $soapRequest = $this->buildSearchSoapRequest($messageId, $username, $password);
             
+            // Use empty header with HTTP Basic Auth (as per user's specification)
+            $soapRequest = $this->buildSearchSoapRequestEmptyHeader($messageId, $username, $password);
+
             // Log the FULL request for debugging
             Log::info('CreditInfo CB5 Search Request', [
                 'url' => $soapUrl,
@@ -535,51 +538,23 @@ class CreditReportSearch extends Component
                 'request_length' => strlen($soapRequest),
                 'request' => $soapRequest
             ]);
-            
-            // Try with WSSE headers (like MultiConnector services)
-            // The SOAP request already has WSSE Security in the header
-            $response = Http::withHeaders([
-                'Content-Type' => 'text/xml; charset=utf-8',
-                'X-WSSE' => 'WSSE profile="UsernameToken"',
-                'Username' => $username,
-                'Password' => $password,
-                'SOAPAction' => 'http://creditinfo.com/CB5/ISearchService/SearchIndividual',
-            ])->timeout(150)
+
+            // Use HTTP Basic Auth with empty header SOAP envelope
+            $response = Http::withBasicAuth($username, $password)
+              ->withHeaders([
+                  'Content-Type' => 'text/xml; charset=utf-8',
+                  'SOAPAction' => 'http://creditinfo.com/CB5/ISearchService/SearchIndividual',
+              ])->timeout(150)
               ->send('POST', $soapUrl, [
                   'body' => $soapRequest
               ]);
-            
+
             // Log the response
             Log::info('CreditInfo CB5 Search Response', [
                 'status' => $response->status(),
                 'response_length' => strlen($response->body()),
                 'response_preview' => substr($response->body(), 0, 1000)
             ]);
-            
-            // If we get a 500 error with Client fault, try with empty header and HTTP Basic Auth
-            if ($response->status() === 500) {
-                $faultCode = $this->extractFaultCode($response->body());
-                if ($faultCode === 's:Client') {
-                    Log::info('Client fault detected, trying with empty header and HTTP Basic Auth');
-                    
-                    // Rebuild request with empty header
-                    $soapRequestEmptyHeader = $this->buildSearchSoapRequestEmptyHeader($messageId, $username, $password);
-                    
-                    $response = Http::withBasicAuth($username, $password)
-                      ->withHeaders([
-                          'Content-Type' => 'text/xml; charset=utf-8',
-                          'SOAPAction' => 'http://creditinfo.com/CB5/ISearchService/SearchIndividual',
-                      ])->timeout(150)
-                      ->send('POST', $soapUrl, [
-                          'body' => $soapRequestEmptyHeader
-                      ]);
-                    
-                    Log::info('CreditInfo CB5 Search Response (Empty Header + Basic Auth)', [
-                        'status' => $response->status(),
-                        'response_preview' => substr($response->body(), 0, 1000)
-                    ]);
-                }
-            }
             
             // Check response status
             if ($response->successful()) {
