@@ -37,28 +37,7 @@ class RequireOtpVerification
             return $next($request);
         }
 
-        // Skip OTP verification for admin and lender roles
-        $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
-        $isLender = $user->isLender() || $user->hasRole('lender');
-
-        if ($isAdmin || $isLender) {
-            // Admin and lender don't need OTP verification
-            Log::info('Skipping OTP check for admin/lender', [
-                'user_id' => Auth::id(),
-                'is_admin' => $isAdmin,
-                'is_lender' => $isLender,
-                'route' => $routeName
-            ]);
-            
-            // Ensure OTP verified flag is set for admin/lender
-            if (!Session::get('otp_verified', false)) {
-                Session::put('otp_verified', true);
-            }
-            
-            return $next($request);
-        }
-
+        // ALL users (including admin and lender) must verify OTP
         // Check if OTP has been verified in this session
         if (!Session::get('otp_verified', false)) {
             Log::warning('User accessing protected route without OTP verification', [

@@ -92,34 +92,11 @@ Route::middleware('guest')->group(function () {
             // Regenerate session for security
             $request->session()->regenerate();
 
-            // Check if user is admin or lender - skip OTP for these roles
-            $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
-            $isLender = $user->isLender() || $user->hasRole('lender');
-
-            if ($isAdmin || $isLender) {
-                Log::info('Admin/Lender login - skipping OTP verification', [
-                    'user_id' => $user->id,
-                    'is_admin' => $isAdmin,
-                    'is_lender' => $isLender
-                ]);
-
-                // Set OTP verified flag for admin/lender (they don't need OTP)
-                Session::put('otp_verified', true);
-
-                // Log the login
-                if (class_exists(\App\Services\LogService::class)) {
-                    \App\Services\LogService::logLogin($user);
-                }
-
-                // Redirect directly to dashboard
-                return redirect()->intended(route('dashboard'))
-                    ->with('success', 'Login successful! Welcome back.');
-            }
-
-            // Regular users need OTP verification
-            Log::info('Regular user login - starting OTP flow', [
+            // ALL users (including admin and lender) need OTP verification
+            Log::info('User login - starting OTP flow', [
                 'user_id' => $user->id,
-                'email' => $user->email
+                'email' => $user->email,
+                'role' => $user->role
             ]);
 
             // Store user before logout
