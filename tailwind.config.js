@@ -12,9 +12,13 @@ export default {
           'brand-dark-red': '#A00E11',
           'brand-green': '#19733B',
           'brand-green-light': '#1a7f40',
-          'sidebar-green': '#1D753F',
-          'sidebar-green-light': '#22864A',
-          'sidebar-green-dark': '#186432',
+          // Sidebar theme color (requested change: green -> red)
+          // Primary requested color: #C40F11
+          'sidebar-green': '#C40F11',
+          // Slightly lighter red for hover states
+          'sidebar-green-light': '#D63A3C',
+          // Darker red for gradient depth
+          'sidebar-green-dark': '#A00E11',
           'sidebar-black': '#0A0A0A',
           'sidebar-gray': '#1F1F1F',
           'accent-gray': '#F8F9FA',
