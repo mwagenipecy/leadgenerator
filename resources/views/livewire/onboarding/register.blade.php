@@ -1,60 +1,45 @@
-<div class="min-h-screen flex">
+<div class="h-screen flex overflow-hidden">
 <!-- Left Side - Welcome Content (Hidden on mobile) -->
-  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden" style="background-image: url('{{ asset("landing/registerImage.png") }}'); background-size: cover; background-position: center;">
+  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden h-screen" style="background-image: url('{{ asset("landing/register-login.jpg") }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <!-- Gradient Overlay at Bottom -->
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-green/90 via-brand-green/50 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-brand-red/90 via-brand-red/60 to-transparent"></div>
             
-            <!-- Content -->
-            <div class="relative z-10 flex flex-col justify-between p-12 w-full">
-                <!-- Logo at Top -->
-                <div class="mb-8">
-                    <img src="{{ asset('logo/logoOnGreenBg.png') }}" alt="Lead Generator Logo" class="h-20 w-auto">
-                </div>
-                
-                <!-- Text Content at Bottom -->
-                <div class="max-w-sm">
-                    <!-- Welcome Text -->
-                    <h1 class="text-3xl font-bold font-poppins text-white mb-4">
-                        Join Fanikisha
-                    </h1>
-                    <p class="text-white/90 text-lg mb-8 leading-relaxed">
-                        Transform your business with our advanced lead generation platform powered by secure NIDA verification.
-                    </p>
-                    
-                    <!-- Feature List -->
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-white">Biometric Security</span>
+            
+            <!-- Marketing Content at Bottom - Squeezed to Right -->
+            <div class="absolute bottom-0 right-0 z-20 p-6 pr-8 max-w-sm">
+                <!-- Red Gradient Background for Text Section -->
+                <div class="bg-gradient-to-t from-brand-red via-brand-red/95 to-brand-red/80 rounded-lg p-5 backdrop-blur-sm">
+                    <h2 class="text-xl md:text-2xl font-bold font-poppins text-white mb-3 leading-tight">
+                        Connect. Grow. Succeed.
+                    </h2>
+                    <div class="space-y-2 mb-4">
+                        <div>
+                            <h3 class="text-base font-semibold text-white mb-1">For Lenders</h3>
+                            <p class="text-white text-sm leading-snug">
+                                Access verified borrowers and expand your portfolio with confidence.
+                            </p>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-white">Real-time Analytics</span>
+                        <div>
+                            <h3 class="text-base font-semibold text-white mb-1">For Borrowers</h3>
+                            <p class="text-white text-sm leading-snug">
+                                Get matched with trusted lenders and secure the funding you need.
+                            </p>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-white">NIDA Integration</span>
-                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-white text-xs font-medium">NIDA-Verified & Secure</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Right Side - Registration Form -->
-        <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 lg:p-12">
-            <div class="w-full max-w-lg">
+        <div class="w-full lg:w-1/2 h-screen overflow-y-auto">
+            <div class="flex items-center justify-center min-h-full p-6 sm:p-8 lg:p-12">
+                <div class="w-full max-w-lg py-8">
                 
                 <!-- Header -->
                 <div class="text-center mb-8">
@@ -99,7 +84,7 @@
                     wire:model.live="first_name"
                     type="text" 
                     required 
-                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('first_name') border-red-500 ring-1 ring-red-500 @enderror"
+                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('first_name') border-red-500 ring-1 ring-red-500 @enderror"
                     placeholder="John"
                 >
                 @error('first_name')
@@ -115,7 +100,7 @@
                     wire:model.live="last_name"
                     type="text" 
                     required 
-                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('last_name') border-red-500 ring-1 ring-red-500 @enderror"
+                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('last_name') border-red-500 ring-1 ring-red-500 @enderror"
                     placeholder="Doe"
                 >
                 @error('last_name')
@@ -141,7 +126,7 @@
                     type="email" 
                     autocomplete="email" 
                     required 
-                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('email') border-red-500 ring-1 ring-red-500 @enderror"
+                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('email') border-red-500 ring-1 ring-red-500 @enderror"
                     placeholder="john.doe@example.com"
                 >
             </div>
@@ -167,7 +152,7 @@
                         wire:model.live="phone"
                         type="tel" 
                         required 
-                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('phone') border-red-500 ring-1 ring-red-500 @enderror"
+                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('phone') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="+255 XXX XXX XXX"
                     >
                 </div>
@@ -193,7 +178,7 @@
                         type="text" 
                         required 
                         maxlength="20"
-                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('nida_number') border-red-500 ring-1 ring-red-500 @enderror"
+                        class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('nida_number') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="19XXXXXXXXXXXXXXXX"
                     >
                 </div>
@@ -204,7 +189,7 @@
             @else
             <div>
                 <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">Company Name *</label>
-                <input id="company_name" wire:model.live="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-red-500 ring-1 ring-red-500 @enderror" placeholder="Acme Ltd">
+                <input id="company_name" wire:model.live="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-red-500 ring-1 ring-red-500 @enderror" placeholder="Acme Ltd">
                 @error('company_name')
                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -219,7 +204,7 @@
             <!-- Country Selection -->
             <div>
                 <label for="country" class="block text-sm font-medium text-gray-700 mb-1.5">Country *</label>
-                <select id="country" wire:model.live="country" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent text-sm @error('country') border-red-500 ring-1 ring-red-500 @enderror">
+                <select id="country" wire:model.live="country" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm @error('country') border-red-500 ring-1 ring-red-500 @enderror">
                     <option value="">Select Country</option>
                     <option value="Tanzania">Tanzania</option>
                     <option value="Kenya">Kenya</option>
@@ -235,7 +220,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="company_tin" class="block text-sm font-medium text-gray-700 mb-1.5">Company TIN *</label>
-                    <input id="company_tin" wire:model.live="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-red-500 ring-1 ring-red-500 @enderror" placeholder="123-456-789">
+                    <input id="company_tin" wire:model.live="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-red-500 ring-1 ring-red-500 @enderror" placeholder="123-456-789">
                     @error('company_tin')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -244,7 +229,7 @@
                 @if(strtolower($country ?? '') === 'tanzania')
                 <div>
                     <label for="company_contact_nida" class="block text-sm font-medium text-gray-700 mb-1.5">Representative NIDA *</label>
-                    <input id="company_contact_nida" wire:model.live="company_contact_nida" maxlength="20" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19XXXXXXXXXXXXXXXX">
+                    <input id="company_contact_nida" wire:model.live="company_contact_nida" maxlength="20" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19XXXXXXXXXXXXXXXX">
                     @error('company_contact_nida')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -252,7 +237,7 @@
                 @elseif($country && strtolower($country) !== 'tanzania')
                 <div>
                     <label for="passport_number" class="block text-sm font-medium text-gray-700 mb-1.5">Passport Number *</label>
-                    <input id="passport_number" wire:model.live="passport_number" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm @error('passport_number') border-red-500 ring-1 ring-red-500 @enderror" placeholder="A12345678">
+                    <input id="passport_number" wire:model.live="passport_number" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('passport_number') border-red-500 ring-1 ring-red-500 @enderror" placeholder="A12345678">
                     @error('passport_number')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -280,7 +265,7 @@
                         type="password" 
                         autocomplete="new-password" 
                         required 
-                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password') border-red-500 ring-1 ring-red-500 @enderror"
+                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="••••••••"
                     >
                     <button 
@@ -315,7 +300,7 @@
                         type="password" 
                         autocomplete="new-password" 
                         required 
-                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password_confirmation') border-red-500 ring-1 ring-red-500 @enderror"
+                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('password_confirmation') border-red-500 ring-1 ring-red-500 @enderror"
                         placeholder="••••••••"
                     >
                     <button 
@@ -343,15 +328,15 @@
                     wire:model.live="terms"
                     type="checkbox" 
                     required
-                    class="h-4 w-4 text-brand-green focus:ring-brand-green border-gray-300 rounded transition-colors"
+                    class="h-4 w-4 text-brand-red focus:ring-brand-red border-gray-300 rounded transition-colors"
                 >
             </div>
             <div class="ml-3">
                 <label for="terms" class="text-sm text-gray-600">
                     I agree to the 
-                    <a href="#" class="text-brand-green hover:text-brand-green-light font-medium">Terms of Service</a> 
+                    <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium">Terms of Service</a> 
                     and 
-                    <a href="#" class="text-brand-green hover:text-brand-green-light font-medium">Privacy Policy</a>
+                    <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium">Privacy Policy</a>
                 </label>
             </div>
         </div>
@@ -365,10 +350,18 @@
                 type="submit" 
                 wire:loading.attr="disabled"
                 wire:target="register"
-                class="w-full bg-brand-green text-white py-3.5 px-4 rounded-lg font-semibold hover:bg-brand-green-light focus:ring-4 focus:ring-brand-green/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full bg-brand-red text-white py-3.5 px-4 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
             >
-                <span wire:loading.remove wire:target="register">{{ $type==='company' ? 'Continue as Business' : 'Create Account' }}</span>
-                <span wire:loading wire:target="register">Creating Account...</span>
+                <span wire:loading.remove wire:target="register" class="flex items-center justify-center">
+                    {{ $type==='company' ? 'Continue as Business' : 'Create Account' }}
+                </span>
+                <span wire:loading wire:target="register" class="flex items-center justify-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating Account...
+                </span>
             </button>
         </div>
 
@@ -381,7 +374,7 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Already have an account? 
-                        <a href="{{ route('login') }}" class="font-medium text-brand-green hover:text-brand-green-light transition-colors">
+                        <a href="{{ route('login') }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
                             Sign in
                         </a>
                     </p>
@@ -395,6 +388,7 @@
                         </svg>
                         <span>Protected by industry-standard encryption</span>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

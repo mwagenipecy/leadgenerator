@@ -202,26 +202,15 @@ class Register extends Component
                 return $user;
             });
     
-            // For company registration, redirect to KYC verification
-            if ($this->type === 'company') {
-                // Auto-login the user
-                auth()->login($user);
-                
-                session()->flash('success', 'Account created successfully! Please complete your company KYC verification.');
-                
-                // Redirect to company KYC verification page
-                return redirect()->route('company.kyc');
-            }
-    
-            // For individual registration, continue with normal flow
+            // Auto-login the user
             auth()->login($user);
             
-            session()->flash('success', 'Account created successfully!');
+            session()->flash('success', 'Account created successfully! Please complete your verification.');
             
             // Reset form
             $this->reset();
             
-            // Redirect to verification options
+            // Redirect to verification options for both individual and company users
             return redirect()->route('verification.options');
             
         } catch (\Exception $e) {

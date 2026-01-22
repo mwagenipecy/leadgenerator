@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Lead Generator</title>
+    <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +15,8 @@
     
     <style>
         :root {
-            --brand-green: #19733B;
-            --brand-green-light: #1a7f40;
+            --brand-red: #C40F11;
+            --brand-dark-red: #A00E11;
         }
     </style>
 

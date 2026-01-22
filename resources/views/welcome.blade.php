@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Generator - Hero Section</title>
+    <title>Fanikisha Market place - Hero Section</title>
+    <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,60 +23,50 @@
     <style>
         /* Custom Brand Color */
         .bg-brand-green {
-            background-color: #19733B;
+            background-color: #C40F11;
         }
         
         .text-brand-green {
-            color: #19733B;
+            color: #C40F11;
         }
         
         .border-brand-green {
-            border-color: #19733B;
+            border-color: #C40F11;
         }
         
         .hover\:bg-brand-green:hover {
-            background-color: #19733B;
+            background-color: #C40F11;
         }
         
         .hover\:text-brand-green:hover {
-            color: #19733B;
+            color: #C40F11;
         }
         
         .hover\:bg-brand-green-light:hover {
-            background-color: #1a7f40;
+            background-color: #999999;
         }
         
-        /* Hero Slider Container with Padding */
+        /* Hero Slider Container - Full Width, No Top Padding */
         .hero-slider-wrapper {
-            padding: 1rem;
-            background: #f9fafb;
+            padding: 0;
+            margin-top: 0;
+            background: transparent;
         }
         
-        @media (min-width: 768px) {
-            .hero-slider-wrapper {
-                padding: 2rem;
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .hero-slider-wrapper {
-                padding: 2rem 4rem;
-            }
-        }
-        
-        /* Hero Slider */
+        /* Hero Slider - Full Width */
         .hero-slider {
             position: relative;
             height: 500px;
             overflow: hidden;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-radius: 0;
+            box-shadow: none;
+            width: 100%;
         }
         
         @media (min-width: 768px) {
             .hero-slider {
                 height: 600px;
-                border-radius: 32px;
+                border-radius: 0;
             }
         }
         
@@ -87,37 +78,19 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            background-size: cover;
+            background-size: 100% 100%;
             background-position: center;
-            background-image: url('{{ asset("landing/image.png") }}');
+            background-repeat: no-repeat;
+            background-image: url('{{ asset("landing/registerImage2.png") }}');
         }
         
         .slide.active {
             opacity: 1;
         }
         
+        /* Gradient removed - no overlay */
         .slide::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
-            border-radius: inherit;
-        }
-        
-        /* Color overlays for different slides - gradient from left to right */
-        .slide-1::before {
-            background: linear-gradient(to left, rgba(25, 115, 59, 0.7) 0%, rgba(25, 115, 59, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
-        }
-        
-        .slide-2::before {
-            background: linear-gradient(to left, rgba(25, 115, 59, 0.7) 0%, rgba(25, 115, 59, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
-        }
-        
-        .slide-3::before {
-            background: linear-gradient(to left, rgba(25, 115, 59, 0.7) 0%, rgba(25, 115, 59, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
+            display: none;
         }
         
         /* Slide Content */
@@ -275,42 +248,33 @@
             transform: translateY(-2px);
         }
 
-        /* Pattern overlay for visual interest */
+        /* Pattern overlay removed */
         .slide::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-            pointer-events: none;
+            display: none;
         }
     </style>
 </head>
 <body class="bg-white text-gray-900 font-inter overflow-x-hidden">
     <!-- Navigation -->
-    <nav class="bg-white/95 backdrop-blur-md py-3 sticky top-0 z-50 border-b border-gray-100">
+    <nav class="sticky top-0 z-50 border-b border-gray-200 bg-white">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <a href="/" class="flex items-center">
-                    <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" class="h-12 lg:h-14 w-auto">
+                    <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-12 lg:h-14 w-auto">
                 </a>
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
-                    <a href="#eligibility" class="text-gray-600 hover:text-brand-green transition-colors font-medium">Eligibility</a>
-                    <a href="#process" class="text-gray-600 hover:text-brand-green transition-colors font-medium">Process</a>
-                    <a href="{{ route('login') }}" class="bg-brand-green text-white px-6 py-2 rounded-md text-sm hover:bg-brand-green-light transition-all font-semibold">
+                    <a href="#eligibility" class="text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Eligibility</a>
+                    <a href="#process" class="text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Process</a>
+                    <a href="{{ route('login') }}" class="text-white px-6 py-2 rounded-md text-sm hover:opacity-90 transition-all font-semibold" style="background-color: #C40F11;">
                         Get Started
                     </a>
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <button class="md:hidden p-2" onclick="toggleMobileMenu()">
+                <button class="md:hidden p-2 text-gray-700" onclick="toggleMobileMenu()">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -318,11 +282,11 @@
             </div>
             
             <!-- Mobile Navigation -->
-            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-100">
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-200">
                 <div class="space-y-3 pt-4">
-                    <a href="#eligibility" class="block text-gray-600 hover:text-brand-green transition-colors font-medium">Eligibility</a>
-                    <a href="#process" class="block text-gray-600 hover:text-brand-green transition-colors font-medium">Process</a>
-                    <a href="{{ route('login') }}" class="w-full text-left bg-brand-green text-white px-6 py-2 rounded-md text-sm hover:bg-brand-green-light transition-all font-semibold">
+                    <a href="#eligibility" class="block text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Eligibility</a>
+                    <a href="#process" class="block text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Process</a>
+                    <a href="{{ route('login') }}" class="w-full text-left text-white px-6 py-2 rounded-md text-sm hover:opacity-90 transition-all font-semibold" style="background-color: #C40F11;">
                         Get Started
                     </a>
                 </div>
@@ -330,168 +294,33 @@
         </div>
     </nav>
 
-    <!-- Hero Section with Padding/Margin -->
-    <div class="hero-slider-wrapper">
+    <!-- Hero Section - Full Width, No Top Margin -->
+    <div class="hero-slider-wrapper" style="margin-top: 0; padding-top: 0;">
         <section class="hero-slider">
             
-            <!-- Slide 1 - Green Theme -->
+            <!-- Slide 1 - Image Only -->
             <div class="slide slide-1 active">
                 <div class="slide-content">
-                    <div class="slide-info animate-fadeInUp">
-                        <span class="inline-block bg-brand-green text-white px-5 py-2.5 rounded-full text-sm font-bold mb-6 shadow-lg">
-                            NIDA Verified Platform
-                        </span>
-                        <h1 class="text-2xl md:text-4xl lg:text-6xl xl:text-7xl font-bold font-poppins mb-6 leading-tight">
-                            Unlock Your <br/>
-                            <span style="color: #4ade80;">Financial Freedom</span>
-                        </h1>
-                        <p class="text-lg md:text-xl lg:text-2xl text-white/90 mb-8 leading-relaxed">
-                            Connect with 50+ trusted lenders across Tanzania.<br/>
-                            Get approved in as fast as 24 hours.
-                        </p>
-                        
-                        <!-- Feature Pills -->
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">No Hidden Fees</span>
-                            </div>
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">Flexible Terms</span>
-                            </div>
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">100% Secure</span>
-                            </div>
-                        </div>
-                        
-                        <!-- CTA Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <a href="{{ route('user.register') }}" class="bg-white text-brand-green px-6 md:px-8 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-gray-50 transition-all inline-flex items-center justify-center gap-2 shadow-xl group">
-                                Get Started Free
-                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                </svg>
-                            </a>
-                            <a href="#eligibility" class="bg-white/20 backdrop-blur-md text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-white/30 transition-all inline-flex items-center justify-center gap-2 border border-white/30">
-                                Learn More
-                            </a>
-                        </div>
+                    <!-- Text content hidden -->
+                    <div class="slide-info opacity-0 pointer-events-none">
                     </div>
                 </div>
             </div>
             
-            <!-- Slide 2 - Green Theme -->
+            <!-- Slide 2 - Image Only -->
             <div class="slide slide-2">
                 <div class="slide-content">
-                    <div class="slide-info">
-                        <span class="inline-block bg-brand-green text-white px-5 py-2.5 rounded-full text-sm font-bold mb-6 shadow-lg">
-                            Lightning Fast Approval
-                        </span>
-                        <h1 class="text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold font-poppins mb-6 leading-tight">
-                            Get Approved <br/>
-                            <span style="color: #4ade80;">In 24 Hours</span>
-                        </h1>
-                        <p class="text-lg md:text-xl lg:text-2xl text-white/90 mb-8 leading-relaxed">
-                            Our AI-powered matching system connects you with <br/>
-                            the right lender instantly. No waiting, no stress.
-                        </p>
-                        
-                        <!-- Feature Pills -->
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">50+ Lenders</span>
-                            </div>
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">Instant Decisions</span>
-                            </div>
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">24/7 Available</span>
-                            </div>
-                        </div>
-                        
-                        <!-- CTA Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <a href="{{ route('user.register') }}" class="bg-white text-brand-green px-6 md:px-8 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-gray-50 transition-all inline-flex items-center justify-center gap-2 shadow-xl group">
-                                Apply Now
-                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                </svg>
-                            </a>
-                            <a href="#process" class="bg-white/20 backdrop-blur-md text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-white/30 transition-all inline-flex items-center justify-center gap-2 border border-white/30">
-                                See How It Works
-                            </a>
-                        </div>
+                    <!-- Text content hidden -->
+                    <div class="slide-info opacity-0 pointer-events-none">
                     </div>
                 </div>
             </div>
             
-            <!-- Slide 3 - Green Theme -->
+            <!-- Slide 3 - Image Only -->
             <div class="slide slide-3">
                 <div class="slide-content">
-                    <div class="slide-info">
-                        <span class="inline-block bg-brand-green text-white px-5 py-2.5 rounded-full text-sm font-bold mb-6 shadow-lg">
-                            Military-Grade Security
-                        </span>
-                        <h1 class="text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold font-poppins mb-6 leading-tight">
-                            Your Data is <br/>
-                            <span style="color: #4ade80;">100% Protected</span>
-                        </h1>
-                        <p class="text-lg md:text-xl lg:text-2xl text-white/90 mb-8 leading-relaxed">
-                            Bank-level 256-bit encryption keeps your personal <br/>
-                            and financial information completely secure.
-                        </p>
-                        
-                        <!-- Feature Pills -->
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">SSL Encrypted</span>
-                            </div>
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">Privacy First</span>
-                            </div>
-                            <div class="feature-pill">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="font-semibold text-sm md:text-base">Verified Safe</span>
-                            </div>
-                        </div>
-                        
-                        <!-- CTA Buttons -->
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <a href="{{ route('user.register') }}" class="bg-white text-brand-green px-6 md:px-8 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-gray-50 transition-all inline-flex items-center justify-center gap-2 shadow-xl group">
-                                Start Secure Application
-                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                </svg>
-                            </a>
-                            <a href="#eligibility" class="bg-white/20 backdrop-blur-md text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-white/30 transition-all inline-flex items-center justify-center gap-2 border border-white/30">
-                                Security Details
-                            </a>
-                        </div>
+                    <!-- Text content hidden -->
+                    <div class="slide-info opacity-0 pointer-events-none">
                     </div>
                 </div>
             </div>
@@ -526,7 +355,7 @@
             <div class="text-center mb-12 md:mb-16">
                 <div class="mb-4">
                     <span class="inline-block bg-brand-green/10 text-brand-green px-4 py-2 rounded-full text-sm font-medium uppercase tracking-wider">
-                        About LeadGenerator
+                        About Fanikisha Market place
                     </span>
                 </div>
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold font-poppins text-black leading-tight mb-6">
@@ -837,7 +666,7 @@
                 <!-- Brand Section -->
                 <div class="md:col-span-1">
                     <a href="/" class="inline-block mb-4">
-                        <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" class="h-10 w-auto">
+                        <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Fanikisha Market place Logo" class="h-10 w-auto">
                     </a>
                     <p class="text-gray-600 text-sm leading-relaxed mb-4">
                         Connecting borrowers with verified lenders. Loans for everyone, regardless of employment status.
@@ -917,7 +746,7 @@
             <div class="border-t border-gray-200 pt-8">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="text-gray-500 text-sm mb-4 md:mb-0">
-                        © 2025 LeadGenerator. All rights reserved.
+                        © 2025 Fanikisha Market place. All rights reserved.
                     </div>
                     <div class="flex flex-wrap gap-6">
                         <a href="#" class="text-gray-500 hover:text-brand-green text-sm transition-colors">Privacy Policy</a>

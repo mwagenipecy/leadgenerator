@@ -8,10 +8,12 @@ export default {
     theme: {
       extend: {
         colors: {
-          'brand-red': '#C40F12',
+          'brand-red': '#C40F11',
           'brand-dark-red': '#A00E11',
-          'brand-green': '#19733B',
-          'brand-green-light': '#1a7f40',
+          // Legacy token kept for existing UI, mapped to new palette (no green)
+          'brand-green': '#C40F11',        // red
+          'brand-green-light': '#999999',  // gray
+          'brand-gray': '#999999',
           // Sidebar theme color (requested change: green -> red)
           // Primary requested color: #C40F11
           'sidebar-green': '#C40F11',

@@ -104,7 +104,10 @@ Route::middleware('guest')->group(function () {
             $userModel = $user;
 
             // Immediately log out for OTP verification
-            Auth::logout();
+            $guard = Auth::guard();
+            if (method_exists($guard, 'logout')) {
+                $guard->logout();
+            }
 
             // Clear any previous OTP verification
             Session::forget('otp_verified');
@@ -149,7 +152,10 @@ Route::middleware('guest')->group(function () {
 
 // Logout route
 Route::post('/logout', function (Request $request) {
-    Auth::logout();
+    $guard = Auth::guard();
+    if (method_exists($guard, 'logout')) {
+        $guard->logout();
+    }
     $request->session()->invalidate();
     $request->session()->regenerateToken();
     return redirect('/');

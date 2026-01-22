@@ -13,8 +13,9 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-green': '#19733B',
-                        'brand-green-light': '#1a7f40',
+                        'brand-green': '#C40F11',
+                        'brand-green-light': '#999999',
+                        'brand-gray': '#999999',
                     },
                     fontFamily: {
                         'inter': ['Inter', 'sans-serif'],

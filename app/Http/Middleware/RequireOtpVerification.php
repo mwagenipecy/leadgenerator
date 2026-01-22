@@ -47,8 +47,11 @@ class RequireOtpVerification
                 'all_session_data' => Session::all()
             ]);
             
-            // Log out the user
-            Auth::logout();
+            // Log out the user (only if using session guard)
+            $guard = Auth::guard();
+            if (method_exists($guard, 'logout')) {
+                $guard->logout();
+            }
             
             // Clear session data
             Session::invalidate();
