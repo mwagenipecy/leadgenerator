@@ -46,7 +46,7 @@
                     <!-- Mobile Logo -->
                     <div class="lg:hidden mb-6">
                         <div class="flex justify-center">
-                            <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" class="h-16 w-auto">
+                            <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-16 w-auto">
                         </div>
                     </div>
                     
