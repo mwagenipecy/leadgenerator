@@ -23,7 +23,7 @@
             </div>
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 <a href="{{ route('loan-application.create') }}" 
-                   class="w-full sm:w-auto inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white font-bold rounded-lg hover:from-sidebar-green-light hover:to-sidebar-green-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                   class="w-full sm:w-auto inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white font-bold rounded-lg hover:from-sidebar-green-light hover:to-sidebar-green transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
@@ -856,16 +856,16 @@
 
 <style>
     /* Custom styles for better visual hierarchy */
-    .bg-sidebar-green { background-color: #1D753F; }
-    .bg-sidebar-green-light { background-color: #22864A; }
-    .text-sidebar-green { color: #1D753F; }
+    /* .bg-sidebar-green { background-color: #1D753F; }
+    .bg-sidebar-green-light { background-color: #22864A; } */
+    /* .text-sidebar-green { color: #1D753F; }
     .text-sidebar-green-light { color: #22864A; }
     .border-sidebar-green { border-color: #1D753F; }
     .ring-sidebar-green { --tw-ring-color: #1D753F; }
     .focus\:ring-sidebar-green:focus { --tw-ring-color: #1D753F; }
     .focus\:border-sidebar-green:focus { border-color: #1D753F; }
     .hover\:from-sidebar-green-light:hover { --tw-gradient-from: #22864A; }
-    .hover\:to-sidebar-green-800:hover { --tw-gradient-to: #186432; }
+    .hover\:to-sidebar-green-800:hover { --tw-gradient-to: #186432; } */
     
     /* Loading animation */
     @keyframes spin {
