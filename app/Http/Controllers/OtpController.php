@@ -142,6 +142,20 @@ class OtpController extends Controller
                     ->with('success', 'Login successful! Welcome back.');
             }
             
+            // For company users from non-Tanzania countries, skip NIDA verification
+            // They will be handled by RequireCompanyVerification middleware
+            if ($user->registration_type === 'company' && !$user->isFromTanzania()) {
+                Log::info('Non-Tanzania company user - skipping NIDA verification', [
+                    'user_id' => $user->id,
+                    'country' => $user->country,
+                    'registration_type' => $user->registration_type,
+                ]);
+                
+                // Redirect to intended page (will be intercepted by RequireCompanyVerification middleware if needed)
+                return redirect()->intended(route('dashboard'))
+                    ->with('success', 'Login successful! Welcome back.');
+            }
+            
             // Check if user is NIDA verified
             // If not verified, redirect to verification options page
             if (!$user->isNidaVerified()) {

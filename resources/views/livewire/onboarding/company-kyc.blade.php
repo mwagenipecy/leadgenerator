@@ -1,10 +1,10 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 py-8">
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-red-50/30 py-8">
     <!-- Header Navigation (Simple) -->
     <div class="bg-white/80 backdrop-blur-sm border-b border-gray-100 shadow-sm mb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator Logo" class="h-12 w-auto">
+                    <img src="{{ asset('/landing/redlogo.png') }}" alt="Lead Generator Logo" class="h-12 w-auto">
                 </div>
                 @auth
                     <form method="POST" action="{{ route('logout') }}">
@@ -25,7 +25,7 @@
         <!-- Header -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-6">
             <div class="flex items-center gap-4 mb-4">
-                <div class="w-14 h-14 bg-gradient-to-br from-sidebar-green to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-sidebar-green/20">
+                <div class="w-14 h-14 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center shadow-lg shadow-red-600/20">
                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
@@ -38,20 +38,27 @@
             
             <!-- Progress indicator -->
             <div class="flex items-center gap-2 mt-6">
-                <div class="flex-1 h-2 rounded-full {{ $step >= 1 ? 'bg-sidebar-green' : 'bg-gray-200' }} transition-colors duration-300"></div>
-                <div class="flex-1 h-2 rounded-full {{ $step >= 2 ? 'bg-sidebar-green' : 'bg-gray-200' }} transition-colors duration-300"></div>
-                <div class="flex-1 h-2 rounded-full {{ $step >= 3 ? 'bg-sidebar-green' : 'bg-gray-200' }} transition-colors duration-300"></div>
+                @if($isTanzania)
+                    <!-- Tanzania: 3 steps (NIDA, Documents, Complete) -->
+                    <div class="flex-1 h-2 rounded-full {{ $step >= 1 ? 'bg-red-600' : 'bg-gray-200' }} transition-colors duration-300"></div>
+                    <div class="flex-1 h-2 rounded-full {{ $step >= 2 ? 'bg-red-600' : 'bg-gray-200' }} transition-colors duration-300"></div>
+                    <div class="flex-1 h-2 rounded-full {{ $step >= 3 ? 'bg-red-600' : 'bg-gray-200' }} transition-colors duration-300"></div>
+                @else
+                    <!-- Non-Tanzania: 2 steps (Documents, Complete) - Skip NIDA -->
+                    <div class="flex-1 h-2 rounded-full {{ $step >= 2 ? 'bg-red-600' : 'bg-gray-200' }} transition-colors duration-300"></div>
+                    <div class="flex-1 h-2 rounded-full {{ $step >= 3 ? 'bg-red-600' : 'bg-gray-200' }} transition-colors duration-300"></div>
+                @endif
             </div>
         </div>
 
         @if (session()->has('success'))
-            <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3">
-                <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3">
+                <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
                 </div>
-                <p class="text-emerald-800 text-sm font-medium">{{ session('success') }}</p>
+                <p class="text-red-800 text-sm font-medium">{{ session('success') }}</p>
             </div>
         @endif
 
@@ -70,7 +77,7 @@
         @if($isTanzania && $step === 1)
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-6" wire:poll.5s="checkNidaStatus">
             <div class="flex items-center gap-4 mb-6">
-                <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-sidebar-green to-emerald-600 text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg shadow-sidebar-green/20">
+                <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg shadow-red-600/20">
                     1
                 </div>
                 <div>
@@ -80,21 +87,21 @@
             </div>
 
             @if($nidaVerificationCompleted)
-                <div class="p-5 bg-emerald-50 border border-emerald-200 rounded-xl mb-5">
+                <div class="p-5 bg-red-50 border border-red-200 rounded-xl mb-5">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                         </div>
                         <div>
-                            <span class="text-emerald-800 font-semibold">NIDA Verification Completed</span>
-                            <p class="text-sm text-emerald-600">Your identity has been verified successfully</p>
+                            <span class="text-red-800 font-semibold">NIDA Verification Completed</span>
+                            <p class="text-sm text-red-600">Your identity has been verified successfully</p>
                         </div>
                     </div>
                 </div>
                 <p class="text-sm text-gray-600 mb-5">You can now proceed to upload your company documents.</p>
-                <button wire:click="$set('step', 2)" class="bg-gradient-to-r from-sidebar-green to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-emerald-600 hover:to-sidebar-green transition-all duration-300 font-semibold shadow-lg shadow-sidebar-green/30 flex items-center gap-2">
+                <button wire:click="$set('step', 2)" class="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl hover:from-red-700 hover:to-red-600 transition-all duration-300 font-semibold shadow-lg shadow-red-600/30 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                     </svg>
@@ -129,7 +136,7 @@
                 <div class="flex flex-wrap items-center gap-3">
                     <a 
                         href="{{ route('verification.options') }}"
-                        class="bg-gradient-to-r from-sidebar-green to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-emerald-600 hover:to-sidebar-green transition-all duration-300 font-semibold shadow-lg shadow-sidebar-green/30 inline-flex items-center gap-2">
+                        class="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl hover:from-red-700 hover:to-red-600 transition-all duration-300 font-semibold shadow-lg shadow-red-600/30 inline-flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                         </svg>
@@ -169,7 +176,7 @@
         @if($step === 2)
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-6">
             <div class="flex items-center gap-4 mb-8">
-                <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-sidebar-green to-emerald-600 text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg shadow-sidebar-green/20">
+                <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg shadow-red-600/20">
                     {{ $isTanzania ? '2' : '1' }}
                 </div>
                 <div>
@@ -182,10 +189,10 @@
                 @if($isTanzania)
                     <!-- Tanzania: BRELA and TIN Certificate -->
                     <!-- BRELA Document -->
-                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-sidebar-green/30 transition-colors duration-200">
+                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-red-600/30 transition-colors duration-200">
                         <div class="flex items-start gap-3 mb-4">
-                            <div class="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
                             </div>
@@ -196,16 +203,16 @@
                         </div>
                         
                         @if(isset($uploadedDocuments['brela']))
-                            <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <div class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                         </svg>
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">{{ $uploadedDocuments['brela']['name'] }}</p>
-                                        <p class="text-xs text-emerald-600">Uploaded successfully</p>
+                                        <p class="text-xs text-red-600">Uploaded successfully</p>
                                     </div>
                                 </div>
                                 <button wire:click="removeDocument('brela')" class="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1 transition-colors">
@@ -217,7 +224,7 @@
                             </div>
                         @else
                             <div class="relative" wire:loading.class="pointer-events-none" wire:target="brelaDocument">
-                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-sidebar-green transition-all duration-200">
+                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-red-600 transition-all duration-200">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6" wire:loading.remove wire:target="brelaDocument">
                                         <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -226,7 +233,7 @@
                                         <p class="text-xs text-gray-400 mt-1">PDF, JPG, JPEG, PNG (Max 5MB)</p>
                                     </div>
                                     <div wire:loading wire:target="brelaDocument" class="flex flex-col items-center justify-center">
-                                        <svg class="animate-spin h-8 w-8 text-sidebar-green mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin h-8 w-8 text-red-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
@@ -240,7 +247,7 @@
                     </div>
 
                     <!-- TIN Certificate -->
-                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-sidebar-green/30 transition-colors duration-200">
+                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-red-600/30 transition-colors duration-200">
                         <div class="flex items-start gap-3 mb-4">
                             <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,16 +261,16 @@
                         </div>
                         
                         @if(isset($uploadedDocuments['tin_certificate']))
-                            <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <div class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                         </svg>
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">{{ $uploadedDocuments['tin_certificate']['name'] }}</p>
-                                        <p class="text-xs text-emerald-600">Uploaded successfully</p>
+                                        <p class="text-xs text-red-600">Uploaded successfully</p>
                                     </div>
                                 </div>
                                 <button wire:click="removeDocument('tin_certificate')" class="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1 transition-colors">
@@ -275,7 +282,7 @@
                             </div>
                         @else
                             <div class="relative" wire:loading.class="pointer-events-none" wire:target="tinCertificate">
-                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-sidebar-green transition-all duration-200">
+                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-red-600 transition-all duration-200">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6" wire:loading.remove wire:target="tinCertificate">
                                         <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -284,7 +291,7 @@
                                         <p class="text-xs text-gray-400 mt-1">PDF, JPG, JPEG, PNG (Max 5MB)</p>
                                     </div>
                                     <div wire:loading wire:target="tinCertificate" class="flex flex-col items-center justify-center">
-                                        <svg class="animate-spin h-8 w-8 text-sidebar-green mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin h-8 w-8 text-red-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
@@ -299,7 +306,7 @@
                 @else
                     <!-- Non-Tanzania: Passport, Company Documents, Personal KYC -->
                     <!-- Passport -->
-                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-sidebar-green/30 transition-colors duration-200">
+                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-red-600/30 transition-colors duration-200">
                         <div class="flex items-start gap-3 mb-4">
                             <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -313,16 +320,16 @@
                         </div>
                         
                         @if(isset($uploadedDocuments['passport']))
-                            <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <div class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                         </svg>
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">{{ $uploadedDocuments['passport']['name'] }}</p>
-                                        <p class="text-xs text-emerald-600">Uploaded successfully</p>
+                                        <p class="text-xs text-red-600">Uploaded successfully</p>
                                     </div>
                                 </div>
                                 <button wire:click="removeDocument('passport')" class="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1 transition-colors">
@@ -334,7 +341,7 @@
                             </div>
                         @else
                             <div class="relative" wire:loading.class="pointer-events-none" wire:target="passportDocument">
-                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-sidebar-green transition-all duration-200">
+                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-red-600 transition-all duration-200">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6" wire:loading.remove wire:target="passportDocument">
                                         <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -343,7 +350,7 @@
                                         <p class="text-xs text-gray-400 mt-1">PDF, JPG, JPEG, PNG (Max 5MB)</p>
                                     </div>
                                     <div wire:loading wire:target="passportDocument" class="flex flex-col items-center justify-center">
-                                        <svg class="animate-spin h-8 w-8 text-sidebar-green mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin h-8 w-8 text-red-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
@@ -357,10 +364,10 @@
                     </div>
 
                     <!-- Company Documents -->
-                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-sidebar-green/30 transition-colors duration-200">
+                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-red-600/30 transition-colors duration-200">
                         <div class="flex items-start gap-3 mb-4">
-                            <div class="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
                             </div>
@@ -371,16 +378,16 @@
                         </div>
                         
                         @if(isset($uploadedDocuments['company_documents']))
-                            <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <div class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                         </svg>
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">{{ $uploadedDocuments['company_documents']['name'] }}</p>
-                                        <p class="text-xs text-emerald-600">Uploaded successfully</p>
+                                        <p class="text-xs text-red-600">Uploaded successfully</p>
                                     </div>
                                 </div>
                                 <button wire:click="removeDocument('company_documents')" class="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1 transition-colors">
@@ -392,7 +399,7 @@
                             </div>
                         @else
                             <div class="relative" wire:loading.class="pointer-events-none" wire:target="companyDocuments">
-                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-sidebar-green transition-all duration-200">
+                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-red-600 transition-all duration-200">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6" wire:loading.remove wire:target="companyDocuments">
                                         <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -401,7 +408,7 @@
                                         <p class="text-xs text-gray-400 mt-1">PDF, JPG, JPEG, PNG (Max 5MB)</p>
                                     </div>
                                     <div wire:loading wire:target="companyDocuments" class="flex flex-col items-center justify-center">
-                                        <svg class="animate-spin h-8 w-8 text-sidebar-green mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin h-8 w-8 text-red-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
@@ -415,7 +422,7 @@
                     </div>
 
                     <!-- Personal KYC -->
-                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-sidebar-green/30 transition-colors duration-200">
+                    <div class="border-2 border-gray-100 rounded-xl p-5 bg-white hover:border-red-600/30 transition-colors duration-200">
                         <div class="flex items-start gap-3 mb-4">
                             <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -429,16 +436,16 @@
                         </div>
                         
                         @if(isset($uploadedDocuments['personal_kyc']))
-                            <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <div class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                         </svg>
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">{{ $uploadedDocuments['personal_kyc']['name'] }}</p>
-                                        <p class="text-xs text-emerald-600">Uploaded successfully</p>
+                                        <p class="text-xs text-red-600">Uploaded successfully</p>
                                     </div>
                                 </div>
                                 <button wire:click="removeDocument('personal_kyc')" class="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1 transition-colors">
@@ -450,7 +457,7 @@
                             </div>
                         @else
                             <div class="relative" wire:loading.class="pointer-events-none" wire:target="personalKyc">
-                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-sidebar-green transition-all duration-200">
+                                <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 hover:border-red-600 transition-all duration-200">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6" wire:loading.remove wire:target="personalKyc">
                                         <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
@@ -459,7 +466,7 @@
                                         <p class="text-xs text-gray-400 mt-1">PDF, JPG, JPEG, PNG (Max 5MB)</p>
                                     </div>
                                     <div wire:loading wire:target="personalKyc" class="flex flex-col items-center justify-center">
-                                        <svg class="animate-spin h-8 w-8 text-sidebar-green mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <svg class="animate-spin h-8 w-8 text-red-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
@@ -475,7 +482,7 @@
 
                 <!-- Submit Button -->
                 <div class="pt-6">
-                    <button wire:click="completeKyc" wire:loading.attr="disabled" wire:target="completeKyc" class="w-full bg-gradient-to-r from-sidebar-green to-emerald-600 text-white px-6 py-4 rounded-xl hover:from-emerald-600 hover:to-sidebar-green transition-all duration-300 font-semibold text-lg shadow-lg shadow-sidebar-green/30 hover:shadow-xl hover:shadow-sidebar-green/40 disabled:opacity-50 flex items-center justify-center gap-2">
+                    <button wire:click="completeKyc" wire:loading.attr="disabled" wire:target="completeKyc" class="w-full bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-4 rounded-xl hover:from-red-700 hover:to-red-600 transition-all duration-300 font-semibold text-lg shadow-lg shadow-red-600/30 hover:shadow-xl hover:shadow-red-600/40 disabled:opacity-50 flex items-center justify-center gap-2">
                         <span wire:loading.remove wire:target="completeKyc">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>

@@ -6,7 +6,7 @@
             <div class="flex justify-between items-center h-16 md:h-20">
                 <!-- Logo -->
                 <div class="flex-shrink-0">
-                    <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Logo" class="h-10 md:h-12 w-auto">
+                    <img src="{{ asset('/landing/redlogo.png') }}" alt="Logo" class="h-10 md:h-12 w-auto">
                 </div>
                 
                 <!-- Desktop Navigation -->

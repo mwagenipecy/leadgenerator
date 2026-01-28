@@ -29,6 +29,13 @@ class OnboardingController extends Controller
             return redirect()->route('dashboard')
                 ->with('info', 'Verification is not required for admin and lender accounts.');
         }
+        
+        // For company users from non-Tanzania countries, redirect to company KYC page
+        // They don't need NIDA verification, only document submission
+        if ($user->registration_type === 'company' && !$user->isFromTanzania()) {
+            return redirect()->route('company.kyc')
+                ->with('info', 'Please complete company verification by submitting required documents.');
+        }
 
         return view('pages.onboarding.verification-method');
     }
@@ -44,6 +51,13 @@ class OnboardingController extends Controller
         if ($isAdmin || $isLender) {
             return redirect()->route('dashboard')
                 ->with('info', 'Verification is not required for admin and lender accounts.');
+        }
+        
+        // For company users from non-Tanzania countries, redirect to company KYC page
+        // They don't need NIDA verification, only document submission
+        if ($user->registration_type === 'company' && !$user->isFromTanzania()) {
+            return redirect()->route('company.kyc')
+                ->with('info', 'NIDA verification is not required for non-Tanzania companies. Please submit your documents instead.');
         }
         
         return view('pages.onboarding.phone-verification');
@@ -126,6 +140,22 @@ class OnboardingController extends Controller
                 ->with('success', 'Successfully logged in! Welcome back.');
         }
         
+        // For company users from non-Tanzania countries, skip NIDA verification
+        // They will be handled by RequireCompanyVerification middleware
+        if ($user->registration_type === 'company' && !$user->isFromTanzania()) {
+            \Illuminate\Support\Facades\Session::put('otp_verified', true);
+            
+            \Log::info('QR Code Login: Non-Tanzania company user - skipping NIDA verification', [
+                'user_id' => $user->id,
+                'country' => $user->country,
+                'registration_type' => $user->registration_type,
+            ]);
+            
+            // Redirect to intended page (will be intercepted by RequireCompanyVerification middleware if needed)
+            return redirect()->intended(route('dashboard'))
+                ->with('success', 'Successfully logged in! Welcome back.');
+        }
+        
         // Regular users go to verification options
         return redirect()->route('verification.options')
             ->with('success', 'Successfully logged in! Please choose your verification method to continue.');
@@ -147,6 +177,13 @@ class OnboardingController extends Controller
                 ->with('info', 'Verification is not required for admin and lender accounts.');
         }
         
+        // For company users from non-Tanzania countries, redirect to company KYC page
+        // They don't need NIDA verification, only document submission
+        if ($user->registration_type === 'company' && !$user->isFromTanzania()) {
+            return redirect()->route('company.kyc')
+                ->with('info', 'NIDA verification is not required for non-Tanzania companies. Please submit your documents instead.');
+        }
+        
         return view('pages.onboarding.qr-code');
     }
 
@@ -160,6 +197,13 @@ class OnboardingController extends Controller
         if ($isAdmin || $isLender) {
             return redirect()->route('dashboard')
                 ->with('info', 'Verification is not required for admin and lender accounts.');
+        }
+        
+        // For company users from non-Tanzania countries, redirect to company KYC page
+        // They don't need NIDA verification, only document submission
+        if ($user->registration_type === 'company' && !$user->isFromTanzania()) {
+            return redirect()->route('company.kyc')
+                ->with('info', 'NIDA verification is not required for non-Tanzania companies. Please submit your documents instead.');
         }
         
         return view('pages.onboarding.questionnaire');

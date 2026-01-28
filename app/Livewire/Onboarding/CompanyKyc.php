@@ -344,6 +344,15 @@ class CompanyKyc extends Component
             return;
         }
 
+        // For non-Tanzania companies, skip NIDA verification - they can proceed directly
+        // Set verification status to pending if not already set
+        if ($this->user->company_verification_status !== 'pending') {
+            $this->user->update([
+                'company_verification_status' => 'pending'
+            ]);
+            $this->user->refresh();
+        }
+
         // All documents uploaded, show completion message
         $this->step = 3;
         session()->flash('success', 'All documents have been submitted successfully! Your company verification is pending admin review.');
