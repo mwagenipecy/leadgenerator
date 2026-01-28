@@ -41,7 +41,7 @@
             </a>
 
             <!-- Lead Management (Lender) -->
-            @if(auth()->user()->role=='lender')
+            @if(auth()->check() && auth()->user()->role=='lender')
             <a href="{{ route('application.list') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('application.*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }} relative"
                title="{{ $isCollapsed ? 'Lead Management' : '' }}">
@@ -84,7 +84,7 @@
             @endif
 
             <!-- User Profile & Loan Applications (Borrower) -->
-            @if(auth()->user()->role=='borrower')
+            @if(auth()->check() && auth()->user()->role=='borrower')
             <a href="{{ route('loan-application.profile') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('loan-application.profile*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
                title="{{ $isCollapsed ? 'User Profile' : '' }}">
@@ -109,7 +109,7 @@
                     <span class="font-medium truncate">Loan Applications</span>
                     @endif
                 </div>
-                @php $userLoanCount = DB::table('applications')->where('user_id',auth()->user()->id)->count(); @endphp
+                @php $userLoanCount = auth()->check() ? DB::table('applications')->where('user_id',auth()->user()->id)->count() : 0; @endphp
                 @if($userLoanCount > 0)
                     @if(!$isCollapsed)
                     <span class="bg-sidebar-green text-white text-xs px-2 py-1 rounded-full font-bold">{{ $userLoanCount }}</span>
@@ -192,7 +192,7 @@
             @endif
 
             <!-- Super Admin Menu Items -->
-            @if(auth()->user()->role=='super_admin')
+            @if(auth()->check() && auth()->user()->role=='super_admin')
             <!-- Reports (Admin) -->
             <a href="{{ route('reports.booking') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('reports.*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
@@ -269,7 +269,7 @@
             @endif
 
             <!-- Loan Products (Lender) -->
-            @if(auth()->user()->role=='lender')
+            @if(auth()->check() && auth()->user()->role=='lender')
             <a href="{{ route('loan.product.index') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('loan-product*') || request()->routeIs('loan.product*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
                title="{{ $isCollapsed ? 'Loan Products' : '' }}">
@@ -284,8 +284,24 @@
             </a>
             @endif
 
+            <!-- Blog (All Authenticated Users) -->
+            @if(auth()->check())
+            <a href="{{ route('blog.index') }}"
+               class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('blog*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
+               title="{{ $isCollapsed ? 'Blog' : '' }}">
+                <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                    </svg>
+                    @if(!$isCollapsed)
+                    <span class="font-medium truncate">Blog</span>
+                    @endif
+                </div>
+            </a>
+            @endif
+
             <!-- Integrations (Not Borrower) -->
-            @if(auth()->user()->role!='borrower')
+            @if(auth()->check() && auth()->user()->role!='borrower')
             <a href="{{ route('webhook.integration') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('webhook*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
                title="{{ $isCollapsed ? 'Integrations' : '' }}">
@@ -301,7 +317,7 @@
             @endif
 
             <!-- Super Admin Settings -->
-            @if(auth()->user()->role=='super_admin')
+            @if(auth()->check() && auth()->user()->role=='super_admin')
             <a href="{{ route('system.settings') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('system*') && !request()->routeIs('system.logs*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
                title="{{ $isCollapsed ? 'Settings' : '' }}">
@@ -351,6 +367,47 @@
                     </svg>
                     @if(!$isCollapsed)
                     <span class="font-medium truncate">Loan Categories</span>
+                    @endif
+                </div>
+            </a>
+
+            <a href="{{ route('admin.blog.management') }}"
+               class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.blog*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
+               title="{{ $isCollapsed ? 'Blog Management' : '' }}">
+                <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    @if(!$isCollapsed)
+                    <span class="font-medium truncate">Blog Management</span>
+                    @endif
+                </div>
+            </a>
+
+            <!-- Hero Slider Management -->
+            <a href="{{ route('admin.hero-slider.management') }}"
+               class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.hero-slider*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
+               title="{{ $isCollapsed ? 'Hero Slider' : '' }}">
+                <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    @if(!$isCollapsed)
+                    <span class="font-medium truncate">Hero Slider</span>
+                    @endif
+                </div>
+            </a>
+
+            <!-- Promotion Management -->
+            <a href="{{ route('admin.promotion.management') }}"
+               class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.promotion*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
+               title="{{ $isCollapsed ? 'Promotions' : '' }}">
+                <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                    </svg>
+                    @if(!$isCollapsed)
+                    <span class="font-medium truncate">Promotions</span>
                     @endif
                 </div>
             </a>

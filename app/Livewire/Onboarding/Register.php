@@ -202,7 +202,7 @@ class Register extends Component
                 return $user;
             });
     
-            // Auto-login the user
+                // Auto-login the user
             auth()->login($user);
             
             session()->flash('success', 'Account created successfully! Please complete your verification.');

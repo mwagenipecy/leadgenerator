@@ -176,9 +176,15 @@
                         <tr class="hover:bg-gray-50 transition-colors duration-200 group">
                             <td class="px-8 py-6 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-2xl flex items-center justify-center shadow-md">
-                                        <span class="text-white text-sm font-bold">{{ substr($lender->company_name, 0, 2) }}</span>
-                                    </div>
+                                    @if($lender->icon)
+                                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md overflow-hidden">
+                                            <img src="{{ asset('storage/' . $lender->icon) }}" alt="{{ $lender->company_name }}" class="w-full h-full object-cover">
+                                        </div>
+                                    @else
+                                        <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-2xl flex items-center justify-center shadow-md">
+                                            <span class="text-white text-sm font-bold">{{ substr($lender->company_name, 0, 2) }}</span>
+                                        </div>
+                                    @endif
                                     <div class="ml-4">
                                         <a href="{{ route('lender.dashboard',$lender) }}" class="text-sm font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ $lender->company_name }}</a>
                                         <div class="text-xs text-gray-500">{{ $lender->license_number ?? 'No License' }}</div>
@@ -464,6 +470,20 @@
                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('license_number') border-sidebar-green @enderror" 
                                    placeholder="Enter license number">
                             @error('license_number') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Icon (Optional) -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Company Icon (Optional)</label>
+                            <input wire:model="icon" type="file" accept="image/*" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('icon') border-sidebar-green @enderror">
+                            @if($icon)
+                                <div class="mt-2">
+                                    <img src="{{ $icon->temporaryUrl() }}" alt="Preview" class="w-16 h-16 object-cover rounded-lg border border-gray-200">
+                                </div>
+                            @endif
+                            <p class="text-xs text-gray-500 mt-1">Recommended: Square image (e.g., 200x200px). Max 2MB. If not provided, initials will be displayed.</p>
+                            @error('icon') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Contact Person -->

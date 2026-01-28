@@ -56,7 +56,8 @@
         /* Hero Slider - Full Width */
         .hero-slider {
             position: relative;
-            height: 500px;
+            height: 60vh;
+            min-height: 500px;
             overflow: hidden;
             border-radius: 0;
             box-shadow: none;
@@ -65,8 +66,15 @@
         
         @media (min-width: 768px) {
             .hero-slider {
-                height: 600px;
-                border-radius: 0;
+                height: 70vh;
+                min-height: 600px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero-slider {
+                height: 80vh;
+                min-height: 700px;
             }
         }
         
@@ -78,10 +86,24 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            background-size: 100% 100%;
-            background-position: center;
+            background-size: cover;
+            background-position: center center;
             background-repeat: no-repeat;
-            background-image: url('{{ asset("landing/registerImage2.png") }}');
+        }
+        
+        /* Ensure images fit hero section properly on all devices */
+        @media (min-width: 768px) {
+            .slide {
+                background-size: cover;
+                background-position: center center;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .slide {
+                background-size: cover;
+                background-position: center center;
+            }
         }
         
         .slide.active {
@@ -253,40 +275,85 @@
             display: none;
         }
     </style>
+
+    
 </head>
 <body class="bg-white text-gray-900 font-inter overflow-x-hidden">
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 border-b border-gray-200 bg-white">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="flex justify-between items-center">
+    <nav id="mainNavbar" class="sticky top-0 z-50 bg-white transition-all duration-300" style="box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <a href="/" class="flex items-center">
-                    <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-12 lg:h-14 w-auto">
+                <a href="/" class="flex items-center group">
+                    <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-12 lg:h-14 w-auto transition-transform duration-300 group-hover:scale-105">
                 </a>
                 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
-                    <a href="#eligibility" class="text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Eligibility</a>
-                    <a href="#process" class="text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Process</a>
-                    <a href="{{ route('login') }}" class="text-white px-6 py-2 rounded-md text-sm hover:opacity-90 transition-all font-semibold" style="background-color: #C40F11;">
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="#eligibility" 
+                       class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
+                       style="color: #C40F11;">
+                        <span class="relative z-10">Eligibility</span>
+                        <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
+                    </a>
+                    <a href="#process" 
+                       class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
+                       style="color: #C40F11;">
+                        <span class="relative z-10">Process</span>
+                        <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
+                    </a>
+                    <a href="{{ route('blog.index') }}" 
+                       class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
+                       style="color: #C40F11;">
+                        <span class="relative z-10">Blog</span>
+                        <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
+                    </a>
+                    <a href="{{ route('login') }}" 
+                       class="ml-2 px-6 py-2.5 rounded-lg text-white font-semibold text-sm lg:text-base hover:shadow-lg hover:scale-105 transition-all duration-300 relative overflow-hidden group"
+                       style="background-color: #C40F11;">
+                        <span class="relative z-10 flex items-center">
                         Get Started
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </span>
+                        <span class="absolute inset-0 bg-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                     </a>
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <button class="md:hidden p-2 text-gray-700" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="md:hidden p-2.5 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-red-600 transition-all duration-300" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <svg id="menuIcon" class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
             
             <!-- Mobile Navigation -->
-            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-200">
-                <div class="space-y-3 pt-4">
-                    <a href="#eligibility" class="block text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Eligibility</a>
-                    <a href="#process" class="block text-gray-700 hover:text-red-600 transition-colors font-medium" style="color: #C40F11;">Process</a>
-                    <a href="{{ route('login') }}" class="w-full text-left text-white px-6 py-2 rounded-md text-sm hover:opacity-90 transition-all font-semibold" style="background-color: #C40F11;">
+            <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 bg-white">
+                <div class="py-4 space-y-1">
+                    <a href="#eligibility" 
+                       onclick="toggleMobileMenu()"
+                       class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
+                       style="color: #C40F11;">
+                        Eligibility
+                    </a>
+                    <a href="#process" 
+                       onclick="toggleMobileMenu()"
+                       class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
+                       style="color: #C40F11;">
+                        Process
+                    </a>
+                    <a href="{{ route('blog.index') }}" 
+                       onclick="toggleMobileMenu()"
+                       class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
+                       style="color: #C40F11;">
+                        Blog
+                    </a>
+                    <a href="{{ route('login') }}" 
+                       onclick="toggleMobileMenu()"
+                       class="block px-4 py-3 rounded-lg text-white font-semibold mt-2 transition-all duration-300"
+                       style="background-color: #C40F11;">
                         Get Started
                     </a>
                 </div>
@@ -297,52 +364,52 @@
     <!-- Hero Section - Full Width, No Top Margin -->
     <div class="hero-slider-wrapper" style="margin-top: 0; padding-top: 0;">
         <section class="hero-slider">
+            @php
+                $sliders = $heroSliders ?? \App\Models\HeroSlider::active()->ordered()->get();
+                $sliderCount = $sliders->count();
+            @endphp
             
-            <!-- Slide 1 - Image Only -->
-            <div class="slide slide-1 active">
-                <div class="slide-content">
-                    <!-- Text content hidden -->
-                    <div class="slide-info opacity-0 pointer-events-none">
+            @if($sliderCount > 0)
+                @foreach($sliders as $index => $slider)
+                    <div class="slide slide-{{ $index + 1 }} {{ $index === 0 ? 'active' : '' }}" 
+                         style="background-image: url('{{ asset('storage/' . $slider->image_path) }}');">
+                        <div class="slide-content">
+                            <!-- Text content hidden -->
+                            <div class="slide-info opacity-0 pointer-events-none">
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <!-- Fallback to default image if no sliders exist -->
+                <div class="slide slide-1 active" style="background-image: url('{{ asset('landing/registerImage2.png') }}');">
+                    <div class="slide-content">
+                        <div class="slide-info opacity-0 pointer-events-none">
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
             
-            <!-- Slide 2 - Image Only -->
-            <div class="slide slide-2">
-                <div class="slide-content">
-                    <!-- Text content hidden -->
-                    <div class="slide-info opacity-0 pointer-events-none">
-                    </div>
+            @if($sliderCount > 1)
+                <!-- Navigation Arrows -->
+                <div class="slider-arrow prev" onclick="previousSlide()">
+                    <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
+                    </svg>
                 </div>
-            </div>
-            
-            <!-- Slide 3 - Image Only -->
-            <div class="slide slide-3">
-                <div class="slide-content">
-                    <!-- Text content hidden -->
-                    <div class="slide-info opacity-0 pointer-events-none">
-                    </div>
+                <div class="slider-arrow next" onclick="nextSlide()">
+                    <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/>
+                    </svg>
                 </div>
-            </div>
-            
-            <!-- Navigation Arrows -->
-            <div class="slider-arrow prev" onclick="previousSlide()">
-                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                </svg>
-            </div>
-            <div class="slider-arrow next" onclick="nextSlide()">
-                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/>
-                </svg>
-            </div>
-            
-            <!-- Slider Dots -->
-            <div class="slider-dots">
-                <div class="slider-dot active" onclick="changeSlide(0)"></div>
-                <div class="slider-dot" onclick="changeSlide(1)"></div>
-                <div class="slider-dot" onclick="changeSlide(2)"></div>
-            </div>
+                
+                <!-- Slider Dots -->
+                <div class="slider-dots">
+                    @foreach($sliders as $index => $slider)
+                        <div class="slider-dot {{ $index === 0 ? 'active' : '' }}" onclick="changeSlide({{ $index }})"></div>
+                    @endforeach
+                </div>
+            @endif
             
         </section>
     </div>
@@ -549,8 +616,8 @@
 
 
     <!-- Process Section -->
-    <section id="process" class=" md:py-10 bg-white">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <section id="process" class=" md:py-8 bg-white">
+        <div class="max-w-7xl mx-auto px-4 lg:px-4">
            
 
         
@@ -604,46 +671,192 @@
 
             </div>
 
-            <!-- Why Choose Us -->
-            <div class="mt-4 md:mt-20">
-                <div class="bg-gray-50 rounded-2xl p-8 md:p-12">
+            <!-- FAQ Section -->
+            <div class="mt-1 md:mt-4">
+                <div class="bg-white rounded-2xl p-8 md:p-12">
                     <h3 class="text-2xl md:text-3xl font-semibold font-poppins text-black text-center mb-8 md:mb-12">
-                        Why Choose Us
+                        Frequently Asked Questions
                     </h3>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="max-w-4xl mx-auto space-y-4">
                         
-                        <!-- Fast -->
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <!-- FAQ Item 1 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(1)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">What is Fanikisha Market place?</span>
+                                <svg id="faq-icon-1" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
+                            </button>
+                            <div id="faq-content-1" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed">
+                                    Fanikisha Market place is a loan marketplace platform that connects borrowers with verified lenders in Tanzania. We provide access to loans for everyone, regardless of employment status - whether you're employed, self-employed, or non-employed. Our platform uses secure NIDA verification to ensure identity protection and matches borrowers with the most suitable lenders based on their profile.
+                                </p>
                             </div>
-                            <h4 class="text-lg font-semibold text-black mb-3">Fast</h4>
-                            <p class="text-gray-600 text-sm">Complete in 30 minutes</p>
                         </div>
 
-                        <!-- Secure -->
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-black/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        <!-- FAQ Item 2 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(2)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">Who can apply for a loan?</span>
+                                <svg id="faq-icon-2" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
+                            </button>
+                            <div id="faq-content-2" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed mb-3">
+                                    Our platform is inclusive and serves:
+                                </p>
+                                <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4">
+                                    <li>Employed individuals with regular income</li>
+                                    <li>Self-employed individuals and business owners</li>
+                                    <li>Non-employed individuals (subject to lender requirements)</li>
+                                    <li>Individuals aged 18 and above</li>
+                                    <li>Residents of Tanzania with valid NIDA identification</li>
+                                </ul>
                             </div>
-                            <h4 class="text-lg font-semibold text-black mb-3">Secure</h4>
-                            <p class="text-gray-600 text-sm">NIDA verified protection</p>
                         </div>
 
-                        <!-- Transparent -->
-                        <div class="text-center">
-                            <div class="w-16 h-16 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        <!-- FAQ Item 3 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(3)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">How does the loan application process work?</span>
+                                <svg id="faq-icon-3" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
+                            </button>
+                            <div id="faq-content-3" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed mb-3">
+                                    The process is simple and straightforward:
+                                </p>
+                                <ol class="list-decimal list-inside text-gray-600 space-y-2 ml-4">
+                                    <li><strong>Register:</strong> Create your account and verify your identity using NIDA</li>
+                                    <li><strong>Apply:</strong> Fill out the loan application form and upload required documents</li>
+                                    <li><strong>Match:</strong> Our system matches you with suitable lenders based on your profile</li>
+                                    <li><strong>Get Funded:</strong> Review offers from lenders and choose the best option for you</li>
+                                </ol>
                             </div>
-                            <h4 class="text-lg font-semibold text-black mb-3">Transparent</h4>
-                            <p class="text-gray-600 text-sm">No hidden fees</p>
+                        </div>
+
+                        <!-- FAQ Item 4 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(4)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">What is NIDA verification and why is it required?</span>
+                                <svg id="faq-icon-4" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq-content-4" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed">
+                                    NIDA (National Identification Authority) verification is a secure identity verification process that confirms your identity using your national ID. This verification is required to protect both borrowers and lenders from fraud, ensure compliance with financial regulations, and maintain the security of our platform. Your personal information is encrypted and protected throughout the verification process.
+                                </p>
+                    </div>
+                        </div>
+
+                        <!-- FAQ Item 5 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(5)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">How long does it take to get approved?</span>
+                                <svg id="faq-icon-5" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq-content-5" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed">
+                                    The approval time varies depending on the lender and your application. Typically, you can expect to receive matching results within 24 hours after submitting your complete application. Once matched with lenders, they review your application and provide approval decisions. The entire process from application to funding can take anywhere from 1-7 business days, depending on the lender's processing time and your responsiveness to any additional information requests.
+                                </p>
+                </div>
+            </div>
+
+                        <!-- FAQ Item 6 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(6)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">What documents do I need to apply?</span>
+                                <svg id="faq-icon-6" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq-content-6" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed mb-3">
+                                    Required documents may vary by lender, but typically include:
+                                </p>
+                                <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4">
+                                    <li>Valid National ID (NIDA)</li>
+                                    <li>Proof of income (payslips, bank statements, or business documents)</li>
+                                    <li>Recent passport-size photo</li>
+                                    <li>Proof of address (utility bill or rental agreement)</li>
+                                    <li>Additional documents as requested by specific lenders</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 7 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(7)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">Do I need a good credit score to apply?</span>
+                                <svg id="faq-icon-7" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq-content-7" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed">
+                                    Not necessarily. Our platform connects you with multiple lenders who have different credit score requirements. Some lenders accept applications from individuals with lower credit scores or no credit history. Your credit score is one factor among many that lenders consider, including your income, employment status, and overall financial profile. Our matching system helps connect you with lenders whose requirements align with your profile.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 8 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(8)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">Are there any fees for using the platform?</span>
+                                <svg id="faq-icon-8" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq-content-8" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed">
+                                    Creating an account and applying for loans through Fanikisha Market place is free. However, lenders may charge processing fees, interest rates, and other charges as outlined in their loan terms. All fees and charges are clearly disclosed before you accept any loan offer, ensuring complete transparency. We recommend reviewing all terms and conditions carefully before accepting any loan offer.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 9 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(9)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">How is my personal information protected?</span>
+                                <svg id="faq-icon-9" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq-content-9" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed">
+                                    Your privacy and security are our top priorities. We use bank-level SSL encryption to protect your data during transmission. Your personal information is only shared with lenders you choose to connect with, and only after you've reviewed their offers. We never sell your data to third parties. All lenders on our platform are verified and must comply with strict data protection standards. Your information is stored securely and accessed only by authorized personnel.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 10 -->
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <button onclick="toggleFAQ(10)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <span class="font-semibold text-gray-900">What if I need help or have questions?</span>
+                                <svg id="faq-icon-10" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq-content-10" class="hidden px-6 pb-4">
+                                <p class="text-gray-600 leading-relaxed">
+                                    We're here to help! You can reach our support team through:
+                                </p>
+                                <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4 mt-3">
+                                    <li>Email: info@fanikisha.com</li>
+                                    <li>Phone: +255 123 456 789</li>
+                                    <li>Live chat (available 24/7)</li>
+                                    <li>Help Center with detailed guides and tutorials</li>
+                                </ul>
+                                <p class="text-gray-600 leading-relaxed mt-3">
+                                    Our support team is available around the clock to assist you with any questions or concerns about your loan application or account.
+                                </p>
+                            </div>
                         </div>
 
                     </div>
@@ -651,6 +864,80 @@
             </div>
 
            
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-12 md:mb-16">
+                <div class="mb-4">
+                    <span class="inline-block bg-brand-green/10 text-brand-green px-4 py-2 rounded-full text-sm font-medium uppercase tracking-wider">
+                        Latest News
+                    </span>
+                </div>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold font-poppins text-black leading-tight mb-6">
+                    Blog & Insights
+                </h2>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    Stay informed with the latest updates, tips, and insights about loans and financial services.
+                </p>
+            </div>
+
+            @php
+                $latestPosts = \App\Models\BlogPost::with('author')
+                    ->published()
+                    ->orderBy('published_at', 'desc')
+                    ->limit(3)
+                    ->get();
+            @endphp
+
+            @if($latestPosts->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    @foreach($latestPosts as $post)
+                        <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow border border-gray-100">
+                            @if($post->featured_image)
+                                <a href="{{ route('blog.show', $post->slug) }}">
+                                    <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" 
+                                         class="w-full h-48 object-cover">
+                                </a>
+                            @endif
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs text-gray-500">{{ $post->published_at->format('M d, Y') }}</span>
+                                    @if($post->is_featured)
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded">Featured</span>
+                                    @endif
+                                </div>
+                                <a href="{{ route('blog.show', $post->slug) }}">
+                                    <h3 class="text-xl font-bold text-gray-900 mb-2 hover:text-brand-green transition-colors line-clamp-2">{{ $post->title }}</h3>
+                                </a>
+                                @if($post->excerpt)
+                                    <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ $post->excerpt }}</p>
+                                @endif
+                                <div class="flex items-center justify-between text-sm text-gray-500">
+                                    <span>By {{ $post->author->name ?? 'Admin' }}</span>
+                                    <a href="{{ route('blog.show', $post->slug) }}" class="text-brand-green hover:text-brand-green-light font-medium">
+                                        Read More →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="text-center">
+                    <a href="{{ route('blog.index') }}" class="inline-flex items-center bg-brand-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-brand-green-light transition-all duration-300">
+                        View All Posts
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                </div>
+            @else
+                <div class="text-center py-12">
+                    <p class="text-gray-500 text-lg">No blog posts available yet. Check back soon!</p>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -666,7 +953,7 @@
                 <!-- Brand Section -->
                 <div class="md:col-span-1">
                     <a href="/" class="inline-block mb-4">
-                        <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Fanikisha Market place Logo" class="h-10 w-auto">
+                        <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-10 w-auto">
                     </a>
                     <p class="text-gray-600 text-sm leading-relaxed mb-4">
                         Connecting borrowers with verified lenders. Loans for everyone, regardless of employment status.
@@ -761,11 +1048,19 @@
 
 
 
-    <!-- JavaScript for Mobile Menu -->
+    <!-- JavaScript for Mobile Menu and Navbar Scroll Effect -->
     <script>
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
             mobileMenu.classList.toggle('hidden');
+            
+            // Animate menu icon
+            if (!mobileMenu.classList.contains('hidden')) {
+                menuIcon.style.transform = 'rotate(90deg)';
+            } else {
+                menuIcon.style.transform = 'rotate(0deg)';
+            }
         }
 
         // Close mobile menu when clicking outside
@@ -775,64 +1070,164 @@
             
             if (!mobileMenu.contains(event.target) && !menuButton) {
                 mobileMenu.classList.add('hidden');
+                const menuIcon = document.getElementById('menuIcon');
+                if (menuIcon) {
+                    menuIcon.style.transform = 'rotate(0deg)';
+                }
             }
         });
+
+        // Navbar scroll effect - add shadow on scroll
+        let lastScroll = 0;
+        const navbar = document.getElementById('mainNavbar');
+        
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 10) {
+                navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+            } else {
+                navbar.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const offsetTop = target.offsetTop - 80; // Account for navbar height
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                        // Close mobile menu if open
+                        const mobileMenu = document.getElementById('mobileMenu');
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            toggleMobileMenu();
+                        }
+                    }
+                }
+            });
+        });
+
+        // FAQ Accordion Functionality
+        function toggleFAQ(index) {
+            const content = document.getElementById('faq-content-' + index);
+            const icon = document.getElementById('faq-icon-' + index);
+            
+            if (content.classList.contains('hidden')) {
+                // Close all other FAQs
+                for (let i = 1; i <= 10; i++) {
+                    if (i !== index) {
+                        const otherContent = document.getElementById('faq-content-' + i);
+                        const otherIcon = document.getElementById('faq-icon-' + i);
+                        if (otherContent && !otherContent.classList.contains('hidden')) {
+                            otherContent.classList.add('hidden');
+                            if (otherIcon) {
+                                otherIcon.classList.remove('rotate-180');
+                            }
+                        }
+                    }
+                }
+                // Open clicked FAQ
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                // Close clicked FAQ
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
 
         // Hero Slider Functionality
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.slider-dot');
         
-        function changeSlide(index) {
-            slides[currentSlide].classList.remove('active');
-            dots[currentSlide].classList.remove('active');
+        // Debug: Log slider info
+        console.log('Hero Slider initialized:', {
+            slidesCount: slides.length,
+            dotsCount: dots.length,
+            slides: Array.from(slides).map(s => s.className)
+        });
+        
+        // Define functions globally for onclick handlers
+        window.changeSlide = function(index) {
+            if (slides.length === 0) return;
+            if (slides[currentSlide]) {
+                slides[currentSlide].classList.remove('active');
+            }
+            if (dots.length > 0 && dots[currentSlide]) {
+                dots[currentSlide].classList.remove('active');
+            }
             currentSlide = index;
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
-        }
+            if (slides[currentSlide]) {
+                slides[currentSlide].classList.add('active');
+            }
+            if (dots.length > 0 && dots[currentSlide]) {
+                dots[currentSlide].classList.add('active');
+            }
+        };
         
-        function nextSlide() {
+        window.nextSlide = function() {
+            if (slides.length <= 1) return;
             const next = (currentSlide + 1) % slides.length;
-            changeSlide(next);
-        }
+            window.changeSlide(next);
+        };
         
-        function previousSlide() {
+        window.previousSlide = function() {
+            if (slides.length <= 1) return;
             const prev = (currentSlide - 1 + slides.length) % slides.length;
-            changeSlide(prev);
-        }
+            window.changeSlide(prev);
+        };
         
-        // Auto-advance slides every 5 seconds
-        setInterval(() => {
-            nextSlide();
-        }, 5000);
+        // Auto-advance slides every 5 seconds (only if multiple slides)
+        if (slides.length > 1) {
+            setInterval(() => {
+                window.nextSlide();
+            }, 5000);
+        }
         
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') previousSlide();
-            if (e.key === 'ArrowRight') nextSlide();
+            if (slides.length > 1) {
+                if (e.key === 'ArrowLeft') window.previousSlide();
+                if (e.key === 'ArrowRight') window.nextSlide();
+            }
         });
         
         // Touch/Swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        const heroSlider = document.querySelector('.hero-slider');
-        
-        heroSlider.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        heroSlider.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                nextSlide();
-            }
-            if (touchEndX > touchStartX + 50) {
-                previousSlide();
+        if (slides.length > 1) {
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            const heroSlider = document.querySelector('.hero-slider');
+            if (heroSlider) {
+                heroSlider.addEventListener('touchstart', e => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+                
+                heroSlider.addEventListener('touchend', e => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+                
+                function handleSwipe() {
+                    if (slides.length > 1) {
+                        if (touchEndX < touchStartX - 50) {
+                            window.nextSlide();
+                        }
+                        if (touchEndX > touchStartX + 50) {
+                            window.previousSlide();
+                        }
+                    }
+                }
             }
         }
     </script>

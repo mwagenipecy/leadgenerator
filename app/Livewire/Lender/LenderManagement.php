@@ -22,6 +22,9 @@ class LenderManagement extends Component
     #[Rule('required|string|max:255')]
     public $company_name = '';
 
+    #[Rule('nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048')]
+    public $icon;
+
     #[Rule('nullable|string|max:255')]
     public $license_number = '';
 
@@ -172,9 +175,16 @@ class LenderManagement extends Component
                     $documents['bank_statement'] = $this->bank_statement->store('lender-documents', 'public');
                 }
 
+                // Handle icon upload
+                $iconPath = null;
+                if ($this->icon) {
+                    $iconPath = $this->icon->store('lender-icons', 'public');
+                }
+
                 // Create lender
                 $lender = Lender::create([
                     'company_name' => $this->company_name,
+                    'icon' => $iconPath,
                     'license_number' => $this->license_number,
                     'contact_person' => $this->contact_person,
                     'email' => $this->email,
@@ -491,6 +501,7 @@ class LenderManagement extends Component
     private function resetForm()
     {
         $this->company_name = '';
+        $this->icon = null;
         $this->license_number = '';
         $this->contact_person = '';
         $this->email = '';

@@ -17,6 +17,7 @@ class Lender extends Model
 
     protected $fillable = [
         'company_name',
+        'icon',
         'license_number',
         'contact_person',
         'email',

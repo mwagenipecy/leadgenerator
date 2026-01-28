@@ -44,7 +44,18 @@ Route::get('/no-permissions', NoPermissions::class)
 
 
 // LANDING PAGE
-Route::get('/', function () {return view('welcome');});
+Route::get('/', function () {
+    $heroSliders = \App\Models\HeroSlider::active()->ordered()->get();
+    return view('welcome', compact('heroSliders'));
+});
+
+// PUBLIC BLOG ROUTES
+Route::get('/blog', function () {
+    return view('blog.index');
+})->name('blog.index');
+Route::get('/blog/{slug}', function ($slug) {
+    return view('blog.show', ['slug' => $slug]);
+})->name('blog.show');
 
 
 
@@ -304,6 +315,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     
        });
 
+      /*********************************** NOTIFICATIONS ***********************/
+      Route::get('notifications', \App\Livewire\Notifications\Index::class)->name('notifications.index');
+
 
     /*********************************** USERMANAGEMENT ****************************************/
     Route::get('user-management',[UserManagementController::class,'index'])->name('user.management');
@@ -353,6 +367,17 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
    /********************************** BILLING SECTION  ***************************************/
    Route::get('billing-section',[BillingController::class,'billingSection'])->name('billing.section');
 
+   /********************************** BLOG MANAGEMENT  ***************************************/
+   Route::get('blog-management', \App\Livewire\Admin\BlogManagement::class)->name('admin.blog.management');
+   Route::get('blog-management/create', \App\Livewire\Admin\BlogCreate::class)->name('admin.blog.create');
+   Route::get('blog-management/{id}/edit', \App\Livewire\Admin\BlogEdit::class)->name('admin.blog.edit');
+
+   /********************************** HERO SLIDER MANAGEMENT  ***************************************/
+   Route::get('hero-slider-management', \App\Livewire\Admin\HeroSliderManagement::class)->name('admin.hero-slider.management');
+
+   /********************************** PROMOTION MANAGEMENT  ***************************************/
+   Route::get('promotion-management', \App\Livewire\Admin\PromotionManagement::class)->name('admin.promotion.management');
+
 
 
 
@@ -373,11 +398,6 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
 Route::get('/mobile/verify/{token}', [NidaVerificationController::class, 'showMobileVerification'])->name('mobile.verification');
 
-
-Route::get('test',function(){
-
-         return view('nida');
-});
 
 
 

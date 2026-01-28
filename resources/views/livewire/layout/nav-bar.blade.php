@@ -25,22 +25,11 @@
 
     <!-- Right Section: Actions & User -->
     <div class="flex items-center gap-4 sm:gap-6">
-    <!-- SMS Credits -->
-   
+        <!-- Notification Dropdown -->
+        <livewire:layout.notification-dropdown />
 
-    <!-- Message Icon -->
-    
-
-    <!-- Notification Bell -->
-    <!-- <button class="hidden sm:flex p-2 hover:bg-gray-100 rounded-lg transition-colors relative" title="Notifications"> -->
-        <!-- <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-        </svg> -->
-        <!-- Notification Badge -->
-        <!-- <span class="absolute top-1 right-1 w-2 h-2 bg-sidebar-green rounded-full"></span> -->
-    <!-- </button> -->
-
-        <!-- User Profile Dropdown -->
+        <!-- User Profile Dropdown (Only show when authenticated) -->
+        @if(auth()->check())
         <div class="relative">
         <button 
             id="profile-menu-button" 
@@ -48,12 +37,12 @@
             onclick="toggleDropdown()">
             <!-- User Info (Hidden on mobile) -->
             <div class="hidden md:block text-right">
-                <div class="text-sidebar-green font-semibold text-sm">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</div>
-                <div class="text-gray-500 text-xs capitalize">{{ auth()->user()->role }}</div>
+                <div class="text-sidebar-green font-semibold text-sm">{{ auth()->user()->first_name ?? '' }} {{ auth()->user()->last_name ?? '' }}</div>
+                <div class="text-gray-500 text-xs capitalize">{{ auth()->user()->role ?? 'user' }}</div>
             </div>
             <!-- Avatar -->
             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-sidebar-green rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
-                {{ strtoupper(substr(auth()->user()->first_name, 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name ?? auth()->user()->first_name, 0, 1)) }}
+                {{ strtoupper(substr(auth()->user()->first_name ?? 'U', 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name ?? auth()->user()->first_name ?? 'U', 0, 1)) }}
             </div>
             <!-- Dropdown Arrow (Hidden on mobile) -->
             <svg class="hidden sm:block h-4 w-4 text-gray-500 transition-transform duration-200" 
@@ -68,9 +57,9 @@
             class="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-40 hidden">
             <!-- User Info in Dropdown -->
             <div class="px-4 py-3 border-b border-gray-100">
-                <p class="text-sm font-semibold text-gray-900">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
-                <p class="text-xs text-gray-500 mt-0.5">{{ auth()->user()->email }}</p>
-                <p class="text-xs text-sidebar-green font-medium mt-1 capitalize">{{ auth()->user()->role }}</p>
+                <p class="text-sm font-semibold text-gray-900">{{ auth()->user()->first_name ?? '' }} {{ auth()->user()->last_name ?? '' }}</p>
+                <p class="text-xs text-gray-500 mt-0.5">{{ auth()->user()->email ?? '' }}</p>
+                <p class="text-xs text-sidebar-green font-medium mt-1 capitalize">{{ auth()->user()->role ?? 'user' }}</p>
             </div>
 
             <!-- Menu Items -->
@@ -100,6 +89,7 @@
             </div>
             </div>
         </div>
+        @endif
     </div>
 
     <script>

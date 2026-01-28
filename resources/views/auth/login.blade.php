@@ -86,107 +86,107 @@
                     </div>
                     
                     <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">Welcome Back</h2>
-                    <p class="text-gray-600">Sign in to your account</p>
+            <p class="text-gray-600">Sign in to your account</p>
+        </div>
+
+        <!-- Login Form -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-100">
+            
+                    <form method="POST" class="space-y-6" action="{{ route('login') }}" id="loginForm">
+                @csrf 
+
+                <x-validation-errors class="mb-4" />
+
+                @session('status')
+                    <div class="mb-4 font-medium text-sm text-green-600">
+                        {{ $value }}
+                    </div>
+                @endsession
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        Email or Phone Number 
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            id="email" 
+                            name="login" 
+                            type="text" 
+                            autocomplete="login" 
+                                    value="{{ old('login') }}"
+                            required 
+                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            placeholder="Enter your email / Phone Number"
+                        >
+                    </div>
                 </div>
 
-                <!-- Login Form -->
-                <div class="bg-white rounded-2xl p-8 border border-gray-100">
-                    
-                    <form method="POST" class="space-y-6" action="{{ route('login') }}" id="loginForm">
-                        @csrf 
-                        
-                        <x-validation-errors class="mb-4" />
-
-                        @session('status')
-                            <div class="mb-4 font-medium text-sm text-green-600">
-                                {{ $value }}
-                            </div>
-                        @endsession
-
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                                Email or Phone Number 
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <input 
-                                    id="email" 
-                                    name="login" 
-                                    type="text" 
-                                    autocomplete="login" 
-                                    value="{{ old('login') }}"
-                                    required 
-                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
-                                    placeholder="Enter your email / Phone Number"
-                                >
-                            </div>
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Password
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
                         </div>
-
-                        <!-- Password Field -->
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                                Password
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                    </svg>
-                                </div>
-                                <input 
-                                    id="password" 
-                                    name="password" 
-                                    type="password" 
-                                    autocomplete="current-password" 
-                                    required 
+                        <input 
+                            id="password" 
+                            name="password" 
+                            type="password" 
+                            autocomplete="current-password" 
+                            required 
                                     class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
-                                    placeholder="Enter your password"
-                                >
-                                <button 
-                                    type="button" 
-                                    class="absolute inset-y-0 right-0 pr-3 flex items-center"
-                                    onclick="togglePassword()"
-                                >
-                                    <svg id="eye-icon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+                            placeholder="Enter your password"
+                        >
+                        <button 
+                            type="button" 
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            onclick="togglePassword()"
+                        >
+                            <svg id="eye-icon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
 
-                        <!-- Remember Me & Forgot Password -->
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <input 
-                                    id="remember-me" 
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input 
+                            id="remember-me" 
                                     name="remember" 
-                                    type="checkbox" 
+                            type="checkbox" 
                                     class="h-4 w-4 text-brand-red focus:ring-brand-red border-gray-300 rounded"
-                                >
-                                <label for="remember-me" class="ml-2 block text-sm text-gray-700">
-                                    Remember me
-                                </label>
-                            </div>
+                        >
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            Remember me
+                        </label>
+                    </div>
 
-                            @if (Route::has('password.request'))
+                    @if (Route::has('password.request'))
                             <a class="underline text-sm text-gray-600 hover:text-brand-red transition-colors" href="{{ route('password.request') }}">
-                                {{ __('Forgot your password?') }}
-                            </a>
-                            @endif
-                        </div>
+                        {{ __('Forgot your password?') }}
+                    </a>
+                @endif
+                </div>
 
-                        <!-- Submit Button -->
-                        <div>
-                            <button 
-                                type="submit" 
+                <!-- Submit Button -->
+                <div>
+                    <button 
+                        type="submit" 
                                 id="loginSubmitBtn"
                                 class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            >
+                    >
                                 <span id="loginBtnText">Sign In</span>
                                 <span id="loginBtnLoader" class="hidden">
                                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -195,30 +195,30 @@
                                     </svg>
                                     Signing in...
                                 </span>
-                            </button>
-                        </div>
-                    </form>
+                    </button>
+                </div>
+            </form>
 
-                    <!-- Sign Up Link -->
-                    <div class="mt-6 text-center">
-                        <p class="text-sm text-gray-600">
-                            Don't have an account? 
+            <!-- Sign Up Link -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account? 
                             <a href="{{ route('user.register') }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
-                                Sign up here
-                            </a>
-                        </p>
-                    </div>
-                </div>
+                        Sign up here
+                    </a>
+                </p>
+            </div>
+        </div>
 
-                <!-- Security Notice -->
+        <!-- Security Notice -->
                 <div class="mt-6 text-center">
-                    <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                        </svg>
-                        <span>Your data is protected with 256-bit SSL encryption</span>
-                    </div>
-                </div>
+            <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                <span>Your data is protected with 256-bit SSL encryption</span>
+            </div>
+        </div>
 
                 <!-- Powered By -->
                 <div class="mt-6 text-center">

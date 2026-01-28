@@ -440,6 +440,11 @@ public function profile()
     return $this->hasOne(UserProfile::class);
 }
 
+public function applications()
+{
+    return $this->hasMany(Application::class);
+}
+
 /**
  * Get company verification documents.
  */
