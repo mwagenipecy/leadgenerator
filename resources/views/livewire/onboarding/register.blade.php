@@ -229,6 +229,7 @@
                 @if(strtolower($country ?? '') === 'tanzania')
                 <div>
                     <label for="company_contact_nida" class="block text-sm font-medium text-gray-700 mb-1.5">Representative NIDA *</label>
+                    <span class="text-xs text-red-600 -mt-2"> Shareholder or company secretary NIDA </span>
                     <input id="company_contact_nida" wire:model="company_contact_nida" maxlength="23" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19760517-37227-00002-17">
                     @error('company_contact_nida')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
