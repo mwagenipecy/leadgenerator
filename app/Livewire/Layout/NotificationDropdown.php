@@ -5,6 +5,7 @@ namespace App\Livewire\Layout;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Redirect;
 
 class NotificationDropdown extends Component
 {
@@ -41,7 +42,7 @@ class NotificationDropdown extends Component
 
         try {
             $user = Auth::user();
-            $this->notifications = $user->notifications()->latest()->take(10)->get();
+            $this->notifications = $user->notifications()->latest()->take(5)->get();
             $this->unreadCount = $user->unreadNotifications()->count();
         } catch (\Exception $e) {
             \Log::error('Failed to load notifications', ['error' => $e->getMessage()]);
@@ -52,10 +53,8 @@ class NotificationDropdown extends Component
 
     public function toggleDropdown()
     {
-        $this->showDropdown = !$this->showDropdown;
-        if ($this->showDropdown) {
-            $this->loadNotifications();
-        }
+        // Redirect to notifications page instead of showing dropdown
+        return $this->redirect(route('notifications.index'), navigate: false);
     }
 
     public function markAsRead($notificationId)
