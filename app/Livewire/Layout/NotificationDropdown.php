@@ -53,8 +53,9 @@ class NotificationDropdown extends Component
 
     public function toggleDropdown()
     {
-        // Redirect to notifications page instead of showing dropdown
-        return $this->redirect(route('notifications.index'), navigate: false);
+        // This method is called but we let Alpine.js handle the UI state
+        // We just ensure notifications are loaded
+        $this->loadNotifications();
     }
 
     public function markAsRead($notificationId)
@@ -65,6 +66,7 @@ class NotificationDropdown extends Component
             $this->loadNotifications();
         }
     }
+    
 
     public function markAllAsRead()
     {

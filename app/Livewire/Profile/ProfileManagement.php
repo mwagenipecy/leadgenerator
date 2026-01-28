@@ -12,6 +12,7 @@ class ProfileManagement extends Component
     public $currentStep = 'overview'; // overview, personal, address, employment, financial, bank, emergency
     public $profile;
     public $completionPercentage = 0;
+    public $showSuccessModal = false;
 
     // Personal Information (some fields are read-only from users table)
     public $first_name = ''; // Read-only from users table
@@ -126,6 +127,14 @@ class ProfileManagement extends Component
         $this->loadProfileData();
         $this->calculateCompletion();
     }
+    
+    public function updatedShowSuccessModal()
+    {
+        // Auto-hide modal after it's shown
+        if ($this->showSuccessModal) {
+            // Modal will auto-close via Alpine.js after 5 seconds
+        }
+    }
 
     public function render()
     {
@@ -208,13 +217,20 @@ class ProfileManagement extends Component
 
     public function goToStep($step)
     {
-        // Save current step before moving if we have data
+        // Don't do anything if clicking the same step
+        if ($this->currentStep === $step) {
+            return;
+        }
+        
+        // Save current step before moving if we have data (but don't show modal for auto-saves during navigation)
         if ($this->currentStep !== 'overview' && $this->hasDataToSave()) {
             try {
-                $this->saveStep($this->currentStep);
+                // Save silently without showing modal
+                $this->saveStepSilently($this->currentStep);
             } catch (\Exception $e) {
-                // Don't block navigation if save fails, just show error
+                // Only show error modal if save fails
                 session()->flash('error', 'Could not save current step: ' . $e->getMessage());
+                $this->showSuccessModal = true;
             }
         }
         
@@ -244,7 +260,7 @@ class ProfileManagement extends Component
         }
     }
 
-    public function saveStep($step = null)
+    public function saveStep($step = null, $showModal = true)
     {
         $stepToSave = $step ?? $this->currentStep;
         
@@ -255,6 +271,9 @@ class ProfileManagement extends Component
                 $this->validateCurrentStep($stepToSave);
             } catch (\Illuminate\Validation\ValidationException $e) {
                 session()->flash('error', 'Please fill in all required fields correctly.');
+                if ($showModal) {
+                    $this->showSuccessModal = true;
+                }
                 return;
             }
         }
@@ -295,14 +314,20 @@ class ProfileManagement extends Component
             
             $this->calculateCompletion();
             
-            session()->flash('message', 'Profile section saved successfully!');
+            if ($showModal) {
+                session()->flash('message', 'Profile section saved successfully!');
+                $this->showSuccessModal = true;
+            }
             
             // Refresh the component to show updated data
             $this->loadProfileData();
             
         } catch (\Exception $e) {
             \Log::error('Profile save error: ' . $e->getMessage());
-            session()->flash('error', 'Error saving profile: ' . $e->getMessage());
+            if ($showModal) {
+                session()->flash('error', 'Error saving profile: ' . $e->getMessage());
+                $this->showSuccessModal = true;
+            }
         }
     }
 
@@ -325,7 +350,7 @@ class ProfileManagement extends Component
 
     public function saveAndContinue($nextStep)
     {
-        $this->saveStep();
+        $this->saveStep($this->currentStep, true); // Show modal for explicit saves
         $this->currentStep = $nextStep;
     }
 
@@ -504,7 +529,18 @@ class ProfileManagement extends Component
 
     public function saveCurrentStep()
     {
-        $this->saveStep($this->currentStep);
+        $this->saveStep($this->currentStep, true);
+    }
+    
+    private function saveStepSilently($step)
+    {
+        // Save without showing modal
+        $this->saveStep($step, false);
+    }
+
+    public function closeModal()
+    {
+        $this->showSuccessModal = false;
     }
 
     public function updated($propertyName)

@@ -1,9 +1,15 @@
 @if(auth()->check())
-<div class="relative">
-    <!-- Notification Bell Button - Redirects to notifications page -->
-    <a 
-        href="{{ route('notifications.index') }}"
-        class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200 group inline-block"
+<div class="relative" x-data="{ open: false }">
+    <!-- Notification Bell Button -->
+    <button 
+        type="button"
+        @click="
+            open = !open;
+            if(open) {
+                $wire.loadNotifications();
+            }
+        "
+        class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200 group inline-block focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:ring-offset-2"
         title="Notifications">
         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-sidebar-green transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
@@ -14,21 +20,22 @@
                 {{ $unreadCount > 99 ? '99+' : $unreadCount }}
             </span>
         @endif
-    </a>
+    </button>
 
     <!-- Notification Dropdown -->
-    @if($showDropdown)
     <div 
+        x-show="open"
+        x-cloak
         class="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-[500px] flex flex-col"
-        x-data="{ show: true }"
-        x-show="show"
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 transform scale-95"
         x-transition:enter-end="opacity-100 transform scale-100"
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 transform scale-100"
         x-transition:leave-end="opacity-0 transform scale-95"
-        wire:click.stop>
+        @click.outside="open = false"
+        wire:click.stop
+        style="display: none;">
         
         <!-- Header -->
         <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50 rounded-t-xl">
@@ -47,10 +54,15 @@
             @if($notifications && $notifications->count() > 0)
                 <div class="divide-y divide-gray-100">
                     @foreach($notifications as $notification)
-                        <div 
-                            wire:click="markAsRead('{{ $notification->id }}')"
+                        @php
+                            $link = $notification->data['link'] ?? route('notifications.index');
+                        @endphp
+                        <a 
+                            href="{{ $link }}"
+                            wire:click.prevent="markAsRead('{{ $notification->id }}')"
                             wire:key="notification-{{ $notification->id }}"
-                            class="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors {{ $notification->unread() ? 'bg-blue-50/50' : '' }}">
+                            @click="open = false"
+                            class="block px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors {{ $notification->unread() ? 'bg-blue-50/50' : '' }}">
                             <div class="flex items-start gap-3">
                                 <!-- Icon -->
                                 <div class="flex-shrink-0 mt-0.5">
@@ -74,7 +86,7 @@
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             @else
@@ -89,31 +101,25 @@
 
         <!-- Footer -->
         @if($notifications && $notifications->count() > 0)
-            <div class="px-4 py-2 border-t border-gray-200 bg-gray-50 rounded-b-xl">
-                <a href="{{ route('notifications.index') }}" class="text-xs text-sidebar-green hover:text-sidebar-green-light font-medium text-center block">
-                    View all notifications
+            <div class="px-4 py-3 border-t border-gray-200 bg-gray-50 rounded-b-xl">
+                <a 
+                    href="{{ route('notifications.index') }}" 
+                    class="text-sm text-sidebar-green hover:text-sidebar-green-light font-semibold text-center block w-full py-2 hover:bg-sidebar-green/5 rounded-lg transition-colors"
+                    @click="open = false">
+                    View More →
+                </a>
+            </div>
+        @else
+            <div class="px-4 py-3 border-t border-gray-200 bg-gray-50 rounded-b-xl">
+                <a 
+                    href="{{ route('notifications.index') }}" 
+                    class="text-sm text-sidebar-green hover:text-sidebar-green-light font-semibold text-center block w-full py-2 hover:bg-sidebar-green/5 rounded-lg transition-colors"
+                    @click="open = false">
+                    View All Notifications →
                 </a>
             </div>
         @endif
     </div>
-    @endif
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const notificationComponent = @this;
-            const button = event.target.closest('button[wire\\:click="toggleDropdown"]');
-            const dropdown = event.target.closest('[wire\\:id*="notification-dropdown"]');
-            
-            if (notificationComponent && notificationComponent.showDropdown) {
-                if (!dropdown && !button) {
-                    notificationComponent.set('showDropdown', false);
-                }
-            }
-        });
-    });
-
-</script>
 @endif

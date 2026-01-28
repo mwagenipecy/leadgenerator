@@ -115,6 +115,11 @@ class Register extends Component
             // Remove null bytes and other dangerous characters
             $value = str_replace(["\0", "\r", "\n"], '', $value);
             
+            // For NIDA fields, remove dashes and keep only numbers
+            if (in_array($propertyName, ['nida_number', 'company_contact_nida'])) {
+                $value = preg_replace('/[^0-9]/', '', $value);
+            }
+            
             // Prevent SQL injection patterns (basic check)
             $dangerousPatterns = [
                 '/(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|SCRIPT|JAVASCRIPT|ONLOAD|ONERROR)\b)/i',

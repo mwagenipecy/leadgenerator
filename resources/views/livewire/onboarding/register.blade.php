@@ -71,7 +71,7 @@
         </div>
     @endif
 
-    <form wire:submit="register" class="space-y-5">
+    <form wire:submit="register" class="space-y-5" onsubmit="stripNidaDashes(); return true;">
         
         <!-- Name Fields -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -174,12 +174,12 @@
                     </div>
                     <input 
                         id="nida_number" 
-                        wire:model.live="nida_number"
+                        wire:model="nida_number"
                         type="text" 
                         required 
-                        maxlength="20"
+                        maxlength="23"
                         class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('nida_number') border-red-500 ring-1 ring-red-500 @enderror"
-                        placeholder="19XXXXXXXXXXXXXXXX"
+                        placeholder="19760517-37227-00002-17"
                     >
                 </div>
                 @error('nida_number')
@@ -229,7 +229,7 @@
                 @if(strtolower($country ?? '') === 'tanzania')
                 <div>
                     <label for="company_contact_nida" class="block text-sm font-medium text-gray-700 mb-1.5">Representative NIDA *</label>
-                    <input id="company_contact_nida" wire:model.live="company_contact_nida" maxlength="20" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19XXXXXXXXXXXXXXXX">
+                    <input id="company_contact_nida" wire:model="company_contact_nida" maxlength="23" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19760517-37227-00002-17">
                     @error('company_contact_nida')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -395,3 +395,134 @@
     
     
     </div>
+
+<script>
+    // NIDA number formatting - format as 19760517-37227-00002-17
+    function formatNidaNumber(input) {
+        if (!input) return;
+        
+        // Get current cursor position
+        const cursorPos = input.selectionStart;
+        const oldValue = input.value;
+        
+        // Remove all non-numeric characters
+        let value = input.value.replace(/\D/g, '');
+        
+        // Limit to 20 digits
+        if (value.length > 20) {
+            value = value.substring(0, 20);
+        }
+        
+        // Format: 19760517-37227-00002-17 (8-5-5-2)
+        let formatted = '';
+        if (value.length > 0) {
+            formatted = value.substring(0, 8);
+            if (value.length > 8) {
+                formatted += '-' + value.substring(8, 13);
+            }
+            if (value.length > 13) {
+                formatted += '-' + value.substring(13, 18);
+            }
+            if (value.length > 18) {
+                formatted += '-' + value.substring(18, 20);
+            }
+        }
+        
+        // Display formatted value
+        input.value = formatted;
+        
+        // Calculate new cursor position (account for dashes)
+        const digitsBeforeCursor = oldValue.substring(0, cursorPos).replace(/\D/g, '').length;
+        let dashCount = 0;
+        if (digitsBeforeCursor > 8) dashCount++;
+        if (digitsBeforeCursor > 13) dashCount++;
+        if (digitsBeforeCursor > 18) dashCount++;
+        const newCursorPos = Math.min(digitsBeforeCursor + dashCount, formatted.length);
+        input.setSelectionRange(newCursorPos, newCursorPos);
+        
+        // Update Livewire model with unformatted value (numbers only)
+        // Dispatch input event to trigger wire:model update
+        if (window.Livewire) {
+            const wireId = input.closest('[wire\\:id]')?.getAttribute('wire:id');
+            if (wireId) {
+                const component = window.Livewire.find(wireId);
+                if (component) {
+                    const fieldName = input.id;
+                    // Set the unformatted value directly
+                    component.set(fieldName, value);
+                }
+            }
+        }
+    }
+    
+    // Setup NIDA formatting when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        function setupNidaInputs() {
+            const nidaInput = document.getElementById('nida_number');
+            if (nidaInput && !nidaInput.dataset.formatted) {
+                nidaInput.dataset.formatted = 'true';
+                nidaInput.addEventListener('input', function(e) {
+                    formatNidaNumber(e.target);
+                });
+                // Format existing value if present (unformatted)
+                if (nidaInput.value && !nidaInput.value.includes('-') && /^\d{20}$/.test(nidaInput.value)) {
+                    formatNidaNumber(nidaInput);
+                }
+            }
+            
+            const companyNidaInput = document.getElementById('company_contact_nida');
+            if (companyNidaInput && !companyNidaInput.dataset.formatted) {
+                companyNidaInput.dataset.formatted = 'true';
+                companyNidaInput.addEventListener('input', function(e) {
+                    formatNidaNumber(e.target);
+                });
+                // Format existing value if present (unformatted)
+                if (companyNidaInput.value && !companyNidaInput.value.includes('-') && /^\d{20}$/.test(companyNidaInput.value)) {
+                    formatNidaNumber(companyNidaInput);
+                }
+            }
+        }
+        
+        setupNidaInputs();
+        
+        // Re-setup after Livewire updates
+        document.addEventListener('livewire:init', function() {
+            Livewire.hook('morph.updated', ({ el, component }) => {
+                setTimeout(setupNidaInputs, 100);
+            });
+        });
+    });
+    
+    // Strip dashes from NIDA fields before form submission
+    function stripNidaDashes() {
+        const nidaInput = document.getElementById('nida_number');
+        if (nidaInput && nidaInput.value) {
+            const unformatted = nidaInput.value.replace(/\D/g, '');
+            if (window.Livewire) {
+                const wireId = nidaInput.closest('[wire\\:id]')?.getAttribute('wire:id');
+                if (wireId) {
+                    const component = window.Livewire.find(wireId);
+                    if (component) {
+                        component.set('nida_number', unformatted);
+                    }
+                }
+            }
+        }
+        
+        const companyNidaInput = document.getElementById('company_contact_nida');
+        if (companyNidaInput && companyNidaInput.value) {
+            const unformatted = companyNidaInput.value.replace(/\D/g, '');
+            if (window.Livewire) {
+                const wireId = companyNidaInput.closest('[wire\\:id]')?.getAttribute('wire:id');
+                if (wireId) {
+                    const component = window.Livewire.find(wireId);
+                    if (component) {
+                        component.set('company_contact_nida', unformatted);
+                    }
+                }
+            }
+        }
+        
+        return true; // Allow form submission
+    }
+</script>

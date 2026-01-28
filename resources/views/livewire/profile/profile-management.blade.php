@@ -36,97 +36,139 @@
             </div>
         </div>
 
-        <!-- Flash Messages -->
-        @if (session()->has('message'))
-            <div class="mb-4 sm:mb-6 bg-green-50 border border-green-200 text-green-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-sm sm:text-base" role="alert">
-                <div class="flex items-center">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="flex-1">{{ session('message') }}</span>
-                </div>
-            </div>
-        @endif
-
-        @if (session()->has('error'))
-            <div class="mb-4 sm:mb-6 bg-sidebar-green-50 border border-sidebar-green-200 text-sidebar-green-light px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-sm sm:text-base" role="alert">
-                <div class="flex items-center">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    <span class="flex-1">{{ session('error') }}</span>
-                </div>
-            </div>
-        @endif
     </div>
 
-    <!-- Mobile Section Selector -->
-    <div class="lg:hidden mb-4 sm:mb-6">
-        <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Select Section</label>
-        <select wire:model.live="currentStep" 
-                class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-sm sm:text-base">
-            <option value="overview">Overview</option>
-            @if(auth()->user()->registration_type === 'company')
-                <option value="company">Company Details</option>
-            @endif
-            <option value="personal">Personal Info</option>
-            <option value="address">Address</option>
-            <option value="employment">Employment</option>
-            <option value="financial">Financial</option>
-            <option value="bank">Banking</option>
-            <option value="emergency">Emergency Contact</option>
-        </select>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 lg:gap-8">
-        <!-- Left Sidebar - Navigation (Desktop Only) -->
-        <div class="hidden lg:block lg:col-span-1">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
-                <div class="p-4 lg:p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white">
-                    <h3 class="text-base lg:text-lg font-bold">Profile Sections</h3>
-                    <p class="text-white text-xs lg:text-sm opacity-90">Complete all sections</p>
-                </div>
+    <!-- Top Navigation Bar -->
+    <div class="mb-6 sm:mb-8">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-3 sm:p-4 border-b border-gray-100 bg-gradient-to-r from-sidebar-green to-sidebar-green-light">
+                <h3 class="text-sm sm:text-base font-bold text-white mb-1">Profile Sections - Complete all sections</h3>
+            </div>
+            
+            @php
+                $sections = [
+                    'overview' => ['name' => 'Overview', 'icon' => 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'],
+                    'personal' => ['name' => 'Personal Info', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
+                    'address' => ['name' => 'Address', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
+                    'employment' => ['name' => 'Employment', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'],
+                    'financial' => ['name' => 'Financial', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1'],
+                    'bank' => ['name' => 'Banking', 'icon' => 'M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z'],
+                    'emergency' => ['name' => 'Emergency Contact', 'icon' => 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z']
+                ];
                 
-                <nav class="p-2">
-                    @php
-                        $sections = [
-                            'overview' => ['name' => 'Overview', 'icon' => 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'],
-                            'personal' => ['name' => 'Personal Info', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
-                            'address' => ['name' => 'Address', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
-                            'employment' => ['name' => 'Employment', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'],
-                            'financial' => ['name' => 'Financial', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1'],
-                            'bank' => ['name' => 'Banking', 'icon' => 'M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z'],
-                            'emergency' => ['name' => 'Emergency Contact', 'icon' => 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z']
-                        ];
-                        
-                        // Add company section for company users
-                        if (auth()->user()->registration_type === 'company') {
-                            $sections = array_slice($sections, 0, 1, true) + 
-                                ['company' => ['name' => 'Company Details', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4']] + 
-                                array_slice($sections, 1, null, true);
-                        }
-                    @endphp
+                // Add company section for company users
+                if (auth()->user()->registration_type === 'company') {
+                    $sections = array_slice($sections, 0, 1, true) + 
+                        ['company' => ['name' => 'Company Details', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4']] + 
+                        array_slice($sections, 1, null, true);
+                }
+            @endphp
 
+            <nav class="p-2 sm:p-3 overflow-x-auto">
+                <div class="flex flex-wrap sm:flex-nowrap gap-2 sm:gap-3 min-w-max sm:min-w-0">
                     @foreach($sections as $key => $section)
                         <button wire:click="goToStep('{{ $key }}')" 
-                                class="w-full flex items-center px-3 lg:px-4 py-2 lg:py-3 rounded-lg text-left transition-all duration-200 mb-1 text-sm lg:text-base {{ $currentStep === $key ? 'bg-sidebar-green text-white' : 'text-gray-700 hover:bg-gray-100' }}">
-                            <svg class="w-4 h-4 lg:w-5 lg:h-5 mr-2 lg:mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="flex items-center px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-left transition-all duration-200 text-xs sm:text-sm font-medium whitespace-nowrap {{ $currentStep === $key ? 'bg-sidebar-green text-white shadow-md' : 'text-gray-700 hover:bg-gray-100 bg-gray-50' }}">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $section['icon'] }}"/>
                             </svg>
-                            <span class="font-medium">{{ $section['name'] }}</span>
+                            <span>{{ $section['name'] }}</span>
                             @if($currentStep === $key)
-                                <svg class="w-3 h-3 lg:w-4 lg:h-4 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
                             @endif
                         </button>
                     @endforeach
-                </nav>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Success/Error Modal -->
+    @if(session()->has('message') || session()->has('error'))
+    <div x-data="{ 
+        showModal: @entangle('showSuccessModal'),
+        init() {
+            if (this.showModal) {
+                setTimeout(() => {
+                    this.showModal = false;
+                    $wire.closeModal();
+                }, 5000);
+            }
+        }
+    }" 
+         x-show="showModal" 
+         x-cloak
+         class="fixed inset-0 z-50 overflow-y-auto"
+         style="display: none;"
+         x-transition:enter="ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div x-show="showModal" 
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+                 @click="$wire.closeModal()"></div>
+
+            <!-- Modal panel -->
+            <div x-show="showModal"
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                 role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full {{ session()->has('message') ? 'bg-green-100' : 'bg-red-100' }} sm:mx-0 sm:h-10 sm:w-10">
+                            @if(session()->has('message'))
+                                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            @else
+                                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            @endif
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left flex-1">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
+                                {{ session()->has('message') ? 'Success!' : 'Error' }}
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    {{ session()->has('message') ? session('message') : session('error') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" 
+                            wire:click="closeModal"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm">
+                        OK
+                    </button>
+                </div>
             </div>
         </div>
+    </div>
+    @endif
 
-        <!-- Main Content -->
-        <div class="lg:col-span-3">
+    <!-- Main Content -->
+    <div>
             {{-- OVERVIEW --}}
             @if($currentStep === 'overview')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
