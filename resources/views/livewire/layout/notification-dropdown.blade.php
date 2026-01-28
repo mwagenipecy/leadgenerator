@@ -1,5 +1,5 @@
 @if(auth()->check())
-<div class="relative" wire:poll.30s="refreshNotifications">
+<div class="relative">
     <!-- Notification Bell Button - Redirects to notifications page -->
     <a 
         href="{{ route('notifications.index') }}"
@@ -115,13 +115,5 @@
         });
     });
 
-    // Auto-refresh notifications every 30 seconds
-    document.addEventListener('livewire:init', function() {
-        setInterval(function() {
-            if (@this) {
-                @this.call('refreshNotifications');
-            }
-        }, 30000);
-    });
 </script>
 @endif
