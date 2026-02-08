@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LoanCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Services\LogService;
 
@@ -47,15 +48,7 @@ class LoanCategoryController extends Controller
         $category = LoanCategory::create($validated);
 
         // Log activity
-        LogService::log(
-            'loan_category_created',
-            auth()->user(),
-            $category,
-            null,
-            $validated,
-            'medium',
-            "Loan category '{$category->name}' created"
-        );
+        LogService::logLoanCategoryCreated($category);
 
         return redirect()->route('admin.loan-categories.index')
             ->with('success', 'Loan category created successfully.');
@@ -100,52 +93,46 @@ class LoanCategoryController extends Controller
 
         $oldValues = $loanCategory->toArray();
         $loanCategory->update($validated);
+        $newValues = $loanCategory->fresh()->toArray();
 
         // Log activity
-        LogService::log(
-            'loan_category_updated',
-            auth()->user(),
-            $loanCategory,
-            $oldValues,
-            $loanCategory->fresh()->toArray(),
-            'medium',
-            "Loan category '{$loanCategory->name}' updated"
-        );
+        LogService::logLoanCategoryUpdated($loanCategory, $oldValues, $newValues);
 
         return redirect()->route('admin.loan-categories.index')
             ->with('success', 'Loan category updated successfully.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Disable the specified loan category.
      */
-    public function destroy(LoanCategory $loanCategory)
+    public function disable(Request $request, LoanCategory $loanCategory)
     {
-        // Check if category is being used by any loan products
-        $productsCount = \App\Models\LoanProduct::where('loan_category_id', $loanCategory->id)->count();
-        
-        if ($productsCount > 0) {
+        // Validate password
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        // Verify password
+        if (!Hash::check($request->password, auth()->user()->password)) {
             return redirect()->route('admin.loan-categories.index')
-                ->with('error', "Cannot delete category. It is being used by {$productsCount} loan product(s).");
+                ->with('error', 'Invalid password. Please try again.');
         }
 
-        $categoryName = $loanCategory->name;
-        $categoryData = $loanCategory->toArray();
-        
-        $loanCategory->delete();
+        // Check if category is already disabled
+        if (!$loanCategory->is_active) {
+            return redirect()->route('admin.loan-categories.index')
+                ->with('error', 'Category is already disabled.');
+        }
+
+        // Disable the category
+        $loanCategory->update([
+            'is_active' => false
+        ]);
 
         // Log activity
-        LogService::log(
-            'loan_category_deleted',
-            auth()->user(),
-            null,
-            $categoryData,
-            null,
-            'medium',
-            "Loan category '{$categoryName}' deleted"
-        );
+        LogService::logLoanCategoryDisabled($loanCategory);
 
         return redirect()->route('admin.loan-categories.index')
-            ->with('success', 'Loan category deleted successfully.');
+            ->with('success', 'Loan category disabled successfully.');
     }
 }

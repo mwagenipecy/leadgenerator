@@ -212,18 +212,60 @@
                 @endif
             </a>
 
-            <a href="{{ route('user.management') }}"
-               class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('user*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }} relative"
-               title="{{ $isCollapsed ? 'User Management' : '' }}">
-                <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+            <!-- Admin Manager (Expandable Menu) -->
+            @if(!$isCollapsed)
+            <div x-data="{ isOpen: {{ request()->routeIs('user.management*') ? 'true' : 'false' }} }">
+                <button 
+                    @click="isOpen = !isOpen" 
+                    class="w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('user.management*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                        </svg>
+                        <span class="font-medium truncate">Admin Manager</span>
+                    </div>
+                    <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': isOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
-                    @if(!$isCollapsed)
-                    <span class="font-medium truncate">User Management</span>
-                    @endif
+                </button>
+                
+                <div x-show="isOpen" x-transition class="ml-4 mt-1 space-y-1">
+                    <a href="{{ route('user.management') }}" 
+                       class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('user.management') && !request()->routeIs('user.management.*') ? 'bg-white/20 text-white font-semibold' : 'text-white/80 hover:bg-sidebar-green-light hover:text-white' }}">
+                        <div class="w-2 h-2 rounded-full border-2 border-current"></div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                        </svg>
+                        <span class="font-medium text-sm">User Management</span>
+                    </a>
+                    <a href="{{ route('user.management.roles') }}" 
+                       class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('user.management.roles') ? 'bg-white/20 text-white font-semibold' : 'text-white/80 hover:bg-sidebar-green-light hover:text-white' }}">
+                        <div class="w-2 h-2 rounded-full border-2 border-current"></div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                        <span class="font-medium text-sm">Roles</span>
+                    </a>
+                    <a href="{{ route('user.management.permissions') }}" 
+                       class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('user.management.permissions') ? 'bg-white/20 text-white font-semibold' : 'text-white/80 hover:bg-sidebar-green-light hover:text-white' }}">
+                        <div class="w-2 h-2 rounded-full border-2 border-current"></div>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <span class="font-medium text-sm">Permissions</span>
+                    </a>
                 </div>
+            </div>
+            @else
+            <!-- Collapsed: Show icon only, clicking opens first submenu -->
+            <a href="{{ route('user.management') }}"
+               class="w-full flex items-center justify-center px-4 py-3 rounded-lg transition-all {{ request()->routeIs('user.management*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
+               title="Admin Manager">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                </svg>
             </a>
+            @endif
 
             <a href="{{ route('admin.company.verification') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.company.verification') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }} relative"

@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\CompanyVerificationDocument;
+use App\Services\LogService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +39,11 @@ class CompanyVerification extends Component
     {
         $this->selectedUser = User::with('companyVerificationDocuments')->find($userId);
         $this->viewDocumentsModal = true;
+        
+        // Log document viewing
+        if ($this->selectedUser) {
+            LogService::logCompanyDocumentsViewed($this->selectedUser);
+        }
     }
 
     public function openVerifyModal($userId)
@@ -76,6 +82,9 @@ class CompanyVerification extends Component
                     'verified_by' => Auth::id(),
                 ]);
 
+            // Log company verification
+            LogService::logCompanyVerified($this->selectedUser, $this->verificationNotes);
+
             session()->flash('success', 'Company verified successfully!');
             $this->verifyModal = false;
             $this->selectedUser = null;
@@ -106,6 +115,9 @@ class CompanyVerification extends Component
                     'verified_by' => Auth::id(),
                 ]);
 
+            // Log company rejection
+            LogService::logCompanyRejected($this->selectedUser, $this->rejectionReason);
+
             session()->flash('success', 'Company verification rejected.');
             $this->rejectModal = false;
             $this->selectedUser = null;
@@ -117,11 +129,16 @@ class CompanyVerification extends Component
 
     public function downloadDocument($documentId)
     {
-        $document = CompanyVerificationDocument::find($documentId);
+        $document = CompanyVerificationDocument::with('user')->find($documentId);
         
         if (!$document || !Storage::disk('public')->exists($document->file_path)) {
             session()->flash('error', 'Document not found.');
             return;
+        }
+
+        // Log document download
+        if ($document->user) {
+            LogService::logCompanyDocumentDownloaded($document->user, $document);
         }
 
         return Storage::disk('public')->download($document->file_path, $document->document_name);

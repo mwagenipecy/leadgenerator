@@ -61,20 +61,24 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </a>
-                                    <form action="{{ route('admin.loan-categories.destroy', $category->id) }}" 
-                                          method="POST" 
-                                          class="inline"
-                                          onsubmit="return confirm('Are you sure you want to delete this category?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
+                                    @if($category->is_active)
+                                        <button type="button" 
+                                                onclick="confirmDisableCategory('{{ $category->id }}', '{{ $category->name }}')"
                                                 class="text-red-600 hover:text-red-800" 
-                                                title="Delete">
+                                                title="Disable">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
                                             </svg>
                                         </button>
-                                    </form>
+                                    @else
+                                        <button disabled
+                                                class="text-gray-400 cursor-not-allowed opacity-50" 
+                                                title="Already Disabled">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
+                                            </svg>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -104,5 +108,78 @@
             </table>
         </div>
     </div>
+
+    <!-- Disable Confirmation Modal -->
+    <div id="disableCategoryModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden flex items-center justify-center">
+        <div class="relative p-4 w-full max-w-xs shadow-lg rounded-lg bg-white mx-4">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-base font-bold text-gray-900">Disable Category</h3>
+                <button onclick="closeDisableModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Message -->
+            <p class="text-sm text-gray-600 mb-3" id="disableCategoryMessage">
+                Disable this category? It will be unavailable for new loan products.
+            </p>
+
+            <!-- Password Form -->
+            <form id="disableCategoryForm" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <input type="password" 
+                           name="password" 
+                           id="disablePassword"
+                           placeholder="Enter your password"
+                           required
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                           autofocus>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end space-x-2">
+                    <button type="button" 
+                            onclick="closeDisableModal()" 
+                            class="px-3 py-1.5 text-sm text-gray-700 hover:text-gray-900">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
+                        Disable
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function confirmDisableCategory(categoryId, categoryName) {
+            const modal = document.getElementById('disableCategoryModal');
+            const form = document.getElementById('disableCategoryForm');
+            const message = document.getElementById('disableCategoryMessage');
+            
+            message.textContent = `Disable "${categoryName}"? It will be unavailable for new loan products.`;
+            form.action = '{{ route("admin.loan-categories.disable", ":id") }}'.replace(':id', categoryId);
+            modal.classList.remove('hidden');
+            document.getElementById('disablePassword').focus();
+        }
+
+        function closeDisableModal() {
+            const modal = document.getElementById('disableCategoryModal');
+            modal.classList.add('hidden');
+            document.getElementById('disablePassword').value = '';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('disableCategoryModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDisableModal();
+            }
+        });
+    </script>
 </x-app-layout>
 

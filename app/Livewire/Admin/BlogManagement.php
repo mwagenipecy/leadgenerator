@@ -6,7 +6,6 @@ use App\Models\BlogPost;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class BlogManagement extends Component
 {
@@ -14,8 +13,6 @@ class BlogManagement extends Component
 
     public $search = '';
     public $statusFilter = 'all';
-    public $showDeleteModal = false;
-    public $postToDelete = null;
 
     protected $paginationTheme = 'tailwind';
 
@@ -37,30 +34,6 @@ class BlogManagement extends Component
         $this->resetPage();
     }
 
-    public function openDeleteModal($postId)
-    {
-        $this->postToDelete = BlogPost::findOrFail($postId);
-        $this->showDeleteModal = true;
-    }
-
-    public function closeDeleteModal()
-    {
-        $this->showDeleteModal = false;
-        $this->postToDelete = null;
-    }
-
-    public function delete()
-    {
-        if ($this->postToDelete) {
-            // Delete featured image if exists
-            if ($this->postToDelete->featured_image) {
-                Storage::disk('public')->delete($this->postToDelete->featured_image);
-            }
-            $this->postToDelete->delete();
-            session()->flash('success', 'Blog post deleted successfully!');
-        }
-        $this->closeDeleteModal();
-    }
 
     public function render()
     {

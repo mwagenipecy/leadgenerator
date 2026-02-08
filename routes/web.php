@@ -13,6 +13,7 @@ use App\Http\Controllers\SystemSettingController;
 use App\Http\Controllers\TRAController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\CompanyVerificationController;
+use App\Http\Controllers\TermsController;
 use App\Models\NidaVerification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NidaVerificationController;
@@ -56,6 +57,9 @@ Route::get('/blog', function () {
 Route::get('/blog/{slug}', function ($slug) {
     return view('blog.show', ['slug' => $slug]);
 })->name('blog.show');
+
+// PUBLIC TERMS AND CONDITIONS
+Route::get('/terms', [\App\Http\Controllers\TermsController::class, 'show'])->name('terms.show');
 
 
 
@@ -334,6 +338,7 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
         'update' => 'admin.loan-categories.update',
         'destroy' => 'admin.loan-categories.destroy',
     ]);
+    Route::post('loan-categories/{loanCategory}/disable', [\App\Http\Controllers\Admin\LoanCategoryController::class, 'disable'])->name('admin.loan-categories.disable');
     Route::get('user-management/roles', function () {
         return view('pages.user-management.roles');
     })->name('user.management.roles');

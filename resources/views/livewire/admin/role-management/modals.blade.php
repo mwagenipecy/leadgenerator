@@ -153,8 +153,8 @@
             <form wire:submit.prevent="updateRole" class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Role Name *</label>
-                    <input wire:model="edit_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500" {{ $selectedRole->is_system_role ? 'disabled' : '' }}>
-                    @error('edit_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
+                    <input wire:model="edit_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500" {{ $selectedRole->is_system_role ? 'disabled' : '' }}>
+                    @error('edit_name') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                     @if($selectedRole->is_system_role)
                         <p class="text-xs text-gray-500 mt-1">System role names cannot be changed</p>
                     @endif
@@ -162,24 +162,24 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Display Name *</label>
-                    <input wire:model="edit_display_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                    @error('edit_display_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
+                    <input wire:model="edit_display_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    @error('edit_display_name') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <textarea wire:model="edit_description" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"></textarea>
-                    @error('edit_description') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
+                    <textarea wire:model="edit_description" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                    @error('edit_description') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Role Level (1-{{ auth()->user()->role_level - 1 }}) *</label>
-                    <input wire:model="edit_level" type="number" min="1" max="{{ auth()->user()->role_level - 1 }}" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                    @error('edit_level') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
+                    <input wire:model="edit_level" type="number" min="1" max="{{ auth()->user()->role_level - 1 }}" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                    @error('edit_level') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="flex items-center">
-                    <input wire:model="edit_is_active" type="checkbox" id="edit_is_active" class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                    <input wire:model="edit_is_active" type="checkbox" id="edit_is_active" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                     <label for="edit_is_active" class="ml-2 block text-sm text-gray-700">Role is active</label>
                 </div>
 
@@ -189,7 +189,7 @@
                         Cancel
                     </button>
                     <button type="submit" 
-                        class="bg-purple-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-purple-700 transition-colors">
+                        class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
                         Update Role
                     </button>
                 </div>

@@ -7,8 +7,10 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\Lender;
+use App\Mail\UserStatusChangeNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log; 
@@ -86,8 +88,14 @@ class UserManagement extends Component
 
     protected $paginationTheme = 'tailwind';
 
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'roleFilter' => ['except' => ''],
+        'statusFilter' => ['except' => ''],
+        'lenderFilter' => ['except' => ''],
+    ];
+
     protected $listeners = [
-        'confirmDeleteUser' => 'confirmDeleteUser',
         'confirmToggleStatus' => 'confirmToggleStatus'
     ];
 
@@ -131,6 +139,11 @@ class UserManagement extends Component
     }
 
     public function updatingLenderFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStatusFilter()
     {
         $this->resetPage();
     }
@@ -441,27 +454,23 @@ class UserManagement extends Component
         $this->confirmUserId = $userId;
         $this->confirmAction = 'toggleStatus';
         $this->passwordConfirmTitle = 'Confirm Status Change';
-        $this->passwordConfirmMessage = "Are you sure you want to " . ($user->is_active ? 'deactivate' : 'activate') . " this user? This is a critical action.";
-        $this->showPasswordConfirmModal = true;
+        $action = $user->is_active ? 'disable' : 'enable';
+        $this->passwordConfirmMessage = "Are you sure you want to {$action} this user? This is a critical action that will " . ($user->is_active ? 'prevent the user from accessing the system' : 'restore the user\'s access to the system') . ". An email notification will be sent to the user.";
+        
+        // Reset password and validation
         $this->currentPassword = '';
         $this->resetValidation(['currentPassword']);
-    }
-
-    public function confirmDeleteUser($userId)
-    {
-        if ($userId === Auth::id()) {
-            session()->flash('error', 'You cannot delete your own account!');
-            return;
-        }
-
-        $this->confirmUserId = $userId;
-        $this->confirmAction = 'deleteUser';
-        $this->passwordConfirmTitle = 'Confirm User Deletion';
-        $this->passwordConfirmMessage = 'Are you sure you want to permanently delete this user? This action cannot be undone and is extremely critical.';
+        
+        // Set modal to show - this must be last to ensure all properties are set
         $this->showPasswordConfirmModal = true;
-        $this->currentPassword = '';
-        $this->resetValidation(['currentPassword']);
+        
+        Log::info('Password confirmation modal opened', [
+            'user_id' => $userId,
+            'action' => $action,
+            'opened_by' => auth()->id()
+        ]);
     }
+
 
     public function closePasswordConfirmModal()
     {
@@ -491,8 +500,6 @@ class UserManagement extends Component
         try {
             if ($this->confirmAction === 'toggleStatus') {
                 $this->performToggleUserStatus($this->confirmUserId);
-            } elseif ($this->confirmAction === 'deleteUser') {
-                $this->performDeleteUser($this->confirmUserId);
             }
 
             $this->closePasswordConfirmModal();
@@ -519,69 +526,59 @@ class UserManagement extends Component
         }
 
         $oldStatus = $user->is_active;
-        $user->update(['is_active' => !$user->is_active]);
+        $newStatus = !$user->is_active;
+        $isDisabled = !$newStatus;
+        
+        $user->update(['is_active' => $newStatus]);
+        
+        // Send email notification to the user
+        try {
+            Mail::to($user->email)->send(
+                new UserStatusChangeNotification($user, $isDisabled)
+            );
+        } catch (\Exception $e) {
+            Log::error('Failed to send user status change email', [
+                'user_id' => $userId,
+                'user_email' => $user->email,
+                'is_disabled' => $isDisabled,
+                'error' => $e->getMessage()
+            ]);
+        }
         
         // Log status change
-        LogService::logUserStatusChanged($user, $user->is_active);
+        LogService::logUserStatusChanged($user, $newStatus);
         
         $this->loadStats();
         
-        $status = $user->is_active ? 'activated' : 'deactivated';
-        session()->flash('message', "User {$status} successfully!");
+        $status = $newStatus ? 'enabled' : 'disabled';
+        $message = "User {$status} successfully!";
+        if ($isDisabled) {
+            $message .= " An email notification has been sent to the user.";
+        }
+        session()->flash('message', $message);
         
         Log::info('User status changed with password confirmation', [
             'user_id' => $userId,
             'old_status' => $oldStatus,
-            'new_status' => $user->is_active,
+            'new_status' => $newStatus,
+            'is_disabled' => $isDisabled,
             'changed_by' => auth()->id()
         ]);
     }
 
-    private function performDeleteUser($userId)
-    {
-        $user = User::find($userId);
-        
-        if (!$user) {
-            session()->flash('error', 'User not found.');
-            return;
-        }
-
-        DB::transaction(function () use ($user) {
-            // Log user deletion before deleting
-            LogService::logUserDeleted($user);
-            
-            // If user is a lender, also handle lender record
-            if ($user->role === 'lender' && $user->lender) {
-                $user->lender->delete();
-            }
-            
-            // Detach roles
-            $user->roles()->detach();
-            
-            // Delete user
-            $user->delete();
-            
-            Log::info('User deleted with password confirmation', [
-                'deleted_user_id' => $user->id,
-                'deleted_user_email' => $user->email,
-                'deleted_by' => auth()->id()
-            ]);
-        });
-        
-        $this->loadStats();
-        session()->flash('message', 'User deleted successfully!');
-    }
-
     public function toggleUserStatus($userId)
     {
-        // This method is now called through password confirmation
-        $this->confirmToggleStatus($userId);
-    }
-
-    public function deleteUser($userId)
-    {
-        // This method is now called through password confirmation
-        $this->confirmDeleteUser($userId);
+        try {
+            // This method is now called through password confirmation
+            $this->confirmToggleStatus($userId);
+        } catch (\Exception $e) {
+            Log::error('Error in toggleUserStatus', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            session()->flash('error', 'An error occurred. Please try again.');
+        }
     }
 
     public function resetCreateUserForm()
@@ -606,6 +603,9 @@ class UserManagement extends Component
 
     public function render()
     {
+        // Reload stats on each render to ensure they're always available
+        $this->loadStats();
+        
         $query = User::query();
 
         // Apply filters

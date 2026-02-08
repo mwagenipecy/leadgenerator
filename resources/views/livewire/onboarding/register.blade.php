@@ -244,6 +244,7 @@
                     @enderror
                 </div>
                 @endif
+                
             </div>
         </div>
         @endif
@@ -335,9 +336,9 @@
             <div class="ml-3">
                 <label for="terms" class="text-sm text-gray-600">
                     I agree to the 
-                    <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium">Terms of Service</a> 
+                    <a href="{{ route('terms.show') }}" target="_blank" class="text-brand-red hover:text-brand-dark-red font-medium underline">Terms of Service</a> 
                     and 
-                    <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium">Privacy Policy</a>
+                    <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium underline">Privacy Policy</a>
                 </label>
             </div>
         </div>

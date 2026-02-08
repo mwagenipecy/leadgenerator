@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\BlogPost;
+use App\Services\LogService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -100,7 +101,12 @@ class BlogEdit extends Component
             $data['featured_image'] = $path;
         }
 
+        $oldValues = $this->post->toArray();
         $this->post->update($data);
+        $newValues = $this->post->fresh()->toArray();
+
+        // Log activity
+        LogService::logBlogPostUpdated($this->post, $oldValues, $newValues);
 
         session()->flash('success', 'Blog post updated successfully!');
         return redirect()->route('admin.blog.management');

@@ -5,66 +5,22 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-4xl font-bold text-gray-900 mb-2">User Management</h1>
-                    <p class="text-gray-600 text-lg">Manage system users, roles, and permissions</p>
+                    <p class="text-gray-600 text-lg">Manage system users and their accounts</p>
                 </div>
                 <div class="flex items-center space-x-3">
-                    @if(request()->routeIs('user.management') && !request()->routeIs('user.management.*'))
-                        <button wire:click="openCreateUserModal" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                            </svg>
-                            Create User
-                        </button>
-                    @endif
+                    <button wire:click="openCreateUserModal" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Create User
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Tabs Navigation -->
-        <div class="mb-8">
-            <div class="border-b border-gray-200">
-                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <!-- Users Tab -->
-                    <a href="{{ route('user.management') }}" 
-                            class="@if(request()->routeIs('user.management') && !request()->routeIs('user.management.*')) border-sidebar-green text-sidebar-green @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
-                        </svg>
-                        <span>Users</span>
-                        @if(request()->routeIs('user.management') && !request()->routeIs('user.management.*'))
-                            <span class="bg-sidebar-green-100 text-sidebar-green ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium">{{ number_format($totalUsers) }}</span>
-                        @endif
-                    </a>
-
-                    <!-- Roles Tab -->
-                    <a href="{{ route('user.management.roles') }}" 
-                            class="@if(request()->routeIs('user.management.roles')) border-purple-500 text-purple-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                        </svg>
-                        <span>Roles</span>
-                    </a>
-
-                    <!-- Permissions Tab -->
-                    <a href="{{ route('user.management.permissions') }}" 
-                            class="@if(request()->routeIs('user.management.permissions')) border-green-500 text-green-600 @else border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 @endif whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                        <span>Permissions</span>
-                    </a>
-                </nav>
-            </div>
-        </div>
-
-        <!-- Tab Content -->
-        <div>
-            <!-- Users Tab Content - Only show on users page -->
-            @if(request()->routeIs('user.management') && !request()->routeIs('user.management.*'))
-                <div wire:key="users-tab-content">
-                    @include('livewire.admin.partials.user-tab')
-                </div>
-            @endif
+        <!-- Users List Content -->
+        <div wire:key="users-content">
+            @include('livewire.admin.partials.user-tab')
         </div>
     </div>
 
@@ -338,17 +294,11 @@
 
     <!-- Password Confirmation Modal -->
     @if($showPasswordConfirmModal)
-        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" 
-             wire:click.self="closePasswordConfirmModal"
-             x-data="{ show: true }" 
-             x-show="show" 
-             x-transition:enter="ease-out duration-300" 
-             x-transition:enter-start="opacity-0" 
-             x-transition:enter-end="opacity-100">
-            <div class="relative top-1/2 transform -translate-y-1/2 mx-auto p-5 border w-11/12 max-w-md shadow-lg rounded-lg bg-white"
-                 x-transition:enter="ease-out duration-300" 
-                 x-transition:enter-start="opacity-0 transform scale-95" 
-                 x-transition:enter-end="opacity-100 transform scale-100">
+        <div wire:key="password-confirm-modal-{{ $confirmUserId }}" 
+             class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4" 
+             wire:click.self="closePasswordConfirmModal">
+            <div class="relative mx-auto p-5 border w-11/12 max-w-md shadow-lg rounded-lg bg-white"
+                 wire:click.stop>
                 
                 <!-- Modal Header -->
                 <div class="flex items-center justify-between mb-6">

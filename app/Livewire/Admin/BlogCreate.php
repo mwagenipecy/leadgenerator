@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\BlogPost;
+use App\Services\LogService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -77,7 +78,10 @@ class BlogCreate extends Component
             $data['featured_image'] = $path;
         }
 
-        BlogPost::create($data);
+        $post = BlogPost::create($data);
+
+        // Log activity
+        LogService::logBlogPostCreated($post);
 
         session()->flash('success', 'Blog post created successfully!');
         return redirect()->route('admin.blog.management');

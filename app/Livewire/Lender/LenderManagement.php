@@ -4,6 +4,9 @@ namespace App\Livewire\Lender;
 
 use App\Models\Lender;
 use App\Models\User;
+use App\Models\LoanProduct;
+use App\Jobs\SendLenderStatusChangeNotification;
+use App\Services\LogService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -111,6 +114,8 @@ class LenderManagement extends Component
 
     public function render()
     {
+        // Note: Disabled (suspended) lenders remain visible in the list - they are not deleted
+        // Only the status changes to 'suspended', allowing them to be re-enabled later
         $lenders = Lender::query()
             ->with(['createdBy', 'updatedBy'])
             ->when($this->search, function ($query) {
@@ -339,14 +344,14 @@ class LenderManagement extends Component
         $lender = Lender::findOrFail($id);
         
         if (!$lender->isApproved()) {
-            session()->flash('error', 'Only approved lenders can be suspended.');
+            session()->flash('error', 'Only approved lenders can be disabled.');
             return;
         }
 
         $this->confirmLenderId = $id;
         $this->confirmAction = 'suspendLender';
-        $this->passwordConfirmTitle = 'Confirm Lender Suspension';
-        $this->passwordConfirmMessage = 'Are you sure you want to suspend this lender? This will also deactivate their user account and is a critical action.';
+        $this->passwordConfirmTitle = 'Confirm Lender Disable';
+        $this->passwordConfirmMessage = 'Are you sure you want to disable this lender? This is a CRITICAL action that will: (1) Disable all loan products belonging to this lender, (2) Disable all users belonging to this lender, (3) Change the lender status to suspended. Email notifications will be sent to all affected users and system administrators.';
         $this->showPasswordConfirmModal = true;
         $this->currentPassword = '';
         $this->resetValidation(['currentPassword']);
@@ -403,22 +408,48 @@ class LenderManagement extends Component
         $lender = Lender::findOrFail($id);
         
         if ($lender->isApproved()) {
-            $lender->update([
-                'status' => 'suspended',
-                'updated_by' => auth()->id()
-            ]);
+            DB::transaction(function () use ($lender, $id) {
+                $oldStatus = $lender->status;
+                
+                // Update lender status to 'suspended' (NOT deleted - record remains visible)
+                // The lender record stays in the database and remains visible on the list page
+                $lender->update([
+                    'status' => 'suspended',
+                    'updated_by' => auth()->id()
+                ]);
+                
+                // Disable all loan products belonging to this lender
+                LoanProduct::where('lender_id', $lender->id)
+                    ->where('status', '!=', 'deleted')
+                    ->update([
+                        'is_active' => false,
+                        'status' => 'inactive',
+                        'updated_by' => auth()->id()
+                    ]);
+                
+                // Disable all users belonging to this lender
+                User::where('lender_id', $lender->id)
+                    ->update(['is_active' => false]);
+                
+                // Log to system log
+                if (class_exists(LogService::class)) {
+                    LogService::logLenderDisabled($lender, [
+                        'disabled_by' => auth()->id(),
+                        'loan_products_disabled' => LoanProduct::where('lender_id', $lender->id)->where('status', '!=', 'deleted')->count(),
+                        'users_disabled' => User::where('lender_id', $lender->id)->count()
+                    ], $oldStatus);
+                }
+                
+                // Dispatch job to send emails
+                SendLenderStatusChangeNotification::dispatch($lender, true);
+            });
             
-            // Suspend the user account too
-            if ($lender->user) {
-                $lender->user->update(['is_active' => false]);
-            }
-            
-            Log::info('Lender suspended with password confirmation', [
+            Log::info('Lender disabled with password confirmation', [
                 'lender_id' => $id,
-                'suspended_by' => auth()->id()
+                'disabled_by' => auth()->id()
             ]);
             
-            session()->flash('message', 'Lender suspended successfully.');
+            session()->flash('message', 'Lender disabled successfully. All loan products and users have been disabled. Email notifications have been sent.');
         }
     }
 
@@ -463,32 +494,57 @@ class LenderManagement extends Component
             $lender = Lender::findOrFail($id);
             
             if ($lender->isSuspended()) {
-                $lender->update([
-                    'status' => 'approved',
-                    'updated_by' => auth()->id()
-                ]);
+                DB::transaction(function () use ($lender, $id) {
+                    $oldStatus = $lender->status;
+                    
+                    // Update lender status
+                    $lender->update([
+                        'status' => 'approved',
+                        'updated_by' => auth()->id()
+                    ]);
+                    
+                    // Enable all loan products belonging to this lender
+                    LoanProduct::where('lender_id', $lender->id)
+                        ->where('status', '!=', 'deleted')
+                        ->update([
+                            'is_active' => true,
+                            'status' => 'active',
+                            'updated_by' => auth()->id()
+                        ]);
+                    
+                    // Enable all users belonging to this lender
+                    User::where('lender_id', $lender->id)
+                        ->update(['is_active' => true]);
+                    
+                    // Log to system log
+                    if (class_exists(LogService::class)) {
+                        LogService::logLenderEnabled($lender, [
+                            'enabled_by' => auth()->id(),
+                            'loan_products_enabled' => LoanProduct::where('lender_id', $lender->id)->where('status', '!=', 'deleted')->count(),
+                            'users_enabled' => User::where('lender_id', $lender->id)->count()
+                        ], $oldStatus);
+                    }
+                    
+                    // Dispatch job to send emails
+                    SendLenderStatusChangeNotification::dispatch($lender, false);
+                });
                 
-                // Reactivate user account
-                if ($lender->user) {
-                    $lender->user->update(['is_active' => true]);
-                }
-                
-                Log::info('Lender reactivated', [
+                Log::info('Lender enabled', [
                     'lender_id' => $id,
-                    'reactivated_by' => auth()->id()
+                    'enabled_by' => auth()->id()
                 ]);
                 
-                session()->flash('message', 'Lender reactivated successfully.');
+                session()->flash('message', 'Lender enabled successfully. All loan products and users have been enabled. Email notifications have been sent.');
             }
 
         } catch (\Exception $e) {
-            Log::error('Failed to reactivate lender', [
+            Log::error('Failed to enable lender', [
                 'lender_id' => $id,
                 'error' => $e->getMessage(),
-                'reactivated_by' => auth()->id()
+                'enabled_by' => auth()->id()
             ]);
             
-            session()->flash('error', 'Failed to reactivate lender. Please try again.');
+            session()->flash('error', 'Failed to enable lender. Please try again.');
         }
     }
 

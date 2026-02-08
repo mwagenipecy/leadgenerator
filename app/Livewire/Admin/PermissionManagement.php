@@ -9,6 +9,7 @@ use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class PermissionManagement extends Component
@@ -25,10 +26,16 @@ class PermissionManagement extends Component
     public $showEditPermissionModal = false;
     public $showDeletePermissionModal = false;
     public $showPermissionRolesModal = false;
+    public $showPasswordConfirmModal = false;
 
     // Selected items
     public $selectedPermission = null;
     public $permissionToDelete = null;
+    public $confirmAction = '';
+    public $confirmPermissionId = null;
+    public $currentPassword = '';
+    public $passwordConfirmTitle = '';
+    public $passwordConfirmMessage = '';
 
     // Create permission properties
     public $name = '';
@@ -146,63 +153,39 @@ class PermissionManagement extends Component
     // Edit Permission Methods
     public function openEditPermissionModal($permissionId)
     {
-        if (!auth()->user()->hasRole('super_admin')) {
-            session()->flash('error', 'Only super administrators can edit permissions.');
-            return;
+        try {
+            // Allow any authenticated user to edit permission descriptions (read-only for other fields)
+            $this->selectedPermission = Permission::findOrFail($permissionId);
+            $this->resetValidation();
+            
+            // Only load description for editing
+            $this->edit_description = $this->selectedPermission->description ?? '';
+
+            $this->showEditPermissionModal = true;
+        } catch (\Exception $e) {
+            \Log::error('Failed to open edit permission modal', [
+                'permission_id' => $permissionId,
+                'error' => $e->getMessage()
+            ]);
+            session()->flash('error', 'Failed to open edit modal. Please try again.');
         }
-
-        $this->selectedPermission = Permission::findOrFail($permissionId);
-        $this->resetValidation();
-        
-        $this->edit_name = $this->selectedPermission->name;
-        $this->edit_display_name = $this->selectedPermission->display_name;
-        $this->edit_description = $this->selectedPermission->description;
-        $this->edit_category = $this->selectedPermission->category;
-        $this->edit_is_active = $this->selectedPermission->is_active;
-
-        $this->showEditPermissionModal = true;
     }
 
     public function updatePermission()
     {
-        if (!auth()->user()->hasRole('super_admin')) {
-            session()->flash('error', 'Only super administrators can edit permissions.');
-            return;
-        }
-
+        // Allow any authenticated user to update permission descriptions
         $this->validate([
-            'edit_name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('permissions', 'name')->ignore($this->selectedPermission->id),
-                'regex:/^[a-z_.]+$/'
-            ],
-            'edit_display_name' => 'required|string|max:255',
             'edit_description' => 'nullable|string|max:1000',
-            'edit_category' => 'required|string|in:' . implode(',', array_keys($this->categories)),
-            'edit_is_active' => 'boolean',
         ]);
 
+        // Only update description
         $this->selectedPermission->update([
-            'name' => $this->edit_name,
-            'display_name' => $this->edit_display_name,
             'description' => $this->edit_description,
-            'category' => $this->edit_category,
-            'is_active' => $this->edit_is_active,
         ]);
-
-        // Clear permissions cache for all users
-        if (!$this->edit_is_active) {
-            DB::table('users')->update([
-                'permissions_cache' => null,
-                'permissions_updated_at' => null
-            ]);
-        }
 
         $this->loadStats();
         $this->showEditPermissionModal = false;
-        session()->flash('message', 'Permission updated successfully!');
+        session()->flash('message', 'Permission description updated successfully!');
     }
 
     // Delete Permission Methods
@@ -306,7 +289,7 @@ class PermissionManagement extends Component
     }
 
     // Toggle permission status
-    public function togglePermissionStatus($permissionId)
+    public function confirmTogglePermissionStatus($permissionId)
     {
         if (!auth()->user()->hasRole('super_admin')) {
             session()->flash('error', 'Only super administrators can modify permissions.');
@@ -314,6 +297,21 @@ class PermissionManagement extends Component
         }
 
         $permission = Permission::findOrFail($permissionId);
+
+        $this->confirmPermissionId = $permissionId;
+        $this->confirmAction = 'toggleStatus';
+        $this->passwordConfirmTitle = 'Confirm Status Change';
+        $action = $permission->is_active ? 'deactivate' : 'activate';
+        $this->passwordConfirmMessage = "Are you sure you want to {$action} the permission '{$permission->display_name}'? This is a critical action that will " . ($permission->is_active ? 'prevent users from using this permission' : 'restore access to this permission') . ".";
+        $this->showPasswordConfirmModal = true;
+        $this->currentPassword = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    private function performTogglePermissionStatus($permissionId)
+    {
+        $permission = Permission::findOrFail($permissionId);
+        $oldStatus = $permission->is_active;
         $permission->update(['is_active' => !$permission->is_active]);
 
         // Clear permissions cache for all users if deactivated
@@ -328,6 +326,57 @@ class PermissionManagement extends Component
         
         $status = $permission->is_active ? 'activated' : 'deactivated';
         session()->flash('message', "Permission {$status} successfully!");
+    }
+
+    public function closePasswordConfirmModal()
+    {
+        $this->showPasswordConfirmModal = false;
+        $this->confirmAction = '';
+        $this->confirmPermissionId = null;
+        $this->currentPassword = '';
+        $this->passwordConfirmTitle = '';
+        $this->passwordConfirmMessage = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    public function passwordConfirmationRules()
+    {
+        return [
+            'currentPassword' => 'required|string',
+        ];
+    }
+
+    public function executeConfirmedAction()
+    {
+        try {
+            $this->validate($this->passwordConfirmationRules());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return;
+        }
+
+        // Verify current user's password
+        if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+            $this->addError('currentPassword', 'The password is incorrect.');
+            return;
+        }
+
+        try {
+            if ($this->confirmAction === 'toggleStatus') {
+                $this->performTogglePermissionStatus($this->confirmPermissionId);
+            }
+
+            $this->closePasswordConfirmModal();
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to execute confirmed action', [
+                'action' => $this->confirmAction,
+                'permission_id' => $this->confirmPermissionId,
+                'error' => $e->getMessage(),
+                'executed_by' => auth()->id()
+            ]);
+            
+            session()->flash('error', 'Failed to execute action. Please try again.');
+        }
     }
 
     // Bulk Operations

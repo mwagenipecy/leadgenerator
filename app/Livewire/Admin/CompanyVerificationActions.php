@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\CompanyVerificationDocument;
+use App\Services\LogService;
 use Illuminate\Support\Facades\Auth;
 
 class CompanyVerificationActions extends Component
@@ -55,12 +56,15 @@ class CompanyVerificationActions extends Component
             ]);
 
             // Update all documents status to verified
-            CompanyVerificationDocument::where('user_id', $this->user->id)
+            $documentsCount = CompanyVerificationDocument::where('user_id', $this->user->id)
                 ->update([
                     'status' => 'verified',
                     'verified_at' => now(),
                     'verified_by' => Auth::id(),
                 ]);
+
+            // Log company verification
+            LogService::logCompanyVerified($this->user, $this->verificationNotes);
 
             session()->flash('success', 'Company verified successfully!');
             $this->closeModals();
@@ -92,6 +96,9 @@ class CompanyVerificationActions extends Component
                     'rejection_reason' => $this->rejectionReason,
                     'verified_by' => Auth::id(),
                 ]);
+
+            // Log company rejection
+            LogService::logCompanyRejected($this->user, $this->rejectionReason);
 
             session()->flash('success', 'Company verification rejected.');
             $this->closeModals();

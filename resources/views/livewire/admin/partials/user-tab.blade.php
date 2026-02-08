@@ -268,7 +268,7 @@
                         </td>
                         <td class="px-6 py-6 whitespace-nowrap">
                             <div class="flex items-center space-x-2">
-                                <button wire:click="openEditUserModal({{ $user->id }})" 
+                                <button wire:click="openEditUserModal('{{ $user->id }}')" 
                                     class="text-blue-600 hover:text-blue-700 p-2 rounded-xl hover:bg-blue-50 transition-all duration-200" title="Edit User">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -276,27 +276,26 @@
                                 </button>
                                 
                                 
-                                <button wire:click="toggleUserStatus({{ $user->id }})" 
-                                    class="text-{{ $user->is_active ? 'yellow' : 'green' }}-600 hover:text-{{ $user->is_active ? 'yellow' : 'green' }}-700 p-2 rounded-xl hover:bg-{{ $user->is_active ? 'yellow' : 'green' }}-50 transition-all duration-200" title="{{ $user->is_active ? 'Deactivate' : 'Activate' }}">
-                                    @if($user->is_active)
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9V6a4 4 0 118 0v3M5 12h14l-1 7H6l-1-7z"/>
-                                        </svg>
-                                    @else
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-                                        </svg>
-                                    @endif
-                                </button>
-                                
                                 @if($user->id !== auth()->id())
-                                    <button wire:click="deleteUser({{ $user->id }})" 
-                                        onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
-                                        class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-xl hover:bg-sidebar-green-50 transition-all duration-200" title="Delete User">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
+                                    @if($user->is_active)
+                                        <button type="button" 
+                                                wire:click="toggleUserStatus('{{ $user->id }}')" 
+                                                class="text-yellow-600 hover:text-yellow-700 p-2 rounded-xl hover:bg-yellow-50 transition-all duration-200" 
+                                                title="Disable User">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9V6a4 4 0 118 0v3M5 12h14l-1 7H6l-1-7z"/>
+                                            </svg>
+                                        </button>
+                                    @else
+                                        <button type="button" 
+                                                wire:click="toggleUserStatus('{{ $user->id }}')" 
+                                                class="text-green-600 hover:text-green-700 p-2 rounded-xl hover:bg-green-50 transition-all duration-200" 
+                                                title="Enable User">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                                            </svg>
+                                        </button>
+                                    @endif
                                 @endif
                             </div>
                         </td>

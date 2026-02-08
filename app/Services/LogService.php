@@ -227,6 +227,38 @@ class LogService
     }
 
     /**
+     * Log lender disabled
+     */
+    public static function logLenderDisabled($lender, array $metadata = null, string $oldStatus = null): SystemLog
+    {
+        return self::log(
+            'lender_disabled',
+            "Lender {$lender->company_name} was disabled. All loan products and users were disabled.",
+            'critical',
+            $lender,
+            ['status' => $oldStatus ?? 'approved'],
+            ['status' => 'suspended', 'is_active' => false],
+            $metadata
+        );
+    }
+
+    /**
+     * Log lender enabled
+     */
+    public static function logLenderEnabled($lender, array $metadata = null, string $oldStatus = null): SystemLog
+    {
+        return self::log(
+            'lender_enabled',
+            "Lender {$lender->company_name} was enabled. All loan products and users were enabled.",
+            'critical',
+            $lender,
+            ['status' => $oldStatus ?? 'suspended'],
+            ['status' => 'approved', 'is_active' => true],
+            $metadata
+        );
+    }
+
+    /**
      * Log loan product creation
      */
     public static function logLoanProductCreated($product): SystemLog
@@ -287,6 +319,202 @@ class LogService
     }
 
     /**
+     * Log role creation
+     */
+    public static function logRoleCreated($role): SystemLog
+    {
+        return self::log(
+            'role_created',
+            "Role '{$role->display_name}' was created",
+            'high',
+            $role,
+            null,
+            $role->toArray()
+        );
+    }
+
+    /**
+     * Log role update
+     */
+    public static function logRoleUpdated($role, array $oldValues, array $newValues): SystemLog
+    {
+        return self::log(
+            'role_updated',
+            "Role '{$role->display_name}' was updated",
+            'high',
+            $role,
+            $oldValues,
+            $newValues
+        );
+    }
+
+    /**
+     * Log role deletion
+     */
+    public static function logRoleDeleted($role): SystemLog
+    {
+        return self::log(
+            'role_deleted',
+            "Role '{$role->display_name}' was deleted",
+            'critical',
+            $role,
+            $role->toArray(),
+            null
+        );
+    }
+
+    /**
+     * Log role status change
+     */
+    public static function logRoleStatusChanged($role, bool $isActive): SystemLog
+    {
+        return self::log(
+            'role_status_changed',
+            "Role '{$role->display_name}' status changed to " . ($isActive ? 'active' : 'inactive'),
+            'high',
+            $role,
+            ['is_active' => !$isActive],
+            ['is_active' => $isActive]
+        );
+    }
+
+    /**
+     * Log company verification
+     */
+    public static function logCompanyVerified($user, string $notes = null): SystemLog
+    {
+        return self::log(
+            'company_verified',
+            "Company '{$user->company_name}' was verified",
+            'high',
+            $user,
+            ['company_verification_status' => 'pending'],
+            ['company_verification_status' => 'verified', 'company_verified_at' => now()],
+            ['notes' => $notes]
+        );
+    }
+
+    /**
+     * Log company verification rejection
+     */
+    public static function logCompanyRejected($user, string $reason = null): SystemLog
+    {
+        return self::log(
+            'company_rejected',
+            "Company '{$user->company_name}' verification was rejected",
+            'high',
+            $user,
+            ['company_verification_status' => 'pending'],
+            ['company_verification_status' => 'rejected'],
+            ['rejection_reason' => $reason]
+        );
+    }
+
+    /**
+     * Log company verification document viewed
+     */
+    public static function logCompanyDocumentsViewed($user): SystemLog
+    {
+        return self::log(
+            'company_documents_viewed',
+            "Company verification documents for '{$user->company_name}' were viewed",
+            'medium',
+            $user
+        );
+    }
+
+    /**
+     * Log company verification document downloaded
+     */
+    public static function logCompanyDocumentDownloaded($user, $document): SystemLog
+    {
+        return self::log(
+            'company_document_downloaded',
+            "Company verification document '{$document->document_name}' was downloaded for '{$user->company_name}'",
+            'medium',
+            $user,
+            null,
+            null,
+            ['document_id' => $document->id, 'document_name' => $document->document_name, 'document_type' => $document->document_type]
+        );
+    }
+
+    /**
+     * Log loan category creation
+     */
+    public static function logLoanCategoryCreated($category): SystemLog
+    {
+        return self::log(
+            'loan_category_created',
+            "Loan category '{$category->name}' was created",
+            'high',
+            $category,
+            null,
+            $category->toArray()
+        );
+    }
+
+    /**
+     * Log loan category update
+     */
+    public static function logLoanCategoryUpdated($category, array $oldValues, array $newValues): SystemLog
+    {
+        return self::log(
+            'loan_category_updated',
+            "Loan category '{$category->name}' was updated",
+            'high',
+            $category,
+            $oldValues,
+            $newValues
+        );
+    }
+
+    /**
+     * Log loan category disable
+     */
+    public static function logLoanCategoryDisabled($category): SystemLog
+    {
+        return self::log(
+            'loan_category_disabled',
+            "Loan category '{$category->name}' was disabled",
+            'high',
+            $category,
+            ['is_active' => true],
+            ['is_active' => false]
+        );
+    }
+
+    /**
+     * Log blog post creation
+     */
+    public static function logBlogPostCreated($post): SystemLog
+    {
+        return self::log(
+            'blog_post_created',
+            "Blog post '{$post->title}' was created",
+            'medium',
+            $post,
+            null,
+            $post->toArray()
+        );
+    }
+
+    /**
+     * Log blog post update
+     */
+    public static function logBlogPostUpdated($post, array $oldValues, array $newValues): SystemLog
+    {
+        return self::log(
+            'blog_post_updated',
+            "Blog post '{$post->title}' was updated",
+            'medium',
+            $post,
+            $oldValues,
+            $newValues
+        );
+    }
+
+    /**
      * Get default description based on action
      */
     private static function getDefaultDescription(string $action, $model = null): string
@@ -299,15 +527,30 @@ class LogService
             'user_deleted' => 'User was deleted',
             'user_status_changed' => 'User status was changed',
             'role_assigned' => 'Role was assigned',
+            'role_created' => 'Role was created',
+            'role_updated' => 'Role was updated',
+            'role_deleted' => 'Role was deleted',
+            'role_status_changed' => 'Role status was changed',
             'permission_changed' => 'Permission was changed',
             'application_created' => 'Application was created',
             'application_status_changed' => 'Application status was changed',
             'lender_approved' => 'Lender was approved',
             'lender_rejected' => 'Lender was rejected',
+            'lender_disabled' => 'Lender was disabled',
+            'lender_enabled' => 'Lender was enabled',
             'loan_product_created' => 'Loan product was created',
             'loan_product_updated' => 'Loan product was updated',
             'loan_product_deleted' => 'Loan product was deleted',
             'loan_product_status_changed' => 'Loan product status was changed',
+            'company_verified' => 'Company was verified',
+            'company_rejected' => 'Company verification was rejected',
+            'company_documents_viewed' => 'Company verification documents were viewed',
+            'company_document_downloaded' => 'Company verification document was downloaded',
+            'loan_category_created' => 'Loan category was created',
+            'loan_category_updated' => 'Loan category was updated',
+            'loan_category_disabled' => 'Loan category was disabled',
+            'blog_post_created' => 'Blog post was created',
+            'blog_post_updated' => 'Blog post was updated',
         ];
 
         return $descriptions[$action] ?? ucfirst(str_replace('_', ' ', $action));

@@ -8,8 +8,10 @@ use Livewire\WithPagination;
 use App\Models\Role;
 use App\Models\Permission;
 use App\Models\User;
+use App\Services\LogService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class RoleManagement extends Component
@@ -27,10 +29,16 @@ class RoleManagement extends Component
     public $showDeleteRoleModal = false;
     public $showManagePermissionsModal = false;
     public $showRoleUsersModal = false;
+    public $showPasswordConfirmModal = false;
 
     // Selected items
     public $selectedRole = null;
     public $roleToDelete = null;
+    public $confirmAction = '';
+    public $confirmRoleId = null;
+    public $currentPassword = '';
+    public $passwordConfirmTitle = '';
+    public $passwordConfirmMessage = '';
 
     // Create role properties
     public $name = '';
@@ -130,7 +138,7 @@ class RoleManagement extends Component
             return;
         }
 
-        Role::create([
+        $role = Role::create([
             'name' => $this->name,
             'display_name' => $this->display_name,
             'description' => $this->description,
@@ -138,6 +146,9 @@ class RoleManagement extends Component
             'is_active' => $this->is_active,
             'is_system_role' => false,
         ]);
+
+        // Log role creation
+        LogService::logRoleCreated($role);
 
         $this->loadStats();
         $this->resetCreateRoleForm();
@@ -198,6 +209,18 @@ class RoleManagement extends Component
             return;
         }
 
+        // Store old values for logging
+        $oldValues = [
+            'display_name' => $this->selectedRole->display_name,
+            'description' => $this->selectedRole->description,
+            'level' => $this->selectedRole->level,
+            'is_active' => $this->selectedRole->is_active,
+        ];
+        
+        if (!$this->selectedRole->is_system_role) {
+            $oldValues['name'] = $this->selectedRole->name;
+        }
+
         $updateData = [
             'display_name' => $this->edit_display_name,
             'description' => $this->edit_description,
@@ -211,6 +234,9 @@ class RoleManagement extends Component
         }
 
         $this->selectedRole->update($updateData);
+
+        // Log role update
+        LogService::logRoleUpdated($this->selectedRole, $oldValues, $updateData);
 
         // Update role levels for users with this role
         // Get user IDs first to avoid loading full user models
@@ -370,8 +396,8 @@ class RoleManagement extends Component
         session()->flash('message', 'User removed from role successfully!');
     }
 
-    // Toggle role status
-    public function toggleRoleStatus($roleId)
+    // Confirm toggle role status
+    public function confirmToggleRoleStatus($roleId)
     {
         if (!auth()->user()->hasPermission('roles.edit')) {
             session()->flash('error', 'You do not have permission to edit roles.');
@@ -385,11 +411,87 @@ class RoleManagement extends Component
             return;
         }
 
+        $this->confirmRoleId = $roleId;
+        $this->confirmAction = 'toggleStatus';
+        $this->passwordConfirmTitle = 'Confirm Status Change';
+        $action = $role->is_active ? 'deactivate' : 'activate';
+        $this->passwordConfirmMessage = "Are you sure you want to {$action} the role '{$role->display_name}'? This is a critical action that will " . ($role->is_active ? 'prevent users with this role from accessing certain features' : 'restore access for users with this role') . ".";
+        $this->showPasswordConfirmModal = true;
+        $this->currentPassword = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    // Toggle role status (after confirmation)
+    private function performToggleRoleStatus($roleId)
+    {
+        $role = Role::findOrFail($roleId);
+
+        if (auth()->user()->role_level <= $role->level) {
+            session()->flash('error', 'You cannot modify a role with level equal or higher than your own.');
+            return;
+        }
+
+        $oldStatus = $role->is_active;
         $role->update(['is_active' => !$role->is_active]);
+        
+        // Log role status change
+        LogService::logRoleStatusChanged($role, $role->is_active);
+        
         $this->loadStats();
         
         $status = $role->is_active ? 'activated' : 'deactivated';
         session()->flash('message', "Role {$status} successfully!");
+    }
+
+    public function closePasswordConfirmModal()
+    {
+        $this->showPasswordConfirmModal = false;
+        $this->confirmAction = '';
+        $this->confirmRoleId = null;
+        $this->currentPassword = '';
+        $this->passwordConfirmTitle = '';
+        $this->passwordConfirmMessage = '';
+        $this->resetValidation(['currentPassword']);
+    }
+
+    public function passwordConfirmationRules()
+    {
+        return [
+            'currentPassword' => 'required|string',
+        ];
+    }
+
+    public function executeConfirmedAction()
+    {
+        try {
+            $this->validate($this->passwordConfirmationRules());
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return;
+        }
+
+        // Verify current user's password
+        if (!Hash::check($this->currentPassword, auth()->user()->password)) {
+            $this->addError('currentPassword', 'The password is incorrect.');
+            return;
+        }
+
+        try {
+            if ($this->confirmAction === 'toggleStatus') {
+                $this->performToggleRoleStatus($this->confirmRoleId);
+            }
+
+            $this->closePasswordConfirmModal();
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to execute confirmed action', [
+                'action' => $this->confirmAction,
+                'role_id' => $this->confirmRoleId,
+                'error' => $e->getMessage(),
+                'executed_by' => auth()->id()
+            ]);
+            
+            session()->flash('error', 'Failed to execute action. Please try again.');
+        }
     }
 
     // Reset methods

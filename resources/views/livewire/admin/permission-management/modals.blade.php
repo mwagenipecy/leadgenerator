@@ -67,7 +67,10 @@
     <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showEditPermissionModal', false)">
         <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-lg shadow-lg rounded-3xl bg-white">
             <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-gray-900">Edit Permission</h3>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900">Edit Permission Description</h3>
+                    <p class="text-sm text-gray-500 mt-1">Only description can be edited</p>
+                </div>
                 <button wire:click="$set('showEditPermissionModal', false)" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -76,38 +79,40 @@
             </div>
 
             <form wire:submit.prevent="updatePermission" class="space-y-6">
+                <!-- Read-only fields -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Permission Name *</label>
-                    <input wire:model="edit_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    @error('edit_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
-                    <p class="text-xs text-gray-500 mt-1">Use lowercase letters, dots, and underscores only</p>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Permission Name</label>
+                    <input type="text" value="{{ $selectedPermission->name }}" disabled class="w-full border border-gray-300 rounded-xl px-3 py-2 bg-gray-50 text-gray-500 cursor-not-allowed">
+                    <p class="text-xs text-gray-400 mt-1">This field cannot be edited</p>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Display Name *</label>
-                    <input wire:model="edit_display_name" type="text" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                    @error('edit_display_name') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Display Name</label>
+                    <input type="text" value="{{ $selectedPermission->display_name }}" disabled class="w-full border border-gray-300 rounded-xl px-3 py-2 bg-gray-50 text-gray-500 cursor-not-allowed">
+                    <p class="text-xs text-gray-400 mt-1">This field cannot be edited</p>
+                </div>
+
+                <!-- Editable description field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                    <textarea wire:model="edit_description" rows="4" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="Enter permission description..."></textarea>
+                    @error('edit_description') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <textarea wire:model="edit_description" rows="3" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"></textarea>
-                    @error('edit_description') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <input type="text" value="{{ $categories[$selectedPermission->category] ?? ucfirst(str_replace('_', ' ', $selectedPermission->category)) }}" disabled class="w-full border border-gray-300 rounded-xl px-3 py-2 bg-gray-50 text-gray-500 cursor-not-allowed">
+                    <p class="text-xs text-gray-400 mt-1">This field cannot be edited</p>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-                    <select wire:model="edit_category" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                        @foreach($categories as $key => $label)
-                            <option value="{{ $key }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                    @error('edit_category') <span class="text-sidebar-green text-xs">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="flex items-center">
-                    <input wire:model="edit_is_active" type="checkbox" id="edit_is_active" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
-                    <label for="edit_is_active" class="ml-2 block text-sm text-gray-700">Permission is active</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <div class="flex items-center">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $selectedPermission->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                            {{ $selectedPermission->is_active ? 'Active' : 'Inactive' }}
+                        </span>
+                        <p class="text-xs text-gray-400 ml-2">This field cannot be edited</p>
+                    </div>
                 </div>
 
                 <div class="flex justify-end space-x-4 pt-6">
@@ -116,8 +121,8 @@
                         Cancel
                     </button>
                     <button type="submit" 
-                        class="bg-green-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-green-700 transition-colors">
-                        Update Permission
+                        class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
+                        Update Description
                     </button>
                 </div>
             </form>
