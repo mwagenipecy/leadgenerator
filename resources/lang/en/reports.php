@@ -33,5 +33,12 @@ return [
     'top_performing_lenders' => 'Top Performing Lenders',
     'rank' => 'Rank',
     'status_breakdown' => 'Status Breakdown',
+    'monthly_trends' => 'Monthly Trends (Last 6 Months)',
+    'application_number' => 'Application #',
+    'applicant' => 'Applicant',
+    'product' => 'Product',
+    'amount' => 'Amount',
+    'booking_fee' => 'Booking Fee',
+    'booked_date' => 'Booked Date',
 ];
 

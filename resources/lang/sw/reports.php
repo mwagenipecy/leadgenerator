@@ -33,5 +33,12 @@ return [
     'top_performing_lenders' => 'Wakopeshaji Wanaofanya Vizuri Zaidi',
     'rank' => 'Cheo',
     'status_breakdown' => 'Muhtasari wa Hali',
+    'monthly_trends' => 'Mienendo ya Kila Mwezi (Miezi 6 Iliyopita)',
+    'application_number' => 'Nambari ya Maombi',
+    'applicant' => 'Mombaji',
+    'product' => 'Bidhaa',
+    'amount' => 'Kiasi',
+    'booking_fee' => 'Ada ya Uwekaji',
+    'booked_date' => 'Tarehe ya Uwekaji',
 ];
 
