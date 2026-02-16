@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password - Fanikisha Market place</title>
+    <!-- Alpine.js for language switcher -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .language-dropdown { z-index: 9999 !important; }
+    </style>
     <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,19 +47,19 @@
                 <!-- Red Gradient Background for Text Section -->
                 <div class="bg-gradient-to-t from-brand-red via-brand-red/95 to-brand-red/80 rounded-lg p-5 backdrop-blur-sm">
                     <h2 class="text-xl md:text-2xl font-bold font-poppins text-white mb-3 leading-tight">
-                        Connect. Grow. Succeed.
+                        {{ __('auth.connect_grow_succeed') }}
                     </h2>
                     <div class="space-y-2 mb-4">
                         <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Lenders</h3>
+                            <h3 class="text-base font-semibold text-white mb-1">{{ __('auth.for_lenders') }}</h3>
                             <p class="text-white text-sm leading-snug">
-                                Access verified borrowers and expand your portfolio with confidence.
+                                {{ __('auth.access_verified_borrowers') }}
                             </p>
                         </div>
                         <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Borrowers</h3>
+                            <h3 class="text-base font-semibold text-white mb-1">{{ __('auth.for_borrowers') }}</h3>
                             <p class="text-white text-sm leading-snug">
-                                Get matched with trusted lenders and secure the funding you need.
+                                {{ __('auth.get_matched_with_lenders') }}
                             </p>
                         </div>
                     </div>
@@ -61,14 +67,18 @@
                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span class="text-white text-xs font-medium">NIDA-Verified & Secure</span>
+                        <span class="text-white text-xs font-medium">{{ __('auth.nida_verified_secure') }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Right Side - Forgot Password Form -->
-        <div class="w-full lg:w-1/2 h-screen overflow-y-auto">
+        <div class="w-full lg:w-1/2 h-screen overflow-y-auto relative">
+            <!-- Language Switcher (Top Right) -->
+            <div class="absolute top-4 right-4 z-50">
+                <x-language-switcher />
+            </div>
             <div class="flex items-center justify-center min-h-full p-6 sm:p-8 lg:p-12">
                 <div class="w-full max-w-lg py-8">
                 
@@ -85,8 +95,8 @@
                         </div>
                     </div>
                     
-                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">Reset Password</h2>
-                    <p class="text-gray-600">Enter your email to receive a reset link</p>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ __('auth.forgot_password_title') }}</h2>
+                    <p class="text-gray-600">{{ __('auth.forgot_password_subtitle') }}</p>
         </div>
 
         <!-- Forgot Password Form -->
@@ -100,7 +110,7 @@
                     </svg>
                 </div>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                            Forgot your password? No problem. Just let us know your email address and we will send you a password reset link that will allow you to choose a new one.
+                            {{ __('auth.forgot_password_description') }}
                 </p>
             </div>
 
@@ -125,7 +135,7 @@
                         <!-- Email Field -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                        Email 
+                        {{ __('auth.email') }}
                     </label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -142,11 +152,11 @@
                             required 
                             autofocus
                                     class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
-                                    placeholder="Enter your email"
+                                    placeholder="{{ __('auth.enter_email') }}"
                         >
                     </div>
                     <p class="mt-2 text-xs text-gray-500">
-                        We'll send a reset link to your email address
+                        {{ __('auth.reset_link_sent') }}
                     </p>
                 </div>
 
@@ -161,14 +171,14 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
-                        Send Password Reset Link
+                        {{ __('auth.send_reset_link') }}
                                 </span>
                                 <span id="btnLoader" class="hidden flex items-center justify-center">
                                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Sending...
+                                    {{ __('auth.sending') }}
                                 </span>
                     </button>
                 </div>
@@ -178,12 +188,12 @@
             <!-- Back to Login Link -->
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
-                    Remember your password? 
+                    {{ __('auth.remember_password') }} 
                             <a href="{{ route('login') }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors inline-flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
-                        Back to Sign In
+                        {{ __('auth.back_to_sign_in') }}
                     </a>
                 </p>
             </div>
@@ -195,7 +205,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                 </svg>
-                <span>Reset links expire in 60 minutes for your security</span>
+                <span>{{ __('auth.reset_link_expires') }}</span>
             </div>
         </div>
 

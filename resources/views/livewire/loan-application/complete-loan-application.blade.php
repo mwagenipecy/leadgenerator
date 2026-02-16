@@ -5,8 +5,8 @@
         <!-- Header -->
         <div class="mb-8">
             <div class="text-center mb-6">
-                <h1 class="text-4xl font-bold text-gray-900 mb-2">Complete Your Loan Application</h1>
-                <p class="text-xl text-gray-600">Final steps to submit your application to selected lenders</p>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('loan.complete_your_loan_application') }}</h1>
+                <p class="text-xl text-gray-600">{{ __('loan.final_steps_submit') }}</p>
             </div>
 
             <!-- Progress Steps -->
@@ -28,16 +28,16 @@
                                 <div class="hidden sm:block">
                                     <p class="text-sm font-bold {{ $currentStep >= $i ? 'text-sidebar-green' : 'text-gray-500' }}">
                                         @switch($i)
-                                            @case(1) Upload Documents @break
-                                            @case(2) Review Application @break
-                                            @case(3) Submit & Confirm @break
+                                            @case(1) {{ __('loan.upload_documents') }} @break
+                                            @case(2) {{ __('loan.review_application') }} @break
+                                            @case(3) {{ __('loan.submit_confirm') }} @break
                                         @endswitch
                                     </p>
                                     <p class="text-xs text-gray-500">
                                         @switch($i)
-                                            @case(1) Required documents @break
-                                            @case(2) Verify details @break
-                                            @case(3) Final submission @break
+                                            @case(1) {{ __('loan.required_documents') }} @break
+                                            @case(2) {{ __('loan.verify_details') }} @break
+                                            @case(3) {{ __('loan.final_submission') }} @break
                                         @endswitch
                                     </p>
                                 </div>
@@ -91,12 +91,12 @@
                 <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-900 mb-2">Upload Required Documents</h2>
-                            <p class="text-gray-600">Please upload clear, readable copies of the required documents for all selected lenders</p>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('loan.upload_required_documents') }}</h2>
+                            <p class="text-gray-600">{{ __('loan.upload_clear_readable_copies') }}</p>
                         </div>
                         <div class="text-center">
                             <div class="text-2xl font-bold text-blue-600">{{ number_format($this->calculateRequiredDocumentsProgress()) }}%</div>
-                            <div class="text-sm text-gray-600">Complete</div>
+                            <div class="text-sm text-gray-600">{{ __('loan.complete') }}</div>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                 <div class="p-6">
                     <!-- Application Summary -->
                     <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100 mb-8">
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">Application Summary</h3>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">{{ __('loan.application_summary') }}</h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="bg-white rounded-lg p-3">
                                 <p class="text-xs text-gray-600">Loan Amount</p>
@@ -528,31 +528,31 @@
 
                     <!-- Next Steps Information -->
                     <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-6 border border-yellow-100 mb-6">
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">What Happens Next?</h3>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">{{ __('loan.what_happens_next') }}</h3>
                         <div class="space-y-3">
                             <div class="flex items-start space-x-3">
                                 <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <span class="text-xs font-bold text-yellow-800">1</span>
                                 </div>
-                                <p class="text-sm text-gray-700">Lenders will review your application and documents within their processing timeframes.</p>
+                                <p class="text-sm text-gray-700">{{ __('loan.lenders_will_review') }}</p>
                             </div>
                             <div class="flex items-start space-x-3">
                                 <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <span class="text-xs font-bold text-yellow-800">2</span>
                                 </div>
-                                <p class="text-sm text-gray-700">You'll receive notifications about application status updates via SMS and email.</p>
+                                <p class="text-sm text-gray-700">{{ __('loan.receive_notifications') }}</p>
                             </div>
                             <div class="flex items-start space-x-3">
                                 <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <span class="text-xs font-bold text-yellow-800">3</span>
                                 </div>
-                                <p class="text-sm text-gray-700">Approved offers will be available in your dashboard for comparison and acceptance.</p>
+                                <p class="text-sm text-gray-700">{{ __('loan.approved_offers_available') }}</p>
                             </div>
                             <div class="flex items-start space-x-3">
                                 <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <span class="text-xs font-bold text-yellow-800">4</span>
                                 </div>
-                                <p class="text-sm text-gray-700">Choose the best offer and complete the final steps for loan disbursement.</p>
+                                <p class="text-sm text-gray-700">{{ __('loan.choose_best_offer') }}</p>
                             </div>
                         </div>
                     </div>
@@ -561,11 +561,11 @@
                     <div class="flex justify-center space-x-4 mt-8">
                         <button wire:click="viewApplications"
                                 class="bg-sidebar-green text-white px-6 py-3 rounded-lg font-medium hover:bg-sidebar-green-light transition-colors">
-                            View My Applications
+                            {{ __('loan.view_my_applications') }}
                         </button>
                         <a href="{{ route('dashboard') }}" 
                            class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
-                            Go to Dashboard
+                            {{ __('loan.go_to_dashboard') }}
                         </a>
                     </div>
                 </div>

@@ -10,19 +10,19 @@
                 <!-- Red Gradient Background for Text Section -->
                 <div class="bg-gradient-to-t from-brand-red via-brand-red/95 to-brand-red/80 rounded-lg p-5 backdrop-blur-sm">
                     <h2 class="text-xl md:text-2xl font-bold font-poppins text-white mb-3 leading-tight">
-                        Connect. Grow. Succeed.
+                        {{ __('auth.connect_grow_succeed') }}
                     </h2>
                     <div class="space-y-2 mb-4">
                         <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Lenders</h3>
+                            <h3 class="text-base font-semibold text-white mb-1">{{ __('auth.for_lenders') }}</h3>
                             <p class="text-white text-sm leading-snug">
-                                Access verified borrowers and expand your portfolio with confidence.
+                                {{ __('auth.access_verified_borrowers') }}
                             </p>
                         </div>
                         <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Borrowers</h3>
+                            <h3 class="text-base font-semibold text-white mb-1">{{ __('auth.for_borrowers') }}</h3>
                             <p class="text-white text-sm leading-snug">
-                                Get matched with trusted lenders and secure the funding you need.
+                                {{ __('auth.get_matched_with_lenders') }}
                             </p>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
-                        <span class="text-white text-xs font-medium">NIDA-Verified & Secure</span>
+                        <span class="text-white text-xs font-medium">{{ __('auth.nida_verified_secure') }}</span>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,62 @@
         <div class="w-full lg:w-1/2 h-screen overflow-y-auto">
             <!-- Language Switcher (Top Right) -->
             <div class="absolute top-4 right-4 z-10">
-                <x-language-switcher :currentLocale="app()->getLocale()" />
+                @php
+                    // Use the shared currentLocale from middleware, or fallback to app locale
+                    $currentLocale = $currentLocale ?? app()->getLocale();
+                    // Ensure it's a valid locale
+                    if (!in_array($currentLocale, ['en', 'sw'])) {
+                        $currentLocale = 'en';
+                    }
+                @endphp
+                <div class="relative" id="language-switcher">
+                    <button 
+                        type="button"
+                        onclick="toggleLanguageDropdown()"
+                        class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
+                        title="{{ __('common.language') }}">
+                        <!-- Language Icon -->
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                        </svg>
+                        <!-- Current Language -->
+                        <span class="hidden sm:inline">{{ $currentLocale === 'en' ? __('common.english') : __('common.swahili') }}</span>
+                        <span class="sm:hidden uppercase">{{ $currentLocale }}</span>
+                        <!-- Dropdown Arrow -->
+                        <svg class="w-4 h-4 transition-transform" id="language-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div 
+                        id="language-dropdown"
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 hidden"
+                        style="z-index: 9999;">
+                        <a 
+                            href="{{ route('language.switch', 'en') }}?type={{ $type }}"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ $currentLocale === 'en' ? 'bg-green-50 text-green-700 font-medium' : '' }}">
+                            <span class="w-6 text-center font-semibold">EN</span>
+                            <span>{{ __('common.english') }}</span>
+                            @if($currentLocale === 'en')
+                                <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            @endif
+                        </a>
+                        <a 
+                            href="{{ route('language.switch', 'sw') }}?type={{ $type }}"
+                            class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ $currentLocale === 'sw' ? 'bg-green-50 text-green-700 font-medium' : '' }}">
+                            <span class="w-6 text-center font-semibold">SW</span>
+                            <span>{{ __('common.swahili') }}</span>
+                            @if($currentLocale === 'sw')
+                                <svg class="w-4 h-4 ml-auto text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            @endif
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="flex items-center justify-center min-h-full p-6 sm:p-8 lg:p-12">
                 <div class="w-full max-w-lg py-8">
@@ -57,8 +112,8 @@
                     <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $type === 'company' ? __('auth.register_business') : __('auth.register_individual') }}</h2>
                     <p class="text-gray-600">{{ $type === 'company' ? __('auth.business_onboarding') : __('auth.individual_onboarding') }}</p>
                     <div class="mt-6 inline-flex bg-gray-100 p-1 rounded-lg">
-                        <button type="button" wire:click="$set('type','individual')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='individual' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.individual') }}</button>
-                        <button type="button" wire:click="$set('type','company')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.business') }}</button>
+                        <a href="{{ route('user.register') }}?type=individual" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='individual' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.individual') }}</a>
+                        <a href="{{ route('user.register') }}?type=company" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.business') }}</a>
                     </div>
                 </div>
 
@@ -380,7 +435,7 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         {{ __('auth.already_have_account') }} 
-                        <a href="{{ route('login') }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
+                        <a href="{{ route('login') }}{{ session()->has('locale') && session()->get('locale') !== config('app.locale') ? '?locale=' . urlencode(session()->get('locale')) : '' }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
                             {{ __('auth.login') }}
                         </a>
                     </p>

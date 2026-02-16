@@ -24,5 +24,12 @@ return [
     'generate_report' => 'Generate Report',
     'no_results' => 'No results found',
     'no_results_description' => 'Try adjusting your search criteria',
+    'generating_credit_report' => 'Generating credit report...',
+    'credit_report_generated' => 'Credit Report Generated',
+    'report_generation_error' => 'Report Generation Error',
+    'showing_results' => 'Showing :from to :to of :total results',
+    'page' => 'Page',
+    'of' => 'of',
+    'results' => 'results',
 ];
 

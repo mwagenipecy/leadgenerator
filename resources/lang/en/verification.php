@@ -76,6 +76,13 @@ return [
     'valid' => 'Valid',
     'issue_date' => 'Issue Date',
     'license_categories' => 'License Categories',
+    'verification_information' => 'Verification Information',
+    'verified_on' => 'Verified On',
+    'data_source' => 'Data Source',
+    'tanzania_revenue_authority' => 'Tanzania Revenue Authority (TRA)',
+    're_verify' => 'Re-verify',
+    'print' => 'Print',
+    'raw_response_debug_mode' => 'Raw Response (Debug Mode)',
     
     // Vehicle Verification
     'tra_motor_vehicle_lookup' => 'TRA Motor Vehicle Details Lookup',

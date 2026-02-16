@@ -1,9 +1,9 @@
 <div>
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-black">Uploaded Documents</h3>
+        <h3 class="text-lg font-semibold text-black">{{ __('leads.uploaded_documents') }}</h3>
         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sidebar-green-100 text-sidebar-green-800">
-            {{ $application->documents->count() ?? 0 }} Documents
+            {{ $application->documents->count() ?? 0 }} {{ __('leads.documents_count') }}
         </span>
     </div>
 
@@ -19,8 +19,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-medium text-gray-900 mb-2">Documents Protected</h3>
-                <p class="text-sm text-gray-500 mb-6">Book this lead to view and download application documents.</p>
+                <h3 class="text-xl font-medium text-gray-900 mb-2">{{ __('leads.documents_protected') }}</h3>
+                <p class="text-sm text-gray-500 mb-6">{{ __('leads.book_to_view_documents') }}</p>
                 
                 <!-- Document preview cards (blurred) -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
@@ -108,7 +108,7 @@
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
-                                    Download
+                                    {{ __('leads.download') }}
                                 </button>
                                 
                                 @if($document->verification_status !== 'verified')
@@ -116,7 +116,7 @@
                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
-                                        Verify
+                                        {{ __('leads.verify') }}
                                     </button>
                                 @endif
                             </div>
@@ -133,8 +133,8 @@
                 <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                <h3 class="mt-2 text-sm font-medium text-black">No documents uploaded</h3>
-                <p class="mt-1 text-sm text-gray-500">Documents will appear here once uploaded by the applicant.</p>
+                <h3 class="mt-2 text-sm font-medium text-black">{{ __('leads.no_documents_uploaded') }}</h3>
+                <p class="mt-1 text-sm text-gray-500">{{ __('leads.documents_will_appear_here') }}</p>
             </div>
         @endif
     @endif

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('OTP Verification') }} - Fanikisha Market place</title>
+    <title>{{ __('auth.otp_verification') }} - Fanikisha Market place</title>
     <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -27,6 +27,12 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- Alpine.js for language switcher -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .language-dropdown { z-index: 9999 !important; }
+    </style>
 </head>
 <body class="font-inter">
 <div class="h-screen flex overflow-hidden">
@@ -40,19 +46,19 @@
                 <!-- Red Gradient Background for Text Section -->
                 <div class="bg-gradient-to-t from-brand-red via-brand-red/95 to-brand-red/80 rounded-lg p-5 backdrop-blur-sm">
                     <h2 class="text-xl md:text-2xl font-bold font-poppins text-white mb-3 leading-tight">
-                        Connect. Grow. Succeed.
+                        {{ __('auth.connect_grow_succeed') }}
                     </h2>
                     <div class="space-y-2 mb-4">
                         <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Lenders</h3>
+                            <h3 class="text-base font-semibold text-white mb-1">{{ __('auth.for_lenders') }}</h3>
                             <p class="text-white text-sm leading-snug">
-                                Access verified borrowers and expand your portfolio with confidence.
+                                {{ __('auth.access_verified_borrowers') }}
                             </p>
                         </div>
                         <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Borrowers</h3>
+                            <h3 class="text-base font-semibold text-white mb-1">{{ __('auth.for_borrowers') }}</h3>
                             <p class="text-white text-sm leading-snug">
-                                Get matched with trusted lenders and secure the funding you need.
+                                {{ __('auth.get_matched_with_lenders') }}
                             </p>
                         </div>
                     </div>
@@ -60,14 +66,18 @@
                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span class="text-white text-xs font-medium">NIDA-Verified & Secure</span>
+                        <span class="text-white text-xs font-medium">{{ __('auth.nida_verified_secure') }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Right Side - OTP Form -->
-        <div class="w-full lg:w-1/2 h-screen overflow-y-auto">
+        <div class="w-full lg:w-1/2 h-screen overflow-y-auto relative">
+            <!-- Language Switcher (Top Right) -->
+            <div class="absolute top-4 right-4 z-50">
+                <x-language-switcher />
+            </div>
             <div class="flex items-center justify-center min-h-full p-6 sm:p-8 lg:p-12">
                 <div class="w-full max-w-lg py-8">
         
@@ -83,8 +93,8 @@
                     <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-16 w-auto">
                 </div>
             </div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{{ __('Verify Your Identity') }}</h2>
-            <p class="text-gray-600">{{ __("We've sent a 6-digit code to") }}</p>
+            <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{{ __('auth.verify_identity') }}</h2>
+            <p class="text-gray-600">{{ __('auth.otp_sent_to') }}</p>
 @php
     $email = $user->email;
     $atPos = strpos($email, '@');
@@ -127,7 +137,7 @@
                 <!-- OTP Input -->
                 <div>
                     <label for="otp" class="block text-sm font-medium text-gray-700 mb-4 text-center">
-                        {{ __('Enter 6-digit verification code') }}
+                        {{ __('auth.enter_6_digit_code') }}
                     </label>
                     
                     <!-- OTP Input Fields -->
@@ -160,14 +170,14 @@
                         class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled
                     >
-                        {{ __('Verify Code') }}
+                        {{ __('auth.verify_code') }}
                     </button>
                 </div>
 
                 <!-- Resend OTP -->
                 <div class="text-center">
                     <p class="text-sm text-gray-600 mb-2">
-                        {{ __("Didn't receive the code?") }}
+                        {{ __('auth.didnt_receive_code') }}
                     </p>
                     <form method="POST" action="{{ route('otp.resend') }}" class="inline">
                         @csrf
@@ -177,7 +187,7 @@
                             class="font-medium text-brand-red hover:text-brand-dark-red transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                             @if(!$canResend) disabled @endif
                         >
-                            {{ __('Resend Code') }}
+                            {{ __('auth.resend_code') }}
                         </button>
                     </form>
                 </div>
@@ -187,7 +197,7 @@
             <!-- Back to Login -->
             <div class="mt-6 text-center">
                 <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-brand-red transition-colors">
-                    ← {{ __('Back to Login') }}
+                    ← {{ __('auth.back_to_login') }}
                 </a>
             </div>
         </div>
@@ -198,7 +208,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                 </svg>
-                <span>{{ __('Code expires in 10 minutes for security') }}</span>
+                <span>{{ __('auth.code_expires_in_minutes') }}</span>
             </div>
         </div>
 
@@ -230,7 +240,7 @@
                 
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
-                    timerElement.textContent = '{{ __("Code expired. Please request a new one.") }}';
+                    timerElement.textContent = '{{ __('auth.code_expired_request_new') }}';
                     timerElement.className = 'text-sm text-brand-red mb-4';
                     
                     // Enable resend button when code expires
@@ -244,7 +254,7 @@
                 if (remainingTime > 0) {
                     const minutes = Math.floor(remainingTime / 60);
                     const seconds = remainingTime % 60;
-                    timerElement.textContent = `{{ __('Code expires in') }} ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    timerElement.textContent = `{{ __('auth.code_expires_in') }} ${minutes}:${seconds.toString().padStart(2, '0')}`;
                     timerElement.className = 'text-sm text-gray-600 mb-4';
                     
                     // Enable resend button in last minute
@@ -341,14 +351,14 @@
 
             // Add loading state to submit button
             document.getElementById('otpForm').addEventListener('submit', function() {
-                verifyBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>{{ __("Verifying...") }}';
+                verifyBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>{{ __('auth.verifying') }}';
                 verifyBtn.disabled = true;
             });
 
             // Add loading state to resend button
             if (resendBtn) {
                 resendBtn.closest('form').addEventListener('submit', function() {
-                    resendBtn.innerHTML = '{{ __("Sending...") }}';
+                    resendBtn.innerHTML = '{{ __('auth.sending_code') }}';
                     resendBtn.disabled = true;
                 });
             }

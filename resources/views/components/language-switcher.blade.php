@@ -14,12 +14,13 @@
     }
 @endphp
 
-<div class="relative" x-data="{ open: false }">
+<div class="relative" x-data="{ open: false }" id="language-switcher-container">
     <button 
         type="button"
         @click="open = !open"
         class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700 cursor-pointer"
-        title="{{ __('common.language') }}">
+        title="{{ __('common.language') }}"
+        id="language-switcher-button">
         <!-- Language Icon -->
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
@@ -28,7 +29,7 @@
         <span class="hidden sm:inline">{{ $currentLocale === 'en' ? __('common.english') : __('common.swahili') }}</span>
         <span class="sm:hidden uppercase">{{ $currentLocale }}</span>
         <!-- Dropdown Arrow -->
-        <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
         </svg>
     </button>
@@ -44,9 +45,10 @@
         x-transition:leave="transition ease-in duration-75"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
+        id="language-dropdown"
         class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-[9999] language-dropdown">
         <a 
-            href="{{ route('language.switch', 'en') }}"
+            href="{{ route('language.switch', 'en') }}?redirect={{ urlencode(request()->url()) }}"
             class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ $currentLocale === 'en' ? 'bg-sidebar-green-50 text-sidebar-green font-medium' : '' }}">
             <span class="w-6 text-center font-semibold">EN</span>
             <span>{{ __('common.english') }}</span>
@@ -57,7 +59,7 @@
             @endif
         </a>
         <a 
-            href="{{ route('language.switch', 'sw') }}"
+            href="{{ route('language.switch', 'sw') }}?redirect={{ urlencode(request()->url()) }}"
             class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ $currentLocale === 'sw' ? 'bg-sidebar-green-50 text-sidebar-green font-medium' : '' }}">
             <span class="w-6 text-center font-semibold">SW</span>
             <span>{{ __('common.swahili') }}</span>
@@ -69,4 +71,5 @@
         </a>
     </div>
 </div>
+
 

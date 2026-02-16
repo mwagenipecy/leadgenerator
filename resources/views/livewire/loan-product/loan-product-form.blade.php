@@ -4,9 +4,9 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-4xl font-bold text-black mb-2">
-                    {{ $mode === 'create' ? 'Create New' : 'Edit' }} Loan Product
+                    {{ $mode === 'create' ? __('admin.create_new_loan_product') : __('admin.edit_loan_product') }}
                 </h1>
-                <p class="text-gray-600 text-lg">Step {{ $currentStep }} of 4 - Complete all steps to publish your loan product</p>
+                <p class="text-gray-600 text-lg">{{ __('admin.step_of', ['current' => $currentStep, 'total' => 4]) }} - {{ __('admin.complete_all_steps') }}</p>
             </div>
             <div class="flex items-center space-x-3">
                 <button wire:click="cancel" class="text-black hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="Cancel">
@@ -36,18 +36,18 @@
                             <div class="hidden sm:block">
                                 <p class="text-sm font-bold {{ $currentStep >= $i ? 'text-sidebar-green' : 'text-gray-500' }}">
                                     @switch($i)
-                                        @case(1) Basic Information @break
-                                        @case(2) Amount & Terms @break
-                                        @case(3) Eligibility Criteria @break
-                                        @case(4) Requirements & Fees @break
+                                        @case(1) {{ __('admin.basic_information') }} @break
+                                        @case(2) {{ __('admin.amount_terms') }} @break
+                                        @case(3) {{ __('admin.eligibility_criteria') }} @break
+                                        @case(4) {{ __('admin.requirements_fees') }} @break
                                     @endswitch
                                 </p>
                                 <p class="text-xs text-gray-400">
                                     @switch($i)
-                                        @case(1) Product details & features @break
-                                        @case(2) Loan limits & interest rates @break
-                                        @case(3) Who can apply @break
-                                        @case(4) Documents & charges @break
+                                        @case(1) {{ __('admin.product_details_features') }} @break
+                                        @case(2) {{ __('admin.loan_limits_interest_rates') }} @break
+                                        @case(3) {{ __('admin.who_can_apply') }} @break
+                                        @case(4) {{ __('admin.documents_charges') }} @break
                                     @endswitch
                                 </p>
                             </div>
@@ -68,9 +68,9 @@
             @if($currentStep === 1)
                 <div class="p-8">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-black">Basic Information</h2>
+                        <h2 class="text-2xl font-bold text-black">{{ __('admin.basic_information') }}</h2>
                         <div class="bg-sidebar-green-50 px-4 py-2 rounded-full">
-                            <span class="text-sidebar-green-light text-sm font-medium">Step 1 of 4</span>
+                            <span class="text-sidebar-green-light text-sm font-medium">{{ __('admin.step_of', ['current' => 1, 'total' => 4]) }}</span>
                         </div>
                     </div>
                     
@@ -78,7 +78,7 @@
                         <!-- Product Name & Status -->
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div class="lg:col-span-2">
-                                <label class="block text-sm font-medium text-black mb-2">Product Name *</label>
+                                <label class="block text-sm font-medium text-black mb-2">{{ __('admin.product_name') }} *</label>
                                 <input wire:model.live="name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-medium" placeholder="e.g., Personal Loan, Business Loan, Emergency Loan">
                                 @error('name') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
@@ -104,9 +104,9 @@
                         <!-- Loan Type & Promotional Tag -->
                         <div class="flex space-x-4">
                             <div class="w-1/2">
-                                <label class="block text-sm font-medium text-black mb-2">Loan Category *</label>
+                                <label class="block text-sm font-medium text-black mb-2">{{ __('admin.loan_category') }} *</label>
                                 <select wire:model.live="loan_category_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                    <option value="">Select Loan Category</option>
+                                    <option value="">{{ __('admin.select_loan_category') }}</option>
                                     @foreach($loanCategories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
@@ -115,7 +115,7 @@
                             </div>
 
                             <div class="w-1/2">
-                                <label class="block text-sm font-medium text-black mb-2">Promotional Tag (Optional)</label>
+                                <label class="block text-sm font-medium text-black mb-2">{{ __('admin.promotional_tag') }}</label>
                                 <input wire:model.live="promotional_tag" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" placeholder="e.g., Best Rate, Quick Approval, No Collateral">
                                 @error('promotional_tag') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 <p class="text-sm text-gray-500 mt-1">This will appear as a badge on your product card</p>
@@ -128,7 +128,7 @@
 
 
                         <div>
-                                <label class="block text-sm font-medium text-black mb-2">Loan Type *</label>
+                                <label class="block text-sm font-medium text-black mb-2">{{ __('admin.loan_type') }} *</label>
                                 <div class="flex items-center space-x-4 pt-3">
                                     <label class="flex items-center cursor-pointer">
                                         <input wire:model.live="loan_type" type="radio" name="loan_type" value="unsecured" class="text-sidebar-green focus:ring-sidebar-green">
@@ -148,14 +148,14 @@
 
                         <!-- Description -->
                         <div>
-                            <label class="block text-sm font-medium text-black mb-2">Product Description</label>
+                            <label class="block text-sm font-medium text-black mb-2">{{ __('admin.product_description') }}</label>
                             <textarea wire:model.live="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" placeholder="Describe your loan product, its benefits, and who it's designed for..."></textarea>
                             @error('description') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Key Features -->
                         <div>
-                            <label class="block text-sm font-medium text-black mb-2">Key Features</label>
+                            <label class="block text-sm font-medium text-black mb-2">{{ __('admin.key_features') }}</label>
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-3">
                                     <input wire:model.live="newKeyFeature" wire:keydown.enter="addKeyFeature" type="text" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" placeholder="Add a key feature (e.g., No hidden fees, Fast approval)">
@@ -166,7 +166,7 @@
                                 
                                 @if(count($key_features) > 0)
                                     <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="text-sm font-medium text-black mb-3">Added Features:</h4>
+                                        <h4 class="text-sm font-medium text-black mb-3">{{ __('admin.added_features') }}</h4>
                                         <div class="flex flex-wrap gap-2">
                                             @foreach($key_features as $index => $feature)
                                                 <span class="inline-flex items-center bg-green-100 text-green-800 px-3 py-2 rounded-full text-sm font-medium">
@@ -196,7 +196,7 @@
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-black">Amount & Terms</h2>
                         <div class="bg-sidebar-green-50 px-4 py-2 rounded-full">
-                            <span class="text-sidebar-green-light text-sm font-medium">Step 2 of 4</span>
+                            <span class="text-sidebar-green-light text-sm font-medium">{{ __('admin.step_of', ['current' => 2, 'total' => 4]) }}</span>
                         </div>
                     </div>
                     
@@ -211,12 +211,12 @@
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Minimum Amount (TSh) *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.minimum_amount') }} *</label>
                                     <input wire:model.live="min_amount" type="number" step="1000" min="1000" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                     @error('min_amount') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Maximum Amount (TSh) *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.maximum_amount') }} *</label>
                                     <input wire:model.live="max_amount" type="number" step="1000" min="1000" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                     @error('max_amount') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
@@ -240,12 +240,12 @@
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Minimum Tenure (Months) *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.minimum_tenure') }} *</label>
                                     <input wire:model.live="min_tenure_months" type="number" min="1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                     @error('min_tenure_months') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Maximum Tenure (Months) *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.maximum_tenure') }} *</label>
                                     <input wire:model.live="max_tenure_months" type="number" min="1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                     @error('max_tenure_months') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
@@ -262,17 +262,17 @@
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Minimum Rate (%) *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.minimum_rate') }} *</label>
                                     <input wire:model.live="interest_rate_min" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                     @error('interest_rate_min') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Maximum Rate (%) *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.maximum_rate') }} *</label>
                                     <input wire:model.live="interest_rate_max" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                     @error('interest_rate_max') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Interest Type *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.interest_type') }} *</label>
                                     <select wire:model.live="interest_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                         <option value="reducing">Reducing Balance</option>
                                         <option value="fixed">Fixed Rate</option>
@@ -285,15 +285,15 @@
                         <!-- Processing Timeline & DSR -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                <h3 class="text-lg font-bold text-black mb-4">Processing Timeline</h3>
+                                <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.processing_timeline') }}</h3>
                                 <div class="space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-black mb-2">Approval Time (Days) *</label>
+                                        <label class="block text-sm font-medium text-black mb-2">{{ __('admin.approval_time') }} *</label>
                                         <input wire:model.live="approval_time_days" type="number" min="1" max="90" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                         @error('approval_time_days') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-black mb-2">Disbursement Time (Days) *</label>
+                                        <label class="block text-sm font-medium text-black mb-2">{{ __('admin.disbursement_time') }} *</label>
                                         <input wire:model.live="disbursement_time_days" type="number" min="1" max="30" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold">
                                         @error('disbursement_time_days') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
@@ -317,21 +317,21 @@
             @elseif($currentStep === 3)
                 <div class="p-8">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-black">Eligibility Criteria</h2>
+                        <h2 class="text-2xl font-bold text-black">{{ __('admin.eligibility_criteria') }}</h2>
                         <div class="bg-sidebar-green-50 px-4 py-2 rounded-full">
-                            <span class="text-sidebar-green-light text-sm font-medium">Step 3 of 4</span>
+                            <span class="text-sidebar-green-light text-sm font-medium">{{ __('admin.step_of', ['current' => 3, 'total' => 4]) }}</span>
                         </div>
                     </div>
                     
                     <div class="space-y-8">
                         <!-- Employment Requirements -->
                         <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                            <h3 class="text-lg font-bold text-black mb-4">Employment Requirements</h3>
+                            <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.employment_requirements') }}</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Employment Type *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.employment_type') }} *</label>
                                     <select wire:model.live="employment_requirement" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
-                                        <option value="all">All Employment Types</option>
+                                        <option value="all">{{ __('admin.all_employment_types') }}</option>
                                         <option value="employed">Employed</option>
                                         <option value="business">Business</option>
                                     </select>
@@ -339,7 +339,7 @@
                                 </div>
                                 @if($employment_requirement === 'employed')
                                     <div>
-                                        <label class="block text-sm font-medium text-black mb-2">Minimum Employment Period (Months)</label>
+                                        <label class="block text-sm font-medium text-black mb-2">{{ __('admin.minimum_employment_period') }}</label>
                                         <input wire:model.live="min_employment_months" type="number" min="1" max="120" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                         @error('min_employment_months') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                         <p class="text-sm text-gray-500 mt-1">How long must they be employed?</p>
@@ -350,15 +350,15 @@
 
                         <!-- Age Requirements -->
                         <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                            <h3 class="text-lg font-bold text-black mb-4">Age Requirements</h3>
+                            <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.age_requirements') }}</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Minimum Age *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.minimum_age') }} *</label>
                                     <input wire:model.live="min_age" type="number" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                     @error('min_age') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Maximum Age *</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.maximum_age') }} *</label>
                                     <input wire:model.live="max_age" type="number" min="18" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                     @error('max_age') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
@@ -368,10 +368,10 @@
                         <!-- Income & Credit Requirements -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                <h3 class="text-lg font-bold text-black mb-4">Income Requirements</h3>
+                                <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.income_requirements') }}</h3>
                                 <div class="space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-black mb-2">Minimum Monthly Income (TSh)</label>
+                                        <label class="block text-sm font-medium text-black mb-2">{{ __('admin.minimum_monthly_income') }}</label>
                                         <input wire:model.live="min_monthly_income" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                         @error('min_monthly_income') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
@@ -379,10 +379,10 @@
                             </div>
 
                             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                <h3 class="text-lg font-bold text-black mb-4">Credit Requirements</h3>
+                                <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.credit_requirements') }}</h3>
                                 <div class="space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-black mb-2">Minimum Credit Score</label>
+                                        <label class="block text-sm font-medium text-black mb-2">{{ __('admin.minimum_credit_score') }}</label>
                                         <input wire:model.live="min_credit_score" type="number" min="300" max="850" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                         @error('min_credit_score') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     </div>
@@ -392,7 +392,7 @@
 
                         <!-- Business Sectors -->
                         <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                            <h3 class="text-lg font-bold text-black mb-4">Allowed Business Sectors (Optional)</h3>
+                            <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.allowed_business_sectors') }}</h3>
                             <p class="text-sm text-gray-600 mb-4">Select business sectors eligible for this loan product. Leave empty to allow all sectors.</p>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                                 @foreach($businessSectors as $key => $sector)
@@ -412,7 +412,7 @@
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-black">Requirements & Fees</h2>
                         <div class="bg-sidebar-green-50 px-4 py-2 rounded-full">
-                            <span class="text-sidebar-green-light text-sm font-medium">Step 4 of 4</span>
+                            <span class="text-sidebar-green-light text-sm font-medium">{{ __('admin.step_of', ['current' => 4, 'total' => 4]) }}</span>
                         </div>
                     </div>
                     
@@ -422,24 +422,24 @@
                             <h3 class="text-lg font-bold text-black mb-4">Fees & Charges</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Processing Fee (%)</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.processing_fee_percent') }}</label>
                                     <input wire:model.live="processing_fee_percentage" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                     @error('processing_fee_percentage') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     <p class="text-sm text-gray-500 mt-1">Percentage of loan amount</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Processing Fee (Fixed TSh)</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.processing_fee_fixed') }}</label>
                                     <input wire:model.live="processing_fee_fixed" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                     @error('processing_fee_fixed') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                     <p class="text-sm text-gray-500 mt-1">Fixed amount in TSh</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Late Payment Fee (TSh)</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.late_payment_fee') }}</label>
                                     <input wire:model.live="late_payment_fee" type="number" step="1000" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                     @error('late_payment_fee') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Early Repayment Fee (%)</label>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.early_repayment_fee') }}</label>
                                     <input wire:model.live="early_repayment_fee_percentage" type="number" step="0.01" min="0" max="100" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green font-medium">
                                     @error('early_repayment_fee_percentage') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
@@ -449,7 +449,7 @@
                         <!-- Collateral & Guarantor Requirements -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                <h3 class="text-lg font-bold text-black mb-4">Collateral Requirements</h3>
+                                <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.collateral_requirements') }}</h3>
                                 <div class="space-y-6">
                                     <label class="flex items-center cursor-pointer bg-white p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
                                         <input wire:model.live="requires_collateral" type="checkbox" class="text-sidebar-green focus:ring-sidebar-green rounded h-5 w-5">
@@ -458,7 +458,7 @@
                                     
                                     @if($requires_collateral)
                                         <div>
-                                            <label class="block text-sm font-medium text-black mb-3">Accepted Collateral Types</label>
+                                            <label class="block text-sm font-medium text-black mb-3">{{ __('admin.accepted_collateral_types') }}</label>
                                             <div class="grid grid-cols-1 gap-3">
                                                 @foreach($collateralTypes as $key => $type)
                                                     <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all duration-200 {{ in_array($key, $selectedCollateralTypes) ? 'bg-sidebar-green-50 border-sidebar-green-300 text-sidebar-green-light' : '' }}">
@@ -473,7 +473,7 @@
                             </div>
 
                             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                <h3 class="text-lg font-bold text-black mb-4">Guarantor Requirements</h3>
+                                <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.guarantor_requirements') }}</h3>
                                 <div class="space-y-4">
                                     <label class="flex items-center cursor-pointer bg-white p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
                                         <input wire:model.live="requires_guarantor" type="checkbox" class="text-sidebar-green focus:ring-sidebar-green rounded h-5 w-5">
@@ -548,16 +548,16 @@
 
                         <!-- Terms and Conditions -->
                         <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                            <h3 class="text-lg font-bold text-black mb-4">Terms and Conditions</h3>
+                            <h3 class="text-lg font-bold text-black mb-4">{{ __('admin.terms_and_conditions') }}</h3>
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Terms and Conditions</label>
-                                    <textarea wire:model.live="terms_and_conditions" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" placeholder="Enter the terms and conditions for this loan product..."></textarea>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.terms_and_conditions') }}</label>
+                                    <textarea wire:model.live="terms_and_conditions" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" placeholder="{{ __('admin.enter_terms_conditions') }}"></textarea>
                                     @error('terms_and_conditions') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-black mb-2">Eligibility Criteria Summary</label>
-                                    <textarea wire:model.live="eligibility_criteria" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" placeholder="Summarize the eligibility criteria for this loan..."></textarea>
+                                    <label class="block text-sm font-medium text-black mb-2">{{ __('admin.eligibility_criteria_summary') }}</label>
+                                    <textarea wire:model.live="eligibility_criteria" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" placeholder="{{ __('admin.summarize_eligibility_criteria') }}"></textarea>
                                     @error('eligibility_criteria') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                                 </div>
                             </div>
@@ -576,7 +576,7 @@
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                                 </svg>
-                                Previous Step
+                                {{ __('admin.previous_step') }}
                             </button>
                         @else
                             <button type="button" wire:click="cancel" @click.prevent class="bg-gray-100 text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center">
@@ -590,7 +590,7 @@
 
                     <!-- Step Indicator -->
                     <div class="hidden md:flex items-center space-x-2">
-                        <span class="text-sm text-gray-500">Step {{ $currentStep }} of 4</span>
+                        <span class="text-sm text-gray-500">{{ __('admin.step_of', ['current' => $currentStep, 'total' => 4]) }}</span>
                         <div class="flex space-x-1">
                             @for($i = 1; $i <= 4; $i++)
                                 <div class="w-2 h-2 rounded-full {{ $currentStep >= $i ? 'bg-sidebar-green' : 'bg-gray-300' }}"></div>
@@ -602,7 +602,7 @@
                     <div>
                         @if($currentStep < 4)
                             <button type="button" wire:click="nextStep" @click.prevent class="bg-sidebar-green text-white px-6 py-3 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg flex items-center">
-                                Next Step
+                                {{ __('admin.next_step') }}
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>

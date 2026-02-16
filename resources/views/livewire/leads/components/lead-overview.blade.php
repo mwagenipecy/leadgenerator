@@ -2,18 +2,18 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Loan Details -->
     <div>
-        <h3 class="text-lg font-semibold text-black mb-4">Loan Application Details</h3>
+        <h3 class="text-lg font-semibold text-black mb-4">{{ __('leads.loan_application_details') }}</h3>
         <div class="bg-gray-50 rounded-lg p-6 space-y-4">
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Application Number</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.application_number') }}</span>
                 <span class="text-sm font-bold text-black">{{ $application->application_number }}</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Loan Product</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.loan_product') }}</span>
                 <span class="text-sm font-bold text-black">{{ $application->loanProduct->name ?? 'N/A' }}</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Requested Amount</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.requested_amount') }}</span>
                 <span class="text-sm font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
                     @if($isAvailable)
                     TSh {{ number_format($application->requested_amount) }}
@@ -23,15 +23,15 @@
                 </span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Tenure</span>
-                <span class="text-sm font-bold text-black">{{ $application->requested_tenure_months }} months</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.tenure') }}</span>
+                <span class="text-sm font-bold text-black">{{ $application->requested_tenure_months }} {{ __('leads.months') }}</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Purpose</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.purpose') }}</span>
                 <span class="text-sm font-bold text-black">{{ ucwords(str_replace('_', ' ', $application->loan_purpose ?? 'N/A')) }}</span>
             </div>
             <div class="flex justify-between items-center py-3">
-                <span class="text-sm font-medium text-gray-600">Application Date</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.application_date') }}</span>
                 <span class="text-sm font-bold text-black">{{ $application->created_at->format('M d, Y H:i') }}</span>
             </div>
         </div>
@@ -39,14 +39,14 @@
 
     <!-- Risk Assessment -->
     <div>
-        <h3 class="text-lg font-semibold text-black mb-4">Risk Assessment</h3>
+        <h3 class="text-lg font-semibold text-black mb-4">{{ __('leads.risk_assessment') }}</h3>
         <div class="bg-gray-50 rounded-lg p-6 space-y-4">
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Credit Score</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.crb_score') }}</span>
                 <span class="text-sm font-bold text-black">{{ $application->credit_score ?? 'N/A' }}</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Debt-to-Income Ratio</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.debt_to_income_ratio') }}</span>
                 @if($application->debt_to_income_ratio && !$isAvailable)
                     <span class="text-sm font-bold {{ $application->debt_to_income_ratio <= 30 ? 'text-green-600' : ($application->debt_to_income_ratio <= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                         {{ number_format($application->debt_to_income_ratio, 1) }}%
@@ -60,7 +60,7 @@
                 @endif
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                <span class="text-sm font-medium text-gray-600">Monthly Obligations</span>
+                <span class="text-sm font-medium text-gray-600">{{ __('leads.monthly_obligations') }}</span>
                 <span class="text-sm font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
                     @if($isAvailable)
                     TSh {{ number_format($application->total_monthly_income ?? 0) }}
@@ -83,7 +83,7 @@
 
 <!-- Application Timeline -->
 <div class="mt-8">
-    <h3 class="text-lg font-semibold text-black mb-4">Application Timeline</h3>
+    <h3 class="text-lg font-semibold text-black mb-4">{{ __('leads.application_timeline') }}</h3>
     <div class="bg-gray-50 rounded-lg p-6">
         <div class="flow-root">
             <ul class="-mb-8">
@@ -99,7 +99,7 @@
                             </div>
                             <div class="min-w-0 flex-1 pt-1.5">
                                 <div>
-                                    <p class="text-sm text-gray-500">Application submitted</p>
+                                    <p class="text-sm text-gray-500">{{ __('leads.application_submitted') }}</p>
                                     <p class="text-xs text-gray-400">{{ $application->created_at->format('M d, Y H:i') }}</p>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@
                                 </div>
                                 <div class="min-w-0 flex-1 pt-1.5">
                                     <div>
-                                        <p class="text-sm text-gray-500">Review started</p>
+                                        <p class="text-sm text-gray-500">{{ __('leads.review_started') }}</p>
                                         <p class="text-xs text-gray-400">{{ $application->reviewed_at->format('M d, Y H:i') }}</p>
                                     </div>
                                 </div>
@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="min-w-0 flex-1 pt-1.5">
                                     <div>
-                                        <p class="text-sm text-gray-500">Application approved</p>
+                                        <p class="text-sm text-gray-500">{{ __('leads.application_approved') }}</p>
                                         <p class="text-xs text-gray-400">{{ $application->approved_at->format('M d, Y H:i') }}</p>
                                     </div>
                                 </div>
@@ -173,7 +173,7 @@
                                 </div>
                                 <div class="min-w-0 flex-1 pt-1.5">
                                     <div>
-                                        <p class="text-sm text-gray-500">Loan disbursed</p>
+                                        <p class="text-sm text-gray-500">{{ __('leads.loan_disbursed') }}</p>
                                         <p class="text-xs text-gray-400">{{ $application->disbursed_at->format('M d, Y H:i') }}</p>
                                     </div>
                                 </div>

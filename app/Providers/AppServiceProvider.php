@@ -35,8 +35,26 @@ class AppServiceProvider extends ServiceProvider
         // Register Outlook mail transport
         $this->app->make(MailManager::class)->extend('outlook', function (array $config) {
             return new OutlookTransport(
-                $this->app->make(OutlookMailService::class)
+                $this->app->make(OutlookMailMailService::class)
             );
         });
+        
+        // Set locale for Livewire on every component hydration
+        // This ensures Livewire components respect the session locale
+        if (class_exists(\Livewire\Livewire::class)) {
+            try {
+                \Livewire\Livewire::listen('component.hydrate', function ($component) {
+                    if (session()->has('locale')) {
+                        $locale = session()->get('locale');
+                        if (in_array($locale, ['en', 'sw'])) {
+                            app()->setLocale($locale);
+                        }
+                    }
+                });
+            } catch (\Exception $e) {
+                // Silently fail if Livewire listener can't be registered
+                // The middleware will still handle locale setting
+            }
+        }
     }
 }

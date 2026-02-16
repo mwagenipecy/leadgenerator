@@ -24,5 +24,12 @@ return [
     'generate_report' => 'Toa Ripoti',
     'no_results' => 'Hakuna matokeo yaliyopatikana',
     'no_results_description' => 'Jaribu kubadilisha vigezo vyako vya utafutaji',
+    'generating_credit_report' => 'Inatoa ripoti ya mkopo...',
+    'credit_report_generated' => 'Ripoti ya Mkopo Imetolewa',
+    'report_generation_error' => 'Kosa la Kutoa Ripoti',
+    'showing_results' => 'Inaonyesha :from hadi :to ya :total matokeo',
+    'page' => 'Ukurasa',
+    'of' => 'ya',
+    'results' => 'matokeo',
 ];
 

@@ -2,24 +2,24 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Personal Information -->
     <div>
-        <h3 class="text-lg font-semibold text-black mb-4">Personal Information</h3>
+        <h3 class="text-lg font-semibold text-black mb-4">{{ __('leads.personal_information') }}</h3>
         <div class="bg-gray-50 rounded-lg p-6 space-y-4">
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="text-sm font-medium text-gray-600">First Name</label>
+                    <label class="text-sm font-medium text-gray-600">{{ __('leads.first_name') }}</label>
                     <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                         {{ $this->getBlurredValue($application->first_name ?? 'N/A', 'name') }}
                     </p>
                 </div>
                 <div>
-                    <label class="text-sm font-medium text-gray-600">Last Name</label>
+                    <label class="text-sm font-medium text-gray-600">{{ __('leads.last_name') }}</label>
                     <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                         {{ $this->getBlurredValue($application->last_name ?? 'N/A', 'name') }}
                     </p>
                 </div>
             </div>
             <div>
-                <label class="text-sm font-medium text-gray-600">Date of Birth</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.date_of_birth') }}</label>
                 <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                     @if($isAvailable)
                         ****-**-**
@@ -30,20 +30,20 @@
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="text-sm font-medium text-gray-600">Gender</label>
+                    <label class="text-sm font-medium text-gray-600">{{ __('leads.gender') }}</label>
                     <p class="text-sm font-bold text-black mt-1">
                         {{ ucfirst($application->gender ?? 'N/A') }}
                     </p>
                 </div>
                 <div>
-                    <label class="text-sm font-medium text-gray-600">Marital Status</label>
+                    <label class="text-sm font-medium text-gray-600">{{ __('leads.marital_status') }}</label>
                     <p class="text-sm font-bold text-black mt-1">
                         {{ ucwords(str_replace('_', ' ', $application->marital_status ?? 'N/A')) }}
                     </p>
                 </div>
             </div>
             <div>
-                <label class="text-sm font-medium text-gray-600">National ID</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.national_id') }}</label>
                 <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                     @if($isAvailable)
                         NIDA****
@@ -57,10 +57,10 @@
 
     <!-- Contact Information -->
     <div>
-        <h3 class="text-lg font-semibold text-black mb-4">Contact Information</h3>
+        <h3 class="text-lg font-semibold text-black mb-4">{{ __('leads.contact_information') }}</h3>
         <div class="bg-gray-50 rounded-lg p-6 space-y-4">
             <div>
-                <label class="text-sm font-medium text-gray-600">Email Address</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.email_address') }}</label>
                 <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                     @if($isAvailable)
                         ***@***.***
@@ -70,7 +70,7 @@
                 </p>
             </div>
             <div>
-                <label class="text-sm font-medium text-gray-600">Phone Number</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.phone_number') }}</label>
                 <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                     @if($isAvailable)
                         +255***-***-***
@@ -80,7 +80,7 @@
                 </p>
             </div>
             <div>
-                <label class="text-sm font-medium text-gray-600">Alternative Phone</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.alternative_phone') }}</label>
                 <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                     @if($isAvailable)
                         +255***-***-***
@@ -95,34 +95,34 @@
 
 <!-- Address Information -->
 <div class="mt-8">
-    <h3 class="text-lg font-semibold text-black mb-4">Address Information</h3>
+    <h3 class="text-lg font-semibold text-black mb-4">{{ __('leads.address_information') }}</h3>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Current Address -->
         <div>
-            <h4 class="text-md font-medium text-gray-700 mb-3">Current Residence</h4>
+            <h4 class="text-md font-medium text-gray-700 mb-3">{{ __('leads.current_residence') }}</h4>
             <div class="bg-gray-50 rounded-lg p-6 space-y-4">
                 <div>
-                    <label class="text-sm font-medium text-gray-600">Address</label>
+                    <label class="text-sm font-medium text-gray-600">{{ __('leads.address') }}</label>
                     <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                         {{ $this->getBlurredValue($application->current_address ?? 'N/A', 'address') }}
                     </p>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-sm font-medium text-gray-600">City</label>
+                        <label class="text-sm font-medium text-gray-600">{{ __('leads.city') }}</label>
                         <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                             {{ $this->getBlurredValue($application->current_city ?? 'N/A', 'city') }}
                         </p>
                     </div>
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Region</label>
+                        <label class="text-sm font-medium text-gray-600">{{ __('leads.region') }}</label>
                         <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                             {{ $this->getBlurredValue($application->current_region ?? 'N/A', 'region') }}
                         </p>
                     </div>
                 </div>
                 <div>
-                    <label class="text-sm font-medium text-gray-600">Postal Code</label>
+                    <label class="text-sm font-medium text-gray-600">{{ __('leads.postal_code') }}</label>
                     <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                         @if($isAvailable)
                             *****
@@ -132,9 +132,9 @@
                     </p>
                 </div>
                 <div>
-                    <label class="text-sm font-medium text-gray-600">Years at Address</label>
+                    <label class="text-sm font-medium text-gray-600">{{ __('leads.years_at_address') }}</label>
                     <p class="text-sm font-bold text-black mt-1">
-                        {{ $application->years_at_current_address ?? 'N/A' }} years
+                        {{ $application->years_at_current_address ?? 'N/A' }} {{ __('leads.years') }}
                     </p>
                 </div>
             </div>
@@ -143,19 +143,19 @@
         <!-- Previous Address (if applicable) -->
         @if($application->previous_address && !$isAvailable)
             <div>
-                <h4 class="text-md font-medium text-gray-700 mb-3">Previous Residence</h4>
+                <h4 class="text-md font-medium text-gray-700 mb-3">{{ __('leads.previous_residence') }}</h4>
                 <div class="bg-gray-50 rounded-lg p-6 space-y-4">
                     <div>
-                        <label class="text-sm font-medium text-gray-600">Address</label>
+                        <label class="text-sm font-medium text-gray-600">{{ __('leads.address') }}</label>
                         <p class="text-sm font-bold text-black mt-1">{{ $application->previous_address }}</p>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-sm font-medium text-gray-600">City</label>
+                            <label class="text-sm font-medium text-gray-600">{{ __('leads.city') }}</label>
                             <p class="text-sm font-bold text-black mt-1">{{ $application->previous_city ?? 'N/A' }}</p>
                         </div>
                         <div>
-                            <label class="text-sm font-medium text-gray-600">Region</label>
+                            <label class="text-sm font-medium text-gray-600">{{ __('leads.region') }}</label>
                             <p class="text-sm font-bold text-black mt-1">{{ $application->previous_region ?? 'N/A' }}</p>
                         </div>
                     </div>
@@ -167,11 +167,11 @@
 
 <!-- Emergency Contact -->
 <div class="mt-8">
-    <h3 class="text-lg font-semibold text-black mb-4">Emergency Contact</h3>
+    <h3 class="text-lg font-semibold text-black mb-4">{{ __('leads.emergency_contact') }}</h3>
     <div class="bg-gray-50 rounded-lg p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-                <label class="text-sm font-medium text-gray-600">Full Name</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.full_name') }}</label>
                 <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                     @if($isAvailable)
                         {{ substr($application->emergency_contact_name ?? 'N/A', 0, 1) }}***
@@ -181,11 +181,11 @@
                 </p>
             </div>
             <div>
-                <label class="text-sm font-medium text-gray-600">Relationship</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.relationship') }}</label>
                 <p class="text-sm font-bold text-black mt-1">{{ ucwords(str_replace('_', ' ', $application->emergency_contact_relationship ?? 'N/A')) }}</p>
             </div>
             <div>
-                <label class="text-sm font-medium text-gray-600">Phone Number</label>
+                <label class="text-sm font-medium text-gray-600">{{ __('leads.phone_number') }}</label>
                 <p class="text-sm font-bold text-black mt-1 {{ $isAvailable ? 'blur-sm' : '' }}">
                     @if($isAvailable)
                         +255***-***-***

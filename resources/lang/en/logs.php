@@ -20,5 +20,6 @@ return [
     'ip_address' => 'IP Address',
     'actions' => 'Actions',
     'user_agent' => 'User Agent',
+    'showing_logs' => 'Showing :count of :total logs',
 ];
 

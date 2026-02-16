@@ -76,6 +76,13 @@ return [
     'valid' => 'Ni Halali',
     'issue_date' => 'Tarehe ya Kutolewa',
     'license_categories' => 'Jamii za Leseni',
+    'verification_information' => 'Taarifa za Uthibitishaji',
+    'verified_on' => 'Imethibitishwa Tarehe',
+    'data_source' => 'Chanzo cha Data',
+    'tanzania_revenue_authority' => 'Mamlaka ya Mapato ya Tanzania (TRA)',
+    're_verify' => 'Thibitisha Tena',
+    'print' => 'Chapisha',
+    'raw_response_debug_mode' => 'Jibu la Asili (Hali ya Utatuzi)',
     
     // Vehicle Verification
     'tra_motor_vehicle_lookup' => 'Utafutaji wa Maelezo ya Gari TRA',

@@ -279,15 +279,15 @@
             <!-- Left Column - Input Form -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-sidebar-green to-brand-dark-red text-white">
-                    <h3 class="text-xl font-bold mb-2">Your Financial Information</h3>
-                    <p class="text-sidebar-green-100 text-sm">Fill in your details to check eligibility</p>
+                    <h3 class="text-xl font-bold mb-2">{{ __('loan.your_financial_information') }}</h3>
+                    <p class="text-sidebar-green-100 text-sm">{{ __('loan.fill_details_check_eligibility') }}</p>
                 </div>
                 
                 <div class="p-6 space-y-6">
                     <!-- Loan Amount -->
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">
-                            Requested Loan Amount (TSh) *
+                            {{ __('loan.requested_loan_amount') }} *
                         </label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
@@ -592,7 +592,7 @@
                                         </p>
                                     </div>
                                     <div>
-                                        <p class="text-xs {{ $index === 0 && $isEligible ? 'text-sidebar-green-200' : 'text-gray-500' }}">Your DSR</p>
+                                        <p class="text-xs {{ $index === 0 && $isEligible ? 'text-sidebar-green-200' : 'text-gray-500' }}">{{ __('loan.your_dsr') }}</p>
                                         <p class="text-lg font-bold {{ $index === 0 && $isEligible ? 'text-white' : 'text-gray-900' }}">
                                             {{ number_format($result['actual_dsr'], 1) }}%
                                         </p>
@@ -646,7 +646,7 @@
                                                 <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                 </svg>
-                                                <span class="text-green-700 font-medium text-sm">You qualify for this loan product</span>
+                                                <span class="text-green-700 font-medium text-sm">{{ __('loan.you_qualify_for_this_product') }}</span>
                                             </div>
                                         </div>
                                     @else
@@ -713,7 +713,7 @@
                     <h1 class="text-4xl font-bold text-gray-900 mb-2">
                         {{ $currentStep === 'create' ? 'New' : 'Edit' }} Loan Application
                     </h1>
-                    <p class="text-gray-600 text-lg">Step {{ $currentFormStep }} of 6 - Complete all steps to submit your application</p>
+                    <p class="text-gray-600 text-lg">{{ __('loan.step_of_complete', ['current' => $currentFormStep, 'total' => 6]) }}</p>
                     @if($currentStep === 'create' && !empty($selectedLenders))
                         <div class="mt-2">
                             <p class="text-sm text-sidebar-green font-medium">
@@ -785,7 +785,7 @@
                                 <div class="hidden sm:block">
                                     <p class="text-sm font-bold {{ $currentFormStep >= $i ? 'text-sidebar-green' : 'text-gray-500' }}">
                                         @switch($i)
-                                            @case(1) Loan Details @break
+                                            @case(1) {{ __('loan.loan_details') }} @break
                                             @case(2) Personal Info @break
                                             @case(3) Address @break
                                             @case(4) Employment @break
@@ -811,9 +811,9 @@
                 @if($currentFormStep === 1)
                     <div class="p-8">
                         <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-2xl font-bold text-gray-900">Loan Details</h2>
+                            <h2 class="text-2xl font-bold text-gray-900">{{ __('loan.loan_details') }}</h2>
                             <div class="bg-blue-50 px-4 py-2 rounded-full">
-                                <span class="text-blue-700 text-sm font-medium">Step 1 of 6</span>
+                                <span class="text-blue-700 text-sm font-medium">{{ __('loan.step_of', ['current' => 1, 'total' => 6]) }}</span>
                             </div>
                         </div>
                         
@@ -827,8 +827,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="text-lg font-bold text-green-900 mb-1">Pre-qualification Completed</h3>
-                                        <p class="text-green-800 text-sm">Your DSR: {{ number_format($calculated_dsr, 1) }}% - You qualify for {{ count($preQualificationResults) }} loan products</p>
+                                        <h3 class="text-lg font-bold text-green-900 mb-1">{{ __('loan.pre_qualification_completed') }}</h3>
+                                        <p class="text-green-800 text-sm">{{ __('loan.your_dsr') }}: {{ number_format($calculated_dsr, 1) }}% - {{ __('loan.you_qualify_for_products', ['count' => count($preQualificationResults)]) }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -910,7 +910,7 @@
                                     @if($newDSR > 40)
                                         <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                                             <p class="text-sm text-yellow-800">
-                                                ⚠️ Your DSR may be too high for some lenders. Consider reducing the loan amount or extending the period.
+                                                ⚠️ {{ __('loan.dsr_too_high_warning') }}
                                             </p>
                                         </div>
                                     @endif
@@ -925,7 +925,7 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-900">Personal Information</h2>
                             <div class="bg-blue-50 px-4 py-2 rounded-full">
-                                <span class="text-blue-700 text-sm font-medium">Step 2 of 6</span>
+                                <span class="text-blue-700 text-sm font-medium">{{ __('loan.step_of', ['current' => 2, 'total' => 6]) }}</span>
                             </div>
                         </div>
                         
@@ -1014,7 +1014,7 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-900">Address Information</h2>
                             <div class="bg-blue-50 px-4 py-2 rounded-full">
-                                <span class="text-blue-700 text-sm font-medium">Step 3 of 6</span>
+                                <span class="text-blue-700 text-sm font-medium">{{ __('loan.step_of', ['current' => 3, 'total' => 6]) }}</span>
                             </div>
                         </div>
                         
@@ -1097,7 +1097,7 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-900">Employment & Financial Information</h2>
                             <div class="bg-blue-50 px-4 py-2 rounded-full">
-                                <span class="text-blue-700 text-sm font-medium">Step 4 of 6</span>
+                                <span class="text-blue-700 text-sm font-medium">{{ __('loan.step_of', ['current' => 4, 'total' => 6]) }}</span>
                             </div>
                         </div>
                         
@@ -1412,7 +1412,7 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-900">Emergency Contact & Additional Information</h2>
                             <div class="bg-blue-50 px-4 py-2 rounded-full">
-                                <span class="text-blue-700 text-sm font-medium">Step 5 of 6</span>
+                                <span class="text-blue-700 text-sm font-medium">{{ __('loan.step_of', ['current' => 5, 'total' => 6]) }}</span>
                             </div>
                         </div>
                         
@@ -1478,15 +1478,15 @@
                         <div class="flex items-center justify-between mb-6">
                             <h2 class="text-2xl font-bold text-gray-900">Required Documents</h2>
                             <div class="bg-blue-50 px-4 py-2 rounded-full">
-                                <span class="text-blue-700 text-sm font-medium">Step 6 of 6</span>
+                                <span class="text-blue-700 text-sm font-medium">{{ __('loan.step_of', ['current' => 6, 'total' => 6]) }}</span>
                             </div>
                         </div>
                         
                         <!-- Document Upload Section -->
                         <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
                             <div class="mb-6">
-                                <h3 class="text-lg font-bold text-gray-900 mb-2">Upload Required Documents</h3>
-                                <p class="text-sm text-gray-600">Please upload clear, readable copies of the following documents to complete your application.</p>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ __('loan.upload_required_documents') }}</h3>
+                                <p class="text-sm text-gray-600">{{ __('loan.upload_documents_description') }}</p>
                             </div>
                             
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1611,31 +1611,31 @@
 
                             <!-- Application Summary -->
                             <div class="mt-8 bg-white border border-gray-200 rounded-lg p-6">
-                                <h4 class="text-lg font-bold text-gray-900 mb-4">Application Summary</h4>
+                                <h4 class="text-lg font-bold text-gray-900 mb-4">{{ __('loan.application_summary') }}</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                                     <div>
-                                        <p class="text-gray-600">Loan Amount:</p>
+                                        <p class="text-gray-600">{{ __('loan.loan_amount_label') }}</p>
                                         <p class="font-bold text-gray-900">TSh {{ number_format($requested_amount) }}</p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-600">Loan Period:</p>
-                                        <p class="font-bold text-gray-900">{{ $requested_tenure_months }} months</p>
+                                        <p class="text-gray-600">{{ __('loan.loan_period_label') }}</p>
+                                        <p class="font-bold text-gray-900">{{ $requested_tenure_months }} {{ __('loan.months') }}</p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-600">Monthly Income:</p>
+                                        <p class="text-gray-600">{{ __('loan.monthly_income_label') }}</p>
                                         <p class="font-bold text-gray-900">TSh {{ number_format($total_monthly_income) }}</p>
                                     </div>
                                     <div>
-                                        <p class="text-gray-600">Selected Lenders:</p>
-                                        <p class="font-bold text-gray-900">{{ count($selectedLenders) }} lender{{ count($selectedLenders) > 1 ? 's' : '' }}</p>
+                                        <p class="text-gray-600">{{ __('loan.selected_lenders_label') }}</p>
+                                        <p class="font-bold text-gray-900">{{ count($selectedLenders) }} {{ count($selectedLenders) > 1 ? __('loan.lenders') : __('loan.lender') }}</p>
                                     </div>
                                 </div>
                                 
                                 @if($calculated_dsr > 0)
                                     <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                                         <p class="text-sm text-blue-800">
-                                            <strong>Your DSR:</strong> {{ number_format($calculated_dsr, 1) }}% 
-                                            - {{ $calculated_dsr <= 30 ? 'Excellent' : ($calculated_dsr <= 40 ? 'Good' : 'Fair') }} loan affordability
+                                            <strong>{{ __('loan.your_dsr') }}:</strong> {{ number_format($calculated_dsr, 1) }}% 
+                                            - {{ $calculated_dsr <= 30 ? __('loan.excellent') : ($calculated_dsr <= 40 ? __('loan.good') : __('loan.fair')) }} {{ __('loan.loan_affordability') }}
                                         </p>
                                     </div>
                                 @endif
@@ -1859,7 +1859,7 @@
                 <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-xl font-bold text-gray-900">Loan Details</h3>
+                            <h3 class="text-xl font-bold text-gray-900">{{ __('loan.loan_details') }}</h3>
                             @if($selectedApplication->debt_to_income_ratio)
                                 <div class="text-right">
                                     <p class="text-sm text-gray-600">DSR</p>
@@ -2622,7 +2622,7 @@
                             </div>
                             @if($selectedApplication->debt_to_income_ratio)
                                 <div class="bg-blue-100 rounded-lg p-3">
-                                    <p class="text-xs text-blue-700">Your DSR</p>
+                                    <p class="text-xs text-blue-700">{{ __('loan.your_dsr') }}</p>
                                     <p class="text-sm font-bold text-blue-900">{{ number_format($selectedApplication->debt_to_income_ratio, 1) }}%</p>
                                 </div>
                             @endif
@@ -2811,7 +2811,7 @@
                                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                                     </svg>
-                                                    You qualify for:
+                                                    {{ __('loan.you_qualify_for') }}
                                                 </h5>
                                                 <ul class="space-y-1">
                                                     @foreach($product['matched_criteria'] as $criteria)
@@ -3039,7 +3039,7 @@
                         <!-- Profile Summary Grid -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="bg-green-100 rounded-lg p-3">
-                                <p class="text-xs text-green-700">Your DSR</p>
+                                <p class="text-xs text-green-700">{{ __('loan.your_dsr') }}</p>
                                 <p class="text-sm font-bold text-green-900">{{ number_format($calculated_dsr, 1) }}%</p>
                             </div>
                             <div class="bg-green-100 rounded-lg p-3">
@@ -3443,34 +3443,33 @@
                     </svg>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">What Happens Next?</h3>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">{{ __('loan.what_happens_next') }}</h3>
                     <div class="space-y-3 text-sm text-gray-700">
                         <div class="flex items-start space-x-3">
                             <span class="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">1</span>
-                            <p><strong>Complete Application:</strong> Fill in detailed information across 6 steps including personal, employment, and financial details.</p>
+                            <p><strong>{{ __('loan.complete_application') }}:</strong> {{ __('loan.complete_application_description') }}</p>
                         </div>
                         <div class="flex items-start space-x-3">
                             <span class="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</span>
-                            <p><strong>Document Upload:</strong> Upload required documents like ID, salary slips, and bank statements.</p>
+                            <p><strong>{{ __('loan.document_upload') }}:</strong> {{ __('loan.document_upload_description') }}</p>
                         </div>
                         <div class="flex items-start space-x-3">
                             <span class="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</span>
-                            <p><strong>Submit to Lenders:</strong> Your application will be sent to all selected lenders simultaneously.</p>
+                            <p><strong>{{ __('loan.submit_to_lenders') }}:</strong> {{ __('loan.submit_to_lenders_description') }}</p>
                         </div>
                         <div class="flex items-start space-x-3">
                             <span class="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">4</span>
-                            <p><strong>Lender Review:</strong> Each lender will review your application and may request additional information.</p>
+                            <p><strong>{{ __('loan.lender_review') }}:</strong> {{ __('loan.lender_review_description') }}</p>
                         </div>
                         <div class="flex items-start space-x-3">
                             <span class="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">5</span>
-                            <p><strong>Decision & Disbursement:</strong> Approved loans will be disbursed according to your preferred method.</p>
+                            <p><strong>{{ __('loan.decision_disbursement') }}:</strong> {{ __('loan.decision_disbursement_description') }}</p>
                         </div>
                     </div>
                     
                     <div class="mt-4 p-4 bg-blue-50 rounded-lg">
                         <p class="text-sm text-blue-800">
-                            <strong>Tip:</strong> Multiple applications increase your chances of approval, but each lender may perform a credit check. 
-                            Consider your credit situation when deciding how many lenders to select.
+                            <strong>{{ __('loan.tip') }}:</strong> {{ __('loan.multiple_applications_tip') }}
                         </p>
                     </div>
                 </div>

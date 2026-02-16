@@ -1854,15 +1854,15 @@
                     <!-- Previous Employment (if applicable) -->
                     @if($selectedApplication->previous_employer_name)
                         <div class="mt-8">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Previous Employment</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ __('leads.previous_employment') }}</h3>
                             <div class="bg-gray-50 rounded-lg p-6">
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
-                                        <label class="text-sm font-medium text-gray-600">Previous Employer</label>
+                                        <label class="text-sm font-medium text-gray-600">{{ __('leads.previous_employer') }}</label>
                                         <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->previous_employer_name }}</p>
                                     </div>
                                     <div>
-                                        <label class="text-sm font-medium text-gray-600">Previous Job Title</label>
+                                        <label class="text-sm font-medium text-gray-600">{{ __('leads.previous_job_title') }}</label>
                                         <p class="text-sm font-bold text-gray-900 mt-1">{{ $selectedApplication->previous_job_title ?? 'N/A' }}</p>
                                     </div>
                                     <div>

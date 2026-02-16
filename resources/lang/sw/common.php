@@ -72,5 +72,6 @@ return [
     'per_page' => 'Kwa ukurasa',
     'selected' => 'Imechaguliwa',
     'action_cannot_undone' => 'Kitendo hiki hakiwezi kutenduliwa',
+    'all_statuses' => 'Hali Zote',
 ];
 

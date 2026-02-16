@@ -51,5 +51,39 @@ return [
     'creating_account' => 'Inaunda Akaunti...',
     'privacy_policy' => 'Sera ya Faragha',
     'and' => 'na',
+    
+    // Marketing content
+    'connect_grow_succeed' => 'Unganisha. Kua. Fanikisha.',
+    'for_lenders' => 'Kwa Wakopeshaji',
+    'for_borrowers' => 'Kwa Wakopaji',
+    'access_verified_borrowers' => 'Pata wakopaji waliyothibitishwa na uongeze portfolio yako kwa ujasiri.',
+    'get_matched_with_lenders' => 'Pata wakopeshaji wa kuaminika na upate ufadhili unaohitaji.',
+    'nida_verified_secure' => 'Imethibitishwa na NIDA na Salama',
+    
+    // Forgot Password
+    'forgot_password_title' => 'Weka Upya Nenosiri',
+    'forgot_password_subtitle' => 'Ingiza barua pepe yako kupokea kiungo cha kuweka upya',
+    'forgot_password_description' => 'Umesahau nenosiri lako? Hakuna tatizo. Tuambie anwani yako ya barua pepe na tutakutumia kiungo cha kuweka upya nenosiri ambacho kitakuruhusu kuchagua nenosiri jipya.',
+    'send_reset_link' => 'Tuma Kiungo cha Kuweka Upya Nenosiri',
+    'sending' => 'Inatumwa...',
+    'enter_email' => 'Ingiza barua pepe yako',
+    'reset_link_sent' => 'Tutakutumia kiungo cha kuweka upya kwenye anwani yako ya barua pepe',
+    'remember_password' => 'Unakumbuka nenosiri lako?',
+    'back_to_sign_in' => 'Rudi Kuingia',
+    'reset_link_expires' => 'Viungo vya kuweka upya hukoma muda baada ya dakika 60 kwa usalama wako',
+    
+    // OTP Verification
+    'verify_identity' => 'Thibitisha Utambulisho Wako',
+    'otp_sent_to' => 'Tumetuma msimbo wa tarakimu 6 kwa',
+    'enter_6_digit_code' => 'Ingiza msimbo wa uthibitishaji wa tarakimu 6',
+    'verify_code' => 'Thibitisha Msimbo',
+    'didnt_receive_code' => 'Hukupokea msimbo?',
+    'resend_code' => 'Tuma Msimbo Tena',
+    'back_to_login' => 'Rudi Kuingia',
+    'code_expires_in_minutes' => 'Msimbo unaisha muda baada ya dakika 10 kwa usalama',
+    'code_expires_in' => 'Msimbo unaisha muda baada ya',
+    'code_expired_request_new' => 'Msimbo umeisha muda. Tafadhali omba mpya.',
+    'verifying' => 'Inathibitisha...',
+    'sending_code' => 'Inatumwa...',
 ];
 

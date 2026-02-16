@@ -72,5 +72,6 @@ return [
     'per_page' => 'Per page',
     'selected' => 'Selected',
     'action_cannot_undone' => 'This action cannot be undone',
+    'all_statuses' => 'All Statuses',
 ];
 

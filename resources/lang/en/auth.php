@@ -51,5 +51,39 @@ return [
     'creating_account' => 'Creating Account...',
     'privacy_policy' => 'Privacy Policy',
     'and' => 'and',
+    
+    // Marketing content
+    'connect_grow_succeed' => 'Connect. Grow. Succeed.',
+    'for_lenders' => 'For Lenders',
+    'for_borrowers' => 'For Borrowers',
+    'access_verified_borrowers' => 'Access verified borrowers and expand your portfolio with confidence.',
+    'get_matched_with_lenders' => 'Get matched with trusted lenders and secure the funding you need.',
+    'nida_verified_secure' => 'NIDA-Verified & Secure',
+    
+    // Forgot Password
+    'forgot_password_title' => 'Reset Password',
+    'forgot_password_subtitle' => 'Enter your email to receive a reset link',
+    'forgot_password_description' => 'Forgot your password? No problem. Just let us know your email address and we will send you a password reset link that will allow you to choose a new one.',
+    'send_reset_link' => 'Send Password Reset Link',
+    'sending' => 'Sending...',
+    'enter_email' => 'Enter your email',
+    'reset_link_sent' => 'We\'ll send a reset link to your email address',
+    'remember_password' => 'Remember your password?',
+    'back_to_sign_in' => 'Back to Sign In',
+    'reset_link_expires' => 'Reset links expire in 60 minutes for your security',
+    
+    // OTP Verification
+    'verify_identity' => 'Verify Your Identity',
+    'otp_sent_to' => 'We\'ve sent a 6-digit code to',
+    'enter_6_digit_code' => 'Enter 6-digit verification code',
+    'verify_code' => 'Verify Code',
+    'didnt_receive_code' => 'Didn\'t receive the code?',
+    'resend_code' => 'Resend Code',
+    'back_to_login' => 'Back to Login',
+    'code_expires_in_minutes' => 'Code expires in 10 minutes for security',
+    'code_expires_in' => 'Code expires in',
+    'code_expired_request_new' => 'Code expired. Please request a new one.',
+    'verifying' => 'Verifying...',
+    'sending_code' => 'Sending...',
 ];
 

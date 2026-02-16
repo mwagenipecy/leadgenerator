@@ -213,7 +213,7 @@
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-600">
                     {{ __('auth.not_registered') }} 
-                            <a href="{{ route('user.register') }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
+                            <a href="{{ route('user.register') }}{{ session()->has('locale') && session()->get('locale') !== config('app.locale') ? '?locale=' . urlencode(session()->get('locale')) : '' }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
                         {{ __('auth.create_account') }}
                     </a>
                 </p>

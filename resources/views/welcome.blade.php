@@ -2,7 +2,7 @@
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +18,31 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            [x-cloak] { 
+                display: none !important; 
+            }
+            .language-dropdown { 
+                z-index: 9999 !important; 
+            }
+        </style>
+        <!-- Ensure Alpine.js starts on this page -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Wait a moment for Alpine to be available
+                setTimeout(function() {
+                    if (typeof window.Alpine !== 'undefined') {
+                        // Alpine is available, ensure it's started
+                        if (!window.Alpine.version) {
+                            window.Alpine.start();
+                        }
+                        console.log('Alpine.js is ready');
+                    } else {
+                        console.error('Alpine.js is not loaded!');
+                    }
+                }, 100);
+            });
+        </script>
 
   
     <style>
@@ -290,6 +315,10 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <!-- Language Switcher -->
+                    <div class="mr-2 relative z-50">
+                        <x-language-switcher />
+                    </div>
                     <a href="#eligibility" 
                        class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
                        style="color: #C40F11;">
@@ -332,6 +361,10 @@
             <!-- Mobile Navigation -->
             <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 bg-white">
                 <div class="py-4 space-y-1">
+                    <!-- Mobile Language Switcher -->
+                    <div class="px-4 py-2">
+                        <x-language-switcher />
+                    </div>
                     <a href="#eligibility" 
                        onclick="toggleMobileMenu()"
                        class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
@@ -426,11 +459,11 @@
                     </span>
                 </div>
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold font-poppins text-black leading-tight mb-6">
-                    Your Financial Partner
-                    <span class="block text-brand-green">For Every Situation</span>
+                    {{ __('landing.financial_partner') }}
+                    <span class="block text-brand-green">{{ __('landing.for_every_situation') }}</span>
                 </h2>
                 <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                    We believe everyone deserves access to financial opportunities, regardless of their employment status or traditional banking relationships.
+                    {{ __('landing.financial_opportunities') }}
                 </p>
             </div>
 
@@ -441,19 +474,19 @@
                     <!-- Mission Statement -->
                     <div>
                         <h3 class="text-2xl md:text-3xl font-semibold font-poppins text-black mb-4">
-                            Our Mission
+                            {{ __('landing.our_mission') }}
                         </h3>
                         <p class="text-gray-600 leading-relaxed mb-6">
-                            Traditional banking often leaves many people behind. We're changing that by connecting borrowers with lenders who understand diverse financial situations and evaluate applications based on your unique circumstances, not just employment status.
+                            {{ __('landing.mission_description_1') }}
                         </p>
                         <p class="text-gray-600 leading-relaxed">
-                            Through our secure, NIDA-verified platform, we make the loan application process transparent, fast, and accessible to everyone.
+                            {{ __('landing.mission_description_2') }}
                         </p>
                     </div>
 
                     <!-- Key Features -->
                     <div class="space-y-6">
-                        <h4 class="text-xl font-semibold font-poppins text-black">Why Choose Us?</h4>
+                        <h4 class="text-xl font-semibold font-poppins text-black">{{ __('landing.why_choose_us') }}</h4>
                         
                         <div class="space-y-4">
                             <div class="flex items-start space-x-4">
@@ -463,9 +496,9 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="font-semibold text-black mb-2">Inclusive Access</h5>
+                                    <h5 class="font-semibold text-black mb-2">{{ __('landing.inclusive_access') }}</h5>
                                     <p class="text-gray-600 text-sm leading-relaxed">
-                                        No employment requirements. We serve employed, self-employed, and non-employed individuals.
+                                        {{ __('landing.inclusive_access_desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -477,9 +510,9 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="font-semibold text-black mb-2">NIDA Verification</h5>
+                                    <h5 class="font-semibold text-black mb-2">{{ __('landing.nida_verification') }}</h5>
                                     <p class="text-gray-600 text-sm leading-relaxed">
-                                        Secure identity verification through NIDA integration for maximum trust and security.
+                                        {{ __('landing.nida_verification_desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -491,9 +524,9 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="font-semibold text-black mb-2">Smart Matching</h5>
+                                    <h5 class="font-semibold text-black mb-2">{{ __('landing.smart_matching') }}</h5>
                                     <p class="text-gray-600 text-sm leading-relaxed">
-                                        AI-powered system matches you with the most suitable lenders based on your profile.
+                                        {{ __('landing.smart_matching_desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -507,7 +540,7 @@
                                 <div>
                                     <h5 class="font-semibold text-black mb-2">{{ __('landing.fast_processing') }}</h5>
                                     <p class="text-gray-600 text-sm leading-relaxed">
-                                        Get matched with lenders and receive approval decisions within 24 hours.
+                                        {{ __('landing.fast_processing_desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -517,7 +550,7 @@
                     <!-- CTA -->
                     <div class="pt-4">
                         <a href="{{ route('user.register') }}" class="bg-brand-green text-white px-8 py-3 rounded-md font-semibold hover:bg-brand-green-light transition-all duration-300 flex items-center group inline-flex">
-                            Start Your Application
+                            {{ __('landing.start_application') }}
                             <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>
@@ -535,38 +568,38 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
                                 </svg>
                             </div>
-                            <h4 class="text-xl font-semibold font-poppins text-black mb-2">Platform Statistics</h4>
-                            <p class="text-gray-600 text-sm">Real numbers from our community</p>
+                            <h4 class="text-xl font-semibold font-poppins text-black mb-2">{{ __('landing.platform_statistics') }}</h4>
+                            <p class="text-gray-600 text-sm">{{ __('landing.real_numbers') }}</p>
                         </div>
 
                         <!-- Stats Grid -->
                         <div class="grid grid-cols-2 gap-6">
                             <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
                                 <div class="text-2xl md:text-3xl font-bold text-brand-green mb-1">2,500+</div>
-                                <div class="text-sm text-gray-600">Successful</div>
-                                <div class="text-sm text-gray-600">Applications</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.successful') }}</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.applications') }}</div>
                             </div>
                             <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
                                 <div class="text-2xl md:text-3xl font-bold text-black mb-1">50+</div>
-                                <div class="text-sm text-gray-600">Verified</div>
-                                <div class="text-sm text-gray-600">Lenders</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.verified') }}</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.lenders') }}</div>
                             </div>
                             <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
                                 <div class="text-2xl md:text-3xl font-bold text-brand-green mb-1">98%</div>
-                                <div class="text-sm text-gray-600">Success</div>
-                                <div class="text-sm text-gray-600">Rate</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.success') }}</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.rate') }}</div>
                             </div>
                             <div class="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-100">
                                 <div class="text-2xl md:text-3xl font-bold text-black mb-1">24hrs</div>
-                                <div class="text-sm text-gray-600">Average</div>
-                                <div class="text-sm text-gray-600">Approval</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.average') }}</div>
+                                <div class="text-sm text-gray-600">{{ __('landing.approval') }}</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Trust Indicators -->
                     <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                        <h4 class="text-lg font-semibold font-poppins text-black mb-6 text-center">Trusted & Secure</h4>
+                        <h4 class="text-lg font-semibold font-poppins text-black mb-6 text-center">{{ __('landing.trusted_secure') }}</h4>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="text-center">
                                 <div class="w-12 h-12 bg-black/10 rounded-lg flex items-center justify-center mx-auto mb-3">
@@ -574,8 +607,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                     </svg>
                                 </div>
-                                <div class="text-sm font-medium text-black">SSL Encrypted</div>
-                                <div class="text-xs text-gray-500">Bank-level security</div>
+                                <div class="text-sm font-medium text-black">{{ __('landing.ssl_encrypted') }}</div>
+                                <div class="text-xs text-gray-500">{{ __('landing.bank_level_security') }}</div>
                             </div>
                             <div class="text-center">
                                 <div class="w-12 h-12 bg-brand-green/10 rounded-lg flex items-center justify-center mx-auto mb-3">
@@ -583,8 +616,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
-                                <div class="text-sm font-medium text-black">NIDA Verified</div>
-                                <div class="text-xs text-gray-500">Identity protection</div>
+                                <div class="text-sm font-medium text-black">{{ __('landing.nida_verified') }}</div>
+                                <div class="text-xs text-gray-500">{{ __('landing.identity_protection') }}</div>
                             </div>
                             <div class="text-center">
                                 <div class="w-12 h-12 bg-black/10 rounded-lg flex items-center justify-center mx-auto mb-3">
@@ -592,8 +625,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
-                                <div class="text-sm font-medium text-black">24/7 Support</div>
-                                <div class="text-xs text-gray-500">Always here to help</div>
+                                <div class="text-sm font-medium text-black">{{ __('landing.support_247') }}</div>
+                                <div class="text-xs text-gray-500">{{ __('landing.always_here') }}</div>
                             </div>
                             <div class="text-center">
                                 <div class="w-12 h-12 bg-brand-green/10 rounded-lg flex items-center justify-center mx-auto mb-3">
@@ -601,8 +634,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                     </svg>
                                 </div>
-                                <div class="text-sm font-medium text-black">Privacy Protected</div>
-                                <div class="text-xs text-gray-500">Data never shared</div>
+                                <div class="text-sm font-medium text-black">{{ __('landing.privacy_protected') }}</div>
+                                <div class="text-xs text-gray-500">{{ __('landing.data_never_shared') }}</div>
                             </div>
                         </div>
                     </div>
@@ -631,8 +664,8 @@
                         <span class="text-white font-bold">1</span>
                     </div>
                     <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Register</h3>
-                        <p class="text-sm text-gray-600">Create account & verify with NIDA</p>
+                        <h3 class="font-semibold text-black">{{ __('landing.step_register') }}</h3>
+                        <p class="text-sm text-gray-600">{{ __('landing.step_register_desc') }}</p>
                     </div>
                 </div>
 
@@ -642,8 +675,8 @@
                         <span class="text-white font-bold">2</span>
                     </div>
                     <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Apply</h3>
-                        <p class="text-sm text-gray-600">Fill form & upload documents</p>
+                        <h3 class="font-semibold text-black">{{ __('landing.step_apply') }}</h3>
+                        <p class="text-sm text-gray-600">{{ __('landing.step_apply_desc') }}</p>
                     </div>
                 </div>
 
@@ -653,8 +686,8 @@
                         <span class="text-white font-bold">3</span>
                     </div>
                     <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Match</h3>
-                        <p class="text-sm text-gray-600">We find best lenders for you</p>
+                        <h3 class="font-semibold text-black">{{ __('landing.step_match') }}</h3>
+                        <p class="text-sm text-gray-600">{{ __('landing.step_match_desc') }}</p>
                     </div>
                 </div>
 
@@ -664,8 +697,8 @@
                         <span class="text-white font-bold">4</span>
                     </div>
                     <div class="flex-1 bg-gray-50 rounded-lg p-4">
-                        <h3 class="font-semibold text-black">Get Funded</h3>
-                        <p class="text-sm text-gray-600">Choose lender & receive money</p>
+                        <h3 class="font-semibold text-black">{{ __('landing.step_get_funded') }}</h3>
+                        <p class="text-sm text-gray-600">{{ __('landing.step_get_funded_desc') }}</p>
                     </div>
                 </div>
 
@@ -675,7 +708,7 @@
             <div class="mt-1 md:mt-4">
                 <div class="bg-white rounded-2xl p-8 md:p-12">
                     <h3 class="text-2xl md:text-3xl font-semibold font-poppins text-black text-center mb-8 md:mb-12">
-                        Frequently Asked Questions
+                        {{ __('landing.faq_title') }}
                     </h3>
                     
                     <div class="max-w-4xl mx-auto space-y-4">
@@ -683,14 +716,14 @@
                         <!-- FAQ Item 1 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(1)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">What is Fanikisha Market place?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_what_is') }}</span>
                                 <svg id="faq-icon-1" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-1" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed">
-                                    Fanikisha Market place is a loan marketplace platform that connects borrowers with verified lenders in Tanzania. We provide access to loans for everyone, regardless of employment status - whether you're employed, self-employed, or non-employed. Our platform uses secure NIDA verification to ensure identity protection and matches borrowers with the most suitable lenders based on their profile.
+                                    {{ __('landing.faq_what_is_answer') }}
                                 </p>
                             </div>
                         </div>
@@ -698,21 +731,21 @@
                         <!-- FAQ Item 2 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(2)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">Who can apply for a loan?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_who_can_apply') }}</span>
                                 <svg id="faq-icon-2" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-2" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed mb-3">
-                                    Our platform is inclusive and serves:
+                                    {{ __('landing.faq_who_can_apply_intro') }}
                                 </p>
                                 <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4">
-                                    <li>Employed individuals with regular income</li>
-                                    <li>Self-employed individuals and business owners</li>
-                                    <li>Non-employed individuals (subject to lender requirements)</li>
-                                    <li>Individuals aged 18 and above</li>
-                                    <li>Residents of Tanzania with valid NIDA identification</li>
+                                    <li>{{ __('landing.faq_employed') }}</li>
+                                    <li>{{ __('landing.faq_self_employed') }}</li>
+                                    <li>{{ __('landing.faq_non_employed') }}</li>
+                                    <li>{{ __('landing.faq_age_requirement') }}</li>
+                                    <li>{{ __('landing.faq_residents') }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -720,20 +753,20 @@
                         <!-- FAQ Item 3 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(3)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">How does the loan application process work?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_how_process') }}</span>
                                 <svg id="faq-icon-3" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-3" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed mb-3">
-                                    The process is simple and straightforward:
+                                    {{ __('landing.faq_how_process_intro') }}
                                 </p>
                                 <ol class="list-decimal list-inside text-gray-600 space-y-2 ml-4">
-                                    <li><strong>Register:</strong> Create your account and verify your identity using NIDA</li>
-                                    <li><strong>Apply:</strong> Fill out the loan application form and upload required documents</li>
-                                    <li><strong>Match:</strong> Our system matches you with suitable lenders based on your profile</li>
-                                    <li><strong>Get Funded:</strong> Review offers from lenders and choose the best option for you</li>
+                                    <li><strong>{{ __('landing.step_register') }}:</strong> {{ __('landing.faq_step1') }}</li>
+                                    <li><strong>{{ __('landing.step_apply') }}:</strong> {{ __('landing.faq_step2') }}</li>
+                                    <li><strong>{{ __('landing.step_match') }}:</strong> {{ __('landing.faq_step3') }}</li>
+                                    <li><strong>{{ __('landing.step_get_funded') }}:</strong> {{ __('landing.faq_step4') }}</li>
                                 </ol>
                             </div>
                         </div>
@@ -741,14 +774,14 @@
                         <!-- FAQ Item 4 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(4)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">What is NIDA verification and why is it required?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_nida_what') }}</span>
                                 <svg id="faq-icon-4" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-4" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed">
-                                    NIDA (National Identification Authority) verification is a secure identity verification process that confirms your identity using your national ID. This verification is required to protect both borrowers and lenders from fraud, ensure compliance with financial regulations, and maintain the security of our platform. Your personal information is encrypted and protected throughout the verification process.
+                                    {{ __('landing.faq_nida_answer') }}
                                 </p>
                     </div>
                         </div>
@@ -756,14 +789,14 @@
                         <!-- FAQ Item 5 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(5)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">How long does it take to get approved?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_approval_time') }}</span>
                                 <svg id="faq-icon-5" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-5" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed">
-                                    The approval time varies depending on the lender and your application. Typically, you can expect to receive matching results within 24 hours after submitting your complete application. Once matched with lenders, they review your application and provide approval decisions. The entire process from application to funding can take anywhere from 1-7 business days, depending on the lender's processing time and your responsiveness to any additional information requests.
+                                    {{ __('landing.faq_approval_time_answer') }}
                                 </p>
                 </div>
             </div>
@@ -771,21 +804,21 @@
                         <!-- FAQ Item 6 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(6)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">What documents do I need to apply?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_documents') }}</span>
                                 <svg id="faq-icon-6" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-6" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed mb-3">
-                                    Required documents may vary by lender, but typically include:
+                                    {{ __('landing.faq_documents_intro') }}
                                 </p>
                                 <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4">
-                                    <li>Valid National ID (NIDA)</li>
-                                    <li>Proof of income (payslips, bank statements, or business documents)</li>
-                                    <li>Recent passport-size photo</li>
-                                    <li>Proof of address (utility bill or rental agreement)</li>
-                                    <li>Additional documents as requested by specific lenders</li>
+                                    <li>{{ __('landing.faq_doc_nida') }}</li>
+                                    <li>{{ __('landing.faq_doc_income') }}</li>
+                                    <li>{{ __('landing.faq_doc_photo') }}</li>
+                                    <li>{{ __('landing.faq_doc_address') }}</li>
+                                    <li>{{ __('landing.faq_doc_additional') }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -793,14 +826,14 @@
                         <!-- FAQ Item 7 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(7)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">Do I need a good credit score to apply?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_credit_score') }}</span>
                                 <svg id="faq-icon-7" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-7" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed">
-                                    Not necessarily. Our platform connects you with multiple lenders who have different credit score requirements. Some lenders accept applications from individuals with lower credit scores or no credit history. Your credit score is one factor among many that lenders consider, including your income, employment status, and overall financial profile. Our matching system helps connect you with lenders whose requirements align with your profile.
+                                    {{ __('landing.faq_credit_score_answer') }}
                                 </p>
                             </div>
                         </div>
@@ -808,14 +841,14 @@
                         <!-- FAQ Item 8 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(8)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">Are there any fees for using the platform?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_fees') }}</span>
                                 <svg id="faq-icon-8" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-8" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed">
-                                    Creating an account and applying for loans through Fanikisha Market place is free. However, lenders may charge processing fees, interest rates, and other charges as outlined in their loan terms. All fees and charges are clearly disclosed before you accept any loan offer, ensuring complete transparency. We recommend reviewing all terms and conditions carefully before accepting any loan offer.
+                                    {{ __('landing.faq_fees_answer') }}
                                 </p>
                             </div>
                         </div>
@@ -823,14 +856,14 @@
                         <!-- FAQ Item 9 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(9)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">How is my personal information protected?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_privacy') }}</span>
                                 <svg id="faq-icon-9" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-9" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed">
-                                    Your privacy and security are our top priorities. We use bank-level SSL encryption to protect your data during transmission. Your personal information is only shared with lenders you choose to connect with, and only after you've reviewed their offers. We never sell your data to third parties. All lenders on our platform are verified and must comply with strict data protection standards. Your information is stored securely and accessed only by authorized personnel.
+                                    {{ __('landing.faq_privacy_answer') }}
                                 </p>
                             </div>
                         </div>
@@ -838,23 +871,23 @@
                         <!-- FAQ Item 10 -->
                         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <button onclick="toggleFAQ(10)" class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                <span class="font-semibold text-gray-900">What if I need help or have questions?</span>
+                                <span class="font-semibold text-gray-900">{{ __('landing.faq_help') }}</span>
                                 <svg id="faq-icon-10" class="w-5 h-5 text-brand-green transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div id="faq-content-10" class="hidden px-6 pb-4">
                                 <p class="text-gray-600 leading-relaxed">
-                                    We're here to help! You can reach our support team through:
+                                    {{ __('landing.faq_help_intro') }}
                                 </p>
                                 <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4 mt-3">
-                                    <li>Email: info@fanikisha.com</li>
-                                    <li>Phone: +255 123 456 789</li>
-                                    <li>Live chat (available 24/7)</li>
-                                    <li>Help Center with detailed guides and tutorials</li>
+                                    <li>{{ __('landing.faq_email') }}</li>
+                                    <li>{{ __('landing.faq_phone') }}</li>
+                                    <li>{{ __('landing.faq_live_chat') }}</li>
+                                    <li>{{ __('landing.faq_help_center') }}</li>
                                 </ul>
                                 <p class="text-gray-600 leading-relaxed mt-3">
-                                    Our support team is available around the clock to assist you with any questions or concerns about your loan application or account.
+                                    {{ __('landing.faq_help_closing') }}
                                 </p>
                             </div>
                         </div>
@@ -873,14 +906,14 @@
             <div class="text-center mb-12 md:mb-16">
                 <div class="mb-4">
                     <span class="inline-block bg-brand-green/10 text-brand-green px-4 py-2 rounded-full text-sm font-medium uppercase tracking-wider">
-                        Latest News
+                        {{ __('landing.latest_news') }}
                     </span>
                 </div>
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold font-poppins text-black leading-tight mb-6">
                     {{ __('landing.blog_insights') }}
                 </h2>
                 <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                    Stay informed with the latest updates, tips, and insights about loans and financial services.
+                    {{ __('landing.blog_description') }}
                 </p>
             </div>
 
@@ -906,7 +939,7 @@
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="text-xs text-gray-500">{{ $post->published_at->format('M d, Y') }}</span>
                                     @if($post->is_featured)
-                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded">Featured</span>
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded">{{ __('landing.featured') }}</span>
                                     @endif
                                 </div>
                                 <a href="{{ route('blog.show', $post->slug) }}">
@@ -916,7 +949,7 @@
                                     <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ $post->excerpt }}</p>
                                 @endif
                                 <div class="flex items-center justify-between text-sm text-gray-500">
-                                    <span>By {{ $post->author->name ?? 'Admin' }}</span>
+                                    <span>{{ __('landing.by') }} {{ $post->author->name ?? 'Admin' }}</span>
                                     <a href="{{ route('blog.show', $post->slug) }}" class="text-brand-green hover:text-brand-green-light font-medium">
                                         {{ __('landing.read_more') }} →
                                     </a>
@@ -927,7 +960,7 @@
                 </div>
                 <div class="text-center">
                     <a href="{{ route('blog.index') }}" class="inline-flex items-center bg-brand-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-brand-green-light transition-all duration-300">
-                        View All Posts
+                        {{ __('landing.view_all_posts') }}
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                         </svg>
@@ -935,7 +968,7 @@
                 </div>
             @else
                 <div class="text-center py-12">
-                    <p class="text-gray-500 text-lg">No blog posts available yet. Check back soon!</p>
+                    <p class="text-gray-500 text-lg">{{ __('landing.no_posts') }}</p>
                 </div>
             @endif
         </div>
@@ -985,7 +1018,7 @@
                         <li><a href="#home" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.home') }}</a></li>
                         <li><a href="#eligibility" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.eligibility') }}</a></li>
                         <li><a href="#process" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.how_it_works') }}</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Lenders</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.lenders') }}</a></li>
                     </ul>
                 </div>
 

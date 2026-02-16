@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Register - Lead Generator</title>
     <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
 
@@ -12,6 +13,9 @@
   
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    
+    <!-- Alpine.js for type switching -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     
     <style>
         :root {
@@ -120,7 +124,35 @@
             this.classList.remove('border-green-400');
         });
     });
-</script>
+
+    // Language dropdown toggle
+    function toggleLanguageDropdown() {
+        const dropdown = document.getElementById('language-dropdown');
+        const arrow = document.getElementById('language-arrow');
+        
+        if (dropdown.classList.contains('hidden')) {
+            dropdown.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            dropdown.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const switcher = document.getElementById('language-switcher');
+        const dropdown = document.getElementById('language-dropdown');
+        
+        if (switcher && dropdown && !switcher.contains(event.target)) {
+            dropdown.classList.add('hidden');
+            const arrow = document.getElementById('language-arrow');
+            if (arrow) {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+    });
+    </script>
 @livewireScripts
 </body>
 </html>

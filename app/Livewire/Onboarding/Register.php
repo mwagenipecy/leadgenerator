@@ -9,9 +9,11 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use App\Livewire\Concerns\WithLocale;
 
 class Register extends Component
 {
+    use WithLocale;
     public $type = 'individual';
     public $first_name = '';
     public $last_name = '';
@@ -60,9 +62,16 @@ class Register extends Component
 
     public function mount(): void
     {
+        // Check route first
         if (request()->routeIs('company.register')) {
             $this->type = 'company';
-        } else {
+        } 
+        // Then check query parameter
+        elseif (request()->has('type') && in_array(request()->get('type'), ['individual', 'company'])) {
+            $this->type = request()->get('type');
+        } 
+        // Default to individual
+        else {
             $this->type = 'individual';
         }
     }
@@ -81,6 +90,31 @@ class Register extends Component
         'password_confirmation.required' => 'Please confirm your password.',
         'terms.accepted' => 'You must agree to the terms and conditions.',
     ];
+
+    public function switchType($newType)
+    {
+        // Validate the type
+        if (!in_array($newType, ['individual', 'company'])) {
+            return;
+        }
+        
+        // Set the type
+        $this->type = $newType;
+        
+        // Reset form fields when switching between individual and company
+        $this->reset(['company_name', 'company_tin', 'company_contact_nida', 'country', 'passport_number', 'nida_number']);
+        $this->resetErrorBag();
+    }
+    
+    public function updatedType($value)
+    {
+        // This will be called automatically when type changes via wire:model
+        // Reset form fields when switching between individual and company
+        if (in_array($value, ['individual', 'company'])) {
+            $this->reset(['company_name', 'company_tin', 'company_contact_nida', 'country', 'passport_number', 'nida_number']);
+            $this->resetErrorBag();
+        }
+    }
 
     public function updated($propertyName)
     {
@@ -235,6 +269,11 @@ class Register extends Component
 
     public function render()
     {
+        // Ensure locale is set from session before rendering
+        if (session()->has('locale')) {
+            app()->setLocale(session()->get('locale'));
+        }
+        
         return view('livewire.onboarding.register');
     }
 }

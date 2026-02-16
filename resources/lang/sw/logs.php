@@ -20,5 +20,6 @@ return [
     'ip_address' => 'Anwani ya IP',
     'actions' => 'Vitendo',
     'user_agent' => 'Wakala wa Mtumiaji',
+    'showing_logs' => 'Inaonyesha :count ya :total nakala',
 ];
 

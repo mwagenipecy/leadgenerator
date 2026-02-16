@@ -4,23 +4,23 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold text-black">Lead Management</h1>
-                    <span class="text-sm text-gray-500">{{ Auth::user()->lender->company_name ?? 'Lender Portal' }}</span>
+                    <h1 class="text-2xl font-bold text-black">{{ __('leads.lead_management') }}</h1>
+                    <span class="text-sm text-gray-500">{{ Auth::user()->lender->company_name ?? __('leads.lender_portal') }}</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Quick Stats -->
                     <div class="hidden md:flex items-center space-x-6 text-sm">
                         <div class="text-center">
                             <div class="font-bold text-sidebar-green">{{ $stats['available_leads'] }}</div>
-                            <div class="text-gray-500">Available</div>
+                            <div class="text-gray-500">{{ __('leads.available') }}</div>
                         </div>
                         <div class="text-center">
                             <div class="font-bold text-black">{{ $stats['my_leads'] }}</div>
-                            <div class="text-gray-500">My Leads</div>
+                            <div class="text-gray-500">{{ __('leads.my_leads') }}</div>
                         </div>
                         <div class="text-center">
                             <div class="font-bold text-sidebar-green">{{ $stats['pending_review'] }}</div>
-                            <div class="text-gray-500">Pending</div>
+                            <div class="text-gray-500">{{ __('leads.pending') }}</div>
                         </div>
                     </div>
                     
@@ -80,9 +80,9 @@
                         </div>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Available Leads</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('leads.available_leads') }}</p>
                         <p class="text-2xl font-bold text-black">{{ number_format($stats['available_leads']) }}</p>
-                        <p class="text-xs text-gray-400 mt-1">In the market</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ __('leads.in_the_market') }}</p>
                     </div>
                 </div>
             </div>
@@ -97,9 +97,9 @@
                         </div>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">My Leads</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('leads.my_leads') }}</p>
                         <p class="text-2xl font-bold text-black">{{ number_format($stats['my_leads']) }}</p>
-                        <p class="text-xs text-gray-400 mt-1">Total acquired</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ __('leads.total_acquired') }}</p>
                     </div>
                 </div>
             </div>
@@ -114,9 +114,9 @@
                         </div>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Pending Review</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('leads.pending_review') }}</p>
                         <p class="text-2xl font-bold text-black">{{ number_format($stats['pending_review']) }}</p>
-                        <p class="text-xs text-sidebar-green mt-1">Requires action</p>
+                        <p class="text-xs text-sidebar-green mt-1">{{ __('leads.requires_action') }}</p>
                     </div>
                 </div>
             </div>
@@ -131,11 +131,11 @@
                         </div>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Total Value</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('leads.total_value') }}</p>
                         <p class="text-2xl font-bold text-black">
                             TSh {{ isset($stats['total_value']) && $stats['total_value'] > 0 ? number_format($stats['total_value']/1000000, 1) . 'M' : '0.0M' }}
                         </p>
-                        <p class="text-xs text-gray-400 mt-1">Approved loans</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ __('leads.approved_loans') }}</p>
                     </div>
                 </div>
             </div>
@@ -147,12 +147,12 @@
                 <nav class="flex space-x-8 px-6" aria-label="Tabs">
                     <button wire:click="setLeadTypeFilter('available')" 
                             class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'available' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                        Available Leads
+                        {{ __('leads.available_leads') }}
                         <span class="ml-2 bg-sidebar-green-100 text-sidebar-green py-0.5 px-2 rounded-full text-xs">{{ $stats['available_leads'] }}</span>
                     </button>
                     <button wire:click="setLeadTypeFilter('booked')" 
                             class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'booked' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                        My Booked Leads
+                        {{ __('leads.my_booked_leads') }}
                         <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ $stats['my_leads'] }}</span>
                     </button>
                 </nav>
@@ -171,7 +171,7 @@
                             </div>
                             <input wire:model.live.debounce.300ms="search" type="text" 
                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-sm transition-all duration-200" 
-                                   placeholder="Search by application #, name...">
+                                   placeholder="{{ __('leads.search_placeholder') }}">
                         </div>
                     </div>
 
@@ -181,10 +181,10 @@
                             <!-- Status Filter for booked leads -->
                             <div class="relative">
                                 <select wire:model.live="statusFilter" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green cursor-pointer">
-                                    <option value="all">All Status</option>
-                                    <option value="submitted">Under Review</option>
-                                    <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
+                                    <option value="all">{{ __('leads.all_status') }}</option>
+                                    <option value="submitted">{{ __('leads.under_review') }}</option>
+                                    <option value="approved">{{ __('leads.approved') }}</option>
+                                    <option value="rejected">{{ __('leads.rejected') }}</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,12 +197,12 @@
                         <!-- Date Range Filter -->
                         <div class="relative">
                             <select wire:model.live="dateRange" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green cursor-pointer">
-                                <option value="all">All Time</option>
-                                <option value="today">Today</option>
-                                <option value="week">This Week</option>
-                                <option value="month">This Month</option>
-                                <option value="quarter">This Quarter</option>
-                                <option value="year">This Year</option>
+                                <option value="all">{{ __('leads.all_time') }}</option>
+                                <option value="today">{{ __('leads.today') }}</option>
+                                <option value="week">{{ __('leads.this_week') }}</option>
+                                <option value="month">{{ __('leads.this_month') }}</option>
+                                <option value="quarter">{{ __('leads.this_quarter') }}</option>
+                                <option value="year">{{ __('leads.this_year') }}</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,9 +214,9 @@
                         <!-- Sort Options -->
                         <div class="relative">
                             <select wire:model.live="sortBy" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green cursor-pointer">
-                                <option value="created_at">Latest First</option>
-                                <option value="requested_amount">Amount (High to Low)</option>
-                                <option value="credit_score">CRB Score</option>
+                                <option value="created_at">{{ __('leads.latest_first') }}</option>
+                                <option value="requested_amount">{{ __('leads.amount_high_low') }}</option>
+                                <option value="credit_score">{{ __('leads.crb_score') }}</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,7 +231,7 @@
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                             </svg>
-                            Filters
+                            {{ __('leads.filters') }}
                         </button>
 
                         <!-- Export Button -->
@@ -239,7 +239,7 @@
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
-                            Export
+                            {{ __('leads.export') }}
                         </button>
                     </div>
                 </div>
@@ -251,26 +251,26 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                         <!-- Amount Range Filter -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount Range</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('leads.loan_amount_range') }}</label>
                             <select wire:model.live="amountRange" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sidebar-green">
-                                <option value="all">All Amounts</option>
-                                <option value="under_100k">Under TSh 100K</option>
-                                <option value="100k_500k">TSh 100K - 500K</option>
-                                <option value="500k_1m">TSh 500K - 1M</option>
-                                <option value="1m_5m">TSh 1M - 5M</option>
-                                <option value="over_5m">Over TSh 5M</option>
+                                <option value="all">{{ __('leads.all_amounts') }}</option>
+                                <option value="under_100k">{{ __('leads.under_100k') }}</option>
+                                <option value="100k_500k">{{ __('leads.100k_500k') }}</option>
+                                <option value="500k_1m">{{ __('leads.500k_1m') }}</option>
+                                <option value="1m_5m">{{ __('leads.1m_5m') }}</option>
+                                <option value="over_5m">{{ __('leads.over_5m') }}</option>
                             </select>
                         </div>
 
                         <!-- CRB Score Range Filter -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">CRB Score Range</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('leads.crb_score_range') }}</label>
                             <select wire:model.live="crbScoreRange" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sidebar-green">
-                                <option value="all">All Scores</option>
-                                <option value="excellent">Excellent (750+)</option>
-                                <option value="good">Good (650-749)</option>
-                                <option value="fair">Fair (550-649)</option>
-                                <option value="poor">Poor (Below 550)</option>
+                                <option value="all">{{ __('leads.all_scores') }}</option>
+                                <option value="excellent">{{ __('leads.excellent') }}</option>
+                                <option value="good">{{ __('leads.good') }}</option>
+                                <option value="fair">{{ __('leads.fair') }}</option>
+                                <option value="poor">{{ __('leads.poor') }}</option>
                             </select>
                         </div>
                     </div>
@@ -280,10 +280,10 @@
                         <div class="flex items-center space-x-4">
                             <button wire:click="clearFilters" 
                                     class="text-sm text-sidebar-green hover:text-sidebar-green-800 underline transition-colors">
-                                Clear all filters
+                                {{ __('leads.clear_all_filters') }}
                             </button>
                             <div class="text-sm text-gray-500">
-                                {{ $leads->total() }} lead{{ $leads->total() !== 1 ? 's' : '' }} found
+                                {{ $leads->total() }} {{ $leads->total() !== 1 ? __('leads.leads_found_plural') : __('leads.leads_found') }}
                             </div>
                         </div>
                     </div>
@@ -336,7 +336,7 @@
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                                            Available
+                                            {{ __('leads.available') }}
                                         </span>
                                     @endif
                                 </div>
@@ -345,7 +345,7 @@
                             <!-- Key Metrics Grid -->
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                    <div class="text-xs text-gray-500 mb-1">Loan Amount</div>
+                                    <div class="text-xs text-gray-500 mb-1">{{ __('leads.loan_amount') }}</div>
                                     <div class="text-sm font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
                                         @if($isAvailable)
                                         TSh {{ number_format($application->requested_amount/1000) }}K
@@ -355,7 +355,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                    <div class="text-xs text-gray-500 mb-1">Monthly Income</div>
+                                    <div class="text-xs text-gray-500 mb-1">{{ __('leads.monthly_income') }}</div>
                                     <div class="text-sm font-bold text-black {{ $isAvailable ? '-sm' : '' }}">
                                         @if($isAvailable)
                                         TSh {{ number_format(($application->total_monthly_income ?? 0)/1000) }}K
@@ -369,7 +369,7 @@
                             <!-- Additional Info -->
                             <div class="space-y-2 text-sm">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-500">CRB Score:</span>
+                                    <span class="text-gray-500">{{ __('leads.crb_score') }}:</span>
                                     @if($application->user && $application->user->credit_score)
                                         <span class="font-medium {{ $application->user->credit_score >= 650 ? 'text-green-600' : ($application->user->credit_score >= 550 ? 'text-yellow-600' : 'text-sidebar-green') }}">
                                             {{ $application->user->credit_score }}
@@ -378,19 +378,19 @@
                                             @endif
                                         </span>
                                     @else
-                                        <span class="font-medium text-gray-400">Waiting</span>
+                                        <span class="font-medium text-gray-400">{{ __('leads.waiting') }}</span>
                                     @endif
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-500">Tenure:</span>
-                                    <span class="font-medium">{{ $application->requested_tenure_months }} months</span>
+                                    <span class="text-gray-500">{{ __('leads.tenure') }}:</span>
+                                    <span class="font-medium">{{ $application->requested_tenure_months }} {{ __('leads.months') }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-500">Product:</span>
+                                    <span class="text-gray-500">{{ __('leads.product') }}:</span>
                                     <span class="font-medium text-xs">{{ $submission->loanProduct->name ?? 'N/A' }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-500">Applied:</span>
+                                    <span class="text-gray-500">{{ __('leads.applied') }}:</span>
                                     <span class="font-medium text-xs">{{ $application->created_at->format('M d, Y') }}</span>
                                 </div>
                             </div>
@@ -405,14 +405,14 @@
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                         </svg>
-                                        Book Lead 
+                                        {{ __('leads.book_lead') }} 
                                     </button>
                                 </div>
                             @else
                                 <div class="flex items-center justify-between">
                                     <div class="text-xs text-gray-500">
 
-                                        Booked: {{ $submission->booked_at ? $submission->booked_at : 'N/A' }}
+                                        {{ __('leads.booked') }}: {{ $submission->booked_at ? $submission->booked_at : 'N/A' }}
 
                                     </div>
                                     
@@ -421,12 +421,12 @@
                                             <button wire:click="cancelBooking({{ $submission->id }})" 
                                                     wire:confirm="Are you sure you want to cancel this booking?"
                                                     class="text-sidebar-green hover:text-sidebar-green-800 text-xs font-medium transition-colors">
-                                                Cancel
+                                                {{ __('leads.cancel') }}
                                             </button>
                                         @endif
                                         
                                         <a href="{{ route('view.loan.details',$submission->id) }}" class="text-black hover:text-gray-700 text-xs font-medium transition-colors">
-                                            View Details
+                                            {{ __('leads.view_details') }}
                                         </a>
                                     </div>
                                 </div>
@@ -439,12 +439,12 @@
                             <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                             </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-900">No leads found</h3>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('leads.no_leads_found') }}</h3>
                             <p class="mt-1 text-sm text-gray-500">
                                 @if($leadTypeFilter === 'available')
-                                    No available leads match your current filters.
+                                    {{ __('leads.no_available_leads') }}
                                 @else
-                                    You haven't booked any leads yet. Check the available leads tab.
+                                    {{ __('leads.no_booked_leads') }}
                                 @endif
                             </p>
                         </div>
@@ -461,7 +461,7 @@
                                 <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors" 
                                     wire:click="sortBy('application_number')">
                                     <div class="flex items-center space-x-1">
-                                        <span>Application</span>
+                                        <span>{{ __('leads.application') }}</span>
                                         @if($sortBy === 'application_number')
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $sortDirection === 'asc' ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' }}"/>
@@ -469,11 +469,11 @@
                                         @endif
                                     </div>
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applicant</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('leads.applicant') }}</th>
                                 <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors" 
                                     wire:click="sortBy('requested_amount')">
                                     <div class="flex items-center space-x-1">
-                                        <span>Loan Amount</span>
+                                        <span>{{ __('leads.loan_amount') }}</span>
                                         @if($sortBy === 'requested_amount')
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $sortDirection === 'asc' ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' }}"/>
@@ -481,11 +481,11 @@
                                         @endif
                                     </div>
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monthly Income</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('leads.monthly_income') }}</th>
                                 <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors" 
                                     wire:click="sortBy('credit_score')">
                                     <div class="flex items-center space-x-1">
-                                        <span>CRB Score</span>
+                                        <span>{{ __('leads.crb_score') }}</span>
                                         @if($sortBy === 'credit_score')
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $sortDirection === 'asc' ? 'M5 15l7-7 7 7' : 'M19 9l-7 7-7-7' }}"/>
@@ -493,12 +493,12 @@
                                         @endif
                                     </div>
                                 </th>
-                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('leads.product') }}</th>
                                 @if($leadTypeFilter === 'booked')
-                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('leads.status') }}</th>
                                 @endif
-                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied</th>
-                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('leads.applied') }}</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('leads.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -549,7 +549,7 @@
                                                 TSh {{ number_format($application->requested_amount) }}
                                             @endif
                                         </div>
-                                        <div class="text-xs text-gray-500">Requested</div>
+                                        <div class="text-xs text-gray-500">{{ __('leads.requested') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-bold text-black {{ $isAvailable ? '' : '' }}">
@@ -559,7 +559,7 @@
                                                 TSh {{ number_format($application->total_monthly_income ?? 0) }}
                                             @endif
                                         </div>
-                                        <div class="text-xs text-gray-500">Monthly</div>
+                                        <div class="text-xs text-gray-500">{{ __('leads.monthly') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($application->user && $application->user->credit_score)
@@ -572,7 +572,7 @@
                                                 @endif
                                             </span>
                                         @else
-                                            <span class="text-gray-400 text-sm">Waiting</span>
+                                            <span class="text-gray-400 text-sm">{{ __('leads.waiting') }}</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -602,7 +602,7 @@
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                                 </svg>
-                                                Book
+                                                {{ __('leads.book') }}
                                             </button>
                                         @else
                                             <div class="flex items-center space-x-2">
@@ -610,7 +610,7 @@
                                                     <button wire:click="cancelBooking({{ $submission->id }})" 
                                                             wire:confirm="Are you sure you want to cancel this booking?"
                                                             class="text-sidebar-green hover:text-sidebar-green-800 p-1.5 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200"
-                                                            title="Cancel Booking">
+                                                            title="{{ __('leads.cancel_booking') }}">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                         </svg>
@@ -634,12 +634,12 @@
                                             <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                                             </svg>
-                                            <h3 class="mt-2 text-sm font-medium text-gray-900">No leads found</h3>
+                                            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('leads.no_leads_found') }}</h3>
                                             <p class="mt-1 text-sm text-gray-500">
                                                 @if($leadTypeFilter === 'available')
-                                                    No available leads match your current filters.
+                                                    {{ __('leads.no_available_leads') }}
                                                 @else
-                                                    You haven't booked any leads yet. Check the available leads tab.
+                                                    {{ __('leads.no_booked_leads') }}
                                                 @endif
                                             </p>
                                         </div>
@@ -675,25 +675,25 @@
                         </div>
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left flex-1">
                             <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                Confirm Lead Booking
+                                {{ __('leads.confirm_lead_booking') }}
                             </h3>
                             <div class="mt-4 space-y-4">
                                 <div class="bg-gray-50 rounded-lg p-4">
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label class="text-xs font-medium text-gray-500">Application #</label>
+                                            <label class="text-xs font-medium text-gray-500">{{ __('leads.application_number') }}</label>
                                             <p class="text-sm font-bold text-black">{{ $selectedLead->application_number }}</p>
                                         </div>
                                         <div>
-                                            <label class="text-xs font-medium text-gray-500">Loan Amount</label>
+                                            <label class="text-xs font-medium text-gray-500">{{ __('leads.loan_amount') }}</label>
                                             <p class="text-sm font-bold text-black ">TSh  {{  number_format($selectedLead->requested_amount,2) }} </p>
                                         </div>
                                         <div>
-                                            <label class="text-xs font-medium text-gray-500">Applicant</label>
+                                            <label class="text-xs font-medium text-gray-500">{{ __('leads.applicant_label') }}</label>
                                             <p class="text-sm font-bold text-black blur-sm">{{ substr($selectedLead->first_name, 0, 1) }}*** {{ substr($selectedLead->last_name, 0, 1) }}***</p>
                                         </div>
                                         <div>
-                                            <label class="text-xs font-medium text-gray-500">Product</label>
+                                            <label class="text-xs font-medium text-gray-500">{{ __('leads.product') }}</label>
                                             <p class="text-sm font-bold text-black">
                                                 @php
                                                     // Get product from submission if available, otherwise from application
@@ -718,12 +718,12 @@
                                 </div>
 
                                 <div class="text-sm text-gray-600">
-                                    <p>By booking this lead, you agree to:</p>
+                                    <p>{{ __('leads.by_booking') }}</p>
                                     <ul class="mt-2 space-y-1 text-xs">
                                         <!-- <li>• Pay the booking fee of TSh {{ number_format($bookingFee) }}</li> -->
-                                        <li>• Gain access to complete applicant details</li>
-                                        <li>• Process the application within 7 business days</li>
-                                        <li>• Comply with lead management terms and conditions</li>
+                                        <li>• {{ __('leads.booking_terms_1') }}</li>
+                                        <li>• {{ __('leads.booking_terms_2') }}</li>
+                                        <li>• {{ __('leads.booking_terms_3') }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -735,19 +735,19 @@
                                 wire:target="confirmBooking"
                                 type="button" 
                                 class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span wire:loading.remove wire:target="confirmBooking">Confirm Booking</span>
+                            <span wire:loading.remove wire:target="confirmBooking">{{ __('leads.confirm_booking') }}</span>
                             <span wire:loading wire:target="confirmBooking" class="flex items-center">
                                 <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Processing...
+                                {{ __('leads.processing') }}
                             </span>
                         </button>
                         <button wire:click="closeBookingModal" 
                                 type="button" 
                                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
-                            Cancel
+                            {{ __('leads.cancel') }}
                         </button>
                     </div>
                 </div>

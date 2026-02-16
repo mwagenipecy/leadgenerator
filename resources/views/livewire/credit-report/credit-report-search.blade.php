@@ -165,7 +165,7 @@
                                                 wire:target="getReport"
                                             >
                                                 <span wire:loading.remove wire:target="getReport">{{ __('credit.generate_report') }}</span>
-                                                <span wire:loading wire:target="getReport">Loading...</span>
+                                                <span wire:loading wire:target="getReport">{{ __('common.loading') }}</span>
                                             </button>
                                         @else
                                             <span class="text-gray-400">N/A</span>
@@ -181,7 +181,7 @@
                 @if($this->getTotalPagesProperty() > 1)
                     <div class="mt-4 flex items-center justify-between">
                         <div class="text-sm text-gray-700">
-                            Showing {{ ($currentPage - 1) * $perPage + 1 }} to {{ min($currentPage * $perPage, count($searchResults)) }} of {{ count($searchResults) }} results
+                            {{ __('credit.showing_results', ['from' => ($currentPage - 1) * $perPage + 1, 'to' => min($currentPage * $perPage, count($searchResults)), 'total' => count($searchResults)]) }}
                         </div>
                         <div class="flex gap-2">
                             <button 
@@ -189,17 +189,17 @@
                                 class="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                                 {{ $currentPage == 1 ? 'disabled' : '' }}
                             >
-                                Previous
+                                {{ __('common.previous') }}
                             </button>
                             <span class="px-3 py-1 text-sm text-gray-700">
-                                Page {{ $currentPage }} of {{ $this->getTotalPagesProperty() }}
+                                {{ __('credit.page') }} {{ $currentPage }} {{ __('credit.of') }} {{ $this->getTotalPagesProperty() }}
                             </span>
                             <button 
                                 wire:click="nextPage" 
                                 class="px-3 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                                 {{ $currentPage >= $this->getTotalPagesProperty() ? 'disabled' : '' }}
                             >
-                                Next
+                                {{ __('common.next') }}
                             </button>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div class="flex items-center">
                     <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-3"></div>
-                    <span class="text-blue-700">Generating credit report...</span>
+                    <span class="text-blue-700">{{ __('credit.generating_credit_report') }}</span>
                 </div>
             </div>
         </div>
@@ -225,7 +225,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <h3 class="text-lg font-semibold text-sidebar-green-800 mb-1">Report Generation Error</h3>
+                        <h3 class="text-lg font-semibold text-sidebar-green-800 mb-1">{{ __('credit.report_generation_error') }}</h3>
                         <p class="text-sidebar-green-light">{{ $reportError }}</p>
                     </div>
                 </div>
@@ -236,12 +236,12 @@
         @if($reportUrl)
             <div class="mb-6 bg-white border border-gray-200 rounded-lg p-4">
                 <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-black">Credit Report Generated</h3>
+                    <h3 class="text-lg font-semibold text-black">{{ __('credit.credit_report_generated') }}</h3>
                     <button 
                         wire:click="clearSelection" 
                         class="text-gray-500 hover:text-gray-700 text-sm"
                     >
-                        Close
+                        {{ __('common.close') }}
                     </button>
                 </div>
                 

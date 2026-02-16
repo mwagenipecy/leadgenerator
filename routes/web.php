@@ -25,15 +25,12 @@ use App\Livewire\QuestionnaireVerification;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OtpController;
 use App\Http\Middleware\CheckPermissions;
-
-
 use App\Services\OtpService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-
 use App\Livewire\NoPermissions;
 
 

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms and Conditions - Lead Generator</title>
+    <title>{{ __('terms.terms_and_conditions') }} - Lead Generator</title>
     <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -18,98 +19,93 @@
 <body class="bg-gray-50">
     <div class="min-h-screen py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Language Switcher -->
+            <div class="mb-4 flex justify-end">
+                <x-language-switcher />
+            </div>
+            
             <!-- Header -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Terms and Conditions</h1>
-                <p class="text-gray-600">Last updated: {{ now()->format('F d, Y') }}</p>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ __('terms.terms_and_conditions') }}</h1>
+                <p class="text-gray-600">{{ __('terms.last_updated') }}: {{ now()->format('F d, Y') }}</p>
             </div>
 
             <!-- Content -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 prose prose-lg max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.acceptance_of_terms') }}</h2>
                 <p class="text-gray-700 mb-6">
-                    By accessing and using this platform, you accept and agree to be bound by the terms and provision of this agreement. 
-                    If you do not agree to abide by the above, please do not use this service.
+                    {{ __('terms.acceptance_content') }}
                 </p>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">2. Use License</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.use_license') }}</h2>
                 <p class="text-gray-700 mb-4">
-                    Permission is granted to temporarily access the materials on this platform for personal, non-commercial transitory viewing only. 
-                    This is the grant of a license, not a transfer of title, and under this license you may not:
+                    {{ __('terms.use_license_content') }}
                 </p>
                 <ul class="list-disc pl-6 mb-6 text-gray-700">
-                    <li>Modify or copy the materials</li>
-                    <li>Use the materials for any commercial purpose or for any public display</li>
-                    <li>Attempt to reverse engineer any software contained on the platform</li>
-                    <li>Remove any copyright or other proprietary notations from the materials</li>
+                    <li>{{ __('terms.modify_copy_materials') }}</li>
+                    <li>{{ __('terms.use_commercial_purpose') }}</li>
+                    <li>{{ __('terms.reverse_engineer') }}</li>
+                    <li>{{ __('terms.remove_copyright') }}</li>
                 </ul>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">3. User Account</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.user_account') }}</h2>
                 <p class="text-gray-700 mb-4">
-                    When you create an account with us, you must provide information that is accurate, complete, and current at all times. 
-                    You are responsible for safeguarding the password and for all activities that occur under your account.
+                    {{ __('terms.user_account_content_1') }}
                 </p>
                 <p class="text-gray-700 mb-6">
-                    You agree not to disclose your password to any third party and to take sole responsibility for any activities or actions 
-                    under your account, whether or not you have authorized such activities or actions.
+                    {{ __('terms.user_account_content_2') }}
                 </p>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">4. Loan Applications</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.loan_applications') }}</h2>
                 <p class="text-gray-700 mb-4">
-                    By submitting a loan application through this platform, you acknowledge that:
+                    {{ __('terms.loan_applications_content') }}
                 </p>
                 <ul class="list-disc pl-6 mb-6 text-gray-700">
-                    <li>All information provided is true, accurate, and complete</li>
-                    <li>You understand that loan approval is subject to lender verification and approval</li>
-                    <li>Interest rates and terms are determined by individual lenders</li>
-                    <li>We act as a platform connecting borrowers with lenders and do not guarantee loan approval</li>
+                    <li>{{ __('terms.information_true_accurate') }}</li>
+                    <li>{{ __('terms.loan_approval_subject') }}</li>
+                    <li>{{ __('terms.interest_rates_determined') }}</li>
+                    <li>{{ __('terms.platform_connecting') }}</li>
                 </ul>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">5. Privacy Policy</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.privacy_policy') }}</h2>
                 <p class="text-gray-700 mb-6">
-                    Your use of this platform is also governed by our Privacy Policy. Please review our Privacy Policy to understand our practices 
-                    regarding the collection and use of your personal information.
+                    {{ __('terms.privacy_policy_content') }}
                 </p>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">6. Prohibited Uses</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.prohibited_uses') }}</h2>
                 <p class="text-gray-700 mb-4">
-                    You may not use this platform:
+                    {{ __('terms.prohibited_uses_content') }}
                 </p>
                 <ul class="list-disc pl-6 mb-6 text-gray-700">
-                    <li>In any way that violates any applicable national or international law or regulation</li>
-                    <li>To transmit, or procure the sending of, any advertising or promotional material without our prior written consent</li>
-                    <li>To impersonate or attempt to impersonate the company, a company employee, another user, or any other person or entity</li>
-                    <li>In any way that infringes upon the rights of others, or in any way is illegal, threatening, fraudulent, or harmful</li>
+                    <li>{{ __('terms.violate_laws') }}</li>
+                    <li>{{ __('terms.transmit_advertising') }}</li>
+                    <li>{{ __('terms.impersonate') }}</li>
+                    <li>{{ __('terms.infringe_rights') }}</li>
                 </ul>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">7. Disclaimer</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.disclaimer') }}</h2>
                 <p class="text-gray-700 mb-6">
-                    The materials on this platform are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby 
-                    disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, 
-                    fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+                    {{ __('terms.disclaimer_content') }}
                 </p>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">8. Limitations</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.limitations') }}</h2>
                 <p class="text-gray-700 mb-6">
-                    In no event shall we or our suppliers be liable for any damages (including, without limitation, damages for loss of data or 
-                    profit, or due to business interruption) arising out of the use or inability to use the materials on this platform, even if we 
-                    or an authorized representative has been notified orally or in writing of the possibility of such damage.
+                    {{ __('terms.limitations_content') }}
                 </p>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">9. Revisions</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.revisions') }}</h2>
                 <p class="text-gray-700 mb-6">
-                    We may revise these terms of service at any time without notice. By using this platform, you are agreeing to be bound by the 
-                    then current version of these terms of service.
+                    {{ __('terms.revisions_content') }}
                 </p>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">10. Contact Information</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('terms.contact_information') }}</h2>
                 <p class="text-gray-700 mb-6">
-                    If you have any questions about these Terms and Conditions, please contact us through our support channels.
+                    {{ __('terms.contact_information_content') }}
                 </p>
 
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <p class="text-sm text-gray-500">
-                        By using this platform, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
+                        {{ __('terms.acknowledgment') }}
                     </p>
                 </div>
             </div>
@@ -121,7 +117,7 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
-                    Back
+                    {{ __('terms.back') }}
                 </a>
             </div>
         </div>

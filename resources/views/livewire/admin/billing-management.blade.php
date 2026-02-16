@@ -31,18 +31,18 @@
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-semibold text-black">
                         @if($filterLender !== 'all')
-                            {{ $lenders->where('id', $filterLender)->first()->company_name ?? 'Selected Lender' }} Statistics
+                            {{ $lenders->where('id', $filterLender)->first()->company_name ?? __('billing.selected_lender') }} {{ __('billing.statistics') }}
                         @else
-                            Overall Statistics
+                            {{ __('billing.overall_statistics') }}
                         @endif
                     </h3>
                     <div class="text-sm text-gray-500">
                         @if($filterDateFrom || $filterDateTo)
-                            {{ $filterDateFrom ? \Carbon\Carbon::parse($filterDateFrom)->format('M d, Y') : 'All time' }} 
+                            {{ $filterDateFrom ? \Carbon\Carbon::parse($filterDateFrom)->format('M d, Y') : __('billing.all_time') }} 
                             - 
-                            {{ $filterDateTo ? \Carbon\Carbon::parse($filterDateTo)->format('M d, Y') : 'Present' }}
+                            {{ $filterDateTo ? \Carbon\Carbon::parse($filterDateTo)->format('M d, Y') : __('billing.present') }}
                         @else
-                            All time
+                            {{ __('billing.all_time') }}
                         @endif
                     </div>
                 </div>
@@ -149,9 +149,9 @@
 
                     <!-- Lender Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-black mb-1">Lender</label>
+                        <label class="block text-sm font-medium text-black mb-1">{{ __('billing.lender') }}</label>
                         <select wire:model.live="filterLender" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                            <option value="all">All Lenders</option>
+                            <option value="all">{{ __('billing.all_lenders') }}</option>
                             @foreach($lenders as $lender)
                                 <option value="{{ $lender->id }}">{{ $lender->company_name }}</option>
                             @endforeach
@@ -160,14 +160,14 @@
 
                     <!-- Date From -->
                     <div>
-                        <label class="block text-sm font-medium text-black mb-1">From Date</label>
+                        <label class="block text-sm font-medium text-black mb-1">{{ __('billing.from_date') }}</label>
                         <input wire:model.live="filterDateFrom" type="date" 
                                class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     </div>
 
                     <!-- Date To -->
                     <div>
-                        <label class="block text-sm font-medium text-black mb-1">To Date</label>
+                        <label class="block text-sm font-medium text-black mb-1">{{ __('billing.to_date') }}</label>
                         <input wire:model.live="filterDateTo" type="date" 
                                class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     </div>
@@ -184,12 +184,12 @@
                                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                                 </svg>
-                                <span class="text-blue-700 font-medium">{{ count($selectedApplications) }} applications selected</span>
+                                <span class="text-blue-700 font-medium">{{ count($selectedApplications) }} {{ __('billing.applications_selected') }}</span>
                             </div>
                             <div class="flex items-center space-x-3">
                                 <select wire:model="bulkAction" class="border border-blue-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500">
-                                    <option value="">Choose Action</option>
-                                    <option value="create_bills">Create Commission Bills</option>
+                                    <option value="">{{ __('billing.choose_action') }}</option>
+                                    <option value="create_bills">{{ __('billing.create_commission_bills') }}</option>
                                 </select>
                                 <!-- <button wire:click="executeBulkAction" 
                                         class="bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -209,13 +209,13 @@
                                         <input wire:model.live="selectAll" type="checkbox" 
                                                class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
                                     </th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Application</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Applicant</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Lender</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Loan Amount</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Approved Date</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Billing Status</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.application') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.applicant') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.lender') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.loan_amount') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.approved_date') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.billing_status') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
@@ -339,14 +339,14 @@
                         <table class="w-full">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Bill Details</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Application</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Lender</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Commission</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Total Amount</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Due Date</th>
-                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.bill_details') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.application') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.lender') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.commission') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.total_amount') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.status') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.due_date') }}</th>
+                                    <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('billing.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
@@ -469,7 +469,7 @@
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click.self="$set('showBillModal', false)">
             <div class="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-xl bg-white">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-2xl font-bold text-black">Create Commission Bills</h3>
+                    <h3 class="text-2xl font-bold text-black">{{ __('billing.create_commission_bills') }}</h3>
                     <button wire:click="$set('showBillModal', false)" class="text-gray-400 hover:text-gray-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -723,14 +723,14 @@
                         <!-- Lender Information -->
                         @if($selectedApplication->lender)
                             <div class="bg-gray-50 rounded-xl p-6 mt-6">
-                                <h4 class="text-lg font-semibold text-black mb-4">Lender Information</h4>
+                                <h4 class="text-lg font-semibold text-black mb-4">{{ __('billing.lender_information') }}</h4>
                                 <div class="space-y-3 text-sm">
                                     <div class="flex justify-between py-2 border-b border-gray-200">
-                                        <span class="text-gray-600">Company:</span>
+                                        <span class="text-gray-600">{{ __('billing.company') }}:</span>
                                         <span class="font-medium">{{ $selectedApplication->lender->company_name }}</span>
                                     </div>
                                     <div class="flex justify-between py-2 border-b border-gray-200">
-                                        <span class="text-gray-600">License:</span>
+                                        <span class="text-gray-600">{{ __('billing.license') }}:</span>
                                         <span class="font-medium">{{ $selectedApplication->lender->license_number ?? 'N/A' }}</span>
                                     </div>
                                     <div class="flex justify-between py-2 border-b border-gray-200">
@@ -826,11 +826,11 @@
                                 <span class="font-medium">{{ $selectedBillForView->application->application_number }}</span>
                             </div>
                             <div class="flex justify-between py-2 border-b border-gray-200">
-                                <span class="text-gray-600">Lender:</span>
+                                <span class="text-gray-600">{{ __('billing.lender') }}:</span>
                                 <span class="font-medium">{{ $selectedBillForView->lender->company_name }}</span>
                             </div>
                             <div class="flex justify-between py-2 border-b border-gray-200">
-                                <span class="text-gray-600">Loan Amount:</span>
+                                <span class="text-gray-600">{{ __('billing.loan_amount') }}:</span>
                                 <span class="font-medium">TSh {{ number_format($selectedBillForView->loan_amount) }}</span>
                             </div>
                             <div class="flex justify-between py-2 border-b border-gray-200">

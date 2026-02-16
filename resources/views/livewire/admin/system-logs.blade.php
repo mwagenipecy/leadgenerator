@@ -146,7 +146,7 @@
                         <p class="text-gray-600">View all system activity and user actions</p>
                     </div>
                     <div class="text-sm text-gray-500">
-                        Showing {{ $logs->count() }} of {{ $logs->total() }} logs
+                        {{ __('logs.showing_logs', ['count' => $logs->count(), 'total' => $logs->total()]) }}
                     </div>
                 </div>
             </div>
