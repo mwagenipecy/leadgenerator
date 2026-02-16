@@ -3,8 +3,8 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-1">Permission Management</h2>
-                <p class="text-gray-600 text-sm">Manage system permissions and access controls</p>
+                <h2 class="text-2xl font-bold text-gray-900 mb-1">{{ __('admin.permission_management') }}</h2>
+                <p class="text-gray-600 text-sm">{{ __('admin.manage_permissions_description') }}</p>
             </div>
         </div>
     </div>
@@ -13,9 +13,9 @@
         <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Permissions</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.search_permissions') }}</label>
                     <div class="relative">
-                        <input wire:model.live="search" type="text" placeholder="Search by name or description..." 
+                        <input wire:model.live="search" type="text" placeholder="{{ __('admin.search_by_name_desc') }}" 
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500">
                         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -24,9 +24,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.filter_by_category') }}</label>
                     <select wire:model.live="categoryFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                        <option value="">All Categories</option>
+                        <option value="">{{ __('admin.all_categories') }}</option>
                         @foreach($categories as $key => $label)
                             <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
@@ -34,11 +34,11 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.filter_by_status') }}</label>
                     <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                        <option value="">All Statuses</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="">{{ __('admin.all_statuses') }}</option>
+                        <option value="active">{{ __('common.active') }}</option>
+                        <option value="inactive">{{ __('common.inactive') }}</option>
                     </select>
                 </div>
 
@@ -47,7 +47,7 @@
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                         </svg>
-                        Refresh
+                        {{ __('admin.refresh') }}
                     </button>
                 </div>
             </div>
@@ -58,11 +58,11 @@
             <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Permissions List</h3>
-                        <p class="text-gray-600">Manage system permissions and view role assignments</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">{{ __('admin.permissions_list') }}</h3>
+                        <p class="text-gray-600">{{ __('admin.manage_permissions_view') }}</p>
                     </div>
                     <div class="text-sm text-gray-500">
-                        Showing {{ $permissions->count() }} of {{ $permissions->total() }} permissions
+                        {{ str_replace([':count', ':total'], [$permissions->count(), $permissions->total()], __('admin.showing_permissions')) }}
                     </div>
                 </div>
             </div>
@@ -71,11 +71,11 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Permission</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Category</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Roles</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.permission') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.category') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.roles') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('common.status') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('common.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
@@ -138,7 +138,7 @@
                                         </div>
                                         <div>
                                             <div class="text-lg font-bold text-gray-900">{{ number_format($permission->roles_count ?? 0) }}</div>
-                                            <div class="text-xs text-gray-500">Roles</div>
+                                            <div class="text-xs text-gray-500">{{ __('admin.roles') }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -146,7 +146,7 @@
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
                                         {{ $permission->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200' }}">
                                         <div class="w-2 h-2 rounded-full mr-2 {{ $permission->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
-                                        {{ $permission->is_active ? 'Active' : 'Inactive' }}
+                                        {{ $permission->is_active ? __('common.active') : __('common.inactive') }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
@@ -154,16 +154,16 @@
                                         <button type="button" 
                                                 wire:click="openEditPermissionModal('{{ $permission->id }}')" 
                                                 class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" 
-                                                title="Update Permission">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </button>
+                                                title="{{ __('admin.update_permission') }}">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                </svg>
+                                            </button>
 
                                         <button type="button" 
                                                 wire:click="confirmTogglePermissionStatus('{{ $permission->id }}')" 
                                                 class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" 
-                                                title="Change Status">
+                                                title="{{ __('admin.change_status') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
                                             </svg>
@@ -179,8 +179,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"/>
                                         </svg>
                                     </div>
-                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">No Permissions Found</h4>
-                                    <p class="text-gray-500">No permissions match your current search criteria.</p>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ __('admin.no_permissions_found') }}</h4>
+                                    <p class="text-gray-500">{{ __('admin.no_permissions_match') }}</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -196,12 +196,12 @@
                             <span class="font-medium">{{ $permissions->firstItem() }}</span>
                             -
                             <span class="font-medium">{{ $permissions->lastItem() }}</span>
-                            of
+                            {{ __('common.of') }}
                             <span class="font-medium">{{ $permissions->total() }}</span>
-                            permissions
+                            {{ __('admin.permissions') }}
                         </div>
                         <div class="flex-1 flex justify-center sm:justify-end">
-                            {{ $permissions->links() }}
+                    {{ $permissions->links() }}
                         </div>
                     </div>
                 </div>

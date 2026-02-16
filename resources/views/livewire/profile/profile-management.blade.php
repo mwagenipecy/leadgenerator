@@ -5,8 +5,8 @@
     <div class="mb-6 sm:mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
             <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">My Profile</h1>
-                <p class="text-gray-600 text-sm sm:text-base lg:text-lg">Complete your profile for faster loan applications</p>
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">{{ __('profile.my_profile') }}</h1>
+                <p class="text-gray-600 text-sm sm:text-base lg:text-lg">{{ __('profile.complete_profile_description') }}</p>
             </div>
             <div class="flex justify-start sm:justify-end">
                 <!-- Profile Completion Circle -->
@@ -27,9 +27,9 @@
                         </div>
                     </div>
                     <div>
-                        <p class="text-xs sm:text-sm text-gray-500">Profile Completion</p>
+                        <p class="text-xs sm:text-sm text-gray-500">{{ __('profile.profile_completion') }}</p>
                         <p class="text-sm sm:text-base lg:text-lg font-bold {{ $completionPercentage >= 70 ? 'text-green-600' : ($completionPercentage >= 40 ? 'text-yellow-600' : 'text-sidebar-green') }}">
-                            {{ $completionPercentage >= 70 ? 'Complete' : ($completionPercentage >= 40 ? 'Good Progress' : 'Needs Work') }}
+                            {{ $completionPercentage >= 70 ? __('profile.complete') : ($completionPercentage >= 40 ? __('profile.good_progress') : __('profile.needs_work')) }}
                         </p>
                     </div>
                 </div>
@@ -42,24 +42,24 @@
     <div class="mb-6 sm:mb-8">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="p-3 sm:p-4 border-b border-gray-100 bg-gradient-to-r from-sidebar-green to-sidebar-green-light">
-                <h3 class="text-sm sm:text-base font-bold text-white mb-1">Profile Sections - Complete all sections</h3>
+                <h3 class="text-sm sm:text-base font-bold text-white mb-1">{{ __('profile.profile_sections') }}</h3>
             </div>
             
             @php
                 $sections = [
-                    'overview' => ['name' => 'Overview', 'icon' => 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'],
-                    'personal' => ['name' => 'Personal Info', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
-                    'address' => ['name' => 'Address', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
-                    'employment' => ['name' => 'Employment', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'],
-                    'financial' => ['name' => 'Financial', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1'],
-                    'bank' => ['name' => 'Banking', 'icon' => 'M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z'],
-                    'emergency' => ['name' => 'Emergency Contact', 'icon' => 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z']
+                    'overview' => ['name' => __('profile.overview'), 'icon' => 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'],
+                    'personal' => ['name' => __('profile.personal_info'), 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
+                    'address' => ['name' => __('profile.address'), 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
+                    'employment' => ['name' => __('profile.employment'), 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'],
+                    'financial' => ['name' => __('profile.financial'), 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1'],
+                    'bank' => ['name' => __('profile.banking'), 'icon' => 'M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z'],
+                    'emergency' => ['name' => __('profile.emergency_contact'), 'icon' => 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z']
                 ];
                 
                 // Add company section for company users
                 if (auth()->user()->registration_type === 'company') {
                     $sections = array_slice($sections, 0, 1, true) + 
-                        ['company' => ['name' => 'Company Details', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4']] + 
+                        ['company' => ['name' => __('profile.company_details'), 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4']] + 
                         array_slice($sections, 1, null, true);
                 }
             @endphp
@@ -145,7 +145,7 @@
                         </div>
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left flex-1">
                             <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                                {{ session()->has('message') ? 'Success!' : 'Error' }}
+                                {{ session()->has('message') ? __('profile.success') : __('profile.error') }}
                             </h3>
                             <div class="mt-2">
                                 <p class="text-sm text-gray-500">
@@ -159,7 +159,7 @@
                     <button type="button" 
                             wire:click="closeModal"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-sidebar-green text-base font-medium text-white hover:bg-sidebar-green-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sidebar-green sm:ml-3 sm:w-auto sm:text-sm">
-                        OK
+                        {{ __('profile.ok') }}
                     </button>
                 </div>
             </div>
@@ -173,8 +173,8 @@
             @if($currentStep === 'overview')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Profile Overview</h2>
-                        <p class="text-sm sm:text-base text-gray-600">Your complete profile status and quick actions</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.profile_overview') }}</h2>
+                        <p class="text-sm sm:text-base text-gray-600">{{ __('profile.complete_profile_status') }}</p>
                     </div>
                     
                     <div class="p-6">
@@ -202,12 +202,12 @@
                                         <h3 class="font-bold text-gray-900 mb-1">{{ $section['name'] }}</h3>
                                         <p class="text-sm text-gray-600">
                                             @switch($key)
-                                                @case('personal') Basic personal information @break
-                                                @case('address') Current and permanent address @break
-                                                @case('employment') Employment and business details @break
-                                                @case('financial') Income and expense information @break
-                                                @case('bank') Banking and account details @break
-                                                @case('emergency') Emergency contact information @break
+                                                @case('personal') {{ __('profile.basic_personal_information') }} @break
+                                                @case('address') {{ __('profile.current_permanent_address') }} @break
+                                                @case('employment') {{ __('profile.employment_business_details') }} @break
+                                                @case('financial') {{ __('profile.income_expense_information') }} @break
+                                                @case('bank') {{ __('profile.banking_account_details') }} @break
+                                                @case('emergency') {{ __('profile.emergency_contact_information') }} @break
                                             @endswitch
                                         </p>
                                     </div>
@@ -227,8 +227,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-gray-900 text-lg">{{ auth()->user()->company_name ?? 'Company Details' }}</h3>
-                                        <p class="text-sm text-gray-600">View and manage your company information</p>
+                                        <h3 class="font-bold text-gray-900 text-lg">{{ auth()->user()->company_name ?? __('profile.company_details') }}</h3>
+                                        <p class="text-sm text-gray-600">{{ __('profile.view_manage_company') }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3">
@@ -237,14 +237,14 @@
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                             </svg>
-                                            Verified
+                                            {{ __('profile.verified') }}
                                         </span>
                                     @elseif(auth()->user()->isCompanyVerificationPending())
-                                        <span class="px-3 py-1.5 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">Pending</span>
+                                        <span class="px-3 py-1.5 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">{{ __('profile.pending') }}</span>
                                     @elseif(auth()->user()->isCompanyVerificationRejected())
-                                        <span class="px-3 py-1.5 bg-red-100 text-red-800 text-xs font-semibold rounded-full">Rejected</span>
+                                        <span class="px-3 py-1.5 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ __('profile.rejected') }}</span>
                                     @else
-                                        <span class="px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">Not Verified</span>
+                                        <span class="px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full">{{ __('profile.not_verified') }}</span>
                                     @endif
                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -256,21 +256,21 @@
 
                         <!-- Quick Actions -->
                         <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-purple-200">
-                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ __('profile.quick_actions') }}</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <a href="{{ route('loan-application.create') }}" 
                                    class="flex items-center justify-center px-6 py-3 bg-sidebar-green text-white rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                     </svg>
-                                    Pre-Qualify for Loan
+                                    {{ __('profile.pre_qualify_loan') }}
                                 </a>
                                 <a href="{{ route('user.loan.application') }}" 
                                    class="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
-                                    View Applications
+                                    {{ __('profile.view_applications') }}
                                 </a>
                             </div>
                         </div>
@@ -283,32 +283,32 @@
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Company Details</h2>
-                                <p class="text-sm sm:text-base text-gray-600">Your registered company information</p>
+                                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.company_details') }}</h2>
+                                <p class="text-sm sm:text-base text-gray-600">{{ __('profile.registered_company_information') }}</p>
                             </div>
                             @if(auth()->user()->isCompanyVerified())
                                 <span class="px-4 py-2 bg-green-100 text-green-800 text-sm font-semibold rounded-full flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    Verified
+                                    {{ __('profile.verified') }}
                                 </span>
                             @elseif(auth()->user()->isCompanyVerificationPending())
                                 <span class="px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-semibold rounded-full flex items-center gap-2">
                                     <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    Pending Review
+                                    {{ __('profile.pending') }}
                                 </span>
                             @elseif(auth()->user()->isCompanyVerificationRejected())
                                 <span class="px-4 py-2 bg-red-100 text-red-800 text-sm font-semibold rounded-full flex items-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
-                                    Rejected
+                                    {{ __('profile.rejected') }}
                                 </span>
                             @else
-                                <span class="px-4 py-2 bg-gray-100 text-gray-800 text-sm font-semibold rounded-full">Not Verified</span>
+                                <span class="px-4 py-2 bg-gray-100 text-gray-800 text-sm font-semibold rounded-full">{{ __('profile.not_verified') }}</span>
                             @endif
                         </div>
                     </div>

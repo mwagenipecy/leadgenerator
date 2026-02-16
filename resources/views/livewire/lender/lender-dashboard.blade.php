@@ -4,16 +4,16 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Lender Dashboard</h1>
-                    <p class="text-gray-600 text-lg">Manage loan applications and monitor your lending performance</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('dashboard.lender_dashboard') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('dashboard.lender_dashboard_description') }}</p>
                 </div>
                 <div class="flex items-center space-x-3">
                     <div class="flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full">
                         <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span class="text-sm font-medium text-green-700">Active Lending</span>
+                        <span class="text-sm font-medium text-green-700">{{ __('dashboard.active_lending') }}</span>
                     </div>
                     <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                        This Month
+                        {{ __('dashboard.this_month') }}
                     </button>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">New Applications</p>
+                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">{{ __('dashboard.new_applications') }}</p>
                         <p class="text-2xl font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($newApplications) }}</p>
                     </div>
                 </div>
@@ -49,9 +49,9 @@
                         <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span class="text-xs font-semibold">Awaiting Review</span>
+                        <span class="text-xs font-semibold">{{ __('dashboard.awaiting_review') }}</span>
                     </div>
-                    <span class="text-xs text-gray-500">{{ $pendingApplications }} in review</span>
+                    <span class="text-xs text-gray-500">{{ $pendingApplications }} {{ __('dashboard.in_review') }}</span>
                 </div>
             </div>
 
@@ -64,7 +64,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Total Applications</p>
+                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">{{ __('dashboard.total_applications') }}</p>
                         <p class="text-2xl font-bold text-gray-900 group-hover:text-black transition-colors">{{ number_format($totalApplications) }}</p>
                     </div>
                 </div>
@@ -73,9 +73,9 @@
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        <span class="text-xs font-semibold">{{ $approvedApplications }} approved</span>
+                        <span class="text-xs font-semibold">{{ $approvedApplications }} {{ __('dashboard.approved') }}</span>
                     </div>
-                    <span class="text-xs text-gray-500">{{ $conversionRate }}% rate</span>
+                    <span class="text-xs text-gray-500">{{ $conversionRate }}% {{ __('dashboard.conversion_rate') }}</span>
                 </div>
             </div>
 
@@ -88,7 +88,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Approved Loans</p>
+                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">{{ __('dashboard.approved_loans') }}</p>
                         <p class="text-2xl font-bold text-gray-900 group-hover:text-black transition-colors">{{ number_format($approvedApplications) }}</p>
                     </div>
                 </div>

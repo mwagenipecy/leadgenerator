@@ -1,0 +1,76 @@
+<?php
+
+return [
+    // Common words
+    'welcome' => 'Welcome',
+    'dashboard' => 'Dashboard',
+    'logout' => 'Logout',
+    'login' => 'Login',
+    'register' => 'Register',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'delete' => 'Delete',
+    'edit' => 'Edit',
+    'view' => 'View',
+    'create' => 'Create',
+    'update' => 'Update',
+    'submit' => 'Submit',
+    'back' => 'Back',
+    'next' => 'Next',
+    'previous' => 'Previous',
+    'search' => 'Search',
+    'filter' => 'Filter',
+    'actions' => 'Actions',
+    'status' => 'Status',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'enabled' => 'Enabled',
+    'disabled' => 'Disabled',
+    'yes' => 'Yes',
+    'no' => 'No',
+    'confirm' => 'Confirm',
+    'close' => 'Close',
+    'loading' => 'Loading...',
+    'no_data' => 'No data available',
+    'success' => 'Success',
+    'error' => 'Error',
+    'warning' => 'Warning',
+    'info' => 'Information',
+    
+    // Navigation
+    'home' => 'Home',
+    'profile' => 'Profile',
+    'settings' => 'Settings',
+    'notifications' => 'Notifications',
+    'language' => 'Language',
+    'english' => 'English',
+    'swahili' => 'Swahili',
+    
+    // Messages
+    'success_message' => 'Operation completed successfully',
+    'error_message' => 'An error occurred',
+    'confirm_delete' => 'Are you sure you want to delete this item?',
+    'confirm_disable' => 'Are you sure you want to disable this item?',
+    'item_created' => 'Item created successfully',
+    'item_updated' => 'Item updated successfully',
+    'item_deleted' => 'Item deleted successfully',
+    'item_disabled' => 'Item disabled successfully',
+    'item_enabled' => 'Item enabled successfully',
+    
+    // Validation
+    'required' => 'This field is required',
+    'email' => 'Please enter a valid email address',
+    'password' => 'Password',
+    'password_confirmation' => 'Confirm Password',
+    'current_password' => 'Current Password',
+    
+    // Pagination
+    'showing' => 'Showing',
+    'to' => 'to',
+    'of' => 'of',
+    'results' => 'results',
+    'per_page' => 'Per page',
+    'selected' => 'Selected',
+    'action_cannot_undone' => 'This action cannot be undone',
+];
+

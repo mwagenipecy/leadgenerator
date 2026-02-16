@@ -5,13 +5,13 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-                    <p class="text-gray-600 text-lg">Manage lenders, applications, and monitor system performance</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('dashboard.admin_dashboard') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('dashboard.admin_dashboard_description') }}</p>
                 </div>
                 <div class="flex items-center space-x-3">
                     <div class="flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full">
                         <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span class="text-sm font-medium text-green-700">All Systems Operational</span>
+                        <span class="text-sm font-medium text-green-700">{{ __('dashboard.all_systems_operational') }}</span>
                     </div>
                     <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl font-medium hover:bg-gray-50 transition-colors">
                         {{ date('Y-M-d') }}
@@ -41,7 +41,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Total Lenders</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('dashboard.total_lenders') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalLenders) }}</p>
                     </div>
                 </div>
@@ -50,9 +50,9 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span class="text-sm font-semibold">{{ $pendingLenders }} pending</span>
+                        <span class="text-sm font-semibold">{{ $pendingLenders }} {{ __('dashboard.pending') }}</span>
                     </div>
-                    <span class="text-sm text-gray-500">{{ $approvedLenders }} approved</span>
+                    <span class="text-sm text-gray-500">{{ $approvedLenders }} {{ __('dashboard.approved') }}</span>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Total Applications</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('dashboard.total_applications') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($totalApplications) }}</p>
                     </div>
                 </div>
@@ -74,9 +74,9 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        <span class="text-sm font-semibold">{{ $approvedApplications }} approved</span>
+                        <span class="text-sm font-semibold">{{ $approvedApplications }} {{ __('dashboard.approved') }}</span>
                     </div>
-                    <span class="text-sm text-gray-500">{{ $conversionRate }}% rate</span>
+                    <span class="text-sm text-gray-500">{{ $conversionRate }}% {{ __('dashboard.conversion_rate') }}</span>
                 </div>
             </div>
 
@@ -89,7 +89,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Total Borrowers</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('dashboard.total_borrowers') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors">{{ number_format($totalBorrowers) }}</p>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
 <div>
 <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
     <div class="mb-6">
-        <h2 class="text-2xl font-bold text-black mb-2">Tanzania Driving License Verification</h2>
-        <p class="text-gray-700">Verify driving license through the official TRA database</p>
+        <h2 class="text-2xl font-bold text-black mb-2">{{ __('verification.tanzania_driving_license') }}</h2>
+        <p class="text-gray-700">{{ __('verification.verify_license_description') }}</p>
     </div>
 
     <!-- Input Form -->
@@ -10,14 +10,14 @@
         <div class="grid grid-cols-1 gap-4 mb-4">
             <div>
                 <label for="licenseNumber" class="block text-sm font-medium text-black mb-1">
-                    Driving License Number *
+                    {{ __('verification.driving_license_number') }} *
                 </label>
                 <input 
                     type="text" 
                     id="licenseNumber"
                     wire:model.live="licenseNumber" 
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
-                    placeholder="Enter license number (e.g., 4002014677)"
+                    placeholder="{{ __('verification.enter_license_number_placeholder') }}"
                     maxlength="20"
                     wire:loading.attr="disabled"
                 >
@@ -34,15 +34,15 @@
                 wire:loading.attr="disabled"
             >
                 <div wire:loading wire:target="verifyLicense" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                <span wire:loading.remove wire:target="verifyLicense">Verify License</span>
-                <span wire:loading wire:target="verifyLicense">Verifying...</span>
+                <span wire:loading.remove wire:target="verifyLicense">{{ __('verification.verify_license_button') }}</span>
+                <span wire:loading wire:target="verifyLicense">{{ __('verification.verifying') }}</span>
             </button>
             
             <button
                 wire:click="resetForm"
                 class="bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition duration-200"
             >
-                Reset
+                {{ __('verification.reset') }}
             </button>
         </div>
 
@@ -52,7 +52,7 @@
                     wire:click="clearResults"
                     class="bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition duration-200"
                 >
-                    Clear Results
+                    {{ __('verification.clear_results') }}
                 </button>
             </div>
         @endif
@@ -63,7 +63,7 @@
         <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
             <div class="flex items-center">
                 <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-sidebar-green mr-3"></div>
-                <span class="text-sidebar-green-light">Connecting to TRA database for license verification...</span>
+                <span class="text-sidebar-green-light">{{ __('verification.connecting_to_tra') }}</span>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
     <!-- Error Display -->
     @if($error)
         <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-sidebar-green-800 mb-2">Verification Failed</h3>
+            <h3 class="text-lg font-semibold text-sidebar-green-800 mb-2">{{ __('verification.verification_failed') }}</h3>
             <p class="text-sidebar-green-light">{{ $error }}</p>
         </div>
     @endif
@@ -81,61 +81,61 @@
         <div class="mb-6 bg-white border border-gray-200 rounded-lg p-4">
             <div class="flex items-center mb-4 pb-3 border-b border-gray-200">
                 <div class="w-3 h-3 bg-sidebar-green rounded-full mr-3"></div>
-                <h3 class="text-lg font-semibold text-black">License Verification Successful</h3>
+                <h3 class="text-lg font-semibold text-black">{{ __('verification.license_verification_successful') }}</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Driver Information -->
                 <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Driver Information</h4>
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">{{ __('verification.driver_information') }}</h4>
                     
                     <!-- Driver Photo -->
                     <div class="mb-4">
                         @if(isset($verificationResult['driver_picture']) && !empty($verificationResult['driver_picture']))
                             <img 
                                 src="data:image/jpeg;base64,{{ $verificationResult['driver_picture'] }}"
-                                alt="Driver Photo"
+                                alt="{{ __('verification.driver_photo') }}"
                                 class="w-32 h-32 object-cover rounded-md border border-gray-300 mx-auto"
                             >
                         @else
                             <div class="w-32 h-32 bg-gray-200 rounded-md flex items-center justify-center mx-auto border border-gray-300">
-                                <span class="text-gray-500 text-sm">No Photo</span>
+                                <span class="text-gray-500 text-sm">{{ __('verification.no_photo') }}</span>
                             </div>
                         @endif
                     </div>
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Full Name:</span>
-                            <span class="font-medium text-black">{{ $verificationResult['driver_name'] ?? 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.full_name') }}:</span>
+                            <span class="font-medium text-black">{{ $verificationResult['driver_name'] ?? __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Age:</span>
-                            <span class="font-medium text-black">{{ $verificationResult['driver_age'] ?? 'N/A' }} years</span>
+                            <span class="text-gray-700">{{ __('verification.age') }}:</span>
+                            <span class="font-medium text-black">{{ $verificationResult['driver_age'] ?? __('verification.n_a') }} {{ __('verification.years') }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- License Details -->
                 <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">License Details</h4>
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">{{ __('verification.license_details') }}</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">License Number:</span>
-                            <span class="font-medium text-black">{{ $verificationResult['license_no'] ?? 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.license_number') }}:</span>
+                            <span class="font-medium text-black">{{ $verificationResult['license_no'] ?? __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Status:</span>
+                            <span class="text-gray-700">{{ __('verification.status') }}:</span>
                             <span class="font-medium {{ $verificationResult['is_expired'] ? 'text-sidebar-green' : 'text-black' }}">
-                                {{ $verificationResult['is_expired'] ? 'Expired' : 'Valid' }}
+                                {{ $verificationResult['is_expired'] ? __('verification.expired') : __('verification.valid') }}
                             </span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Issue Date:</span>
-                            <span class="font-medium text-black">{{ $verificationResult['issue_date_formatted'] ?? 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.issue_date') }}:</span>
+                            <span class="font-medium text-black">{{ $verificationResult['issue_date_formatted'] ?? __('verification.n_a') }}</span>
                         </div>
                         <div class="py-1">
-                            <span class="text-gray-700">License Categories:</span>
+                            <span class="text-gray-700">{{ __('verification.license_categories') }}:</span>
                             <div class="mt-1">
                                 @if(isset($verificationResult['license_categories_array']) && count($verificationResult['license_categories_array']) > 0)
                                     @foreach($verificationResult['license_categories_array'] as $category)
@@ -144,7 +144,7 @@
                                         </span>
                                     @endforeach
                                 @else
-                                    <span class="font-medium text-black">N/A</span>
+                                    <span class="font-medium text-black">{{ __('verification.n_a') }}</span>
                                 @endif
                             </div>
                         </div>

@@ -4,15 +4,15 @@
         <div class="mb-6 sm:mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2">My Loan Dashboard</h1>
-                    <p class="text-gray-600 text-sm sm:text-base lg:text-lg">Track your loan applications and manage your borrowing journey</p>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-black mb-2">{{ __('dashboard.my_loan_dashboard') }}</h1>
+                    <p class="text-gray-600 text-sm sm:text-base lg:text-lg">{{ __('dashboard.track_applications') }}</p>
                 </div>
                 <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
                     <!-- NIDA Status Badge -->
                     <div class="flex items-center space-x-2 bg-{{ $nidaVerificationStatus === 'verified' ? 'green' : 'red' }}-50 px-3 py-2 rounded-full">
                         <div class="w-2 h-2 bg-{{ $nidaVerificationStatus === 'verified' ? 'green' : 'red' }}-500 rounded-full animate-pulse"></div>
                         <span class="text-xs sm:text-sm font-medium text-{{ $nidaVerificationStatus === 'verified' ? 'green' : 'red' }}-700">
-                            {{ $nidaVerificationStatus === 'verified' ? 'NIDA Verified' : 'Verification Pending' }}
+                            {{ $nidaVerificationStatus === 'verified' ? __('dashboard.nida_verified') : __('dashboard.verification_pending') }}
                         </span>
                     </div>
                     <!-- Apply Button -->
@@ -46,7 +46,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs sm:text-sm font-medium text-gray-500">Total Applications</p>
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">{{ __('dashboard.total_applications_label') }}</p>
                         <p class="text-2xl sm:text-3xl font-bold text-black">{{ $totalApplications }}</p>
                     </div>
                 </div>
@@ -55,9 +55,9 @@
                         <svg class="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span class="font-semibold">{{ $pendingApplications }} pending</span>
+                        <span class="font-semibold">{{ $pendingApplications }} {{ __('dashboard.pending') }}</span>
                     </div>
-                    <span class="text-gray-500">{{ $approvedApplications }} approved</span>
+                    <span class="text-gray-500">{{ $approvedApplications }} {{ __('dashboard.approved') }}</span>
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs sm:text-sm font-medium text-gray-500">Approved Amount</p>
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">{{ __('dashboard.approved_amount') }}</p>
                         <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-sidebar-green">
                             @if($totalApprovedAmount >= 1000000)
                                 TSh {{ number_format($totalApprovedAmount/1000000, 1) }}M
@@ -85,9 +85,9 @@
                         <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        <span class="font-semibold">{{ $approvedApplications }} loans</span>
+                        <span class="font-semibold">{{ $approvedApplications }} {{ __('dashboard.loans') }}</span>
                     </div>
-                    <span class="text-gray-500">approved</span>
+                    <span class="text-gray-500">{{ __('dashboard.approved') }}</span>
                 </div>
             </div>
 
@@ -100,12 +100,12 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs sm:text-sm font-medium text-gray-500">Credit Score</p>
+                        <p class="text-xs sm:text-sm font-medium text-gray-500">{{ __('dashboard.credit_score') }}</p>
                         <p class="text-2xl sm:text-3xl font-bold text-black">
                             @if($creditScore)
                                 {{ number_format((float)$creditScore, 0) }}
                             @else
-                                Waiting
+                                {{ __('dashboard.waiting') }}
                             @endif
                         </p>
                     </div>
@@ -119,9 +119,9 @@
                             <div class="w-2 h-2 sm:w-3 sm:h-3 bg-{{ $this->getCreditScoreColor() }}-500 rounded-full"></div>
                             <span class="font-semibold">{{ $rating }}</span>
                         </div>
-                        <span class="text-gray-500">rating</span>
+                        <span class="text-gray-500">{{ __('dashboard.rating') }}</span>
                     @else
-                        <span class="text-gray-500 text-xs">Waiting</span>
+                        <span class="text-gray-500 text-xs">{{ __('dashboard.waiting') }}</span>
                     @endif
                 </div>
             </div>
@@ -136,8 +136,8 @@
             <div class="lg:col-span-4 bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8 border border-gray-100">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
                     <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-2">Application Status</h3>
-                        <p class="text-gray-600 text-sm sm:text-base">Track the progress of all your loan applications</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-2">{{ __('dashboard.application_status') }}</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">{{ __('dashboard.track_progress') }}</p>
                     </div>
                 </div>
                 
@@ -184,10 +184,10 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
                         </div>
-                        <h4 class="text-lg font-semibold text-black mb-2">No Applications Yet</h4>
-                        <p class="text-gray-500 mb-4 text-sm sm:text-base">Start your borrowing journey by applying for your first loan.</p>
+                        <h4 class="text-lg font-semibold text-black mb-2">{{ __('dashboard.no_applications_yet') }}</h4>
+                        <p class="text-gray-500 mb-4 text-sm sm:text-base">{{ __('dashboard.start_borrowing_journey') }}</p>
                         <button wire:click="applyForLoan" class="bg-sidebar-green text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors text-sm sm:text-base">
-                            Apply for Loan
+                            {{ __('dashboard.apply_for_loan') }}
                         </button>
                     </div>
                 @endif 
@@ -196,7 +196,7 @@
             <!-- Recent Activity Feed -->
             <div class="lg:col-span-3 bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-100">
                 <div class="flex items-center justify-between mb-4 sm:mb-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-black">Recent Activity</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-black">{{ __('dashboard.recent_activity') }}</h3>
                 </div>
                 <div class="space-y-3 sm:space-y-4 max-h-64 sm:max-h-80 overflow-y-auto">
                     @forelse($recentActivity as $activity)
@@ -212,7 +212,7 @@
                         </div>
                     @empty
                         <div class="text-center py-8">
-                            <p class="text-gray-500 text-sm">No recent activity</p>
+                            <p class="text-gray-500 text-sm">{{ __('dashboard.no_recent_activity') }}</p>
                         </div>
                     @endforelse
                 </div>
@@ -224,12 +224,12 @@
             <div class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-b border-gray-100 bg-gray-50">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                     <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-1">My Loan Applications</h3>
-                        <p class="text-gray-600 text-sm sm:text-base">Track the status and details of your loan applications</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-1">{{ __('dashboard.my_loan_applications') }}</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">{{ __('dashboard.track_status_details') }}</p>
                     </div>
                     <div class="flex items-center space-x-3">
                         <button wire:click="applyForLoan" class="bg-sidebar-green text-white px-4 sm:px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg text-sm sm:text-base">
-                            New Application
+                            {{ __('dashboard.new_application') }}
                         </button>
                     </div>
                 </div>
@@ -271,27 +271,27 @@
                         </div>
                         <div class="space-y-2 text-xs text-gray-600">
                             <div class="flex justify-between">
-                                <span>Application #:</span>
+                                <span>{{ __('dashboard.application_number') }}</span>
                                 <span class="font-medium text-blue-600">{{ $application->application_number }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span>Tenure:</span>
-                                <span>{{ $application->requested_tenure_months }} months</span>
+                                <span>{{ __('dashboard.tenure') }}</span>
+                                <span>{{ $application->requested_tenure_months }} {{ __('dashboard.months') }}</span>
                             </div>
                             @if($application->lender)
                                 <div class="flex justify-between">
-                                    <span>Lender:</span>
+                                    <span>{{ __('dashboard.lender') }}</span>
                                     <span>{{ $application->lender->company_name }}</span>
                                 </div>
                             @endif
                             @if($application->loanProduct)
                                 <div class="flex justify-between">
-                                    <span>Product:</span>
+                                    <span>{{ __('dashboard.product') }}</span>
                                     <span>{{ $application->loanProduct->name }}</span>
                                 </div>
                             @endif
                             <div class="flex justify-between">
-                                <span>Applied:</span>
+                                <span>{{ __('dashboard.applied') }}</span>
                                 <span>{{ $application->created_at->format('M d, Y') }}</span>
                             </div>
                         </div>
@@ -543,7 +543,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div class="flex items-center justify-center space-x-2">
-                                        <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-black hover:text-sidebar-green p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="View Details">
+                                        <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-black hover:text-sidebar-green p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="{{ __('dashboard.view_details') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
@@ -647,9 +647,9 @@
                             </div>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-4">
-                            <h4 class="text-sm font-semibold text-black mb-2">Min Credit Score</h4>
+                            <h4 class="text-sm font-semibold text-black mb-2">{{ __('dashboard.min_credit_score') }}</h4>
                             <div class="text-center">
-                                <span class="text-lg font-bold text-black">{{ $selectedProduct->min_credit_score ?? 'No requirement' }}</span>
+                                <span class="text-lg font-bold text-black">{{ $selectedProduct->min_credit_score ?? __('dashboard.no_requirement') }}</span>
                             </div>
                         </div>
                     </div>

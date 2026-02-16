@@ -7,23 +7,23 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold text-black">Lead Management</h1>
-                    <span class="text-sm text-gray-500">{{ Auth::user()->lender->company_name ?? 'Lender Portal' }}</span>
+                    <h1 class="text-2xl font-bold text-black">{{ __('leads.lead_management') }}</h1>
+                    <span class="text-sm text-gray-500">{{ Auth::user()->lender->company_name ?? __('leads.lender_portal') }}</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Quick Stats -->
                     <div class="hidden md:flex items-center space-x-6 text-sm">
                         <div class="text-center">
                             <div class="font-bold text-sidebar-green">{{ $stats['available_leads'] }}</div>
-                            <div class="text-gray-500">Available</div>
+                            <div class="text-gray-500">{{ __('leads.available') }}</div>
                         </div>
                         <div class="text-center">
                             <div class="font-bold text-black">{{ $stats['my_leads'] }}</div>
-                            <div class="text-gray-500">My Leads</div>
+                            <div class="text-gray-500">{{ __('leads.my_leads') }}</div>
                         </div>
                         <div class="text-center">
                             <div class="font-bold text-sidebar-green">{{ $stats['pending_review'] }}</div>
-                            <div class="text-gray-500">Pending</div>
+                            <div class="text-gray-500">{{ __('leads.pending') }}</div>
                         </div>
                     </div>
                     
@@ -62,9 +62,9 @@
                         </div>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Available Leads</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('leads.available_leads') }}</p>
                         <p class="text-2xl font-bold text-black">{{ number_format($stats['available_leads']) }}</p>
-                        <p class="text-xs text-gray-400 mt-1">In the market</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ __('leads.in_the_market') }}</p>
                     </div>
                 </div>
             </div>
@@ -79,9 +79,9 @@
                         </div>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">My Leads</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('leads.my_leads') }}</p>
                         <p class="text-2xl font-bold text-black">{{ number_format($stats['my_leads']) }}</p>
-                        <p class="text-xs text-gray-400 mt-1">Total acquired</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ __('leads.total_acquired') }}</p>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Pending Review</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('leads.pending_review') }}</p>
                         <p class="text-2xl font-bold text-black">{{ number_format($stats['pending_review']) }}</p>
                         <p class="text-xs text-sidebar-green mt-1">Requires action</p>
                     </div>
@@ -127,12 +127,12 @@
                 <nav class="flex space-x-8 px-6" aria-label="Tabs">
                     <button wire:click="setLeadTypeFilter('available')" 
                             class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'available' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                        Available Leads
+                        {{ __('leads.available_leads') }}
                         <span class="ml-2 bg-sidebar-green-100 text-sidebar-green py-0.5 px-2 rounded-full text-xs">{{ $stats['available_leads'] }}</span>
                     </button>
                     <button wire:click="setLeadTypeFilter('booked')" 
                             class="py-4 px-1 text-sm font-medium border-b-2 {{ $leadTypeFilter === 'booked' ? 'border-sidebar-green text-sidebar-green' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
-                        My Booked Leads
+                        {{ __('leads.my_leads') }}
                         <span class="ml-2 bg-gray-100 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ $stats['my_leads'] }}</span>
                     </button>
                 </nav>
@@ -151,7 +151,7 @@
                             </div>
                             <input wire:model.live.debounce.300ms="search" type="text" 
                                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-sm transition-all duration-200" 
-                                   placeholder="Search by application #, name...">
+                                   placeholder="{{ __('leads.search_by_name') }}">
                         </div>
                     </div>
 
@@ -161,10 +161,10 @@
                             <!-- Status Filter for booked leads -->
                             <div class="relative">
                                 <select wire:model.live="statusFilter" class="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-3 pr-8 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green cursor-pointer">
-                                    <option value="all">All Status</option>
-                                    <option value="submitted">Under Review</option>
-                                    <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
+                                    <option value="all">{{ __('leads.all_statuses') }}</option>
+                                    <option value="submitted">{{ __('loan.under_review') }}</option>
+                                    <option value="approved">{{ __('loan.approved') }}</option>
+                                    <option value="rejected">{{ __('loan.rejected') }}</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -434,7 +434,7 @@
                             <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                             </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-900">No leads found</h3>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('leads.no_leads_found') }}</h3>
                             <p class="mt-1 text-sm text-gray-500">
                                 @if($leadTypeFilter === 'available')
                                     No available leads match your current filters.
@@ -562,7 +562,7 @@
                                         <div class="flex items-center gap-1.5">
                                             <button wire:click="viewLead({{ $isAvailable ? $lead->id : $lead->id }})" 
                                                     class="inline-flex items-center px-2.5 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-medium hover:bg-indigo-100 border border-indigo-200 transition-all duration-200"
-                                                    title="View Details">
+                                                    title="{{ __('leads.view_details') }}">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -608,7 +608,7 @@
                                             <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                                             </svg>
-                                            <h3 class="mt-2 text-sm font-medium text-gray-900">No leads found</h3>
+                                            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('leads.no_leads_found') }}</h3>
                                             <p class="mt-1 text-sm text-gray-500">
                                                 @if($leadTypeFilter === 'available')
                                                     No available leads match your current filters.
@@ -789,7 +789,7 @@
                                         <span class="text-sm font-bold text-black">{{ ucwords(str_replace('_', ' ', $application->loan_purpose ?? 'N/A')) }}</span>
                                     </div>
                                     <div class="flex justify-between items-center py-3">
-                                        <span class="text-sm font-medium text-gray-600">Application Date</span>
+                                        <span class="text-sm font-medium text-gray-600">{{ __('leads.application_date') }}</span>
                                         <span class="text-sm font-bold text-black">{{ $application->created_at->format('M d, Y H:i') }}</span>
                                     </div>
                                 </div>

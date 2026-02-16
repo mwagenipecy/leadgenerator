@@ -4,8 +4,8 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Roles</h1>
-                    <p class="text-gray-600 text-lg">Manage system roles and their permissions</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('admin.roles') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('admin.manage_roles_description') }}</p>
                 </div>
             </div>
         </div>

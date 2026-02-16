@@ -1,8 +1,8 @@
 <div>
 <div class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
     <div class="mb-6">
-        <h2 class="text-2xl font-bold text-black mb-2">TRA Motor Vehicle Details Lookup</h2>
-        <p class="text-gray-700">Enter vehicle registration information to retrieve details from TRA</p>
+        <h2 class="text-2xl font-bold text-black mb-2">{{ __('verification.tra_motor_vehicle_lookup') }}</h2>
+        <p class="text-gray-700">{{ __('verification.enter_vehicle_info') }}</p>
     </div>
 
     <!-- Input Form -->
@@ -10,14 +10,14 @@
         <div class="mb-4">
             <div>
                 <label for="vehicleRegistrationPlate" class="block text-sm font-medium text-black mb-1">
-                    Vehicle Registration Plate *
+                    {{ __('verification.vehicle_registration_plate') }} *
                 </label>
                 <input 
                     type="text" 
                     id="vehicleRegistrationPlate"
                     wire:model="vehicleRegistrationPlate" 
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent uppercase font-medium"
-                    placeholder="Enter registration plate (e.g., T115DYF)"
+                    placeholder="{{ __('verification.enter_registration_plate') }}"
                     :disabled="$wire.isLoading"
                 >
                 @error('vehicleRegistrationPlate') 
@@ -33,8 +33,8 @@
                 :disabled="$wire.isLoading"
             >
                 <div wire:loading wire:target="getVehicleDetails" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                <span wire:loading.remove wire:target="getVehicleDetails">Search Vehicle</span>
-                <span wire:loading wire:target="getVehicleDetails">Searching...</span>
+                <span wire:loading.remove wire:target="getVehicleDetails">{{ __('verification.search_vehicle') }}</span>
+                <span wire:loading wire:target="getVehicleDetails">{{ __('verification.searching') }}</span>
             </button>
             
             @if($response || $error || $rawResponse)
@@ -42,7 +42,7 @@
                     wire:click="clearResults" 
                     class="bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition duration-200"
                 >
-                    Clear Results
+                    {{ __('verification.clear_results') }}
                 </button>
             @endif
         </div>
@@ -53,7 +53,7 @@
         <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
             <div class="flex items-center">
                 <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-sidebar-green mr-3"></div>
-                <span class="text-sidebar-green-light">Sending request to TRA service...</span>
+                <span class="text-sidebar-green-light">{{ __('verification.sending_request') }}</span>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
     <!-- Error Display -->
     @if($error)
         <div class="mb-6 bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
-            <h3 class="text-lg font-semibold text-sidebar-green-800 mb-2">Error</h3>
+            <h3 class="text-lg font-semibold text-sidebar-green-800 mb-2">{{ __('verification.error') }}</h3>
             <p class="text-sidebar-green-light">{{ $error }}</p>
         </div>
     @endif
@@ -71,83 +71,83 @@
         <div class="mb-6 bg-white border border-gray-200 rounded-lg p-4">
             <div class="flex items-center mb-4 pb-3 border-b border-gray-200">
                 <div class="w-3 h-3 bg-sidebar-green rounded-full mr-3"></div>
-                <h3 class="text-lg font-semibold text-black">Vehicle Details Retrieved Successfully</h3>
+                <h3 class="text-lg font-semibold text-black">{{ __('verification.vehicle_details_retrieved') }}</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Vehicle Registration Information -->
                 <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Vehicle Registration</h4>
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">{{ __('verification.vehicle_registration') }}</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Registration No:</span>
+                            <span class="text-gray-700">{{ __('verification.registration_no') }}:</span>
                             <span class="font-medium text-black">{{ $response['registrationNo'] }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Certificate No:</span>
-                            <span class="font-medium text-black">{{ $response['registrationCertificateNo'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.certificate_no') }}:</span>
+                            <span class="font-medium text-black">{{ $response['registrationCertificateNo'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Registered On:</span>
-                            <span class="font-medium text-black">{{ $response['registeredOn'] ? date('Y-m-d', strtotime($response['registeredOn'])) : 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.registered_on') }}:</span>
+                            <span class="font-medium text-black">{{ $response['registeredOn'] ? date('Y-m-d', strtotime($response['registeredOn'])) : __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Purpose:</span>
-                            <span class="font-medium text-black">{{ $response['registrationPurpose'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.purpose') }}:</span>
+                            <span class="font-medium text-black">{{ $response['registrationPurpose'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Usage:</span>
-                            <span class="font-medium text-black">{{ $response['vehicleUsage'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.usage') }}:</span>
+                            <span class="font-medium text-black">{{ $response['vehicleUsage'] ?: __('verification.n_a') }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Vehicle Specifications -->
                 <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Vehicle Specifications</h4>
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">{{ __('verification.vehicle_specifications') }}</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Make:</span>
-                            <span class="font-medium text-black">{{ $response['vehicleMake'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.make') }}:</span>
+                            <span class="font-medium text-black">{{ $response['vehicleMake'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Model:</span>
-                            <span class="font-medium text-black">{{ $response['vehicleModel'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.model') }}:</span>
+                            <span class="font-medium text-black">{{ $response['vehicleModel'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Year:</span>
-                            <span class="font-medium text-black">{{ $response['yearOfMake'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.year') }}:</span>
+                            <span class="font-medium text-black">{{ $response['yearOfMake'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Body Type:</span>
-                            <span class="font-medium text-black">{{ $response['bodyType'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.body_type') }}:</span>
+                            <span class="font-medium text-black">{{ $response['bodyType'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Colour:</span>
-                            <span class="font-medium text-black">{{ $response['colour'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.colour') }}:</span>
+                            <span class="font-medium text-black">{{ $response['colour'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Category:</span>
-                            <span class="font-medium text-black">{{ $response['vehCategory'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.category') }}:</span>
+                            <span class="font-medium text-black">{{ $response['vehCategory'] ?: __('verification.n_a') }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Engine & Technical Details -->
                 <div class="bg-white p-4 rounded-lg border-2 border-sidebar-green-100">
-                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">Engine & Technical</h4>
+                    <h4 class="font-semibold text-black mb-3 text-sm uppercase tracking-wide pb-2 border-b border-sidebar-green-200">{{ __('verification.engine_technical') }}</h4>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Chassis No:</span>
-                            <span class="font-medium text-black">{{ $response['chassisNumber'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.chassis_no') }}:</span>
+                            <span class="font-medium text-black">{{ $response['chassisNumber'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Engine No:</span>
-                            <span class="font-medium text-black">{{ $response['engineNumber'] ?: 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.engine_no') }}:</span>
+                            <span class="font-medium text-black">{{ $response['engineNumber'] ?: __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
-                            <span class="text-gray-700">Engine CC:</span>
-                            <span class="font-medium text-black">{{ $response['engineCubicCapacity'] ? $response['engineCubicCapacity'] . ' cc' : 'N/A' }}</span>
+                            <span class="text-gray-700">{{ __('verification.engine_cc') }}:</span>
+                            <span class="font-medium text-black">{{ $response['engineCubicCapacity'] ? $response['engineCubicCapacity'] . ' ' . __('verification.cc') : __('verification.n_a') }}</span>
                         </div>
                         <div class="flex justify-between py-1">
                             <span class="text-gray-700">Fuel Type:</span>

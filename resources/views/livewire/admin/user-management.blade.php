@@ -4,15 +4,15 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">User Management</h1>
-                    <p class="text-gray-600 text-lg">Manage system users and their accounts</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('admin.user_management') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('admin.manage_users_description') ?? 'Manage system users and their accounts' }}</p>
                 </div>
                 <div class="flex items-center space-x-3">
                     <button wire:click="openCreateUserModal" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
-                        Create User
+                        {{ __('admin.create_user') }}
                     </button>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                  x-transition:enter-start="opacity-0 transform scale-95" 
                  x-transition:enter-end="opacity-100 transform scale-100">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-2xl font-bold text-gray-900">Create New User</h3>
+                    <h3 class="text-2xl font-bold text-gray-900">{{ __('admin.create_user') }}</h3>
                     <button wire:click="closeCreateUserModal" class="text-gray-400 hover:text-gray-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

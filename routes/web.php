@@ -61,6 +61,9 @@ Route::get('/blog/{slug}', function ($slug) {
 // PUBLIC TERMS AND CONDITIONS
 Route::get('/terms', [\App\Http\Controllers\TermsController::class, 'show'])->name('terms.show');
 
+// LANGUAGE SWITCHING
+Route::get('/language/{locale}', [\App\Http\Controllers\LanguageController::class, 'switch'])->name('language.switch');
+
 
 
 
@@ -327,6 +330,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     Route::get('user-management',[UserManagementController::class,'index'])->name('user.management');
     Route::get('company-verification',[CompanyVerificationController::class,'index'])->name('admin.company.verification');
     Route::get('company-verification/{user}',[CompanyVerificationController::class,'show'])->name('admin.company.verification.show');
+    
+    /*********************************** LANGUAGE MANAGEMENT ****************************************/
+    Route::get('language-management', \App\Livewire\Admin\LanguageManagement::class)->name('admin.language.management');
     
     /*********************************** LOAN CATEGORIES ****************************************/
     Route::resource('loan-categories', \App\Http\Controllers\Admin\LoanCategoryController::class)->names([

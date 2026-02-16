@@ -1,8 +1,8 @@
 <div>
     <div class="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg">
         <div class="mb-6">
-            <h2 class="text-2xl font-bold text-black mb-2">Credit Report Search</h2>
-            <p class="text-gray-700">Search for individuals and generate credit reports</p>
+            <h2 class="text-2xl font-bold text-black mb-2">{{ __('credit.credit_report_search') }}</h2>
+            <p class="text-gray-700">{{ __('credit.search_individuals') }}</p>
         </div>
 
         <!-- Search Form -->
@@ -10,14 +10,14 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                     <label for="fullName" class="block text-sm font-medium text-black mb-1">
-                        Full Name
+                        {{ __('credit.full_name') }}
                     </label>
                     <input 
                         type="text" 
                         id="fullName"
                         wire:model.live="fullName" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
-                        placeholder="Enter full name"
+                        placeholder="{{ __('credit.enter_full_name') }}"
                         wire:loading.attr="disabled"
                     >
                     @error('fullName') 
@@ -27,14 +27,14 @@
                 
                 <div>
                     <label for="idNumber" class="block text-sm font-medium text-black mb-1">
-                        ID Number
+                        {{ __('credit.id_number') }}
                     </label>
                     <input 
                         type="text" 
                         id="idNumber"
                         wire:model.live="idNumber" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
-                        placeholder="Enter ID number"
+                        placeholder="{{ __('credit.enter_id_number') }}"
                         wire:loading.attr="disabled"
                     >
                     @error('idNumber') 
@@ -44,14 +44,14 @@
                 
                 <div>
                     <label for="phoneNumber" class="block text-sm font-medium text-black mb-1">
-                        Phone Number
+                        {{ __('credit.phone_number') }}
                     </label>
                     <input 
                         type="text" 
                         id="phoneNumber"
                         wire:model.live="phoneNumber" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
-                        placeholder="Enter phone number"
+                        placeholder="{{ __('credit.enter_phone_number') }}"
                         wire:loading.attr="disabled"
                     >
                     @error('phoneNumber') 
@@ -68,8 +68,8 @@
                     wire:target="search"
                 >
                     <div wire:loading wire:target="search" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    <span wire:loading.remove wire:target="search">Search</span>
-                    <span wire:loading wire:target="search">Searching...</span>
+                    <span wire:loading.remove wire:target="search">{{ __('credit.search') }}</span>
+                    <span wire:loading wire:target="search">{{ __('credit.searching') }}</span>
                 </button>
                 
                 @if(count($searchResults) > 0)
@@ -77,7 +77,7 @@
                         wire:click="exportResults" 
                         class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
                     >
-                        Export CSV
+                        {{ __('credit.export_csv') }}
                     </button>
                 @endif
             </div>
@@ -88,7 +88,7 @@
             <div class="bg-sidebar-green-50 border border-sidebar-green-200 rounded-lg p-4">
                 <div class="flex items-center">
                     <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-sidebar-green mr-3"></div>
-                    <span class="text-sidebar-green-light">Searching credit information...</span>
+                    <span class="text-sidebar-green-light">{{ __('credit.searching_credit_info') }}</span>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <h3 class="text-lg font-semibold text-sidebar-green-800 mb-1">Error</h3>
+                        <h3 class="text-lg font-semibold text-sidebar-green-800 mb-1">{{ __('credit.error') }}</h3>
                         <p class="text-sidebar-green-light">{{ $errorMessage }}</p>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
             <div class="mb-6 bg-white border border-gray-200 rounded-lg p-4">
                 <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
                     <h3 class="text-lg font-semibold text-black">
-                        Search Results ({{ count($searchResults) }} found)
+                        {{ __('credit.search_results') }} ({{ count($searchResults) }} {{ __('credit.found') }})
                     </h3>
                 </div>
                 
@@ -134,11 +134,11 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Birth</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">National ID</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('credit.full_name') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('credit.date_of_birth') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('credit.national_id') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('credit.address') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('credit.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -154,7 +154,7 @@
                                         {{ $result['NationalID'] ?? 'N/A' }}
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-900">
-                                        {{ $result['Address'] ?? 'N/A' }}
+                                        {{ $result['Address'] ?? __('verification.n_a') }}
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
                                         @if(isset($result['CreditinfoId']))
@@ -164,7 +164,7 @@
                                                 wire:loading.attr="disabled"
                                                 wire:target="getReport"
                                             >
-                                                <span wire:loading.remove wire:target="getReport">Generate Report</span>
+                                                <span wire:loading.remove wire:target="getReport">{{ __('credit.generate_report') }}</span>
                                                 <span wire:loading wire:target="getReport">Loading...</span>
                                             </button>
                                         @else

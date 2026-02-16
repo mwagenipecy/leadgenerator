@@ -1,8 +1,8 @@
 <div class="p-4 sm:p-6 lg:p-8">
     <!-- Page Header -->
     <div class="mb-6 sm:mb-8">
-        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Company Verification</h1>
-        <p class="text-gray-600 text-sm sm:text-base lg:text-lg">Review and verify company registration requests</p>
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{{ __('admin.company_verification_title') }}</h1>
+        <p class="text-gray-600 text-sm sm:text-base lg:text-lg">{{ __('admin.company_verification_description') }}</p>
     </div>
 
     @if (session()->has('success'))
@@ -22,18 +22,18 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Search -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Search Companies</label>
-                <input wire:model.live="search" type="text" placeholder="Search by company name, email, TIN..." 
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.search_companies') }}</label>
+                <input wire:model.live="search" type="text" placeholder="{{ __('admin.search_by_company') }}" 
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent">
             </div>
 
             <!-- Status Filter -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.filter_by_status') }}</label>
                 <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-transparent">
-                    <option value="pending">Pending</option>
-                    <option value="verified">Verified</option>
-                    <option value="rejected">Rejected</option>
+                    <option value="pending">{{ __('admin.pending') }}</option>
+                    <option value="verified">{{ __('admin.verified') }}</option>
+                    <option value="rejected">{{ __('admin.rejected') }}</option>
                 </select>
             </div>
         </div>
@@ -45,14 +45,14 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TIN</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Application Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documents</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('admin.company') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('admin.contact') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('admin.country') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('admin.tin') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('admin.application_date') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('common.status') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('admin.documents') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('common.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -78,15 +78,15 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($company->company_verification_status === 'verified')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Verified</span>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">{{ __('admin.verified') }}</span>
                                 @elseif($company->company_verification_status === 'rejected')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">{{ __('admin.rejected') }}</span>
                                 @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">{{ __('admin.pending') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $company->companyVerificationDocuments->count() }} documents
+                                {{ $company->companyVerificationDocuments->count() }} {{ __('admin.documents_count') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex items-center space-x-2">
@@ -96,7 +96,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                         </svg>
-                                        View
+                                        {{ __('admin.view') }}
                                     </a>
                                     @if($company->company_verification_status === 'pending')
                                         <button wire:click="openVerifyModal('{{ $company->id }}')" 

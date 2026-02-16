@@ -38,6 +38,10 @@
 
         <!-- Right Side - Registration Form -->
         <div class="w-full lg:w-1/2 h-screen overflow-y-auto">
+            <!-- Language Switcher (Top Right) -->
+            <div class="absolute top-4 right-4 z-10">
+                <x-language-switcher :currentLocale="app()->getLocale()" />
+            </div>
             <div class="flex items-center justify-center min-h-full p-6 sm:p-8 lg:p-12">
                 <div class="w-full max-w-lg py-8">
                 
@@ -50,11 +54,11 @@
                         </div>
                     </div>
                     
-                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $type === 'company' ? 'Register Your Business' : 'Create Your Account' }}</h2>
-                    <p class="text-gray-600">{{ $type === 'company' ? 'Business onboarding to connect with borrowers' : 'Sign up to start generating quality leads' }}</p>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $type === 'company' ? __('auth.register_business') : __('auth.register_individual') }}</h2>
+                    <p class="text-gray-600">{{ $type === 'company' ? __('auth.business_onboarding') : __('auth.individual_onboarding') }}</p>
                     <div class="mt-6 inline-flex bg-gray-100 p-1 rounded-lg">
-                        <button type="button" wire:click="$set('type','individual')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='individual' ? 'bg-white shadow text-black' : 'text-gray-600' }}">Individual</button>
-                        <button type="button" wire:click="$set('type','company')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">Business</button>
+                        <button type="button" wire:click="$set('type','individual')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='individual' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.individual') }}</button>
+                        <button type="button" wire:click="$set('type','company')" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.business') }}</button>
                     </div>
                 </div>
 
@@ -77,7 +81,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    First Name *
+                    {{ __('auth.first_name') }} *
                 </label>
                 <input 
                     id="first_name" 
@@ -93,7 +97,7 @@
             </div>
             <div>
                 <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Last Name *
+                    {{ __('auth.last_name') }} *
                 </label>
                 <input 
                     id="last_name" 
@@ -112,7 +116,7 @@
         <!-- Email -->
         <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">
-                Email Address *
+                {{ __('auth.email') }} *
             </label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -139,7 +143,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="phone" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Phone Number *
+                    {{ __('auth.phone') }} *
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -164,7 +168,7 @@
             @if($type === 'individual')
             <div>
                 <label for="nida_number" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    NIDA Number *
+                    {{ __('auth.nida_number') }} *
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -188,7 +192,7 @@
             </div>
             @else
             <div>
-                <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">Company Name *</label>
+                <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.company_name') }} *</label>
                 <input id="company_name" wire:model.live="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-red-500 ring-1 ring-red-500 @enderror" placeholder="Acme Ltd">
                 @error('company_name')
                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -203,9 +207,9 @@
         <div class="space-y-4">
             <!-- Country Selection -->
             <div>
-                <label for="country" class="block text-sm font-medium text-gray-700 mb-1.5">Country *</label>
+                <label for="country" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.country') }} *</label>
                 <select id="country" wire:model.live="country" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm @error('country') border-red-500 ring-1 ring-red-500 @enderror">
-                    <option value="">Select Country</option>
+                    <option value="">{{ __('auth.select_country') }}</option>
                     <option value="Tanzania">Tanzania</option>
                     <option value="Kenya">Kenya</option>
                     <option value="Uganda">Uganda</option>
@@ -219,7 +223,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="company_tin" class="block text-sm font-medium text-gray-700 mb-1.5">Company TIN *</label>
+                    <label for="company_tin" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.company_tin') }} *</label>
                     <input id="company_tin" wire:model.live="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-red-500 ring-1 ring-red-500 @enderror" placeholder="123-456-789">
                     @error('company_tin')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -228,7 +232,7 @@
                 
                 @if(strtolower($country ?? '') === 'tanzania')
                 <div>
-                    <label for="company_contact_nida" class="block text-sm font-medium text-gray-700 mb-1.5">Representative NIDA *</label>
+                    <label for="company_contact_nida" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.representative_nida') }} *</label>
                     <span class="text-xs text-red-600 -mt-2"> Shareholder or company secretary NIDA </span>
                     <input id="company_contact_nida" wire:model="company_contact_nida" maxlength="23" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_contact_nida') border-red-500 ring-1 ring-red-500 @enderror" placeholder="19760517-37227-00002-17">
                     @error('company_contact_nida')
@@ -237,7 +241,7 @@
                 </div>
                 @elseif($country && strtolower($country) !== 'tanzania')
                 <div>
-                    <label for="passport_number" class="block text-sm font-medium text-gray-700 mb-1.5">Passport Number *</label>
+                    <label for="passport_number" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.passport_number') }} *</label>
                     <input id="passport_number" wire:model.live="passport_number" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('passport_number') border-red-500 ring-1 ring-red-500 @enderror" placeholder="A12345678">
                     @error('passport_number')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -253,7 +257,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Password *
+                    {{ __('auth.password') }} *
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -288,7 +292,7 @@
             
             <div>
                 <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">
-                    Confirm Password *
+                    {{ __('auth.confirm_password') }} *
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -335,10 +339,10 @@
             </div>
             <div class="ml-3">
                 <label for="terms" class="text-sm text-gray-600">
-                    I agree to the 
-                    <a href="{{ route('terms.show') }}" target="_blank" class="text-brand-red hover:text-brand-dark-red font-medium underline">Terms of Service</a> 
-                    and 
-                    <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium underline">Privacy Policy</a>
+                    {{ __('auth.terms_accept') }} 
+                    <a href="{{ route('terms.show') }}" target="_blank" class="text-brand-red hover:text-brand-dark-red font-medium underline">{{ __('auth.terms_link') }}</a> 
+                    {{ __('auth.and') }} 
+                    <a href="#" class="text-brand-red hover:text-brand-dark-red font-medium underline">{{ __('auth.privacy_policy') }}</a>
                 </label>
             </div>
         </div>
@@ -355,14 +359,14 @@
                 class="w-full bg-brand-red text-white py-3.5 px-4 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
             >
                 <span wire:loading.remove wire:target="register" class="flex items-center justify-center">
-                    {{ $type==='company' ? 'Continue as Business' : 'Create Account' }}
+                    {{ $type==='company' ? __('auth.continue_as_business') : __('auth.create_account') }}
                 </span>
                 <span wire:loading wire:target="register" class="flex items-center justify-center">
                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Creating Account...
+                    {{ __('auth.creating_account') }}
                 </span>
             </button>
         </div>
@@ -375,9 +379,9 @@
                 <!-- Sign In Link -->
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
-                        Already have an account? 
+                        {{ __('auth.already_have_account') }} 
                         <a href="{{ route('login') }}" class="font-medium text-brand-red hover:text-brand-dark-red transition-colors">
-                            Sign in
+                            {{ __('auth.login') }}
                         </a>
                     </p>
                 </div>

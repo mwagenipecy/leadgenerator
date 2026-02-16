@@ -2,12 +2,12 @@
     <div class="p-6">
         <div class="flex justify-between items-center mb-6">
             <div>
-                <h1 class="text-2xl font-bold text-black">Loan Categories</h1>
-                <p class="text-gray-600 mt-1">Manage loan product categories</p>
+                <h1 class="text-2xl font-bold text-black">{{ __('admin.loan_categories_title') }}</h1>
+                <p class="text-gray-600 mt-1">{{ __('admin.manage_categories_title') }}</p>
             </div>
             <a href="{{ route('admin.loan-categories.create') }}" 
                class="bg-sidebar-green hover:bg-sidebar-green-light text-white px-6 py-2 rounded-lg font-semibold transition-colors">
-                Add New Category
+                {{ __('admin.add_new_category') }}
             </a>
         </div>
 
@@ -27,11 +27,11 @@
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Description</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Sort Order</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('admin.name') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('admin.description') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('common.status') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('admin.sort_order') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('common.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -46,7 +46,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $category->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                                    {{ $category->is_active ? 'Active' : 'Inactive' }}
+                                    {{ $category->is_active ? __('common.active') : __('common.inactive') }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -56,7 +56,7 @@
                                 <div class="flex items-center space-x-3">
                                     <a href="{{ route('admin.loan-categories.edit', $category->id) }}" 
                                        class="text-sidebar-green hover:text-sidebar-green-light" 
-                                       title="Edit">
+                                       title="{{ __('admin.edit') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
@@ -65,7 +65,7 @@
                                         <button type="button" 
                                                 onclick="confirmDisableCategory('{{ $category->id }}', '{{ $category->name }}')"
                                                 class="text-red-600 hover:text-red-800" 
-                                                title="Disable">
+                                                title="{{ __('admin.disable') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
                                             </svg>
@@ -73,7 +73,7 @@
                                     @else
                                         <button disabled
                                                 class="text-gray-400 cursor-not-allowed opacity-50" 
-                                                title="Already Disabled">
+                                                title="{{ __('admin.already_disabled') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
                                             </svg>
@@ -89,15 +89,15 @@
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                                     </svg>
-                                    <h3 class="mt-2 text-sm font-medium text-gray-900">No categories</h3>
-                                    <p class="mt-1 text-sm text-gray-500">Get started by creating a new loan category.</p>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('admin.no_categories') }}</h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{ __('admin.get_started_create') }}</p>
                                     <div class="mt-6">
                                         <a href="{{ route('admin.loan-categories.create') }}" 
                                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-sidebar-green hover:bg-sidebar-green-light">
                                             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                             </svg>
-                                            Add Category
+                                            {{ __('admin.add_category') }}
                                         </a>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@
         <div class="relative p-4 w-full max-w-xs shadow-lg rounded-lg bg-white mx-4">
             <!-- Header -->
             <div class="flex items-center justify-between mb-3">
-                <h3 class="text-base font-bold text-gray-900">Disable Category</h3>
+                <h3 class="text-base font-bold text-gray-900">{{ __('admin.disable_category_title') }}</h3>
                 <button onclick="closeDisableModal()" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -124,7 +124,7 @@
 
             <!-- Message -->
             <p class="text-sm text-gray-600 mb-3" id="disableCategoryMessage">
-                Disable this category? It will be unavailable for new loan products.
+                {{ __('admin.disable_category_message') }}
             </p>
 
             <!-- Password Form -->
@@ -134,7 +134,7 @@
                     <input type="password" 
                            name="password" 
                            id="disablePassword"
-                           placeholder="Enter your password"
+                           placeholder="{{ __('admin.enter_password_to_disable') }}"
                            required
                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500 focus:border-red-500"
                            autofocus>
@@ -145,11 +145,11 @@
                     <button type="button" 
                             onclick="closeDisableModal()" 
                             class="px-3 py-1.5 text-sm text-gray-700 hover:text-gray-900">
-                        Cancel
+                        {{ __('admin.cancel') }}
                     </button>
                     <button type="submit" 
                             class="px-3 py-1.5 text-sm bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
-                        Disable
+                        {{ __('admin.disable') }}
                     </button>
                 </div>
             </form>
@@ -162,7 +162,7 @@
             const form = document.getElementById('disableCategoryForm');
             const message = document.getElementById('disableCategoryMessage');
             
-            message.textContent = `Disable "${categoryName}"? It will be unavailable for new loan products.`;
+            message.textContent = `{{ __('admin.disable_category_confirm') }}`.replace(':name', categoryName);
             form.action = '{{ route("admin.loan-categories.disable", ":id") }}'.replace(':id', categoryId);
             modal.classList.remove('hidden');
             document.getElementById('disablePassword').focus();

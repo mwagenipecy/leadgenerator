@@ -6,9 +6,9 @@
         @if($currentStep === 'category')
             <div class="mb-8">
                 <div class="text-center mb-8">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Find Your Perfect Loan</h1>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ __('loan.find_perfect_loan') }}</h1>
                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Choose the type of loan that best fits your needs. We'll help you find the right lenders with the best terms.
+                        {{ __('loan.choose_loan_type') }}
                     </p>
                 </div>
 
@@ -73,7 +73,7 @@
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                             </svg>
-                                            Selected
+                                            {{ __('common.selected') }}
                                         </span>
                                     </div>
                                 @endif
@@ -88,20 +88,20 @@
             <div class="mb-8">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h1 class="text-4xl font-bold text-gray-900 mb-2">Loan Requirements</h1>
-                        <p class="text-gray-600 text-lg">Enter your loan details to find matching lenders</p>
+                        <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('loan.loan_requirements') }}</h1>
+                        <p class="text-gray-600 text-lg">{{ __('loan.enter_loan_details') }}</p>
                         <div class="mt-2 flex items-center space-x-4 text-sm">
                             @php
                                 $selectedCategory = $loanCategories->firstWhere('name', $loan_category) ?? $loanCategories->firstWhere('slug', $loan_category);
                             @endphp
-                            <span class="text-gray-500">Category: <span class="font-medium text-sidebar-green">{{ $selectedCategory->name ?? $loan_category }}</span></span>
+                            <span class="text-gray-500">{{ __('admin.category') }}: <span class="font-medium text-sidebar-green">{{ $selectedCategory->name ?? $loan_category }}</span></span>
                         </div>
                     </div>
                     <button wire:click="backToCategory" class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                         </svg>
-                        Change Category
+                        {{ __('loan.change_category') }}
                     </button>
                 </div>
 
@@ -109,15 +109,15 @@
                     <!-- Left Column - Input Form -->
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-sidebar-green to-sidebar-green-light text-white">
-                            <h3 class="text-xl font-bold mb-2">Loan Details</h3>
-                            <p class="text-white text-sm opacity-90">Specify your loan requirements</p>
+                            <h3 class="text-xl font-bold mb-2">{{ __('loan.loan_details') }}</h3>
+                            <p class="text-white text-sm opacity-90">{{ __('loan.specify_loan_requirements') }}</p>
                         </div>
                         
                         <div class="p-6 space-y-6">
                             <!-- Loan Amount -->
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">
-                                    Requested Amount (TSh) *
+                                    {{ __('loan.requested_amount') }} (TSh) *
                                 </label>
                                 <div class="relative">
                                     <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
@@ -136,11 +136,11 @@
                             <!-- Loan Period -->
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">
-                                    Loan Period (Months) *
+                                    {{ __('loan.loan_period') }} ({{ __('dashboard.months') }}) *
                                 </label>
                                 <select wire:model.live="requested_tenure" 
                                         class="w-full px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold bg-gray-50">
-                                    <option value="">Select period</option>
+                                    <option value="">{{ __('loan.select_period') }}</option>
                                     <option value="6">6 months</option>
                                     <option value="12">12 months</option>
                                     <option value="18">18 months</option>

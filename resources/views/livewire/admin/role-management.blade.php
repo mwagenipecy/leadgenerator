@@ -3,15 +3,15 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-1">Role Management</h2>
-                <p class="text-gray-600 text-sm">Manage system roles and their permissions</p>
+                <h2 class="text-2xl font-bold text-gray-900 mb-1">{{ __('admin.role_management') }}</h2>
+                <p class="text-gray-600 text-sm">{{ __('admin.manage_roles_description') }}</p>
             </div>
             <div class="flex items-center space-x-3">
                 <button wire:click="openCreateRoleModal" class="bg-red-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-red-700 transition-all duration-200 shadow-lg shadow-red-600/25">
                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
-                    Create Role
+                    {{ __('admin.create_role') }}
                 </button>
             </div>
         </div>
@@ -48,7 +48,7 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">{{ number_format($totalRoles) }}</p>
-                    <p class="text-sm font-medium text-gray-500">Total Roles</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('admin.total_roles') }}</p>
                 </div>
             </div>
 
@@ -62,7 +62,7 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalSystemRoles) }}</p>
-                    <p class="text-sm font-medium text-gray-500">System Roles</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('admin.system_roles') }}</p>
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">{{ number_format($totalCustomRoles) }}</p>
-                    <p class="text-sm font-medium text-gray-500">Custom Roles</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('admin.custom_roles') }}</p>
                 </div>
             </div>
 
@@ -90,7 +90,7 @@
                 </div>
                 <div>
                     <p class="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors">{{ number_format($totalActiveRoles) }}</p>
-                    <p class="text-sm font-medium text-gray-500">Active Roles</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('admin.active_roles') }}</p>
                 </div>
             </div>
         </div>
@@ -99,9 +99,9 @@
         <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Roles</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.search_roles') }}</label>
                     <div class="relative">
-                        <input wire:model.live="search" type="text" placeholder="Search by name or description..." 
+                        <input wire:model.live="search" type="text" placeholder="{{ __('admin.search_by_name') }}" 
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
                         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -110,9 +110,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Type</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.filter_by_type') }}</label>
                     <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                        <option value="">All Types</option>
+                        <option value="">{{ __('admin.all_types') }}</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                         <option value="system">System Roles</option>
@@ -121,9 +121,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Level</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.filter_by_level') }}</label>
                     <select wire:model.live="levelFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
-                        <option value="">All Levels</option>
+                        <option value="">{{ __('admin.all_levels') }}</option>
                         <option value="high">High (80-100)</option>
                         <option value="medium">Medium (50-79)</option>
                         <option value="low">Low (1-49)</option>
@@ -135,7 +135,7 @@
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                         </svg>
-                        Refresh
+                        {{ __('admin.refresh') }}
                     </button>
                 </div>
             </div>
@@ -146,8 +146,8 @@
             <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Roles List</h3>
-                        <p class="text-gray-600">Manage system roles and view user assignments</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">{{ __('admin.roles_list') }}</h3>
+                        <p class="text-gray-600">{{ __('admin.manage_roles_view') }}</p>
                     </div>
                 </div>
             </div>
@@ -156,13 +156,13 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Role</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Level</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Users</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Permissions</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.role') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.level') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.users_count') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.permissions_count') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.type') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('common.status') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('common.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
@@ -211,7 +211,7 @@
                                         </div>
                                         <div>
                                             <div class="text-lg font-bold text-gray-900">{{ number_format($role->users_count) }}</div>
-                                            <div class="text-xs text-gray-500">Users</div>
+                                            <div class="text-xs text-gray-500">{{ __('admin.users_count') }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -224,7 +224,7 @@
                                         </div>
                                         <div>
                                             <div class="text-lg font-bold text-gray-900">{{ number_format($role->permissions_count) }}</div>
-                                            <div class="text-xs text-gray-500">Permissions</div>
+                                            <div class="text-xs text-gray-500">{{ __('admin.permissions_count') }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -248,14 +248,14 @@
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $role->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200' }}">
                                         <div class="w-2 h-2 rounded-full mr-2 {{ $role->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
-                                        {{ $role->is_active ? 'Active' : 'Inactive' }}
+                                        {{ $role->is_active ? __('common.active') : __('common.inactive') }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
                                         <button wire:click="openEditRoleModal('{{ $role->id }}')" 
                                                 class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" 
-                                                title="Update Role">
+                                                title="{{ __('admin.update_role') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
@@ -263,7 +263,7 @@
 
                                         <button wire:click="confirmToggleRoleStatus('{{ $role->id }}')" 
                                                 class="text-red-600 hover:text-red-700 p-2 rounded-xl hover:bg-red-50 transition-all duration-200" 
-                                                title="Change Status">
+                                                title="{{ __('admin.change_status') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
                                             </svg>

@@ -4,16 +4,16 @@
     <div class="mb-8">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-4xl font-bold text-gray-900 mb-2">Lender Management</h1>
-                <p class="text-gray-600 text-lg">Manage lender onboarding and verification</p>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('admin.lender_management_title') }}</h1>
+                <p class="text-gray-600 text-lg">{{ __('admin.lender_management_description') }}</p>
             </div>
             <div class="flex items-center space-x-3">
                 <div class="flex items-center space-x-2 bg-sidebar-green-50 px-4 py-2 rounded-full">
                     <div class="w-2 h-2 bg-sidebar-green-400 rounded-full animate-pulse"></div>
-                    <span class="text-sm font-medium text-sidebar-green-light">{{ $stats['pending'] }} Pending Review</span>
+                    <span class="text-sm font-medium text-sidebar-green-light">{{ $stats['pending'] }} {{ __('admin.pending_review') }}</span>
                 </div>
                 <button wire:click="showAddLenderForm" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
-                    + Add Lender
+                    + {{ __('admin.add_lender') }}
                 </button>
             </div>
         </div>
@@ -67,7 +67,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Total</p>
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{{ __('admin.total') }}</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $stats['total'] }}</p>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Pending</p>
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{{ __('admin.pending') }}</p>
                     <p class="text-2xl font-bold text-sidebar-green">{{ $stats['pending'] }}</p>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Approved</p>
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{{ __('admin.approved_lenders') }}</p>
                     <p class="text-2xl font-bold text-gray-700">{{ $stats['approved'] }}</p>
                 </div>
             </div>
@@ -112,7 +112,7 @@
                     </svg>
                 </div>
                 <div class="text-right">
-                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Rejected</p>
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{{ __('admin.suspended_lenders') }}</p>
                     <p class="text-2xl font-bold text-black">{{ $stats['rejected'] + $stats['suspended'] }}</p>
                 </div>
             </div>
@@ -124,9 +124,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <!-- Search -->
             <div class="lg:col-span-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Search Lenders</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.search_lenders') }}</label>
                 <div class="relative">
-                    <input wire:model.live="search" type="text" placeholder="Search by name, email..." 
+                    <input wire:model.live="search" type="text" placeholder="{{ __('admin.search_by_lender') }}" 
                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -136,9 +136,9 @@
 
             <!-- Status Filter -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('admin.filter_by_status_lender') }}</label>
                 <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                    <option value="">All Statuses</option>
+                    <option value="">{{ __('admin.all_statuses_lender') }}</option>
                     @foreach ($lender_status as $status)
                         <option value="{{ $status }}">{{ ucfirst($status) }}</option>
                     @endforeach
@@ -152,8 +152,8 @@
         <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-1">Lenders</h3>
-                    <p class="text-gray-600">Manage lender applications and status</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-1">{{ __('admin.lender_management') }}</h3>
+                    <p class="text-gray-600">{{ __('admin.manage_lenders_description') ?? 'Manage lender applications and status' }}</p>
                 </div>
             </div>
         </div>
@@ -162,13 +162,13 @@
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Company</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Contact</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Location</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Documents</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Created/Updated</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.company') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.contact') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.location') ?? 'Location' }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('common.status') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.documents') }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('admin.created_updated') ?? 'Created/Updated' }}</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('common.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
@@ -214,14 +214,14 @@
                                         <svg class="w-3 h-3 mr-1.5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
-                                        Pending
+                                        {{ __('admin.pending') }}
                                     </span>
                                 @elseif($lender->status === 'approved')
                                     <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 border border-gray-200">
                                         <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                         </svg>
-                                        Approved
+                                        {{ __('admin.approved_lenders') }}
                                     </span>
                                 @elseif($lender->status === 'rejected')
                                     <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-black text-white border border-black">
@@ -235,7 +235,7 @@
                                         <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636"/>
                                         </svg>
-                                        Suspended
+                                        {{ __('admin.suspended_lenders') }}
                                     </span>
                                 @endif
                             </td>
@@ -291,12 +291,12 @@
                                     <!-- View Button -->
                                     <a href="{{ route('lenders.view', $lender->id) }}" 
                                             class="text-gray-600 hover:text-gray-700 p-2 rounded-xl hover:bg-gray-50 transition-all duration-200 group relative" 
-                                            title="View Details">
+                                            title="{{ __('admin.view_details') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                         </svg>
-                                        <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">View Details</span>
+                                        <span class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">{{ __('admin.view_details') }}</span>
                                     </a>
 
                                     @if($lender->isPending())

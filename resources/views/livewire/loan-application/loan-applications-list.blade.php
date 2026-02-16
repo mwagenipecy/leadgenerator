@@ -4,20 +4,20 @@
     <div class="mb-6 sm:mb-8">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div class="mb-4 sm:mb-6 lg:mb-0">
-                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">My Loan Applications</h1>
-                <p class="text-sm sm:text-base lg:text-lg text-gray-600">Track and manage your loan applications</p>
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">{{ __('loan.my_loan_applications') }}</h1>
+                <p class="text-sm sm:text-base lg:text-lg text-gray-600">{{ __('loan.track_manage_applications') }}</p>
                 <div class="mt-3 flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 text-sm text-gray-500">
                     <span class="flex items-center">
                         <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        Last updated: {{ now()->format('M d, Y H:i') }}
+                        {{ __('loan.last_updated') }}: {{ now()->format('M d, Y H:i') }}
                     </span>
                     <span class="flex items-center">
                         <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
-                        {{ $applications->total() }} total applications
+                        {{ $applications->total() }} {{ __('loan.total_applications') }}
                     </span>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
-                    New Application
+                    {{ __('loan.new_application') }}
                 </a>
                 <!-- <button wire:click="exportApplications" 
                         class="inline-flex items-center px-4 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-xs sm:text-sm font-medium text-gray-600">Total Applications</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600">{{ __('dashboard.total_applications_label') }}</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ $applications->total() }}</p>
                 </div>
             </div>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-xs sm:text-sm font-medium text-gray-600">Under Review</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600">{{ __('loan.under_review') }}</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ $statusCounts['under_review'] ?? 0 }}</p>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-xs sm:text-sm font-medium text-gray-600">Approved</p>
+                    <p class="text-xs sm:text-sm font-medium text-gray-600">{{ __('loan.approved') }}</p>
                     <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ $statusCounts['approved'] ?? 0 }}</p>
                 </div>
             </div>
@@ -152,12 +152,12 @@
             <div class="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
                 <select wire:model.live="statusFilter" 
                         class="bg-gray-50 border border-gray-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                    <option value="all">All Status</option>
+                    <option value="all">{{ __('common.all_statuses') }}</option>
                     <option value="draft">Draft</option>
                     <option value="submitted">Submitted</option>
                     <option value="under_review">Under Review</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
+                    <option value="approved">{{ __('loan.approved') }}</option>
+                    <option value="rejected">{{ __('loan.rejected') }}</option>
                     <option value="disbursed">Disbursed</option>
                     <option value="cancelled">Cancelled</option>
                 </select>
@@ -166,7 +166,7 @@
                         class="bg-gray-50 border border-gray-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                     <option value="created_at">Date Created</option>
                     <option value="requested_amount">Amount</option>
-                    <option value="status">Status</option>
+                    <option value="status">{{ __('common.status') }}</option>
                     <option value="application_number">App Number</option>
                 </select>
 
@@ -225,7 +225,7 @@
                             </th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 <button wire:click="sortBy('status')" class="flex items-center space-x-1 hover:text-gray-900">
-                                    <span>Status</span>
+                                    <span>{{ __('common.status') }}</span>
                                     @if($sortBy === 'status')
                                         <svg class="w-3 h-3 {{ $sortDirection === 'desc' ? 'transform rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
@@ -245,7 +245,7 @@
                                     @endif
                                 </button>
                             </th>
-                            <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('common.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -336,7 +336,7 @@
                                         <!-- View Button -->
                                         <button wire:click="viewApplication('{{ $application->id }}')" 
                                                 class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-all" 
-                                                title="View Details">
+                                                title="{{ __('common.view') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -347,7 +347,7 @@
                                         @if($application->status === 'draft')
                                             <button wire:click="editApplication('{{ $application->id }}')" 
                                                     class="text-gray-700 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-all" 
-                                                    title="Edit Draft">
+                                                    title="{{ __('common.edit') }}">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                                 </svg>
@@ -378,7 +378,7 @@
                                         @if($application->status === 'draft')
                                             <button wire:click="showDeleteConfirmation('{{ $application->id }}')" 
                                                     class="text-orange-600 hover:text-orange-900 p-2 rounded-lg hover:bg-orange-50 transition-all" 
-                                                    title="Delete Draft">
+                                                    title="{{ __('common.delete') }}">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
@@ -508,7 +508,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">No applications found</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ __('loan.no_applications') }}</h3>
                 <p class="text-gray-500 mb-6">
                     @if($search || $statusFilter !== 'all')
                         No applications match your current filters. Try adjusting your search criteria.

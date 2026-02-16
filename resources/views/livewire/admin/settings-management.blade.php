@@ -4,12 +4,12 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">System Settings</h1>
-                    <p class="text-gray-600 text-lg">Configure billing, commissions, and system preferences</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('settings.system_settings') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('settings.configure_billing_commissions') }}</p>
                 </div>
                 <div class="flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full">
                     <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span class="text-sm font-medium text-green-700">Settings Active</span>
+                    <span class="text-sm font-medium text-green-700">{{ __('settings.settings_active') }}</span>
                 </div>
             </div>
         </div>
@@ -30,15 +30,15 @@
                 <nav class="-mb-px flex space-x-8 px-8" aria-label="Tabs">
                     <button wire:click="setActiveTab('commission')" 
                             class="border-transparent {{ $activeTab === 'commission' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
-                        Commission Settings
+                        {{ __('settings.commission_settings') }}
                     </button>
                     <button wire:click="setActiveTab('payment')" 
                             class="border-transparent {{ $activeTab === 'payment' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
-                        Payment Settings
+                        {{ __('settings.payment_settings') }}
                     </button>
                     <button wire:click="setActiveTab('business')" 
                             class="border-transparent {{ $activeTab === 'business' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
-                        Business Info
+                        {{ __('settings.business_info') }}
                     </button>
                 </nav>
             </div>
@@ -49,23 +49,23 @@
                     <form wire:submit.prevent="saveGeneralSettings">
                         <!-- Default Commission Configuration -->
                         <div class="mb-8">
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Default Commission Configuration</h3>
-                            <p class="text-gray-600 mb-6">Set default commission rates for all lenders. Individual lender settings will override these defaults.</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">{{ __('settings.default_commission_configuration') }}</h3>
+                            <p class="text-gray-600 mb-6">{{ __('settings.set_default_commission_rates') }}</p>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 <!-- Commission Type -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Commission Type</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('settings.commission_type') }}</label>
                                     <select wire:model.live="default_commission_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                        <option value="percentage">Percentage of Loan</option>
-                                        <option value="fixed">Fixed Amount</option>
+                                        <option value="percentage">{{ __('settings.percentage_of_loan') }}</option>
+                                        <option value="fixed">{{ __('settings.fixed_amount') }}</option>
                                     </select>
                                 </div>
 
                                 <!-- Commission Percentage -->
                                 @if($default_commission_type === 'percentage')
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Commission Percentage (%)</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('settings.commission_percentage') }}</label>
                                         <div class="relative">
                                             <input wire:model="default_commission_percentage" type="number" step="0.1" min="0" max="100" 
                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
@@ -75,7 +75,7 @@
                                     </div>
                                 @else
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Fixed Commission Amount</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('settings.fixed_commission_amount') }}</label>
                                         <div class="relative">
                                             <input wire:model="default_commission_fixed_amount" type="number" step="0.01" min="0" 
                                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 pl-12 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
@@ -87,11 +87,11 @@
 
                                 <!-- Calculation Base -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Calculate Commission Based On</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('settings.calculate_commission_based_on') }}</label>
                                     <select wire:model="commission_calculation_base" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                        <option value="loan_amount">Total Loan Amount</option>
-                                        <option value="interest_amount">Interest Amount</option>
-                                        <option value="monthly_payment">Monthly Payment</option>
+                                        <option value="loan_amount">{{ __('settings.total_loan_amount') }}</option>
+                                        <option value="interest_amount">{{ __('settings.interest_amount') }}</option>
+                                        <option value="monthly_payment">{{ __('settings.monthly_payment') }}</option>
                                     </select>
                                 </div>
                             </div>

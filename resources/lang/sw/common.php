@@ -1,0 +1,76 @@
+<?php
+
+return [
+    // Common words
+    'welcome' => 'Karibu',
+    'dashboard' => 'Dashibodi',
+    'logout' => 'Toka',
+    'login' => 'Ingia',
+    'register' => 'Jisajili',
+    'save' => 'Hifadhi',
+    'cancel' => 'Ghairi',
+    'delete' => 'Futa',
+    'edit' => 'Hariri',
+    'view' => 'Angalia',
+    'create' => 'Unda',
+    'update' => 'Sasisha',
+    'submit' => 'Wasilisha',
+    'back' => 'Rudi',
+    'next' => 'Inayofuata',
+    'previous' => 'Iliyotangulia',
+    'search' => 'Tafuta',
+    'filter' => 'Chuja',
+    'actions' => 'Vitendo',
+    'status' => 'Hali',
+    'active' => 'Inatumika',
+    'inactive' => 'Haifanyi kazi',
+    'enabled' => 'Imeamilishwa',
+    'disabled' => 'Imezimwa',
+    'yes' => 'Ndiyo',
+    'no' => 'Hapana',
+    'confirm' => 'Thibitisha',
+    'close' => 'Funga',
+    'loading' => 'Inapakia...',
+    'no_data' => 'Hakuna data',
+    'success' => 'Mafanikio',
+    'error' => 'Kosa',
+    'warning' => 'Onyo',
+    'info' => 'Taarifa',
+    
+    // Navigation
+    'home' => 'Nyumbani',
+    'profile' => 'Wasifu',
+    'settings' => 'Mipangilio',
+    'notifications' => 'Arifa',
+    'language' => 'Lugha',
+    'english' => 'Kiingereza',
+    'swahili' => 'Kiswahili',
+    
+    // Messages
+    'success_message' => 'Operesheni imekamilika kwa mafanikio',
+    'error_message' => 'Kosa limetokea',
+    'confirm_delete' => 'Je, una uhakika unataka kufuta kipengele hiki?',
+    'confirm_disable' => 'Je, una uhakika unataka kuzima kipengele hiki?',
+    'item_created' => 'Kipengele kimeundwa kwa mafanikio',
+    'item_updated' => 'Kipengele kimesasishwa kwa mafanikio',
+    'item_deleted' => 'Kipengele kimefutwa kwa mafanikio',
+    'item_disabled' => 'Kipengele kimezimwa kwa mafanikio',
+    'item_enabled' => 'Kipengele kimeamilishwa kwa mafanikio',
+    
+    // Validation
+    'required' => 'Sehemu hii inahitajika',
+    'email' => 'Tafadhali ingiza anwani ya barua pepe halali',
+    'password' => 'Nenosiri',
+    'password_confirmation' => 'Thibitisha Nenosiri',
+    'current_password' => 'Nenosiri la Sasa',
+    
+    // Pagination
+    'showing' => 'Inaonyesha',
+    'to' => 'hadi',
+    'of' => 'ya',
+    'results' => 'matokeo',
+    'per_page' => 'Kwa ukurasa',
+    'selected' => 'Imechaguliwa',
+    'action_cannot_undone' => 'Kitendo hiki hakiwezi kutenduliwa',
+];
+

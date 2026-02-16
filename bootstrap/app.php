@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'company.verified' => \App\Http\Middleware\RequireCompanyVerification::class,
             'otp.required' => \App\Http\Middleware\RequireOtpVerification::class,
         ]);
+        $middleware->web(prepend: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
         $middleware->web(append: [
             \App\Http\Middleware\RequireCompanyVerification::class,
             \App\Http\Middleware\RequireOtpVerification::class,
