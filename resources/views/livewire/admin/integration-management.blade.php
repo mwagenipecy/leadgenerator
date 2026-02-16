@@ -4,20 +4,20 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Integration Management</h1>
-                    <p class="text-gray-600 text-lg">Create and manage webhook integrations for your applications</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('integration.integration_management') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('integration.create_manage_webhooks') }}</p>
                 </div>
                 <div class="flex items-center space-x-3">
                     <div class="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full">
                         <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                        <span class="text-sm font-medium text-blue-700">Webhooks Active</span>
-                    </div>
+                        <span class="text-sm font-medium text-blue-700">{{ __('integration.webhooks_active') }}</span>
+                </div>
                     <button wire:click="openCreateModal" 
                             class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
-                        Create Integration
+                        {{ __('integration.create_integration') }}
                     </button>
                 </div>
             </div>
@@ -47,9 +47,9 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Search -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Integrations</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('integration.search_integrations') }}</label>
                     <div class="relative">
-                        <input wire:model.live="search" type="text" placeholder="Search by name, API name, or URL..." 
+                        <input wire:model.live="search" type="text" placeholder="{{ __('integration.search_by_name_api_url') }}" 
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -59,11 +59,11 @@
 
                 <!-- Status Filter -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('integration.filter_by_status') }}</label>
                     <select wire:model.live="status_filter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                        <option value="">All Statuses</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="">{{ __('integration.all_statuses') }}</option>
+                        <option value="active">{{ __('integration.active') }}</option>
+                        <option value="inactive">{{ __('integration.inactive') }}</option>
                     </select>
                 </div>
 
@@ -72,11 +72,11 @@
                     <div class="grid grid-cols-2 gap-4 w-full">
                         <div class="text-center p-3 bg-green-50 rounded-lg">
                             <div class="text-2xl font-bold text-green-600">{{ $integrations->where('is_active', true)->count() }}</div>
-                            <div class="text-xs text-green-600">Active</div>
+                            <div class="text-xs text-green-600">{{ __('integration.active') }}</div>
                         </div>
                         <div class="text-center p-3 bg-gray-50 rounded-lg">
                             <div class="text-2xl font-bold text-gray-600">{{ $integrations->total() }}</div>
-                            <div class="text-xs text-gray-600">Total</div>
+                            <div class="text-xs text-gray-600">{{ __('integration.total') }}</div>
                         </div>
                     </div>
                 </div>
@@ -88,11 +88,11 @@
             <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Your Integrations</h3>
-                        <p class="text-gray-600">Manage webhook endpoints and field mappings</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">{{ __('integration.your_integrations') }}</h3>
+                        <p class="text-gray-600">{{ __('integration.manage_webhook_endpoints') }}</p>
                     </div>
                     <div class="text-sm text-gray-500">
-                        Showing {{ $integrations->count() }} of {{ $integrations->total() }} integrations
+                        {{ __('integration.showing') }} {{ $integrations->count() }} {{ __('integration.of') }} {{ $integrations->total() }} {{ __('integration.integrations') }}
                     </div>
                 </div>
             </div>
@@ -100,12 +100,12 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Integration</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Endpoint</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Auth Method</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Last Used</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('integration.integration') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('integration.endpoint') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('integration.auth_method') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('integration.status') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('integration.last_used') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('common.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
@@ -146,7 +146,7 @@
                                         class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors
                                             {{ $integration->is_active ? 'bg-green-100 text-green-800 border border-green-200 hover:bg-green-200' : 'bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200 hover:bg-sidebar-green-200' }}">
                                         <div class="w-2 h-2 rounded-full mr-2 {{ $integration->is_active ? 'bg-green-400' : 'bg-sidebar-green-400' }}"></div>
-                                        {{ $integration->is_active ? 'Active' : 'Inactive' }}
+                                        {{ $integration->is_active ? __('integration.active') : __('integration.inactive') }}
                                     </button>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
@@ -154,35 +154,35 @@
                                         <div class="text-sm font-medium text-gray-900">{{ $integration->logs()->latest()->first()->created_at->format('M d, Y') }}</div>
                                         <div class="text-xs text-gray-500">{{ $integration->logs()->latest()->first()->created_at->format('g:i A') }}</div>
                                     @else
-                                        <span class="text-xs text-gray-400">Never used</span>
+                                        <span class="text-xs text-gray-400">{{ __('integration.never_used') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="flex items-center space-x-2">
                                         <button wire:click="openTestModal({{ $integration->id }})" 
                                             class="text-green-600 hover:text-green-700 p-2 rounded-lg hover:bg-green-50 transition-all duration-200" 
-                                            title="Test Integration">
+                                            title="{{ __('integration.test_integration') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
                                         </button>
                                         <button wire:click="openLogsModal({{ $integration->id }})" 
                                             class="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-all duration-200"
-                                            title="View Logs">
+                                            title="{{ __('integration.view_logs') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
                                         </button>
                                         <button wire:click="openEditModal({{ $integration->id }})" 
                                             class="text-yellow-600 hover:text-yellow-700 p-2 rounded-lg hover:bg-yellow-50 transition-all duration-200"
-                                            title="Edit Integration">
+                                            title="{{ __('integration.edit_integration') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
                                         </button>
                                         <button wire:click="deleteIntegration({{ $integration->id }})" 
                                             class="text-sidebar-green hover:text-sidebar-green-light p-2 rounded-lg hover:bg-sidebar-green-50 transition-all duration-200"
-                                            title="Delete Integration">
+                                            title="{{ __('integration.delete_integration') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                             </svg>
@@ -198,11 +198,11 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                         </svg>
                                     </div>
-                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">No Integrations Found</h4>
-                                    <p class="text-gray-500 mb-4">Create your first integration to start sending webhook data when offers are accepted.</p>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ __('integration.no_integrations_found') }}</h4>
+                                    <p class="text-gray-500 mb-4">{{ __('integration.create_first_integration') }}</p>
                                     <button wire:click="openCreateModal" 
                                         class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors">
-                                        Create Your First Integration
+                                        {{ __('integration.create_your_first_integration') }}
                                     </button>
                                 </td>
                             </tr>

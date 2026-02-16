@@ -4,8 +4,8 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Promotion Management</h1>
-                    <p class="text-gray-600 text-lg">Create and send promotional emails and notifications to targeted users</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('promotion.promotion_management') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('promotion.create_send_promotions') }}</p>
                 </div>
                 <div class="flex items-center space-x-3">
                     <button 
@@ -20,15 +20,15 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span wire:loading.remove wire:target="createSamplePromotion">Create Sample</span>
-                        <span wire:loading wire:target="createSamplePromotion">Creating...</span>
+                        <span wire:loading.remove wire:target="createSamplePromotion">{{ __('promotion.create_sample') }}</span>
+                        <span wire:loading wire:target="createSamplePromotion">{{ __('promotion.creating') }}</span>
                     </button>
                     <button wire:click="openCreateModal" 
                             class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25 inline-flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
-                        Create Promotion
+                        {{ __('promotion.create_promotion') }}
                     </button>
                 </div>
             </div>
@@ -59,13 +59,13 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Target Audience</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recipients</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sent</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('promotion.title') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('promotion.target_audience') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('promotion.recipients') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('promotion.status') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('promotion.sent') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('promotion.created') }}</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('promotion.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -85,10 +85,10 @@
                                             </div>
                                         @endif
                                         @if($promotion->target_audience['new_customers'] ?? false)
-                                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded mt-1 inline-block">New Customers</span>
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded mt-1 inline-block">{{ __('promotion.new_customers') }}</span>
                                         @endif
                                         @if($promotion->target_audience['no_loans'] ?? false)
-                                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded mt-1 inline-block">No Loans</span>
+                                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded mt-1 inline-block">{{ __('promotion.no_loans') }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -103,7 +103,12 @@
                                         @elseif($promotion->status === 'failed') bg-red-100 text-red-800
                                         @else bg-gray-100 text-gray-800
                                         @endif">
-                                        {{ ucfirst($promotion->status) }}
+                                        @if($promotion->status === 'draft') {{ __('promotion.draft') }}
+                                        @elseif($promotion->status === 'scheduled') {{ __('promotion.scheduled') }}
+                                        @elseif($promotion->status === 'sending') {{ __('promotion.sending') }}
+                                        @elseif($promotion->status === 'sent') {{ __('promotion.sent') }}
+                                        @else {{ ucfirst($promotion->status) }}
+                                        @endif
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -114,7 +119,7 @@
                                         </div>
                                     @else
                                         @if($promotion->scheduled_at)
-                                            Scheduled: {{ $promotion->scheduled_at->format('M d, Y H:i') }}
+                                            {{ __('promotion.scheduled') }}: {{ $promotion->scheduled_at->format('M d, Y H:i') }}
                                         @else
                                             -
                                         @endif
@@ -128,7 +133,7 @@
                                     @if($promotion->status === 'draft' || $promotion->status === 'scheduled')
                                         <button wire:click="sendPromotion({{ $promotion->id }})" 
                                                 class="p-2 text-sidebar-green hover:bg-sidebar-green/10 rounded-lg transition-colors" 
-                                                title="Send Now">
+                                                title="{{ __('promotion.send') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                                             </svg>
@@ -139,7 +144,7 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="px-6 py-12 text-center text-gray-500">
-                                    No promotions found. Create your first promotion to get started.
+                                    {{ __('promotion.no_promotions_found') }}
                                 </td>
                             </tr>
                         @endforelse
@@ -188,16 +193,16 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="flex items-center">
                                     <input type="checkbox" wire:model="send_email" id="send_email" class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
-                                    <label for="send_email" class="ml-2 text-sm text-gray-700">Send Email</label>
+                                    <label for="send_email" class="ml-2 text-sm text-gray-700">{{ __('promotion.send_email') }}</label>
                                 </div>
                                 <div class="flex items-center">
                                     <input type="checkbox" wire:model="send_notification" id="send_notification" class="rounded border-gray-300 text-sidebar-green focus:ring-sidebar-green">
-                                    <label for="send_notification" class="ml-2 text-sm text-gray-700">Send In-App Notification</label>
+                                    <label for="send_notification" class="ml-2 text-sm text-gray-700">{{ __('promotion.send_notification') }}</label>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Schedule (Optional)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('promotion.schedule_optional') }}</label>
                                 <input type="datetime-local" wire:model="scheduled_at" 
                                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                 @error('scheduled_at') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -207,11 +212,11 @@
 
                     <!-- Target Audience -->
                     <div class="mb-6">
-                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Target Audience</h4>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">{{ __('promotion.target_audience') }}</h4>
                         <div class="space-y-4">
                             <!-- Roles -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">User Roles</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('promotion.user_roles') }}</label>
                                 <div class="flex flex-wrap gap-2">
                                     @foreach($roles as $role)
                                         <label class="flex items-center">
@@ -252,14 +257,14 @@
 
                             <!-- Credit Score Range -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Credit Score Range (Optional)</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('promotion.credit_score_range_optional') }}</label>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <input type="number" wire:model="target_credit_score_min" placeholder="Min Score" 
+                                        <input type="number" wire:model="target_credit_score_min" placeholder="{{ __('promotion.min_score') }}" 
                                                class="w-full border border-gray-300 rounded-lg px-3 py-2">
                                     </div>
                                     <div>
-                                        <input type="number" wire:model="target_credit_score_max" placeholder="Max Score" 
+                                        <input type="number" wire:model="target_credit_score_max" placeholder="{{ __('promotion.max_score') }}" 
                                                class="w-full border border-gray-300 rounded-lg px-3 py-2">
                                     </div>
                                 </div>
@@ -268,7 +273,7 @@
                             <!-- Location Filters -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">City (Optional)</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('promotion.city_optional') }}</label>
                                     <input type="text" wire:model="target_city" list="cities" 
                                            class="w-full border border-gray-300 rounded-lg px-3 py-2">
                                     <datalist id="cities">
@@ -278,7 +283,7 @@
                                     </datalist>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Region (Optional)</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('promotion.region_optional') }}</label>
                                     <input type="text" wire:model="target_region" list="regions" 
                                            class="w-full border border-gray-300 rounded-lg px-3 py-2">
                                     <datalist id="regions">
@@ -295,7 +300,7 @@
                         <button type="button" wire:click="closeCreateModal" 
                                 class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
                         <button type="submit" 
-                                class="px-6 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light">Preview & Send</button>
+                                class="px-6 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light">{{ __('promotion.preview_send') }}</button>
                     </div>
                 </form>
             </div>
@@ -307,10 +312,10 @@
     <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" wire:click="closePreviewModal">
         <div class="bg-white rounded-2xl max-w-2xl w-full" wire:click.stop>
             <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-4">Preview Promotion</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-4">{{ __('promotion.preview_promotion') }}</h3>
                 <div class="mb-4">
-                    <p class="text-sm text-gray-600 mb-2">This promotion will be sent to:</p>
-                    <p class="text-2xl font-bold text-sidebar-green">{{ number_format($previewRecipientsCount) }} recipients</p>
+                    <p class="text-sm text-gray-600 mb-2">{{ __('promotion.will_be_sent_to') }}</p>
+                    <p class="text-2xl font-bold text-sidebar-green">{{ number_format($previewRecipientsCount) }} {{ __('promotion.recipients') }}</p>
                 </div>
                 <div class="border-t border-gray-200 pt-4 mb-4">
                     <h4 class="font-semibold text-gray-900 mb-2">{{ $title }}</h4>
@@ -318,9 +323,9 @@
                 </div>
                 <div class="flex justify-end space-x-3">
                     <button wire:click="closePreviewModal" 
-                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Back</button>
+                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">{{ __('common.back') }}</button>
                     <button wire:click="savePromotion" 
-                            class="px-6 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light">Create & Send</button>
+                            class="px-6 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light">{{ __('promotion.create_send') }}</button>
                 </div>
             </div>
         </div>

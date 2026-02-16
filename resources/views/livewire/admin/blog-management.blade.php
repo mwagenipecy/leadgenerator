@@ -4,8 +4,8 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Blog Management</h1>
-                    <p class="text-gray-600 text-lg">Create and manage blog posts and content</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('blog.blog_management') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('blog.create_manage_posts') }}</p>
                 </div>
                 <div class="flex items-center space-x-3">
                     <a href="{{ route('admin.blog.create') }}" 
@@ -13,7 +13,7 @@
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
-                        Create Post
+                        {{ __('blog.create_post') }}
                     </a>
                 </div>
             </div>
@@ -33,9 +33,9 @@
         <div class="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Posts</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('blog.search_posts') }}</label>
                     <div class="relative">
-                        <input wire:model.live="search" type="text" placeholder="Search by title, content..." 
+                        <input wire:model.live="search" type="text" placeholder="{{ __('blog.search_by_title') }}" 
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -43,12 +43,12 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('blog.filter_by_status') }}</label>
                     <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                        <option value="all">All Statuses</option>
-                        <option value="draft">Draft</option>
-                        <option value="published">Published</option>
-                        <option value="archived">Archived</option>
+                        <option value="all">{{ __('blog.all_statuses') }}</option>
+                        <option value="draft">{{ __('blog.draft') }}</option>
+                        <option value="published">{{ __('blog.published') }}</option>
+                        <option value="archived">{{ __('blog.archived') }}</option>
                     </select>
                 </div>
             </div>
@@ -60,12 +60,12 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('blog.title') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('blog.author') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('blog.status') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('blog.views') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('blog.published_at') }}</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('blog.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -79,7 +79,7 @@
                                         <div>
                                             <div class="text-sm font-medium text-gray-900">{{ Str::limit($post->title, 50) }}</div>
                                             @if($post->is_featured)
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Featured</span>
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">{{ __('blog.featured') }}</span>
                                             @endif
                                         </div>
                                     </div>

@@ -10,8 +10,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                     </svg>
                 </div>
-                <h1 class="text-3xl font-bold text-white mb-2">Access Restricted</h1>
-                <p class="text-sidebar-green-100 text-lg">You don't have permission to access this page</p>
+                <h1 class="text-3xl font-bold text-white mb-2">{{ __('errors.access_restricted') }}</h1>
+                <p class="text-sidebar-green-100 text-lg">{{ __('errors.no_permission') }}</p>
             </div>
 
             <!-- Content Section -->
@@ -22,10 +22,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"/>
                         </svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Permission Required</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('errors.permission_required') }}</h2>
                     <p class="text-gray-600 leading-relaxed mb-6">
-                        Sorry, but you don't have the necessary permissions to view this page. 
-                        This area is restricted to authorized users only.
+                        {{ __('errors.sorry_no_permission') }}
                     </p>
                 </div>
 
@@ -35,26 +34,26 @@
                         <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        What you can do:
+                        {{ __('errors.what_you_can_do') }}
                     </h3>
                     <ul class="space-y-2 text-gray-700">
                         <li class="flex items-center">
                             <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
-                            Contact your administrator to request access
+                            {{ __('errors.contact_administrator') }}
                         </li>
                         <li class="flex items-center">
                             <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
-                            Return to your dashboard or authorized areas
+                            {{ __('errors.return_to_dashboard') }}
                         </li>
                         <li class="flex items-center">
                             <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
-                            Check if you're logged in with the correct account
+                            {{ __('errors.check_account') }}
                         </li>
                     </ul>
                 </div>
@@ -66,15 +65,15 @@
                         <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
-                        Current User Information:
+                        {{ __('errors.current_user_information') }}
                     </h3>
                     <div class="space-y-2 text-blue-800">
-                        <p><span class="font-medium">Name:</span> {{ auth()->user()->name ?? 'N/A' }}</p>
-                        <p><span class="font-medium">Email:</span> {{ auth()->user()->email }}</p>
-                        <p><span class="font-medium">Role:</span> {{ ucfirst(auth()->user()->role ?? 'user') }}</p>
-                        <p><span class="font-medium">Account Status:</span> 
+                        <p><span class="font-medium">{{ __('errors.name') }}</span> {{ auth()->user()->name ?? 'N/A' }}</p>
+                        <p><span class="font-medium">{{ __('errors.email') }}</span> {{ auth()->user()->email }}</p>
+                        <p><span class="font-medium">{{ __('errors.role') }}</span> {{ ucfirst(auth()->user()->role ?? 'user') }}</p>
+                        <p><span class="font-medium">{{ __('errors.account_status') }}</span> 
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                Active
+                                {{ __('errors.active') }}
                             </span>
                         </p>
                     </div>
@@ -89,7 +88,7 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
-                        Go to Dashboard
+                        {{ __('errors.go_to_dashboard') }}
                     </button>
                     
                     <button 
@@ -98,13 +97,13 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
-                        Contact Administrator
+                        {{ __('errors.contact_administrator_button') }}
                     </button>
                 </div>
 
                 <!-- Additional Help -->
                 <div class="mt-8 text-center">
-                    <p class="text-sm text-gray-500 mb-2">Need immediate assistance?</p>
+                    <p class="text-sm text-gray-500 mb-2">{{ __('errors.need_assistance') }}</p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center text-sm">
                         <a href="mailto:admin@yourapp.com" class="text-blue-600 hover:text-blue-700 font-medium flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +126,7 @@
         <!-- Footer -->
         <div class="text-center mt-8">
             <p class="text-gray-500 text-sm">
-                Error Code: 403 | Access Denied | {{ now()->format('Y-m-d H:i:s') }}
+                {{ __('errors.error_code') }} | {{ now()->format('Y-m-d H:i:s') }}
             </p>
         </div>
     </div>

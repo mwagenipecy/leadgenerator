@@ -4,8 +4,8 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">System Logs</h1>
-                    <p class="text-gray-600 text-lg">Monitor and track all critical user actions and system events</p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ __('logs.system_logs') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('logs.monitor_track_actions') }}</p>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Total Logs</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('logs.total_logs') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ number_format($totalLogs) }}</p>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Critical Logs</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('logs.critical_logs') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">{{ number_format($criticalLogs) }}</p>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Today's Logs</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('logs.todays_logs') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-green-600 transition-colors">{{ number_format($todayLogs) }}</p>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">This Week</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('logs.this_week') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors">{{ number_format($thisWeekLogs) }}</p>
                     </div>
                 </div>
@@ -78,9 +78,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                 <!-- Search -->
                 <div class="lg:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Search Logs</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('logs.search_logs') }}</label>
                     <div class="relative">
-                        <input wire:model.live="search" type="text" placeholder="Search by action, description, IP..." 
+                        <input wire:model.live="search" type="text" placeholder="{{ __('logs.search_by_action_description_ip') }}" 
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -90,9 +90,9 @@
 
                 <!-- Severity Filter -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Severity</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('logs.severity') }}</label>
                     <select wire:model.live="severityFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">All Severities</option>
+                        <option value="">{{ __('logs.all_severities') }}</option>
                         @foreach($severities as $severity)
                             <option value="{{ $severity }}">{{ ucfirst($severity) }}</option>
                         @endforeach
@@ -101,9 +101,9 @@
 
                 <!-- Action Filter -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Action</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('logs.action') }}</label>
                     <select wire:model.live="actionFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">All Actions</option>
+                        <option value="">{{ __('logs.all_actions') }}</option>
                         @foreach($actions as $action)
                             <option value="{{ $action }}">{{ ucfirst(str_replace('_', ' ', $action)) }}</option>
                         @endforeach
@@ -112,9 +112,9 @@
 
                 <!-- User Filter -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">User</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('logs.user') }}</label>
                     <select wire:model.live="userFilter" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">All Users</option>
+                        <option value="">{{ __('logs.all_users') }}</option>
                         @foreach($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name ?? $user->email }}</option>
                         @endforeach
@@ -154,13 +154,13 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Timestamp</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">User</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Action</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Description</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Severity</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">IP Address</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('logs.timestamp') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('logs.user') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('logs.action') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('logs.description') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('logs.severity') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('logs.ip_address') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('logs.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">

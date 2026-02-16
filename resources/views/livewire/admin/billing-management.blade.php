@@ -4,13 +4,13 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-black mb-2">Commission Billing</h1>
-                    <p class="text-gray-600 text-lg">Manage commission billing for booked applications</p>
+                    <h1 class="text-4xl font-bold text-black mb-2">{{ __('billing.commission_billing') }}</h1>
+                    <p class="text-gray-600 text-lg">{{ __('billing.manage_commission_billing') }}</p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-2 bg-white border border-gray-300 px-4 py-2 rounded-xl shadow-sm">
                         <div class="w-2 h-2 bg-sidebar-green rounded-full animate-pulse"></div>
-                        <span class="text-sm font-medium text-gray-700">Billing Active</span>
+                        <span class="text-sm font-medium text-gray-700">{{ __('billing.billing_active') }}</span>
                     </div>
                     @if($activeTab === 'applications' && count($selectedApplications) > 0)
                         <button wire:click="createBillsForSelected" 
@@ -18,7 +18,7 @@
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>
-                            Create Bills ({{ count($selectedApplications) }})
+                            {{ __('billing.create_bills') }} ({{ count($selectedApplications) }})
                         </button>
                     @endif
                 </div>
@@ -49,32 +49,32 @@
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                        <div class="text-xs font-medium text-gray-600 uppercase tracking-wide">Total Bills</div>
+                        <div class="text-xs font-medium text-gray-600 uppercase tracking-wide">{{ __('billing.total_bills') }}</div>
                         <div class="text-lg font-bold text-black">{{ number_format($lenderStats['total_bills']) }}</div>
                     </div>
                     
                     <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                        <div class="text-xs font-medium text-gray-600 uppercase tracking-wide">Total Amount</div>
+                        <div class="text-xs font-medium text-gray-600 uppercase tracking-wide">{{ __('billing.total_amount') }}</div>
                         <div class="text-lg font-bold text-black">TSh {{ number_format($lenderStats['total_amount']) }}</div>
                     </div>
                     
                     <div class="bg-green-50 rounded-lg p-3 border border-green-200">
-                        <div class="text-xs font-medium text-green-600 uppercase tracking-wide">Paid Amount</div>
+                        <div class="text-xs font-medium text-green-600 uppercase tracking-wide">{{ __('billing.paid_amount') }}</div>
                         <div class="text-lg font-bold text-green-700">TSh {{ number_format($lenderStats['paid_amount']) }}</div>
                     </div>
                     
                     <div class="bg-yellow-50 rounded-lg p-3 border border-yellow-200">
-                        <div class="text-xs font-medium text-yellow-600 uppercase tracking-wide">Pending Amount</div>
+                        <div class="text-xs font-medium text-yellow-600 uppercase tracking-wide">{{ __('billing.pending_amount') }}</div>
                         <div class="text-lg font-bold text-yellow-700">TSh {{ number_format($lenderStats['pending_amount']) }}</div>
                     </div>
                     
                     <div class="bg-sidebar-green-50 rounded-lg p-3 border border-sidebar-green-200">
-                        <div class="text-xs font-medium text-sidebar-green uppercase tracking-wide">Overdue Amount</div>
+                        <div class="text-xs font-medium text-sidebar-green uppercase tracking-wide">{{ __('billing.overdue_amount') }}</div>
                         <div class="text-lg font-bold text-sidebar-green-light">TSh {{ number_format($lenderStats['overdue_amount']) }}</div>
                     </div>
                     
                     <div class="bg-blue-50 rounded-lg p-3 border border-blue-200">
-                        <div class="text-xs font-medium text-blue-600 uppercase tracking-wide">Outstanding</div>
+                        <div class="text-xs font-medium text-blue-600 uppercase tracking-wide">{{ __('billing.outstanding') }}</div>
                         <div class="text-lg font-bold text-blue-700">TSh {{ number_format($lenderStats['outstanding_balance']) }}</div>
                     </div>
                 </div>
@@ -109,14 +109,14 @@
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        Booked Applications
+                        {{ __('billing.booked_applications') }}
                     </button>
                     <button wire:click="setActiveTab('bills')" 
                             class="border-transparent {{ $activeTab === 'bills' ? 'text-sidebar-green border-b-2 border-sidebar-green' : 'text-gray-500 hover:text-gray-700' }} py-6 px-1 text-sm font-medium transition-colors">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
-                        Commission Bills
+                        {{ __('billing.commission_bills') }}
                     </button>
                 </nav>
             </div>
@@ -126,23 +126,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <!-- Search -->
                     <div>
-                        <label class="block text-sm font-medium text-black mb-1">Search</label>
+                        <label class="block text-sm font-medium text-black mb-1">{{ __('billing.search') }}</label>
                         <input wire:model.live="search" type="text" 
                                class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"
-                               placeholder="Search applications or bills...">
+                               placeholder="{{ __('billing.search_applications_bills') }}">
                     </div>
 
                     <!-- Status Filter -->
                     @if($activeTab === 'bills')
                         <div>
-                            <label class="block text-sm font-medium text-black mb-1">Status</label>
+                            <label class="block text-sm font-medium text-black mb-1">{{ __('billing.status') }}</label>
                             <select wire:model.live="filterStatus" class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                <option value="all">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="sent">Sent</option>
-                                <option value="paid">Paid</option>
-                                <option value="overdue">Overdue</option>
-                                <option value="cancelled">Cancelled</option>
+                                <option value="all">{{ __('billing.all_status') }}</option>
+                                <option value="pending">{{ __('billing.pending') }}</option>
+                                <option value="sent">{{ __('billing.sent') }}</option>
+                                <option value="paid">{{ __('billing.paid') }}</option>
+                                <option value="overdue">{{ __('billing.overdue') }}</option>
+                                <option value="cancelled">{{ __('billing.cancelled') }}</option>
                             </select>
                         </div>
                     @endif

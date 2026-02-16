@@ -293,26 +293,26 @@
                     <a href="#eligibility" 
                        class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
                        style="color: #C40F11;">
-                        <span class="relative z-10">Eligibility</span>
+                        <span class="relative z-10">{{ __('landing.eligibility') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="#process" 
                        class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
                        style="color: #C40F11;">
-                        <span class="relative z-10">Process</span>
+                        <span class="relative z-10">{{ __('landing.process') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="{{ route('blog.index') }}" 
                        class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
                        style="color: #C40F11;">
-                        <span class="relative z-10">Blog</span>
+                        <span class="relative z-10">{{ __('landing.blog') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="{{ route('login') }}" 
                        class="ml-2 px-6 py-2.5 rounded-lg text-white font-semibold text-sm lg:text-base hover:shadow-lg hover:scale-105 transition-all duration-300 relative overflow-hidden group"
                        style="background-color: #C40F11;">
                         <span class="relative z-10 flex items-center">
-                        Get Started
+                        {{ __('landing.get_started') }}
                             <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>
@@ -336,25 +336,25 @@
                        onclick="toggleMobileMenu()"
                        class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
                        style="color: #C40F11;">
-                        Eligibility
+                        {{ __('landing.eligibility') }}
                     </a>
                     <a href="#process" 
                        onclick="toggleMobileMenu()"
                        class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
                        style="color: #C40F11;">
-                        Process
+                        {{ __('landing.process') }}
                     </a>
                     <a href="{{ route('blog.index') }}" 
                        onclick="toggleMobileMenu()"
                        class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
                        style="color: #C40F11;">
-                        Blog
+                        {{ __('landing.blog') }}
                     </a>
                     <a href="{{ route('login') }}" 
                        onclick="toggleMobileMenu()"
                        class="block px-4 py-3 rounded-lg text-white font-semibold mt-2 transition-all duration-300"
                        style="background-color: #C40F11;">
-                        Get Started
+                        {{ __('landing.get_started') }}
                     </a>
                 </div>
             </div>
@@ -422,7 +422,7 @@
             <div class="text-center mb-12 md:mb-16">
                 <div class="mb-4">
                     <span class="inline-block bg-brand-green/10 text-brand-green px-4 py-2 rounded-full text-sm font-medium uppercase tracking-wider">
-                        About Fanikisha Market place
+                        {{ __('landing.about_fanikisha') }}
                     </span>
                 </div>
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold font-poppins text-black leading-tight mb-6">
@@ -505,7 +505,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="font-semibold text-black mb-2">Fast Processing</h5>
+                                    <h5 class="font-semibold text-black mb-2">{{ __('landing.fast_processing') }}</h5>
                                     <p class="text-gray-600 text-sm leading-relaxed">
                                         Get matched with lenders and receive approval decisions within 24 hours.
                                     </p>
@@ -877,7 +877,7 @@
                     </span>
                 </div>
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold font-poppins text-black leading-tight mb-6">
-                    Blog & Insights
+                    {{ __('landing.blog_insights') }}
                 </h2>
                 <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                     Stay informed with the latest updates, tips, and insights about loans and financial services.
@@ -918,7 +918,7 @@
                                 <div class="flex items-center justify-between text-sm text-gray-500">
                                     <span>By {{ $post->author->name ?? 'Admin' }}</span>
                                     <a href="{{ route('blog.show', $post->slug) }}" class="text-brand-green hover:text-brand-green-light font-medium">
-                                        Read More →
+                                        {{ __('landing.read_more') }} →
                                     </a>
                                 </div>
                             </div>
@@ -956,7 +956,7 @@
                         <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-10 w-auto">
                     </a>
                     <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                        Connecting borrowers with verified lenders. Loans for everyone, regardless of employment status.
+                        {{ __('landing.connecting_borrowers') }}
                     </p>
                     <div class="flex space-x-4">
                         <!-- Social Icons -->
@@ -980,30 +980,30 @@
 
                 <!-- Quick Links -->
                 <div>
-                    <h4 class="font-semibold font-poppins text-lg mb-4 text-gray-900">Quick Links</h4>
+                    <h4 class="font-semibold font-poppins text-lg mb-4 text-gray-900">{{ __('landing.quick_links') }}</h4>
                     <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Home</a></li>
-                        <li><a href="#eligibility" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Eligibility</a></li>
-                        <li><a href="#process" class="text-gray-600 hover:text-brand-green transition-colors text-sm">How It Works</a></li>
+                        <li><a href="#home" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.home') }}</a></li>
+                        <li><a href="#eligibility" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.eligibility') }}</a></li>
+                        <li><a href="#process" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.how_it_works') }}</a></li>
                         <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Lenders</a></li>
                     </ul>
                 </div>
 
                 <!-- Support -->
                 <div>
-                    <h4 class="font-semibold font-poppins text-lg mb-4 text-gray-900">Support</h4>
+                    <h4 class="font-semibold font-poppins text-lg mb-4 text-gray-900">{{ __('landing.support') }}</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Help Center</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Contact Us</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Live Chat</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">FAQs</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Status</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.help_center') }}</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.contact_us') }}</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.live_chat') }}</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.faqs') }}</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.status') }}</a></li>
                     </ul>
                 </div>
 
                 <!-- Contact -->
                 <div>
-                    <h4 class="font-semibold font-poppins text-lg mb-4 text-gray-900">Contact</h4>
+                    <h4 class="font-semibold font-poppins text-lg mb-4 text-gray-900">{{ __('landing.contact') }}</h4>
                     <div class="space-y-3">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">

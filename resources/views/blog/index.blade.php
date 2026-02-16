@@ -57,26 +57,26 @@
                     <a href="/#eligibility" 
                        class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
                        style="color: #C40F11;">
-                        <span class="relative z-10">Eligibility</span>
+                        <span class="relative z-10">{{ __('landing.eligibility') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="/#process" 
                        class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
                        style="color: #C40F11;">
-                        <span class="relative z-10">Process</span>
+                        <span class="relative z-10">{{ __('landing.process') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="{{ route('blog.index') }}" 
                        class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
                        style="color: #C40F11;">
-                        <span class="relative z-10">Blog</span>
+                        <span class="relative z-10">{{ __('landing.blog') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="{{ route('login') }}" 
                        class="ml-2 px-6 py-2.5 rounded-lg text-white font-semibold text-sm lg:text-base hover:shadow-lg hover:scale-105 transition-all duration-300 relative overflow-hidden group"
                        style="background-color: #C40F11;">
                         <span class="relative z-10 flex items-center">
-                            Get Started
+                            {{ __('landing.get_started') }}
                             <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                             </svg>

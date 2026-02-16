@@ -4,11 +4,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold text-gray-900">Booking Reports</h1>
+                    <h1 class="text-2xl font-bold text-gray-900">{{ __('reports.booking_reports') }}</h1>
                     @if(Auth::user()->isAdmin() || Auth::user()->role === 'super_admin')
-                        <span class="text-sm text-gray-500">All Lenders Overview</span>
+                        <span class="text-sm text-gray-500">{{ __('reports.all_lenders_overview') }}</span>
                     @else
-                        <span class="text-sm text-gray-500">{{ Auth::user()->lender->company_name ?? 'Lender Portal' }}</span>
+                        <span class="text-sm text-gray-500">{{ Auth::user()->lender->company_name ?? __('reports.lender_portal') }}</span>
                     @endif
                 </div>
                 <div class="flex items-center space-x-4">
@@ -16,11 +16,11 @@
                     <div class="flex items-center bg-gray-100 rounded-lg p-1">
                         <button wire:click="setViewMode('summary')" 
                                 class="px-3 py-1 rounded-md text-sm {{ $viewMode === 'summary' ? 'bg-white shadow-sm' : '' }}">
-                            Summary
+                            {{ __('reports.summary') }}
                         </button>
                         <button wire:click="setViewMode('table')" 
                                 class="px-3 py-1 rounded-md text-sm {{ $viewMode === 'table' ? 'bg-white shadow-sm' : '' }}">
-                            Table
+                            {{ __('reports.table') }}
                         </button>
                     </div>
                 </div>
@@ -34,23 +34,23 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Date Range Filter -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('reports.date_range') }}</label>
                     <select wire:model.live="dateRange" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="all">All Time</option>
-                        <option value="today">Today</option>
-                        <option value="week">Last Week</option>
-                        <option value="month">Last Month</option>
-                        <option value="quarter">Last Quarter</option>
-                        <option value="year">Last Year</option>
+                        <option value="all">{{ __('reports.all_time') }}</option>
+                        <option value="today">{{ __('reports.today') }}</option>
+                        <option value="week">{{ __('reports.last_week') }}</option>
+                        <option value="month">{{ __('reports.last_month') }}</option>
+                        <option value="quarter">{{ __('reports.last_quarter') }}</option>
+                        <option value="year">{{ __('reports.last_year') }}</option>
                     </select>
                 </div>
 
                 <!-- Lender Filter (Admin Only) -->
                 @if(Auth::user()->isAdmin())
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Lender</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('reports.lender') }}</label>
                     <select wire:model.live="lenderFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="all">All Lenders</option>
+                        <option value="all">{{ __('reports.all_lenders') }}</option>
                         @foreach($lenders as $lender)
                             <option value="{{ $lender->id }}">{{ $lender->company_name }}</option>
                         @endforeach
@@ -60,22 +60,22 @@
 
                 <!-- Status Filter -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('reports.status') }}</label>
                     <select wire:model.live="statusFilter" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="all">All Statuses</option>
-                        <option value="under_review">Under Review</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="disbursed">Disbursed</option>
+                        <option value="all">{{ __('reports.all_statuses') }}</option>
+                        <option value="under_review">{{ __('reports.under_review') }}</option>
+                        <option value="approved">{{ __('reports.approved') }}</option>
+                        <option value="rejected">{{ __('reports.rejected') }}</option>
+                        <option value="disbursed">{{ __('reports.disbursed') }}</option>
                     </select>
                 </div>
 
                 <!-- Sort By -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('reports.sort_by') }}</label>
                     <select wire:model.live="sortBy" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="booked_at">Booking Date</option>
-                        <option value="created_at">Created Date</option>
+                        <option value="booked_at">{{ __('reports.booking_date') }}</option>
+                        <option value="created_at">{{ __('reports.created_date') }}</option>
                     </select>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Total Bookings</p>
+                            <p class="text-sm font-medium text-gray-500">{{ __('reports.total_bookings') }}</p>
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($summaryStats['total_bookings']) }}</p>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Total Value</p>
+                            <p class="text-sm font-medium text-gray-500">{{ __('reports.total_amount') }}</p>
                             <p class="text-2xl font-bold text-gray-900">TSh {{ number_format($summaryStats['total_value']) }}</p>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Avg Booking Value</p>
+                            <p class="text-sm font-medium text-gray-500">{{ __('reports.average_amount') }}</p>
                             <p class="text-2xl font-bold text-gray-900">TSh {{ number_format($summaryStats['avg_booking_value']) }}</p>
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Total Booking Fees</p>
+                            <p class="text-sm font-medium text-gray-500">{{ __('reports.total_booking_fees') }}</p>
                             <p class="text-2xl font-bold text-gray-900">TSh {{ number_format($summaryStats['total_booking_fees'] ?? 0) }}</p>
                         </div>
                     </div>
@@ -153,15 +153,15 @@
             {{-- Top Lenders (Admin Only) --}}
             @if(Auth::user()->isAdmin() && $topLenders->count() > 0)
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Top Performing Lenders</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ __('reports.top_performing_lenders') }}</h2>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lender</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Bookings</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Value</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('reports.rank') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('reports.lender') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('reports.total_bookings') }}</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('reports.total_amount') }}</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -191,7 +191,7 @@
 
             {{-- Status Breakdown Chart --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Status Breakdown</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">{{ __('reports.status_breakdown') }}</h2>
                 <div class="space-y-3">
                     @foreach($summaryStats['status_breakdown'] as $status => $count)
                     <div class="flex items-center justify-between">
