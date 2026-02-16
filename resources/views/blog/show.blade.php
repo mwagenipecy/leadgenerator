@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -112,7 +112,7 @@
                        onclick="toggleMobileMenu()"
                        class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium"
                        style="color: #C40F11;">
-                        Blog
+                        {{ __('landing.blog') }}
                     </a>
                     <a href="{{ route('login') }}" 
                        onclick="toggleMobileMenu()"
@@ -140,7 +140,7 @@
                         <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-10 w-auto">
                     </a>
                     <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                        Connecting borrowers with verified lenders. Loans for everyone, regardless of employment status.
+                        {{ __('landing.connecting_borrowers') }}
                     </p>
                     <div class="flex space-x-4">
                         <!-- Social Icons -->
@@ -169,7 +169,7 @@
                         <li><a href="/" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Home</a></li>
                         <li><a href="/#eligibility" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Eligibility</a></li>
                         <li><a href="/#process" class="text-gray-600 hover:text-brand-green transition-colors text-sm">How It Works</a></li>
-                        <li><a href="{{ route('blog.index') }}" class="text-gray-600 hover:text-brand-green transition-colors text-sm">Blog</a></li>
+                        <li><a href="{{ route('blog.index') }}" class="text-gray-600 hover:text-brand-green transition-colors text-sm">{{ __('landing.blog') }}</a></li>
                     </ul>
                 </div>
 

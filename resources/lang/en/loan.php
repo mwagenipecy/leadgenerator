@@ -93,5 +93,22 @@ return [
     'fair' => 'Fair',
     'loan_affordability' => 'loan affordability',
     'months' => 'months',
+    // FAQ Section
+    'frequently_asked_questions' => 'Frequently Asked Questions',
+    'faq_apply_multiple_lenders' => 'Can I apply to multiple lenders at once?',
+    'faq_apply_multiple_lenders_answer' => 'Yes, you can apply to multiple lenders simultaneously. This increases your chances of approval and allows you to compare offers. However, each lender may perform a credit check, which could temporarily affect your credit score.',
+    'faq_approval_time' => 'How long does the approval process take?',
+    'faq_approval_time_answer' => 'Approval times vary by lender, typically ranging from 3-14 days. The timeline shown for each lender is an estimate based on their standard process. Complete applications with all required documents are processed faster.',
+    'faq_not_eligible' => 'What if I\'m not eligible for any lenders?',
+    'faq_not_eligible_answer' => 'If you\'re not eligible for any lenders, consider reducing your loan amount, extending the repayment period, or improving your debt-to-income ratio. You can also contact our support team for personalized advice on improving your loan profile.',
+    'faq_interest_rates_final' => 'Are the interest rates final?',
+    'faq_interest_rates_final_answer' => 'The interest rates shown are indicative ranges. Final rates will be determined by each lender based on their detailed assessment of your creditworthiness, employment stability, and other risk factors.',
+    'faq_change_lender_selection' => 'Can I change my lender selection later?',
+    'faq_change_lender_selection_answer' => 'You can modify your lender selection before submitting your application. Once submitted, you cannot add more lenders, but you can withdraw applications that haven\'t been processed yet by contacting the lenders directly.',
+    // Support Contact
+    'need_help_choosing' => 'Need Help Choosing?',
+    'loan_experts_help' => 'Our loan experts are here to help you make the best decision for your financial situation.',
+    'call_us' => 'Call Us',
+    'email_us' => 'Email Us',
 ];
 

@@ -3479,67 +3479,67 @@
         <!-- FAQs Section -->
         <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
-                <h3 class="text-lg font-bold text-gray-900">Frequently Asked Questions</h3>
+                <h3 class="text-lg font-bold text-gray-900">{{ __('loan.frequently_asked_questions') }}</h3>
             </div>
             <div class="p-6">
                 <div class="space-y-4">
                     <details class="group">
                         <summary class="flex items-center justify-between cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="font-medium text-gray-900">Can I apply to multiple lenders at once?</span>
+                            <span class="font-medium text-gray-900">{{ __('loan.faq_apply_multiple_lenders') }}</span>
                             <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </summary>
                         <div class="mt-3 p-3 text-sm text-gray-700 bg-white border-l-4 border-blue-500">
-                            Yes, you can apply to multiple lenders simultaneously. This increases your chances of approval and allows you to compare offers. However, each lender may perform a credit check, which could temporarily affect your credit score.
+                            {{ __('loan.faq_apply_multiple_lenders_answer') }}
                         </div>
                     </details>
 
                     <details class="group">
                         <summary class="flex items-center justify-between cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="font-medium text-gray-900">How long does the approval process take?</span>
+                            <span class="font-medium text-gray-900">{{ __('loan.faq_approval_time') }}</span>
                             <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </summary>
                         <div class="mt-3 p-3 text-sm text-gray-700 bg-white border-l-4 border-blue-500">
-                            Approval times vary by lender, typically ranging from 3-14 days. The timeline shown for each lender is an estimate based on their standard process. Complete applications with all required documents are processed faster.
+                            {{ __('loan.faq_approval_time_answer') }}
                         </div>
                     </details>
 
                     <details class="group">
                         <summary class="flex items-center justify-between cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="font-medium text-gray-900">What if I'm not eligible for any lenders?</span>
+                            <span class="font-medium text-gray-900">{{ __('loan.faq_not_eligible') }}</span>
                             <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </summary>
                         <div class="mt-3 p-3 text-sm text-gray-700 bg-white border-l-4 border-blue-500">
-                            If you're not eligible for any lenders, consider reducing your loan amount, extending the repayment period, or improving your debt-to-income ratio. You can also contact our support team for personalized advice on improving your loan profile.
+                            {{ __('loan.faq_not_eligible_answer') }}
                         </div>
                     </details>
 
                     <details class="group">
                         <summary class="flex items-center justify-between cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="font-medium text-gray-900">Are the interest rates final?</span>
+                            <span class="font-medium text-gray-900">{{ __('loan.faq_interest_rates_final') }}</span>
                             <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </summary>
                         <div class="mt-3 p-3 text-sm text-gray-700 bg-white border-l-4 border-blue-500">
-                            The interest rates shown are indicative ranges. Final rates will be determined by each lender based on their detailed assessment of your creditworthiness, employment stability, and other risk factors.
+                            {{ __('loan.faq_interest_rates_final_answer') }}
                         </div>
                     </details>
 
                     <details class="group">
                         <summary class="flex items-center justify-between cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <span class="font-medium text-gray-900">Can I change my lender selection later?</span>
+                            <span class="font-medium text-gray-900">{{ __('loan.faq_change_lender_selection') }}</span>
                             <svg class="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </summary>
                         <div class="mt-3 p-3 text-sm text-gray-700 bg-white border-l-4 border-blue-500">
-                            You can modify your lender selection before submitting your application. Once submitted, you cannot add more lenders, but you can withdraw applications that haven't been processed yet by contacting the lenders directly.
+                            {{ __('loan.faq_change_lender_selection_answer') }}
                         </div>
                     </details>
                 </div>
@@ -3560,13 +3560,13 @@
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                         </svg>
-                        Call Us Now
+                        {{ __('loan.call_us') }}
                     </a>
                     <button class="bg-white text-green-700 border border-green-300 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors flex items-center justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                         </svg>
-                        Live Chat
+                        {{ __('landing.live_chat') }}
                     </button>
                 </div>
             </div>

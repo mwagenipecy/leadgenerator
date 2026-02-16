@@ -93,5 +93,22 @@ return [
     'fair' => 'Wastani',
     'loan_affordability' => 'uwezo wa mkopo',
     'months' => 'miezi',
+    // FAQ Section
+    'frequently_asked_questions' => 'Maswali Yanayoulizwa Mara kwa Mara',
+    'faq_apply_multiple_lenders' => 'Naweza kuomba kwa wakopeshaji wengi wakati huo huo?',
+    'faq_apply_multiple_lenders_answer' => 'Ndiyo, unaweza kuomba kwa wakopeshaji wengi wakati huo huo. Hii inaongeza nafasi zako za idhini na inakuruhusu kulinganisha ofa. Hata hivyo, kila mkopeshaji anaweza kufanya ukaguzi wa mkopo, ambao unaweza kuathiri kwa muda alama yako ya mkopo.',
+    'faq_approval_time' => 'Muda wa idhini unachukua muda gani?',
+    'faq_approval_time_answer' => 'Muda wa idhini hutofautiana kwa mkopeshaji, kwa kawaida kutoka siku 3-14. Muda unaoonyeshwa kwa kila mkopeshaji ni makadirio kulingana na mchakato wao wa kawaida. Maombi yaliyokamilika na nyaraka zote zinazohitajika yanachakatiwa haraka.',
+    'faq_not_eligible' => 'Nini ikiwa sistahili kwa mkopeshaji yeyote?',
+    'faq_not_eligible_answer' => 'Ikiwa hukustahili kwa mkopeshaji yeyote, fikiria kupunguza kiasi cha mkopo, kuongeza muda wa kulipa, au kuboresha uwiano wako wa deni kwa mapato. Unaweza pia kuwasiliana na timu yetu ya msaada kwa ushauri wa kibinafsi juu ya kuboresha wasifu wako wa mkopo.',
+    'faq_interest_rates_final' => 'Viwango vya riba ni vya mwisho?',
+    'faq_interest_rates_final_answer' => 'Viwango vya riba vinavyoonyeshwa ni anuwai za kiashiria. Viwango vya mwisho vitaamuliwa na kila mkopeshaji kulingana na tathmini yao ya kina ya uwezo wako wa mkopo, utulivu wa ajira, na mambo mengine ya hatari.',
+    'faq_change_lender_selection' => 'Naweza kubadilisha uchaguzi wangu wa mkopeshaji baadaye?',
+    'faq_change_lender_selection_answer' => 'Unaweza kubadilisha uchaguzi wako wa mkopeshaji kabla ya kuwasilisha omba lako. Mara tu omba litakapowasilishwa, huwezi kuongeza wakopeshaji zaidi, lakini unaweza kujiondoa maombi ambayo bado hayajachakatiwa kwa kuwasiliana na wakopeshaji moja kwa moja.',
+    // Support Contact
+    'need_help_choosing' => 'Unahitaji Msaada wa Kuchagua?',
+    'loan_experts_help' => 'Wataalamu wetu wa mkopo wako hapa kukusaidia kufanya uamuzi bora kwa hali yako ya kifedha.',
+    'call_us' => 'Tuite',
+    'email_us' => 'Tutumie Barua Pepe',
 ];
 
