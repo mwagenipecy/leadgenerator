@@ -20,5 +20,9 @@ return [
     'notifications' => 'Arifa',
     'billing' => 'Bili',
     'integrations' => 'Muunganisho',
+    'hero_slider' => 'Kisukuku cha Picha',
+    'promotions' => 'Matangazo',
+    'blog_management' => 'Usimamizi wa Blogu',
+    'self_services' => 'Huduma za Kibinafsi',
 ];
 

@@ -66,7 +66,7 @@
             <!-- Reports (Lender) -->
             <a href="{{ route('reports.booking') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('reports.*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Reports' : '' }}">
+               title="{{ $isCollapsed ? __('navigation.reports') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
@@ -129,7 +129,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
-                        <span class="font-medium truncate">Self Services</span>
+                        <span class="font-medium truncate">{{ __('navigation.self_services') }}</span>
                     </div>
                     <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': isOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -142,48 +142,48 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <span class="font-medium text-sm">Verify TIN Number</span>
+                        <span class="font-medium text-sm">{{ __('verification.verify_tin_number') }}</span>
                     </a>
                     <a href="{{ route('lincense.verification') }}" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all">
                         <div class="w-2 h-2 rounded-full border-2 border-current"></div>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
                         </svg>
-                        <span class="font-medium text-sm">Verify License</span>
+                        <span class="font-medium text-sm">{{ __('verification.verify_license') }}</span>
                     </a>
                     <a href="{{ route('motor.vehicle.verification') }}" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all">
                         <div class="w-2 h-2 rounded-full border-2 border-current"></div>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                         </svg>
-                        <span class="font-medium text-sm">Verify Vehicle</span>
+                        <span class="font-medium text-sm">{{ __('verification.verify_vehicle') }}</span>
                     </a>
                     <a href="{{ route('credit.report') }}" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all">
                         <div class="w-2 h-2 rounded-full border-2 border-current"></div>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <span class="font-medium text-sm">Credit Report</span>
+                        <span class="font-medium text-sm">{{ __('verification.credit_report') }}</span>
                     </a>
                 </div>
             </div>
             @else
-            <a href="{{ route('taxpayer.verification') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="Verify TIN Number">
+            <a href="{{ route('taxpayer.verification') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="{{ __('verification.verify_tin_number') }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
             </a>
-            <a href="{{ route('lincense.verification') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="Verify License">
+            <a href="{{ route('lincense.verification') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="{{ __('verification.verify_license') }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
                 </svg>
             </a>
-            <a href="{{ route('motor.vehicle.verification') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="Verify Vehicle">
+            <a href="{{ route('motor.vehicle.verification') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="{{ __('verification.verify_vehicle') }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                 </svg>
             </a>
-            <a href="{{ route('credit.report') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="Credit Report">
+            <a href="{{ route('credit.report') }}" class="flex items-center justify-center px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all" title="{{ __('verification.credit_report') }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
@@ -196,7 +196,7 @@
             <!-- Reports (Admin) -->
             <a href="{{ route('reports.booking') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('reports.*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Reports' : '' }}">
+               title="{{ $isCollapsed ? __('navigation.reports') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
@@ -322,7 +322,7 @@
             @if(auth()->check() && auth()->user()->role=='lender')
             <a href="{{ route('loan.product.index') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('loan-product*') || request()->routeIs('loan.product*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Loan Products' : '' }}">
+               title="{{ $isCollapsed ? __('navigation.loan_products') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
@@ -338,13 +338,13 @@
             @if(auth()->check())
             <a href="{{ route('blog.index') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('blog*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Blog' : '' }}">
+               title="{{ $isCollapsed ? __('landing.blog') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
                     </svg>
                     @if(!$isCollapsed)
-                    <span class="font-medium truncate">Blog</span>
+                    <span class="font-medium truncate">{{ __('landing.blog') }}</span>
                     @endif
                 </div>
             </a>
@@ -410,26 +410,26 @@
 
             <a href="{{ route('admin.loan-categories.index') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.loan-categories*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Loan Categories' : '' }}">
+               title="{{ $isCollapsed ? __('navigation.loan_categories') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                     </svg>
                     @if(!$isCollapsed)
-                    <span class="font-medium truncate">Loan Categories</span>
+                    <span class="font-medium truncate">{{ __('navigation.loan_categories') }}</span>
                     @endif
                 </div>
             </a>
 
             <a href="{{ route('admin.blog.management') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.blog*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Blog Management' : '' }}">
+               title="{{ $isCollapsed ? __('navigation.blog_management') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
                     @if(!$isCollapsed)
-                    <span class="font-medium truncate">Blog Management</span>
+                    <span class="font-medium truncate">{{ __('navigation.blog_management') }}</span>
                     @endif
                 </div>
             </a>
@@ -437,13 +437,13 @@
             <!-- Hero Slider Management -->
             <a href="{{ route('admin.hero-slider.management') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.hero-slider*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Hero Slider' : '' }}">
+               title="{{ $isCollapsed ? __('navigation.hero_slider') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                     @if(!$isCollapsed)
-                    <span class="font-medium truncate">Hero Slider</span>
+                    <span class="font-medium truncate">{{ __('navigation.hero_slider') }}</span>
                     @endif
                 </div>
             </a>
@@ -451,13 +451,13 @@
             <!-- Promotion Management -->
             <a href="{{ route('admin.promotion.management') }}"
                class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'justify-between' }} {{ $isCollapsed ? 'px-4 py-3' : 'px-4 py-3' }} rounded-lg transition-all {{ request()->routeIs('admin.promotion*') ? 'bg-white text-sidebar-green' : 'text-white hover:bg-sidebar-green-light' }}"
-               title="{{ $isCollapsed ? 'Promotions' : '' }}">
+               title="{{ $isCollapsed ? __('navigation.promotions') : '' }}">
                 <div class="flex items-center {{ $isCollapsed ? '' : 'gap-3 min-w-0' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
                     </svg>
                     @if(!$isCollapsed)
-                    <span class="font-medium truncate">Promotions</span>
+                    <span class="font-medium truncate">{{ __('navigation.promotions') }}</span>
                     @endif
                 </div>
             </a>
@@ -470,12 +470,12 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="w-full flex items-center {{ $isCollapsed ? 'justify-center' : 'gap-3' }} px-4 py-3 text-white hover:bg-sidebar-green-light rounded-lg transition-all"
-                    title="{{ $isCollapsed ? 'Logout' : '' }}">
+                    title="{{ $isCollapsed ? __('common.logout') : '' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                 </svg>
                 @if(!$isCollapsed)
-                <span class="font-medium">Logout</span>
+                <span class="font-medium">{{ __('common.logout') }}</span>
                 @endif
             </button>
         </form>

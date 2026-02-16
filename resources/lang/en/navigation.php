@@ -20,5 +20,9 @@ return [
     'notifications' => 'Notifications',
     'billing' => 'Billing',
     'integrations' => 'Integrations',
+    'hero_slider' => 'Hero Slider',
+    'promotions' => 'Promotions',
+    'blog_management' => 'Blog Management',
+    'self_services' => 'Self Services',
 ];
 
