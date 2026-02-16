@@ -32,10 +32,13 @@ return [
     // 500 Error
     'server_error' => 'Kosa la Seva',
     '500_title' => '500',
-    '500_message' => 'Oops! Kitu kimeharibika upande wetu.',
-    '500_description' => 'Tunakumbana na matatizo ya kiufundi. Tafadhali jaribu tena baadaye au wasiliana na msaada ikiwa tatizo linaendelea.',
+    '500_message' => 'Oops! Kitu kimeharibika.',
+    '500_description' => 'Kitu kimeharibika. Tafadhali wasiliana na msimamizi kwa msaada.',
+    'contact_admin_support' => 'Wasiliana na Msimamizi kwa Msaada',
     'try_again' => 'Jaribu Tena',
     'contact_support' => 'Wasiliana na Msaada',
     'error_code_500' => 'Msimbo wa Kosa: 500 | Kosa la Seva la Ndani',
+    'something_went_wrong' => 'Kitu kimeharibika',
+    'contact_admin_message' => 'Tafadhali wasiliana na msimamizi kwa msaada',
 ];
 

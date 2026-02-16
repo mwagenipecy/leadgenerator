@@ -32,10 +32,13 @@ return [
     // 500 Error
     'server_error' => 'Server Error',
     '500_title' => '500',
-    '500_message' => 'Oops! Something went wrong on our end.',
-    '500_description' => 'We are experiencing some technical difficulties. Please try again later or contact support if the problem persists.',
+    '500_message' => 'Oops! Something went wrong.',
+    '500_description' => 'Something went wrong. Please contact admin for support.',
+    'contact_admin_support' => 'Contact Admin for Support',
     'try_again' => 'Try Again',
     'contact_support' => 'Contact Support',
     'error_code_500' => 'Error Code: 500 | Internal Server Error',
+    'something_went_wrong' => 'Something went wrong',
+    'contact_admin_message' => 'Please contact admin for support',
 ];
 
