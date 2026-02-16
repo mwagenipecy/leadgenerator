@@ -6,6 +6,12 @@
     <title>{{ __('auth.login') }} - {{ config('app.name') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for language switcher -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .language-dropdown { z-index: 9999 !important; }
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -68,10 +74,10 @@
         </div>
 
         <!-- Right Side - Login Form -->
-        <div class="w-full lg:w-1/2 h-screen overflow-y-auto">
+        <div class="w-full lg:w-1/2 h-screen overflow-y-auto relative">
             <!-- Language Switcher (Top Right) -->
-            <div class="absolute top-4 right-4 z-10">
-                <x-language-switcher :currentLocale="app()->getLocale()" />
+            <div class="absolute top-4 right-4 z-50">
+                <x-language-switcher />
             </div>
             <div class="flex items-center justify-center min-h-full p-6 sm:p-8 lg:p-12">
                 <div class="w-full max-w-lg py-8">

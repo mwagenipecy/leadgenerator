@@ -65,5 +65,17 @@ return [
     'min_credit_score' => 'Min Credit Score',
     'no_requirement' => 'No requirement',
     'view_details' => 'View Details',
+    'total_revenue' => 'Total Revenue',
+    'month' => 'month',
+    'this_month' => 'this month',
+    'monthly_application_trends' => 'Monthly Application Trends',
+    'application_trends_description' => 'Application submissions and approvals throughout the year',
+    'live_activity' => 'Live Activity',
+    'pending_lender_approvals' => 'Pending Lender Approvals',
+    'review_approve_lenders' => 'Review and approve new lender registrations',
+    'lender_information' => 'Lender Information',
+    'contact_details' => 'Contact Details',
+    'registration_date' => 'Registration Date',
+    'license' => 'License',
 ];
 

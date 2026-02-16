@@ -65,5 +65,17 @@ return [
     'min_credit_score' => 'Alama ya Mkopo ya Chini',
     'no_requirement' => 'Hakuna hitaji',
     'view_details' => 'Angalia Maelezo',
+    'total_revenue' => 'Jumla ya Mapato',
+    'month' => 'mwezi',
+    'this_month' => 'mwezi huu',
+    'monthly_application_trends' => 'Mienendo ya Maombi ya Kila Mwezi',
+    'application_trends_description' => 'Uwasilishaji na uthibitishaji wa maombi kwa mwaka mzima',
+    'live_activity' => 'Shughuli za Moja kwa Moja',
+    'pending_lender_approvals' => 'Idhini za Wakopeshaji Zinangojea',
+    'review_approve_lenders' => 'Kagua na idhinisha usajili mpya wa wakopeshaji',
+    'lender_information' => 'Taarifa za Mkopeshaji',
+    'contact_details' => 'Maelezo ya Mawasiliano',
+    'registration_date' => 'Tarehe ya Usajili',
+    'license' => 'Leseni',
 ];
 

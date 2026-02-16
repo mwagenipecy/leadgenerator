@@ -17,12 +17,22 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Get locale from session, user preference, or default
-        $locale = Session::get('locale', config('app.locale'));
+        // Priority: Session > User Preference > Config Default
+        $locale = null;
         
-        // Check if user has a preferred language
-        if (auth()->check() && auth()->user()->preferred_language) {
+        // First, check session (highest priority for manual language switching)
+        if (Session::has('locale')) {
+            $locale = Session::get('locale');
+        }
+        // Then check user preference if authenticated and no session locale
+        elseif (auth()->check() && auth()->user()->preferred_language) {
             $locale = auth()->user()->preferred_language;
+            // Also set it in session for consistency
+            Session::put('locale', $locale);
+        }
+        // Finally, use config default
+        else {
+            $locale = config('app.locale');
         }
         
         // Validate locale (only allow supported languages)
@@ -31,8 +41,17 @@ class SetLocale
             $locale = config('app.locale');
         }
         
+        // Set locale in application FIRST (before any other operations)
         App::setLocale($locale);
-        Session::put('locale', $locale);
+        
+        // Ensure locale is in session (this is the source of truth)
+        if (!Session::has('locale') || Session::get('locale') !== $locale) {
+            Session::put('locale', $locale);
+            Session::save(); // Force save to ensure it persists
+        }
+        
+        // Make sure locale is available to views and Livewire
+        view()->share('currentLocale', $locale);
         
         return $next($request);
     }

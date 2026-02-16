@@ -19,5 +19,23 @@ return [
     'contact_administrator_button' => 'Wasiliana na Msimamizi',
     'need_assistance' => 'Unahitaji msaada wa haraka?',
     'error_code' => 'Msimbo wa Kosa: 403 | Ufikiaji Umekataliwa',
+    
+    // 404 Error
+    'page_not_found' => 'Ukurasa Haupatikani',
+    '404_title' => '404',
+    '404_message' => 'Oops! Ukurasa unaoutafuta haupo.',
+    '404_description' => 'Ukurasa ulioombwa unaweza kuwa umehamishwa, umefutwa, au haujawahi kuwepo.',
+    'go_home' => 'Nenda Nyumbani',
+    'go_back' => 'Rudi Nyuma',
+    'error_code_404' => 'Msimbo wa Kosa: 404 | Ukurasa Haupatikani',
+    
+    // 500 Error
+    'server_error' => 'Kosa la Seva',
+    '500_title' => '500',
+    '500_message' => 'Oops! Kitu kimeharibika upande wetu.',
+    '500_description' => 'Tunakumbana na matatizo ya kiufundi. Tafadhali jaribu tena baadaye au wasiliana na msaada ikiwa tatizo linaendelea.',
+    'try_again' => 'Jaribu Tena',
+    'contact_support' => 'Wasiliana na Msaada',
+    'error_code_500' => 'Msimbo wa Kosa: 500 | Kosa la Seva la Ndani',
 ];
 

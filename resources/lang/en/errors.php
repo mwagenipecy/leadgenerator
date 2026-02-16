@@ -19,5 +19,23 @@ return [
     'contact_administrator_button' => 'Contact Administrator',
     'need_assistance' => 'Need immediate assistance?',
     'error_code' => 'Error Code: 403 | Access Denied',
+    
+    // 404 Error
+    'page_not_found' => 'Page Not Found',
+    '404_title' => '404',
+    '404_message' => 'Oops! The page you are looking for does not exist.',
+    '404_description' => 'The page you requested may have been moved, deleted, or never existed.',
+    'go_home' => 'Go to Home',
+    'go_back' => 'Go Back',
+    'error_code_404' => 'Error Code: 404 | Page Not Found',
+    
+    // 500 Error
+    'server_error' => 'Server Error',
+    '500_title' => '500',
+    '500_message' => 'Oops! Something went wrong on our end.',
+    '500_description' => 'We are experiencing some technical difficulties. Please try again later or contact support if the problem persists.',
+    'try_again' => 'Try Again',
+    'contact_support' => 'Contact Support',
+    'error_code_500' => 'Error Code: 500 | Internal Server Error',
 ];
 

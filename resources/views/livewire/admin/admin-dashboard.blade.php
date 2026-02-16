@@ -100,7 +100,7 @@
                         </svg>
                         <!-- <span class="text-sm font-semibold">+8.2%</span> -->
                     </div>
-                    <span class="text-sm text-gray-500">this month</span>
+                    <span class="text-sm text-gray-500">{{ __('dashboard.this_month') }}</span>
                 </div>
             </div>
 
@@ -113,7 +113,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-medium text-gray-500">Total Revenue</p>
+                        <p class="text-sm font-medium text-gray-500">{{ __('dashboard.total_revenue') }}</p>
                         <p class="text-lg font-bold text-gray-900 group-hover:text-purple-600 transition-colors">TSh {{ number_format($totalRevenue/1000000, 1) }}M</p>
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                         </svg>
                         <!-- <span class="text-sm font-semibold">+15.3%</span> -->
                     </div>
-                    <span class="text-sm text-gray-500"> month</span>
+                    <span class="text-sm text-gray-500"> {{ __('dashboard.month') }}</span>
                 </div>
             </div>
         </div>
@@ -135,8 +135,8 @@
             <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Monthly Application Trends</h3>
-                        <p class="text-gray-600">Application submissions and approvals throughout the year</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('dashboard.monthly_application_trends') }}</h3>
+                        <p class="text-gray-600">{{ __('dashboard.application_trends_description') }}</p>
                     </div>
                     <div class="flex items-center space-x-3">
                         <button class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-sidebar-green/25">Current Year</button>
@@ -221,7 +221,7 @@
             <!-- Recent Activity Feed -->
             <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-6 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-900">Live Activity</h3>
+                    <h3 class="text-xl font-bold text-gray-900">{{ __('dashboard.live_activity') }}</h3>
                     <div class="flex items-center space-x-2">
                         <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                         <span class="text-xs font-semibold text-green-600">LIVE</span>
@@ -252,12 +252,12 @@
                 <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-1">Pending Lender Approvals</h3>
-                            <p class="text-gray-600">Review and approve new lender registrations</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-1">{{ __('dashboard.pending_lender_approvals') }}</h3>
+                            <p class="text-gray-600">{{ __('dashboard.review_approve_lenders') }}</p>
                         </div>
                         <div class="flex items-center space-x-2 bg-orange-100 px-4 py-2 rounded-full">
                             <div class="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                            <span class="text-sm font-medium text-orange-700">{{ $pendingLenders }} pending</span>
+                            <span class="text-sm font-medium text-orange-700">{{ $pendingLenders }} {{ __('dashboard.pending') }}</span>
                         </div>
                     </div>
                 </div>
@@ -265,10 +265,10 @@
                     <table class="w-full">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Lender Information</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Contact Details</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Registration Date</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">License</th>
+                                <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.lender_information') }}</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.contact_details') }}</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.registration_date') }}</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.license') }}</th>
                                 <!-- <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th> -->
                             </tr>
                         </thead>
@@ -372,7 +372,7 @@
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="text-sm font-bold text-gray-900">TSh {{ number_format($application->requested_amount) }}</div>
-                                    <div class="text-xs text-gray-500">{{ $application->requested_tenure_months }} months</div>
+                                    <div class="text-xs text-gray-500">{{ $application->requested_tenure_months }} {{ __('dashboard.months') }}</div>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     @if($application->lender)

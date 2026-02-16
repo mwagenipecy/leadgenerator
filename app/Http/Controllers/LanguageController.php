@@ -21,20 +21,31 @@ class LanguageController extends Controller
             return redirect()->back()->with('error', 'Unsupported language');
         }
         
-        // Set locale in session
+        // Set locale in session (this takes priority)
         Session::put('locale', $locale);
+        Session::save(); // Force save session immediately
+        
+        // Set locale for current request
         App::setLocale($locale);
         
-        // Save user preference if authenticated
+        // Save user preference if authenticated (for future sessions)
         if (Auth::check()) {
             $user = Auth::user();
-            if (isset($user->preferred_language)) {
+            // Check if user model has preferred_language column
+            if (method_exists($user, 'getFillable') && in_array('preferred_language', $user->getFillable())) {
+                $user->preferred_language = $locale;
+                $user->save();
+            } elseif (property_exists($user, 'preferred_language')) {
                 $user->preferred_language = $locale;
                 $user->save();
             }
         }
         
-        return redirect()->back()->with('success', __('Language changed successfully'));
+        // Force a full page reload to ensure Livewire components pick up the new locale
+        // Use redirect()->to() with the current URL to force a fresh page load
+        $redirectUrl = url()->previous() ?: route('dashboard');
+        
+        return redirect($redirectUrl)->with('success', __('Language changed successfully'));
     }
 }
 

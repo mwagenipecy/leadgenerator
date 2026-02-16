@@ -26,7 +26,7 @@
     <!-- Right Section: Actions & User -->
     <div class="flex items-center gap-4 sm:gap-6">
         <!-- Language Switcher -->
-        <x-language-switcher :currentLocale="app()->getLocale()" />
+        <x-language-switcher />
         
         <!-- Notification Dropdown -->
         <livewire:layout.notification-dropdown />
