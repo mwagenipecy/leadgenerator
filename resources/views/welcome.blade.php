@@ -78,11 +78,11 @@
             background: transparent;
         }
         
-        /* Hero Slider - Full Width */
+        /* Hero Slider - Covers full row, increased height */
         .hero-slider {
             position: relative;
-            height: 60vh;
-            min-height: 500px;
+            height: 45vh;
+            min-height: 280px;
             overflow: hidden;
             border-radius: 0;
             box-shadow: none;
@@ -91,18 +91,19 @@
         
         @media (min-width: 768px) {
             .hero-slider {
-                height: 70vh;
-                min-height: 600px;
+                height: 50vh;
+                min-height: 340px;
             }
         }
         
         @media (min-width: 1024px) {
             .hero-slider {
-                height: 80vh;
-                min-height: 700px;
+                height: 55vh;
+                min-height: 400px;
             }
         }
         
+        /* Image covers entire row - full width, no centering box */
         .slide {
             position: absolute;
             top: 0;
@@ -116,7 +117,6 @@
             background-repeat: no-repeat;
         }
         
-        /* Ensure images fit hero section properly on all devices */
         @media (min-width: 768px) {
             .slide {
                 background-size: cover;

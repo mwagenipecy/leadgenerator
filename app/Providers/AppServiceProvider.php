@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
         // Register Outlook mail transport
         $this->app->make(MailManager::class)->extend('outlook', function (array $config) {
             return new OutlookTransport(
-                $this->app->make(OutlookMailMailService::class)
+                $this->app->make(OutlookMailService::class)
             );
         });
         

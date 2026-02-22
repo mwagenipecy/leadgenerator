@@ -1,0 +1,42 @@
+@import url('https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Figtree', system-ui, sans-serif;
+}
+
+@keyframes score-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes level-unlock {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-24px); opacity: 0; }
+}
+
+@keyframes progress-fill {
+  from { width: 0; }
+}
+
+.animate-score-pop {
+  animation: score-pop 0.4s ease-out;
+}
+
+.animate-level-unlock {
+  animation: level-unlock 0.5s ease-out;
+}
+
+.animate-float-up {
+  animation: float-up 0.8s ease-out forwards;
+}
