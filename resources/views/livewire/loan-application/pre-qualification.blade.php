@@ -539,8 +539,12 @@
                                                 </span>
                                             </label>
                                             
-                                            <!-- View Details Button -->
-                                            <button wire:click="showProductDetails({{ $product['product_id'] }})"
+                                            <button wire:click="viewMatchingCriteria('{{ $product['product_id'] }}')"
+                                                    class="text-amber-600 hover:text-amber-700 text-sm font-medium flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                                {{ __('matching.view_matching_criteria') }}
+                                            </button>
+                                            <button wire:click="showProductDetails('{{ $product['product_id'] }}')"
                                                     class="text-sidebar-green hover:text-sidebar-green-light text-sm font-medium flex items-center {{ !$isEligible ? 'opacity-60' : '' }}">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -797,7 +801,8 @@
                 <!-- Modal Actions -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t border-gray-200">
                     <button wire:click="selectProduct('{{ $selectedProductForDetails['product_id'] }}')"
-                            class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-bold hover:bg-sidebar-green-light transition-colors flex items-center justify-center">
+                            {{ !($selectedProductForDetails['can_apply'] ?? true) ? 'disabled' : '' }}
+                            class="bg-sidebar-green text-white px-8 py-3 rounded-lg font-bold hover:bg-sidebar-green-light transition-colors flex items-center justify-center {{ !($selectedProductForDetails['can_apply'] ?? true) ? 'opacity-50 cursor-not-allowed' : '' }}">
                         @if(in_array($selectedProductForDetails['product_id'], $selected_products))
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -815,6 +820,76 @@
                         Close Details
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+{{-- View matching criteria modal (where you match / where you don't match) --}}
+@if($showCriteriaModal && $selectedMatchItem)
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" wire:click.self="closeCriteriaModal">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">{{ $selectedMatchItem['product_name'] }}</h3>
+                    <p class="text-sm text-gray-500">{{ $selectedMatchItem['lender_name'] }}</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 rounded-full text-sm font-bold {{ ($selectedMatchItem['match_percent'] ?? 0) >= 70 ? 'bg-green-100 text-green-800' : (($selectedMatchItem['match_percent'] ?? 0) >= 40 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700') }}">
+                        {{ $selectedMatchItem['match_percent'] ?? 0 }}% {{ __('matching.match_percent') }}
+                    </span>
+                    <button type="button" wire:click="closeCriteriaModal" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 space-y-6">
+                <div>
+                    <h4 class="text-sm font-bold text-green-700 mb-2 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        {{ __('matching.where_you_match') }}
+                    </h4>
+                    @if(!empty($selectedMatchItem['matched_criteria']))
+                        <ul class="space-y-1.5">
+                            @foreach($selectedMatchItem['matched_criteria'] as $c)
+                                <li class="text-sm text-gray-800 flex items-start"><span class="text-green-500 mr-2">•</span>{{ $c }}</li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-sm text-gray-500">No matching criteria yet.</p>
+                    @endif
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-red-700 mb-2 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        {{ __('matching.where_you_dont_match') }}
+                    </h4>
+                    @if(!empty($selectedMatchItem['unmatched_criteria']))
+                        <ul class="space-y-1.5">
+                            @foreach($selectedMatchItem['unmatched_criteria'] as $c)
+                                <li class="text-sm text-gray-800 flex items-start"><span class="text-red-500 mr-2">•</span>{{ $c }}</li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-sm text-gray-500">No criteria missing.</p>
+                    @endif
+                </div>
+                @if(!empty($selectedMatchItem['product_info'] ?? []))
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-700 mb-2 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            {{ __('matching.about_this_product') }}
+                        </h4>
+                        <ul class="space-y-1.5">
+                            @foreach($selectedMatchItem['product_info'] as $info)
+                                <li class="text-sm text-gray-600 flex items-start"><span class="text-gray-400 mr-2">•</span>{{ $info }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if(empty($selectedMatchItem['can_apply']))
+                    <p class="text-sm text-amber-700 bg-amber-50 p-3 rounded-lg">{{ __('matching.cannot_apply') }}</p>
+                @endif
             </div>
         </div>
     </div>

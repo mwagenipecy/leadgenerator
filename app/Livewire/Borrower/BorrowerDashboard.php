@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Application;
 use App\Models\LoanProduct;
 use App\Models\NidaVerification;
-use App\Models\CreditInfoRequest;
+use App\Services\LoanProductMatchingService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -35,8 +35,11 @@ class BorrowerDashboard extends Component
     
     // Collections
     public $myApplications;
+    /** @var \Illuminate\Support\Collection<int, array{product: \App\Models\LoanProduct, match_percent: int, matched_criteria: array, unmatched_criteria: array, can_apply: bool}> */
     public $availableLoanProducts;
     public $applicationsByStatus;
+    /** Max amount the user may qualify for across all matching products (for summary). */
+    public $maxPossibleAmount = 0;
     public $recentActivity;
     public $paymentHistory;
     public $monthlyApplicationTrend;
@@ -47,9 +50,14 @@ class BorrowerDashboard extends Component
     public $selectedApplicationNumber = '';
     public $showProductModal = false;
     public $selectedProduct = null;
+    /** View matching criteria modal: show where user matches / doesn't match */
+    public $showCriteriaModal = false;
+    /** @var array{product: \App\Models\LoanProduct, match_percent: int, matched_criteria: array, unmatched_criteria: array, can_apply: bool}|null */
+    public $selectedMatchItem = null;
 
     public function mount()
     {
+        $this->availableLoanProducts = $this->availableLoanProducts ?? collect();
         $this->loadDashboardData();
     }
 
@@ -144,27 +152,34 @@ class BorrowerDashboard extends Component
             ->limit(10)
             ->get();
 
-        // Available loan products that match user profile
-        $this->availableLoanProducts = LoanProduct::with('lender')
-            ->where('is_active', true)
-            ->when($this->creditScore, function($query) {
-                if ($this->creditScore < 600) {
-                    $query->where('allow_bad_credit', true);
-                }
-                if ($this->creditScore >= 600) {
-                    $query->where('min_credit_score', '<=', $this->creditScore)
-                          ->orWhereNull('min_credit_score');
-                }
-            })
-            ->orderBy('interest_rate_min')
-            ->limit(6)
-            ->get();
+        // Matching loan products via central service (same criteria as application/create; credit_score from users table)
+        $service = app(LoanProductMatchingService::class);
+        $this->availableLoanProducts = $service->getMatchingProductsForUser($user);
+        $this->maxPossibleAmount = $this->availableLoanProducts->isEmpty()
+            ? 0
+            : (float) $this->availableLoanProducts->max(fn ($r) => $r['product']->max_amount);
 
         // Recent activity from applications
         $this->recentActivity = $this->generateRecentActivity($user);
         
         // Monthly application trend
         $this->monthlyApplicationTrend = $this->getMonthlyApplicationTrend($user);
+    }
+
+    /** Open modal showing where user matches / doesn't match for a product. */
+    public function viewMatchingCriteria($productId)
+    {
+        $item = $this->availableLoanProducts->firstWhere(fn ($i) => $i['product']->id === $productId);
+        if ($item) {
+            $this->selectedMatchItem = $item;
+            $this->showCriteriaModal = true;
+        }
+    }
+
+    public function closeCriteriaModal()
+    {
+        $this->showCriteriaModal = false;
+        $this->selectedMatchItem = null;
     }
 
     private function generateRecentActivity($user)

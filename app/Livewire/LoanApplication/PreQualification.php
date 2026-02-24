@@ -5,6 +5,7 @@ namespace App\Livewire\LoanApplication;
 use App\Models\LoanProduct;
 use App\Models\LoanCategory;
 use App\Models\UserProfile;
+use App\Services\LoanProductMatchingService;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,9 @@ class PreQualification extends Component
     // Product details modal
     public $showProductDetails = false;
     public $selectedProductForDetails = null;
+    // View matching criteria modal (same criteria as dashboard; credit_score from users table)
+    public $showCriteriaModal = false;
+    public $selectedMatchItem = null;
 
     public function mount()
     {
@@ -190,26 +194,27 @@ class PreQualification extends Component
             return;
         }
         
-        // Get all products that match basic criteria with improved filtering
+        // Get all products in category (service will score; same criteria as dashboard, credit_score from users table)
         $products = $productsQuery
-            // Amount range matching
-            ->where('min_amount', '<=', $this->requested_amount)
-            ->where('max_amount', '>=', $this->requested_amount)
-            // Tenure range matching
-            ->where('min_tenure_months', '<=', $this->requested_tenure)
-            ->where('max_tenure_months', '>=', $this->requested_tenure)
-            // Monthly income requirement (null means no minimum)
-            ->where(function($query) {
-                $query->whereNull('min_monthly_income')
-                      ->orWhere('min_monthly_income', '<=', $this->monthly_income);
-            })
-            // Ensure lender is active
             ->whereHas('lender', function($query) {
                 $query->where('status', 'approved');
             })
             ->get();
 
-        $this->matching_products = $products->map(function ($product) {
+        $user = Auth::user();
+        $matchingService = app(LoanProductMatchingService::class);
+        $applicantProfile = $matchingService->buildApplicantProfile(
+            $user,
+            $user->profile,
+            (float) $this->requested_amount,
+            (int) $this->requested_tenure,
+            null
+        );
+        $applicantProfile['total_monthly_income'] = (float) $this->monthly_income;
+        $applicantProfile['existing_loan_payments'] = (float) $this->existing_loans;
+        $applicantProfile['preferred_loan_category_id'] = $category->id;
+
+        $this->matching_products = $products->map(function ($product) use ($matchingService, $applicantProfile) {
             // Calculate DSR for this specific product
             $dsrData = $this->calculateDSRForProduct($product);
             
@@ -255,54 +260,13 @@ class PreQualification extends Component
                 $eligibilityReasons = array_merge($eligibilityReasons, $additionalEligibility['issues']);
             }
 
-            // Combine DSR eligibility with other eligibility factors
-            $finalEligibility = $dsrData['eligible'] && $additionalEligibility['eligible'] && $basicEligible;
-            
-            // Calculate eligibility score with category matching bonus
-            $score = 0;
-            if ($finalEligibility) {
-                $score += 50; // Base score for being eligible
-                
-                // BONUS: Category match ensures products are from the selected category (already filtered)
-                // Additional verification that product category matches selection
-                $categoryMatch = false;
-                if ($product->loanCategory) {
-                    $categoryMatch = ($product->loanCategory->name === $this->loan_category) || 
-                                   ($product->loanCategory->slug === $this->loan_category);
-                }
-                if ($categoryMatch) {
-                    $score += 10; // Bonus for exact category match
-                }
-                
-                // Bonus points for lower DSR (closer to 0% gets more points, max 50% DSR gets full points)
-                $dsrBonus = max(0, (50 - min(50, $dsrData['dsr']))) * 0.6;
-                $score += $dsrBonus;
-                
-                // Bonus points for lower interest rate (max 30% rate, lower is better)
-                $interestBonus = max(0, (30 - min(30, $product->interest_rate_max))) * 0.6;
-                $score += $interestBonus;
-                
-                // Bonus points for faster processing (max 30 days, faster is better)
-                $processingBonus = max(0, (30 - min(30, $product->approval_time_days))) * 0.4;
-                $score += $processingBonus;
-                
-                // Bonus for faster disbursement
-                $disbursementBonus = max(0, (15 - min(15, $product->disbursement_time_days))) * 0.2;
-                $score += $disbursementBonus;
-                
-                // Bonus for lower processing fees
-                $feePercentage = $product->processing_fee_percentage ?? 0;
-                $feeBonus = max(0, (10 - min(10, $feePercentage))) * 0.2;
-                $score += $feeBonus;
-            } else {
-                // Even for ineligible products, give partial score based on how close they are
-                if ($dsrData['dsr'] <= ($product->minimum_dsr + 10)) {
-                    $score += 20; // Close to eligible
-                } elseif ($dsrData['dsr'] <= ($product->minimum_dsr + 20)) {
-                    $score += 10; // Somewhat close
-                }
-            }
-            
+            // Same criteria as dashboard: use LoanProductMatchingService (credit_score from users table; >55% to apply)
+            $matchResult = $matchingService->getMatchResult($applicantProfile, $product);
+            $matchPercent = $matchResult['score'];
+            $canApply = $matchResult['can_apply'];
+
+            $finalEligibility = $canApply;
+
             return [
                 'product_id' => $product->id,
                 'product_name' => $product->name,
@@ -321,9 +285,14 @@ class PreQualification extends Component
                 'approval_time_days' => $product->approval_time_days,
                 'disbursement_time_days' => $product->disbursement_time_days,
                 'eligible' => $finalEligibility,
-                'eligibility_score' => min(100, max(0, $score)), // Cap at 100
-                'eligibility_issues' => $eligibilityReasons ?? [],
-                'eligibility_reasons' => $eligibilityReasons ?? [],
+                'eligibility_score' => $matchPercent,
+                'match_percent' => $matchPercent,
+                'can_apply' => $canApply,
+                'matched_criteria' => $matchResult['matched_criteria'],
+                'unmatched_criteria' => $matchResult['unmatched_criteria'],
+                'product_info' => $matchResult['product_info'] ?? [],
+                'eligibility_issues' => array_merge($eligibilityReasons ?? [], $matchResult['unmatched_criteria']),
+                'eligibility_reasons' => array_merge($eligibilityReasons ?? [], $matchResult['unmatched_criteria']),
                 'category_match' => $product->loanCategory ? (
                     ($product->loanCategory->name === $this->loan_category) || 
                     ($product->loanCategory->slug === $this->loan_category)
@@ -342,10 +311,9 @@ class PreQualification extends Component
                 'is_lender_selected' => in_array($product->lender->id, $this->selected_lenders),
             ];
         })
-        // Don't filter - show all products, both eligible and ineligible
-        ->sortByDesc(function ($product) {
-            // Sort eligible products first, then by score
-            return [$product['eligible'] ? 1 : 0, $product['eligibility_score']];
+        // Don't filter - show all products; sort by can_apply then match %
+        ->sortByDesc(function ($p) {
+            return [($p['can_apply'] ?? false) ? 1 : 0, $p['eligibility_score']];
         })
         ->values()
         ->toArray();
@@ -381,16 +349,18 @@ class PreQualification extends Component
 
     public function selectProduct($productId)
     {
-        // Find the product to get its lender ID
         $product = collect($this->matching_products)->firstWhere('product_id', $productId);
-        
         if (!$product) {
+            return;
+        }
+        // Only allow selecting if match > 55% (can_apply)
+        if (!($product['can_apply'] ?? false)) {
+            session()->flash('error', __('matching.cannot_apply'));
             return;
         }
 
         $lenderId = $product['lender_id'];
 
-        // Check if this product is already selected
         if (in_array($productId, $this->selected_products)) {
             // Deselect the product and remove lender from selected lenders
             $this->selected_products = array_filter($this->selected_products, fn($id) => $id !== $productId);
@@ -464,6 +434,21 @@ class PreQualification extends Component
         $this->selectedProductForDetails = null;
     }
 
+    public function viewMatchingCriteria($productId)
+    {
+        $item = collect($this->matching_products)->firstWhere('product_id', $productId);
+        if ($item) {
+            $this->selectedMatchItem = $item;
+            $this->showCriteriaModal = true;
+        }
+    }
+
+    public function closeCriteriaModal()
+    {
+        $this->showCriteriaModal = false;
+        $this->selectedMatchItem = null;
+    }
+
     public function proceedToApplication()
     {
         if (empty($this->selected_products)) {
@@ -471,10 +456,15 @@ class PreQualification extends Component
             return;
         }
 
-        // Get selected product details
         $selectedProductDetails = collect($this->matching_products)
             ->whereIn('product_id', $this->selected_products)
             ->toArray();
+
+        $allCanApply = collect($selectedProductDetails)->every(fn ($p) => $p['can_apply'] ?? false);
+        if (!$allCanApply) {
+            session()->flash('error', __('matching.cannot_apply'));
+            return;
+        }
 
         // Validate that we have the required income data
         if (empty($this->monthly_income) || $this->monthly_income <= 0) {

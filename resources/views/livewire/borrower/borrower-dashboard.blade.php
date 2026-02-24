@@ -130,6 +130,173 @@
           
         </div>
 
+        <!-- Matching Lenders & Loan Offers - Match % and Possible Amount -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6 sm:mb-8">
+            <div class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-b border-gray-100 bg-gradient-to-r from-sidebar-green/5 to-transparent">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0 gap-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-black mb-1">{{ __('dashboard.matching_lenders_title') }}</h2>
+                        <p class="text-gray-600 text-sm sm:text-base">{!! __('dashboard.matching_lenders_description', [
+                            'match_percent' => '<strong>'.__('dashboard.matching_lenders_match_percent_label').'</strong>',
+                            'possible_amount' => '<strong>'.__('dashboard.matching_lenders_possible_amount_label').'</strong>',
+                        ]) !!}</p>
+                    </div>
+                    @if($availableLoanProducts && $availableLoanProducts->isNotEmpty())
+                        <div class="flex flex-wrap items-center gap-3 text-sm">
+                            <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-green-100 text-green-800 font-semibold">
+                                {{ $availableLoanProducts->count() === 1
+                                    ? __('dashboard.lender_matches_profile', ['count' => $availableLoanProducts->count()])
+                                    : __('dashboard.lenders_match_profile', ['count' => $availableLoanProducts->count()]) }}
+                            </span>
+                            @if($maxPossibleAmount > 0)
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-sidebar-green/10 text-sidebar-green font-semibold">
+                                    {{ __('dashboard.may_qualify_up_to', ['amount' => $maxPossibleAmount >= 1000000 ? number_format($maxPossibleAmount/1000000, 1) . 'M' : number_format($maxPossibleAmount/1000) . 'K']) }}
+                                </span>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Mobile: Matching lenders list -->
+            <div class="block sm:hidden divide-y divide-gray-100">
+                @forelse($availableLoanProducts ?? [] as $item)
+                    @php $product = $item['product']; $lender = $product->lender; @endphp
+                    <div class="p-4 hover:bg-gray-50/50 transition-colors">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="flex items-center space-x-3 min-w-0">
+                                @if($lender && $lender->icon)
+                                    <div class="w-11 h-11 rounded-lg flex-shrink-0 overflow-hidden bg-gray-100">
+                                        <img src="{{ asset('storage/' . $lender->icon) }}" alt="{{ $lender->company_name ?? 'Lender' }}" class="w-full h-full object-cover">
+                                    </div>
+                                @else
+                                    <div class="w-11 h-11 bg-sidebar-green rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <span class="text-white text-sm font-bold">{{ $lender ? strtoupper(substr($lender->company_name ?? 'L', 0, 2)) : '—' }}</span>
+                                    </div>
+                                @endif
+                                <div class="min-w-0">
+                                    <h4 class="text-sm font-bold text-black truncate">{{ $product->name }}</h4>
+                                    <p class="text-xs text-gray-500">{{ $lender->company_name ?? $lender->name ?? __('dashboard.lender_name_fallback') }}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-sm font-bold {{ $item['match_percent'] >= 70 ? 'bg-green-100 text-green-800' : ($item['match_percent'] >= 40 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700') }}">
+                                    {{ $item['match_percent'] }}% {{ __('matching.match_percent') }}
+                                </span>
+                                <button wire:click="viewMatchingCriteria('{{ $product->id }}')" class="text-amber-600 p-1" title="{{ __('matching.view_matching_criteria') }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                </button>
+                                <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-sidebar-green p-1" title="{{ __('dashboard.view_details') }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                </button>
+                                @if($item['can_apply'] ?? true)
+                                    <button wire:click="applyForLoan('{{ $product->id }}')" class="bg-sidebar-green text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-sidebar-green-light">{{ __('dashboard.apply') }}</button>
+                                @else
+                                    <span class="text-xs text-gray-500 px-2 py-1" title="{{ __('matching.cannot_apply') }}">{{ __('matching.min_score_to_apply') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="rounded-lg bg-gray-50 p-3 space-y-1.5 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">{{ __('dashboard.possible_amount_you_can_get') }}:</span>
+                                <span class="font-semibold text-black">TSh {{ number_format($product->min_amount) }} – {{ number_format($product->max_amount) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">{{ __('dashboard.tenure') }}</span>
+                                <span class="font-medium">{{ $product->min_tenure_months }}–{{ $product->max_tenure_months }} {{ __('dashboard.months') }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">{{ __('dashboard.interest') }}:</span>
+                                <span class="font-medium text-sidebar-green">{{ $product->interest_rate_min }}% – {{ $product->interest_rate_max }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-8 text-center">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-black mb-2">{{ __('dashboard.no_matching_lenders_yet') }}</h4>
+                        <p class="text-gray-500 text-sm mb-4">{!! __('dashboard.complete_profile_see_matches', ['profile_link' => '<a href="'.route('loan-application.profile').'" class="text-sidebar-green font-medium underline">'.__('dashboard.profile_link_text').'</a>']) !!}</p>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Desktop: Matching lenders table -->
+            <div class="hidden sm:block overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('dashboard.product_lender') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('matching.match_percent') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('dashboard.possible_amount_column') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('dashboard.tenure') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">{{ __('dashboard.interest') }}</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-black uppercase tracking-wider">{{ __('dashboard.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        @forelse($availableLoanProducts ?? [] as $item)
+                            @php $product = $item['product']; $lender = $product->lender; @endphp
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        @if($lender && $lender->icon)
+                                            <div class="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-gray-100">
+                                                <img src="{{ asset('storage/' . $lender->icon) }}" alt="{{ $lender->company_name ?? 'Lender' }}" class="w-full h-full object-cover">
+                                            </div>
+                                        @else
+                                            <div class="w-10 h-10 bg-sidebar-green rounded-lg flex items-center justify-center flex-shrink-0">
+                                                <span class="text-white text-xs font-bold">{{ $lender ? strtoupper(substr($lender->company_name ?? 'L', 0, 2)) : '—' }}</span>
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <div class="text-sm font-bold text-black">{{ $product->name }}</div>
+                                            <div class="text-xs text-gray-500">{{ $lender->company_name ?? $lender->name ?? __('dashboard.lender_name_fallback') }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-bold {{ $item['match_percent'] >= 70 ? 'bg-green-100 text-green-800' : ($item['match_percent'] >= 40 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700') }}">
+                                        {{ $item['match_percent'] }}%
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-semibold text-black">TSh {{ number_format($product->min_amount) }} – {{ number_format($product->max_amount) }}</div>
+                                    <div class="text-xs text-gray-500">{{ __('dashboard.amount_this_lender_offer') }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $product->min_tenure_months }} – {{ $product->max_tenure_months }} {{ __('dashboard.months') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-sidebar-green">{{ $product->interest_rate_min }}% – {{ $product->interest_rate_max }}%</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button wire:click="viewMatchingCriteria('{{ $product->id }}')" class="text-amber-600 hover:text-amber-700 p-2 rounded-lg hover:bg-amber-50 text-sm font-medium" title="{{ __('matching.view_matching_criteria') }}">{{ __('matching.view_matching_criteria') }}</button>
+                                        <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-gray-600 hover:text-sidebar-green p-2 rounded-lg hover:bg-gray-100" title="{{ __('dashboard.view_details') }}">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        </button>
+                                        @if($item['can_apply'] ?? true)
+                                            <button wire:click="applyForLoan('{{ $product->id }}')" class="bg-sidebar-green text-white px-4 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light text-sm">{{ __('dashboard.apply') }}</button>
+                                        @else
+                                            <span class="text-xs text-gray-500 px-3 py-2" title="{{ __('matching.cannot_apply') }}">{{ __('matching.min_score_to_apply') }}</span>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-8 py-12 text-center">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold text-black mb-2">{{ __('dashboard.no_matching_lenders_yet') }}</h4>
+                                    <p class="text-gray-500">{!! __('dashboard.complete_profile_see_matches_short', ['profile_link' => '<a href="'.route('loan-application.profile').'" class="text-sidebar-green font-medium underline">'.__('dashboard.profile_link_text').'</a>']) !!}</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Main Content Grid - Mobile Responsive -->
         <div class="grid grid-cols-1 lg:grid-cols-7 gap-6 mb-6 sm:mb-8">
             <!-- Application Status Distribution -->
@@ -427,151 +594,6 @@
             </div>
         </div>
 
-
-
-          <!-- Available Loan Products - Table View -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-b border-gray-100 bg-gray-50">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                    <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-black mb-1">Available Loan Products</h3>
-                        <p class="text-gray-600 text-sm sm:text-base">Explore loan products that match your profile</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile Product List -->
-            <div class="block sm:hidden">
-                @forelse($availableLoanProducts as $product)
-                    <div class="border-b border-gray-100 p-4 hover:bg-gray-50 transition-colors">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-sidebar-green rounded-lg flex items-center justify-center">
-                                    <span class="text-white text-xs font-bold">{{ substr($product->name, 0, 2) }}</span>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-black">{{ $product->name }}</h4>
-                                    <p class="text-xs text-gray-500">{{ $product->lender->company_name }}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-sidebar-green hover:text-sidebar-green-light p-1">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </button>
-                                <button wire:click="applyForLoan('{{ $product->id }}')" class="bg-sidebar-green text-white px-3 py-1 rounded text-xs font-semibold hover:bg-sidebar-green-light transition-colors">
-                                    Apply
-                                </button>
-                            </div>
-                        </div>
-                        <div class="space-y-1 text-xs text-gray-600">
-                            <div class="flex justify-between">
-                                <span>Amount:</span>
-                                <span class="font-medium">TSh {{ number_format($product->min_amount/1000) }}K - 
-                                    @if($product->max_amount >= 1000000){{ number_format($product->max_amount/1000000, 1) }}M
-                                    @else {{ number_format($product->max_amount/1000) }}K @endif
-                                </span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Interest:</span>
-                                <span class="font-medium text-sidebar-green">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</span>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="p-8 text-center">
-                        <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
-                        </div>
-                        <h4 class="text-lg font-semibold text-black mb-2">No Products Available</h4>
-                        <p class="text-gray-500 text-sm">No loan products are currently available for your profile.</p>
-                    </div>
-                @endforelse
-            </div>
-
-            <!-- Desktop Product Table -->
-            <div class="hidden sm:block overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Product</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Lender</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Amount Range</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Interest Rate</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-black uppercase tracking-wider">Tenure</th>
-                            <th class="px-6 py-4 text-center text-xs font-bold text-black uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-100">
-                        @forelse($availableLoanProducts as $product)
-                            <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 bg-sidebar-green rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <span class="text-white text-xs font-bold">{{ substr($product->name, 0, 2) }}</span>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-bold text-black">{{ $product->name }}</div>
-                                            @if($product->promotional_tag)
-                                                <span class="text-xs font-medium text-sidebar-green bg-sidebar-green-100 px-2 py-1 rounded-full">{{ $product->promotional_tag }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-black">{{ $product->lender->company_name }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-semibold text-black">
-                                        TSh {{ number_format($product->min_amount/1000) }}K - 
-                                        @if($product->max_amount >= 1000000)
-                                            {{ number_format($product->max_amount/1000000, 1) }}M
-                                        @else
-                                            {{ number_format($product->max_amount/1000) }}K
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-semibold text-sidebar-green">{{ $product->interest_rate_min }}% - {{ $product->interest_rate_max }}%</div>
-                                    <div class="text-xs text-gray-500">{{ ucfirst($product->interest_type) }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-black">{{ $product->min_tenure_months }} - {{ $product->max_tenure_months }} months</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <button wire:click="viewProductDetails('{{ $product->id }}')" class="text-black hover:text-sidebar-green p-2 rounded-lg hover:bg-gray-100 transition-all duration-200" title="{{ __('dashboard.view_details') }}">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
-                                        </button>
-                                        <!-- <button wire:click="applyForLoan('{{ $product->id }}')" class="bg-sidebar-green text-white px-4 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-colors text-sm">
-                                            Apply Now
-                                        </button> -->
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="px-8 py-12 text-center">
-                                    <div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                                        </svg>
-                                    </div>
-                                    <h4 class="text-lg font-semibold text-black mb-2">No Products Available</h4>
-                                    <p class="text-gray-500">No loan products are currently available for your profile.</p>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
       
     </div>
 
@@ -693,7 +715,75 @@
         </div>
     @endif
 
-
+    {{-- View matching criteria modal: where you match / where you don't match --}}
+    @if($showCriteriaModal && $selectedMatchItem)
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" wire:click.self="closeCriteriaModal">
+            <div class="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-black">{{ $selectedMatchItem['product']->name }}</h3>
+                        <p class="text-sm text-gray-500">{{ $selectedMatchItem['product']->lender->company_name ?? $selectedMatchItem['product']->lender->name }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold {{ $selectedMatchItem['match_percent'] >= 70 ? 'bg-green-100 text-green-800' : ($selectedMatchItem['match_percent'] >= 40 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-700') }}">
+                            {{ $selectedMatchItem['match_percent'] }}% {{ __('matching.match_percent') }}
+                        </span>
+                        <button type="button" wire:click="closeCriteriaModal" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div>
+                        <h4 class="text-sm font-bold text-green-700 mb-2 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            {{ __('matching.where_you_match') }}
+                        </h4>
+                        @if(!empty($selectedMatchItem['matched_criteria']))
+                            <ul class="space-y-1.5">
+                                @foreach($selectedMatchItem['matched_criteria'] as $c)
+                                    <li class="text-sm text-gray-800 flex items-start"><span class="text-green-500 mr-2">•</span>{{ $c }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-sm text-gray-500">No matching criteria yet.</p>
+                        @endif
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-red-700 mb-2 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            {{ __('matching.where_you_dont_match') }}
+                        </h4>
+                        @if(!empty($selectedMatchItem['unmatched_criteria']))
+                            <ul class="space-y-1.5">
+                                @foreach($selectedMatchItem['unmatched_criteria'] as $c)
+                                    <li class="text-sm text-gray-800 flex items-start"><span class="text-red-500 mr-2">•</span>{{ $c }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-sm text-gray-500">No criteria missing.</p>
+                        @endif
+                    </div>
+                    @if(!empty($selectedMatchItem['product_info'] ?? []))
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-700 mb-2 flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                {{ __('matching.about_this_product') }}
+                            </h4>
+                            <ul class="space-y-1.5">
+                                @foreach($selectedMatchItem['product_info'] as $info)
+                                    <li class="text-sm text-gray-600 flex items-start"><span class="text-gray-400 mr-2">•</span>{{ $info }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if(!($selectedMatchItem['can_apply'] ?? true))
+                        <p class="text-sm text-amber-700 bg-amber-50 p-3 rounded-lg">{{ __('matching.cannot_apply') }}</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
 
     @if($showWithdrawModal)
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
