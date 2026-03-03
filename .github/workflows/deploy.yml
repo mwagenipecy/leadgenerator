@@ -1,5 +1,8 @@
 # CI/CD: Deploy to Azure server via SSH + Docker (no tests)
-# Only secret needed: DEPLOY_SSH_KEY (full .pem content). chmod 400 file.pem then cat file.pem to copy.
+# This workflow runs on GitHub's servers - it cannot read files on your Mac.
+# You MUST add the key in GitHub: Settings → Secrets and variables → Actions → New repository secret:
+#   Name: DEPLOY_SSH_KEY
+#   Value: run on your Mac:  cat config/fanikisha-app-_key.pem  (paste the entire output)
 name: CI/CD Deploy
 
 on:
