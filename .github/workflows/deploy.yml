@@ -38,8 +38,8 @@ jobs:
             echo "==> Pulling latest code..."
             sudo git fetch origin refined01
             sudo git reset --hard origin/refined01
-            echo "==> Auto-building Docker images on server..."
-            sudo docker compose build --no-cache app queue
+            echo "==> Auto-building Docker image on server (app + queue use same image)..."
+            sudo docker compose build --no-cache app
             echo "==> Starting containers..."
             sudo docker compose up -d
             echo "==> Running migrations and caches..."
