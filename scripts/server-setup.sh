@@ -59,6 +59,13 @@ echo "==> Creating storage dirs..."
 mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
+# So the SSH user (e.g. AdminFanikisha) can git fetch during GitHub Actions deploy
+OWNER="${SUDO_USER:-$USER}"
+if [ -n "$OWNER" ] && [ "$OWNER" != root ]; then
+  echo "==> Setting ownership to $OWNER..."
+  chown -R "$OWNER:$OWNER" "$APP_DIR"
+fi
+
 echo "==> Server setup complete."
 echo "Next steps:"
 echo "  1. Edit $APP_DIR/.env (APP_KEY, APP_URL, DB_PASSWORD, etc.)"
