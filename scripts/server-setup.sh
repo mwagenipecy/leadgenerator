@@ -4,7 +4,7 @@
 
 set -e
 
-APP_DIR="${DEPLOY_PATH:-/var/www/lead_generator}"
+APP_DIR="${DEPLOY_PATH:-/var/www/leadgenerator}"
 REPO_URL="${REPO_URL:-https://github.com/your-org/lead_generator.git}"  # Set your repo URL
 
 echo "==> Updating system and installing dependencies..."

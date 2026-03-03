@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Run on the server to deploy (or called by GitHub Actions via SSH).
-# Usage: ./scripts/deploy.sh   or   cd /var/www/lead_generator && ./scripts/deploy.sh
+# Usage: ./scripts/deploy.sh   or   cd /var/www/leadgenerator && ./scripts/deploy.sh
 
 set -e
 cd "$(dirname "$0")/.."

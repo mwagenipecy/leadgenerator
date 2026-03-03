@@ -18,7 +18,7 @@ In your repo: **Settings → Secrets and variables → Actions → New repositor
 | `DEPLOY_HOST`     | Server IP                            | `20.164.19.2`    |
 | `DEPLOY_USER`     | SSH username                         | `AdminFanikisha` |
 | `DEPLOY_SSH_KEY`  | Full contents of the SSH private key | Paste entire content of `config/fanikisha-app-_key.pem` |
-| `DEPLOY_PATH`     | App directory on server              | `/var/www/lead_generator` |
+| `DEPLOY_PATH`     | App directory on server              | `/var/www/leadgenerator` |
 
 **Important:** Never commit the `.pem` file. It is in `.gitignore`. For Actions, paste the key contents into `DEPLOY_SSH_KEY`.
 
@@ -39,7 +39,7 @@ Then run the setup script. Option A – from your **local** machine (script sent
 ```bash
 # From your laptop (replace with your repo URL)
 export REPO_URL="https://github.com/YOUR_ORG/lead_generator.git"
-export DEPLOY_PATH="/var/www/lead_generator"
+export DEPLOY_PATH="/var/www/leadgenerator"
 ssh -i config/fanikisha-app-_key.pem AdminFanikisha@20.164.19.2 "DEPLOY_PATH=$DEPLOY_PATH REPO_URL=$REPO_URL bash -s" < scripts/server-setup.sh
 ```
 
@@ -52,12 +52,12 @@ sudo bash scripts/server-setup.sh
 Setup script will:
 
 - Install Docker and Docker Compose
-- Clone the repo into `DEPLOY_PATH` (default `/var/www/lead_generator`)
+- Clone the repo into `DEPLOY_PATH` (default `/var/www/leadgenerator`)
 - Create `.env` from `.env.example` with production-style defaults (**PostgreSQL**)
 
 After setup:
 
-1. **Edit `.env` on the server** (e.g. `nano /var/www/lead_generator/.env`):
+1. **Edit `.env` on the server** (e.g. `nano /var/www/leadgenerator/.env`):
    - `APP_URL` = your domain or `http://20.164.19.2`
    - `DB_CONNECTION=pgsql`, `DB_HOST=postgres`, `DB_PORT=5432`
    - `DB_PASSWORD` = strong PostgreSQL password (same as in compose)
@@ -66,7 +66,7 @@ After setup:
 2. **Generate app key and run first deploy** (on the server):
 
 ```bash
-cd /var/www/lead_generator
+cd /var/www/leadgenerator
 docker compose run --rm app php artisan key:generate
 docker compose up -d
 docker compose exec app php artisan migrate --force

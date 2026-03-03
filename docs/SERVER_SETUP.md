@@ -1,6 +1,6 @@
 # Server setup – one-time (Azure)
 
-The error `cd: /var/www/lead_generator: No such file or directory` means the app directory and repo do not exist on the server yet. Do this **once** on the server so GitHub Actions can deploy.
+The error `cd: /var/www/leadgenerator: No such file or directory` means the app directory and repo do not exist on the server yet. Do this **once** on the server so GitHub Actions can deploy.
 
 ---
 
@@ -11,12 +11,12 @@ From your project folder, with the server reachable via SSH:
 ```bash
 # Replace with your actual GitHub repo URL (use SSH if private: git@github.com:OWNER/lead_generator.git)
 export REPO_URL="https://github.com/YOUR_ORG/lead_generator.git"
-export DEPLOY_PATH="/var/www/lead_generator"
+export DEPLOY_PATH="/var/www/leadgenerator"
 
 ssh -i config/fanikisha-app-_key.pem AdminFanikisha@20.164.19.2 "DEPLOY_PATH=$DEPLOY_PATH REPO_URL=$REPO_URL sudo bash -s" < scripts/server-setup.sh
 ```
 
-That script will create `/var/www/lead_generator`, clone the repo (branch `refined01`), create `.env`, and create storage dirs.
+That script will create `/var/www/leadgenerator`, clone the repo (branch `refined01`), create `.env`, and create storage dirs.
 
 Then do **Step 2 and 3** below (edit `.env` and first deploy).
 
@@ -32,9 +32,9 @@ SSH into the server, then run these commands.
 # SSH into server first:
 # ssh -i config/fanikisha-app-_key.pem AdminFanikisha@20.164.19.2
 
-sudo mkdir -p /var/www/lead_generator
-sudo chown $USER:$USER /var/www/lead_generator
-cd /var/www/lead_generator
+sudo mkdir -p /var/www/leadgenerator
+sudo chown $USER:$USER /var/www/leadgenerator
+cd /var/www/leadgenerator
 
 # Clone (replace with your repo URL; use git@github.com:... if private and you have deploy key)
 git clone --branch refined01 https://github.com/YOUR_ORG/lead_generator.git .
@@ -49,7 +49,7 @@ git clone --branch refined01 git@github.com:YOUR_ORG/lead_generator.git .
 ### 2. Create and edit `.env`
 
 ```bash
-cd /var/www/lead_generator
+cd /var/www/leadgenerator
 cp .env.example .env
 nano .env   # or vim .env
 ```
@@ -71,7 +71,7 @@ Save and exit.
 ### 3. First deploy on the server
 
 ```bash
-cd /var/www/lead_generator
+cd /var/www/leadgenerator
 
 # Generate Laravel app key
 docker compose run --rm app php artisan key:generate
@@ -101,7 +101,7 @@ docker compose exec app php artisan passport:install
 - **App:** open `http://20.164.19.2` in a browser.
 - **Portainer:** open `https://20.164.19.2:9443`.
 
-After this, **GitHub Actions** can deploy on every push to `refined01`: it will `cd /var/www/lead_generator`, pull, build, and run migrations.
+After this, **GitHub Actions** can deploy on every push to `refined01`: it will `cd /var/www/leadgenerator`, pull, build, and run migrations.
 
 ---
 

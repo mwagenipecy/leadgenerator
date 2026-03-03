@@ -14,7 +14,7 @@ on:
 env:
   DEPLOY_HOST: 20.164.19.2
   DEPLOY_USER: AdminFanikisha
-  DEPLOY_PATH: /var/www/lead_generator
+  DEPLOY_PATH: /var/www/leadgenerator
 
 jobs:
   deploy:
