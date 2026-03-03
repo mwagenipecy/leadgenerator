@@ -18,15 +18,14 @@ jobs:
     name: Build and deploy on server
     runs-on: ubuntu-latest
     steps:
-      - name: Check SSH key secret
+      - name: Skip deploy (no SSH key)
+        if: ${{ secrets.DEPLOY_SSH_KEY == '' }}
         run: |
-          if [ -z "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
-            echo "::error::DEPLOY_SSH_KEY is not set. In repo Settings → Secrets and variables → Actions, add secret DEPLOY_SSH_KEY with the full .pem file content (chmod 400 the file, then cat file.pem)."
-            exit 1
-          fi
-          echo "DEPLOY_SSH_KEY is set."
+          echo "::warning::DEPLOY_SSH_KEY is not set. Deploy skipped."
+          echo "To enable deploy: repo Settings → Secrets and variables → Actions → New repository secret → name DEPLOY_SSH_KEY, value = full .pem file content (chmod 400 file.pem then cat file.pem)."
 
       - name: Auto build and deploy on server (SSH)
+        if: ${{ secrets.DEPLOY_SSH_KEY != '' }}
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.DEPLOY_HOST }}
