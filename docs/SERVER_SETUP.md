@@ -74,10 +74,10 @@ Save and exit.
 cd /var/www/leadgenerator
 
 # Generate Laravel app key
-docker compose run --rm app php artisan key:generate
+docker compose run --rm app  php artisan key:generate
 
 # Create storage dirs
-mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs
+mkdir -p storage/app/public storage/framework/cache storage/framework/sessions  storage/framework/views storage/logs
 chmod -R 775 storage bootstrap/cache
 
 # Build and start everything
