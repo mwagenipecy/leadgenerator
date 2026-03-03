@@ -22,7 +22,7 @@ class LenderAccountCreated extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Lender Account Has Been Created - Lead Generator',
+            subject: 'Your lender account is ready – Fanikisha Marketplace',
         );
     }
 

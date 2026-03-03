@@ -4,6 +4,7 @@ namespace App\Livewire\LoanProduct;
 
 use App\Models\LoanProduct;
 use App\Models\LoanCategory;
+use App\Models\Region;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Log;
@@ -124,6 +125,9 @@ class LoanProductForm extends Component
     public $key_features = [];
     public $is_active = true;
 
+    // Regions: where product is shown and can lend (empty = all regions)
+    public $selectedRegions = [];
+
     // Temporary arrays for UI
     public $newKeyFeature = '';
     public $selectedDocuments = [];
@@ -180,9 +184,11 @@ class LoanProductForm extends Component
     public function render()
     {
         $loanCategories = LoanCategory::active()->ordered()->get();
+        $regions = Region::active()->ordered()->get();
 
         return view('livewire.Loan-product.loan-product-form', [
             'loanCategories' => $loanCategories,
+            'regions' => $regions,
             'documentTypes' => LoanProduct::getAvailableDocumentTypes(),
             'collateralTypes' => LoanProduct::getAvailableCollateralTypes(),
             'businessSectors' => LoanProduct::getAvailableBusinessSectors(),
@@ -324,6 +330,7 @@ class LoanProductForm extends Component
             if ($this->mode === 'edit' && $this->selectedProduct) {
                 $oldValues = $this->selectedProduct->toArray();
                 $this->selectedProduct->update($data);
+                $this->selectedProduct->regions()->sync($this->selectedRegions ?? []);
                 $this->selectedProduct->refresh();
                 
                 // Log the update
@@ -339,6 +346,7 @@ class LoanProductForm extends Component
             } else {
                 $data['created_by'] = auth()->id();
                 $product = LoanProduct::create($data);
+                $product->regions()->sync($this->selectedRegions ?? []);
                 
                 // Log the creation
                 if (class_exists(LogService::class)) {
@@ -473,6 +481,30 @@ class LoanProductForm extends Component
         $this->disbursement_methods = $this->selectedDisbursementMethods;
     }
 
+    // Regions selection (where product is shown and can lend)
+    public function toggleRegion($regionId)
+    {
+        $regionId = (int) $regionId;
+        if (! Region::active()->where('id', $regionId)->exists()) {
+            return;
+        }
+        if (in_array($regionId, $this->selectedRegions)) {
+            $this->selectedRegions = array_values(array_filter($this->selectedRegions, fn ($id) => (int) $id !== $regionId));
+        } else {
+            $this->selectedRegions = array_values(array_merge($this->selectedRegions, [$regionId]));
+        }
+    }
+
+    public function selectAllRegions()
+    {
+        $this->selectedRegions = Region::active()->ordered()->pluck('id')->map(fn ($id) => (int) $id)->all();
+    }
+
+    public function clearRegions()
+    {
+        $this->selectedRegions = [];
+    }
+
     // Business sectors selection
     public function toggleBusinessSector($sector)
     {
@@ -553,6 +585,7 @@ class LoanProductForm extends Component
         $this->selectedCollateralTypes = $product->collateral_types ?? [];
         $this->selectedDisbursementMethods = $product->disbursement_methods ?? [];
         $this->selectedBusinessSectors = $product->business_sectors_allowed ?? [];
+        $this->selectedRegions = $product->regions->pluck('id')->map(fn ($id) => (int) $id)->all();
 
         // Sync with form fields
         $this->required_documents = $this->selectedDocuments;

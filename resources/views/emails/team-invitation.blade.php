@@ -1,4 +1,6 @@
 @component('mail::message')
+**Fanikisha Marketplace** – Team invitation
+
 {{ __('You have been invited to join the :team team!', ['team' => $invitation->team->name]) }}
 
 @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::registration()))

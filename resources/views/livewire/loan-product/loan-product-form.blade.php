@@ -187,6 +187,33 @@
                                 <p class="text-sm text-gray-500">Add key selling points that make your loan product attractive to customers</p>
                             </div>
                         </div>
+
+                        <!-- Regions: where product is shown and can lend -->
+                        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <h3 class="text-lg font-bold text-black mb-2">{{ __('admin.regions_product_available') }}</h3>
+                            <p class="text-sm text-gray-600 mb-4">{{ __('admin.regions_product_available_hint') }}</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <button type="button" wire:click="selectAllRegions" class="text-sm px-3 py-1.5 rounded-lg bg-sidebar-green/10 text-sidebar-green hover:bg-sidebar-green/20 font-medium">
+                                    {{ __('admin.select_all_regions') }}
+                                </button>
+                                <button type="button" wire:click="clearRegions" class="text-sm px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 font-medium">
+                                    {{ __('admin.clear_regions') }}
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-48 overflow-y-auto">
+                                @foreach($regions as $region)
+                                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-white cursor-pointer transition-all duration-200 {{ in_array($region->id, $selectedRegions) ? 'bg-sidebar-green-50 border-sidebar-green-300 text-sidebar-green-light' : '' }}">
+                                        <input wire:click="toggleRegion({{ $region->id }})" type="checkbox" {{ in_array($region->id, $selectedRegions) ? 'checked' : '' }} class="text-sidebar-green focus:ring-sidebar-green rounded">
+                                        <span class="ml-2 text-sm font-medium truncate" title="{{ $region->name }}">{{ $region->name }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                            @if(count($selectedRegions) > 0)
+                                <p class="text-sm text-gray-500 mt-3">{{ __('admin.regions_selected_count', ['count' => count($selectedRegions)]) }}</p>
+                            @else
+                                <p class="text-sm text-gray-500 mt-3">{{ __('admin.regions_all_if_empty') }}</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

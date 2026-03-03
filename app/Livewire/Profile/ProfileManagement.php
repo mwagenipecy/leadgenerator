@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile;
 
 use App\Models\UserProfile;
+use App\Models\Region;
 use Livewire\Component;
 use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -142,6 +143,7 @@ class ProfileManagement extends Component
             'maritalStatuses' => $this->getMaritalStatuses(),
             'employmentSectors' => $this->getEmploymentSectors(),
             'businessTypes' => $this->getBusinessTypes(),
+            'regions' => Region::active()->ordered()->get(),
         ]);
     }
 

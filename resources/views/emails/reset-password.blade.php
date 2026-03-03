@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password - Lead Generator</title>
+    <title>Reset Your Password – Fanikisha Marketplace</title>
     <style>
         * {
             margin: 0;
@@ -27,9 +27,9 @@
             background-color: #ffffff;
         }
         
-        /* Header with dark background */
+        /* Header – Fanikisha brand */
         .header {
-            background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+            background: linear-gradient(135deg, #C40F11 0%, #A00E11 100%);
             padding: 40px 20px;
             text-align: center;
         }
@@ -78,7 +78,7 @@
         
         .button {
             display: inline-block;
-            background-color: #10b981;
+            background-color: #C40F11;
             color: #ffffff;
             text-decoration: none;
             padding: 14px 32px;
@@ -89,7 +89,7 @@
         }
         
         .button:hover {
-            background-color: #059669;
+            background-color: #A00E11;
         }
         
         /* Security notice */
@@ -177,48 +177,44 @@
         <!-- Header with Logo -->
         <div class="header">
             <div class="logo-container">
-                <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator" class="logo">
+                <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Marketplace" class="logo">
             </div>
         </div>
         
         <!-- Main Content -->
         <div class="content">
-            <h1 class="title">Reset Your Password</h1>
+            <h1 class="title">Reset your password</h1>
             
             <p class="message">
-                You are receiving this email because we received a password reset request for your account.
+                We received a request to reset the password for your Fanikisha Marketplace account. Click the button below to choose a new password. If you did not make this request, you can safely ignore this email.
             </p>
             
             <div class="button-container">
-                <a href="{{ $url }}" class="button">Reset Password</a>
+                <a href="{{ $url }}" class="button">Reset password</a>
             </div>
             
             <p class="message">
-                This password reset link will expire in {{ $expiration }} minutes.
-            </p>
-            
-            <p class="message">
-                If you did not request a password reset, no further action is required.
+                This link expires in <strong>{{ $expiration }} minutes</strong>. For your security, it can only be used once.
             </p>
             
             <!-- URL Fallback -->
             <div class="url-fallback">
-                <strong>If the button doesn't work, copy and paste this URL into your browser:</strong><br>
+                <strong>If the button does not work, copy and paste this link into your browser:</strong><br>
                 {{ $url }}
             </div>
             
             <!-- Security Notice -->
             <div class="security-notice">
                 <p>
-                    <strong>Security Notice:</strong> If you did not request this password reset, please ignore this email. Your password will remain unchanged.
+                    <strong>Security:</strong> If you did not request a password reset, no action is needed. Your password will remain unchanged. Do not share this link with anyone.
                 </p>
             </div>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            <p class="footer-company">Lead Generator Team</p>
-            <p>This message was produced and distributed by Lead Generator. &copy; {{ date('Y') }} Lead Generator. All rights reserved.</p>
+            <p class="footer-company">Fanikisha Marketplace</p>
+            <p>This is an automated message from Fanikisha Marketplace. &copy; {{ date('Y') }} Fanikisha Marketplace. All rights reserved. Powered by CreditInfo Tanzania.</p>
         </div>
     </div>
 </body>

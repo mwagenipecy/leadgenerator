@@ -90,4 +90,9 @@ return [
     'min_score_to_apply' => 'Minimum 55% match required to apply',
     'can_apply' => 'You can apply (match > 55%)',
     'cannot_apply' => 'You cannot apply (match ≤ 55%). Improve your profile or choose another product.',
+
+    'region_available' => 'Available in your region (:region)',
+    'region_not_available' => 'Product not available in your region (:region)',
+    'region_required_for_product' => 'Complete your profile address (region) to see if this product is available for you',
+    'region_all_regions' => 'Available in all regions',
 ];

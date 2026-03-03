@@ -21,8 +21,8 @@ class UserStatusChangeNotification extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        $action = $this->isDisabled ? 'Disabled' : 'Enabled';
-        $subject = "Your Account Has Been {$action}";
+        $action = $this->isDisabled ? 'disabled' : 'enabled';
+        $subject = "Your account has been {$action} – Fanikisha Marketplace";
 
         return new Envelope(subject: $subject);
     }

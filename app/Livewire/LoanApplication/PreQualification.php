@@ -179,8 +179,8 @@ class PreQualification extends Component
                 ->first();
         }
         
-        // Start base query with relationships
-        $productsQuery = LoanProduct::with(['lender', 'loanCategory'])
+        // Start base query with relationships (include regions for region-based matching)
+        $productsQuery = LoanProduct::with(['lender', 'loanCategory', 'regions'])
             ->where('is_active', true)
             ->where('status', '!=', 'deleted');
         
@@ -213,6 +213,19 @@ class PreQualification extends Component
         $applicantProfile['total_monthly_income'] = (float) $this->monthly_income;
         $applicantProfile['existing_loan_payments'] = (float) $this->existing_loans;
         $applicantProfile['preferred_loan_category_id'] = $category->id;
+
+        $userRegionId = isset($applicantProfile['region_id']) ? (int) $applicantProfile['region_id'] : null;
+
+        // Filter by region (by ID): only include products available in user's region or in all regions
+        $products = $products->filter(function ($product) use ($userRegionId) {
+            if ($product->regions->isEmpty()) {
+                return true; // No regions = available everywhere
+            }
+            if ($userRegionId === null) {
+                return false; // Product is region-restricted but user has no region set
+            }
+            return $product->regions->contains('id', $userRegionId);
+        });
 
         $this->matching_products = $products->map(function ($product) use ($matchingService, $applicantProfile) {
             // Calculate DSR for this specific product

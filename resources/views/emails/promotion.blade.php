@@ -161,7 +161,7 @@
         <!-- Header with Logo -->
         <div class="header">
             <div class="logo-container">
-                <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place" class="logo">
+                <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Marketplace" class="logo">
             </div>
         </div>
         
@@ -180,14 +180,14 @@
             </div>
             
             <p class="message" style="margin-top: 30px; font-size: 14px; color: #888888;">
-                Thank you for using Fanikisha Market place!
+                Thank you for being part of Fanikisha Marketplace. We are here to help you connect, grow, and succeed.
             </p>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            <p class="footer-company">Fanikisha Market place</p>
-            <p>This message was produced and distributed by Fanikisha Market place. &copy; {{ date('Y') }} Fanikisha Market place. All rights reserved.</p>
+            <p class="footer-company">Fanikisha Marketplace</p>
+            <p>This message was sent by Fanikisha Marketplace, the loan marketplace connecting borrowers and lenders in Tanzania. &copy; {{ date('Y') }} Fanikisha Marketplace. All rights reserved.</p>
             <p class="footer-powered">Powered by CreditInfo Tanzania</p>
         </div>
     </div>

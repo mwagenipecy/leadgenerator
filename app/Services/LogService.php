@@ -515,6 +515,22 @@ class LogService
     }
 
     /**
+     * Log CreditInfo alert service unsubscribe (audit trail).
+     */
+    public static function logCreditInfoServiceUnsubscribed($user, string $serviceName, $service = null, array $metadata = null): SystemLog
+    {
+        return self::log(
+            'creditinfo_service_unsubscribed',
+            "User {$user->email} unsubscribed from CreditInfo service: {$serviceName}",
+            'medium',
+            $service,
+            ['subscribed' => true],
+            ['subscribed' => false],
+            $metadata ? array_merge($metadata, ['service_name' => $serviceName]) : ['service_name' => $serviceName]
+        );
+    }
+
+    /**
      * Get default description based on action
      */
     private static function getDefaultDescription(string $action, $model = null): string
@@ -551,6 +567,7 @@ class LogService
             'loan_category_disabled' => 'Loan category was disabled',
             'blog_post_created' => 'Blog post was created',
             'blog_post_updated' => 'Blog post was updated',
+            'creditinfo_service_unsubscribed' => 'CreditInfo alert service was unsubscribed',
         ];
 
         return $descriptions[$action] ?? ucfirst(str_replace('_', ' ', $action));

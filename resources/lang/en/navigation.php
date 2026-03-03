@@ -24,5 +24,9 @@ return [
     'promotions' => 'Promotions',
     'blog_management' => 'Blog Management',
     'self_services' => 'Self Services',
+    'creditinfo_alert' => 'CreditInfo Alert',
+    'subscribe_to_services' => 'Subscribe to services',
+    'menu_management' => 'Menu Management',
+    'regions' => 'Regions',
 ];
 

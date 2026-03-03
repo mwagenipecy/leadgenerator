@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify your email address</title>
+    <title>Verification Code – Fanikisha Marketplace</title>
     <style>
         * {
             margin: 0;
@@ -27,9 +27,9 @@
             background-color: #ffffff;
         }
         
-        /* Header with dark background */
+        /* Header – Fanikisha brand */
         .header {
-            background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+            background: linear-gradient(135deg, #C40F11 0%, #A00E11 100%);
             padding: 40px 20px;
             text-align: center;
         }
@@ -184,39 +184,39 @@
         <!-- Header with Logo -->
         <div class="header">
             <div class="logo-container">
-                <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Lead Generator" class="logo">
+                <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Marketplace" class="logo">
             </div>
         </div>
         
         <!-- Main Content -->
         <div class="content">
-            <h1 class="title">Verify your email address</h1>
+            <h1 class="title">Your verification code</h1>
             
             <p class="message">
-                Thanks for using Lead Generator. We want to make sure it's really you. Please enter the following verification code when prompted. If you didn't request this code, you can ignore this message.
+                You requested a verification code to sign in or complete registration on Fanikisha Marketplace. Enter the code below when prompted on our platform.
             </p>
             
             <!-- Verification Code -->
             <div class="code-section">
-                <div class="code-label">Verification Code</div>
+                <div class="code-label">Verification code</div>
                 <div class="otp-code">{{ $otp }}</div>
-                <div class="code-validity">(This code is valid for 10 minutes)</div>
+                <div class="code-validity">This code expires in 10 minutes. Do not share it with anyone.</div>
             </div>
             
             <!-- Security Notice -->
             <div class="security-notice">
                 <p>
-                    <strong>Security Notice:</strong> Lead Generator will never email you and ask you to disclose or verify your password, credit card, or banking account number.
+                    <strong>Security:</strong> Fanikisha Marketplace will never ask you for your password, bank details, or card number by email. If you did not request this code, ignore this email and ensure your password is secure.
                 </p>
             </div>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            <p class="footer-company">Lead Generator Team</p>
-            <p>This message was produced and distributed by Lead Generator. &copy; {{ date('Y') }} Lead Generator. All rights reserved.</p>
+            <p class="footer-company">Fanikisha Marketplace</p>
+            <p>This is an automated message from Fanikisha Marketplace, the loan marketplace connecting borrowers and lenders in Tanzania. &copy; {{ date('Y') }} Fanikisha Marketplace. All rights reserved. Powered by CreditInfo Tanzania.</p>
             <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-                If you did not attempt to log in or create an account, please disregard this email.
+                If you did not request this code, please disregard this email.
             </p>
         </div>
     </div>

@@ -36,5 +36,6 @@ return [
     'pre_qualify_loan' => 'Pre-Qualify for Loan',
     'view_applications' => 'View Applications',
     'registered_company_information' => 'Your registered company information',
+    'select_region' => 'Select region',
 ];
 

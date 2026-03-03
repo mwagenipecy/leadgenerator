@@ -24,5 +24,9 @@ return [
     'promotions' => 'Matangazo',
     'blog_management' => 'Usimamizi wa Blogu',
     'self_services' => 'Huduma za Kibinafsi',
+    'creditinfo_alert' => 'Arifa za CreditInfo',
+    'subscribe_to_services' => 'Jiandikishe kwa huduma',
+    'menu_management' => 'Usimamizi wa Menyu',
+    'regions' => 'Mikoa',
 ];
 

@@ -322,6 +322,10 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
       /*********************************** NOTIFICATIONS ***********************/
       Route::get('notifications', \App\Livewire\Notifications\Index::class)->name('notifications.index');
 
+      /*********************************** CREDITINFO ALERT ***********************/
+      Route::get('credit-info-alert', \App\Livewire\CreditInfoAlert::class)->name('creditinfo.alert');
+      Route::get('credit-info-alert/pricing', \App\Livewire\CreditInfoPricing::class)->name('creditinfo.pricing');
+
 
     /*********************************** USERMANAGEMENT ****************************************/
     Route::get('user-management',[UserManagementController::class,'index'])->name('user.management');
@@ -330,6 +334,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     
     /*********************************** LANGUAGE MANAGEMENT ****************************************/
     Route::get('language-management', \App\Livewire\Admin\LanguageManagement::class)->name('admin.language.management');
+
+    /*********************************** MENU MANAGEMENT ****************************************/
+    Route::get('menu-management', \App\Livewire\Admin\MenuManagement::class)->name('admin.menu.management');
     
     /*********************************** LOAN CATEGORIES ****************************************/
     Route::resource('loan-categories', \App\Http\Controllers\Admin\LoanCategoryController::class)->names([
@@ -342,6 +349,17 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
         'destroy' => 'admin.loan-categories.destroy',
     ]);
     Route::post('loan-categories/{loanCategory}/disable', [\App\Http\Controllers\Admin\LoanCategoryController::class, 'disable'])->name('admin.loan-categories.disable');
+
+    /*********************************** REGIONS (Tanzania) ****************************************/
+    Route::resource('regions', \App\Http\Controllers\Admin\RegionController::class)->names([
+        'index' => 'admin.regions.index',
+        'create' => 'admin.regions.create',
+        'store' => 'admin.regions.store',
+        'edit' => 'admin.regions.edit',
+        'update' => 'admin.regions.update',
+        'destroy' => 'admin.regions.destroy',
+    ])->except(['show']);
+
     Route::get('user-management/roles', function () {
         return view('pages.user-management.roles');
     })->name('user.management.roles');

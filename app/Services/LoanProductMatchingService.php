@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\LoanProduct;
+use App\Models\Region;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Models\Application;
@@ -83,7 +84,16 @@ class LoanProductMatchingService
             }
         }
 
+        $regionName = $profile && ! empty($profile->current_region) ? trim((string) $profile->current_region) : null;
+        $regionId = null;
+        if ($regionName !== null) {
+            $region = Region::where('name', $regionName)->first();
+            $regionId = $region?->id;
+        }
+
         return [
+            'region' => $regionName,
+            'region_id' => $regionId,
             'credit_score' => $creditScore,
             'age' => $age,
             'total_monthly_income' => $totalMonthlyIncome,
@@ -124,6 +134,28 @@ class LoanProductMatchingService
         $employmentSector = $applicantProfile['employment_sector'] ?? null;
         $businessType = $applicantProfile['business_type'] ?? null;
         $existingPayments = $applicantProfile['existing_loan_payments'] ?? 0;
+        $userRegionId = isset($applicantProfile['region_id']) ? (int) $applicantProfile['region_id'] : null;
+        $userRegionName = ! empty($applicantProfile['region']) ? trim((string) $applicantProfile['region']) : null;
+
+        $regionEligible = true; // set to false if product has regions and user's region is not in list
+
+        // --- 0. REGION (product available in user's region) - match by region ID ---
+        $product->loadMissing('regions');
+        if ($product->regions->isNotEmpty()) {
+            $maxScore += 8;
+            $productRegionIds = $product->regions->pluck('id')->all();
+            if ($userRegionId !== null && in_array($userRegionId, $productRegionIds, true)) {
+                $score += 8;
+                $matched[] = __('matching.region_available', ['region' => $userRegionName ?? (string) $userRegionId]);
+            } else {
+                $regionEligible = false;
+                $unmatched[] = $userRegionName
+                    ? __('matching.region_not_available', ['region' => $userRegionName])
+                    : __('matching.region_required_for_product');
+            }
+        } else {
+            $matched[] = __('matching.region_all_regions');
+        }
 
         // --- 1. CREDIT SCORE (most important - from users table) ---
         $maxScore += 25;
@@ -424,6 +456,11 @@ class LoanProductMatchingService
             $canApply = false;
         }
 
+        // Region: product restricted to regions and user not in list = cannot apply
+        if (! $regionEligible) {
+            $canApply = false;
+        }
+
         return [
             'score' => $percent,
             'matched_criteria' => $matched,
@@ -440,10 +477,23 @@ class LoanProductMatchingService
     public function getMatchingProductsForUser(User $user): \Illuminate\Support\Collection
     {
         $profile = $this->buildApplicantProfile($user);
-        $products = LoanProduct::with(['lender', 'loanCategory'])
+        $userRegionId = isset($profile['region_id']) ? (int) $profile['region_id'] : null;
+
+        $products = LoanProduct::with(['lender', 'loanCategory', 'regions'])
             ->where('is_active', true)
             ->where('status', '!=', 'deleted')
             ->get();
+
+        // Only include products available in user's region (or in all regions) - match by region ID
+        $products = $products->filter(function (LoanProduct $product) use ($userRegionId) {
+            if ($product->regions->isEmpty()) {
+                return true;
+            }
+            if ($userRegionId === null) {
+                return false;
+            }
+            return $product->regions->contains('id', $userRegionId);
+        });
 
         return $products->map(function (LoanProduct $product) use ($profile) {
             $result = $this->getMatchResult($profile, $product);

@@ -36,5 +36,6 @@ return [
     'pre_qualify_loan' => 'Stahiki Kwa Mkopo',
     'view_applications' => 'Angalia Maombi',
     'registered_company_information' => 'Taarifa za kampuni yako iliyosajiliwa',
+    'select_region' => 'Chagua mkoa',
 ];
 

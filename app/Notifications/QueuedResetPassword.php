@@ -27,7 +27,7 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
         $expiration = config('auth.passwords.'.config('auth.defaults.passwords').'.expire', 60);
 
         return (new MailMessage)
-            ->subject('Reset Password Notification - Lead Generator')
+            ->subject('Reset your password – Fanikisha Marketplace')
             ->view('emails.reset-password', [
                 'url' => $url,
                 'expiration' => $expiration,

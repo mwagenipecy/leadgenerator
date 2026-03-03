@@ -155,6 +155,11 @@ class User extends Authenticatable
         return $this->hasOne(NidaVerification::class);
     }
 
+    public function creditInfoAlertSetting()
+    {
+        return $this->hasOne(CreditInfoAlertSetting::class);
+    }
+
     /**
      * Check if user is NIDA verified.
      */

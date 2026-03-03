@@ -55,7 +55,15 @@ return [
     'translation_key' => 'Translation Key',
     'translation_value' => 'Translation Value',
     'manage_users_description' => 'Manage system users and their accounts',
-    
+
+    // Menu Management
+    'menu_management_description' => 'Show or hide sidebar menu items and enable or disable menu links for all users.',
+    'menu_item' => 'Menu Item',
+    'route' => 'Route',
+    'show_in_menu' => 'Show in menu',
+    'enable_link' => 'Enable link',
+    'menu_management_hint' => 'When "Show in menu" is off, the item is hidden from the sidebar. When "Enable link" is off, the item still appears but the link is disabled (greyed out).',
+
     // Role Management
     'role_management' => 'Role Management',
     'manage_roles_description' => 'Manage system roles and their permissions',
@@ -133,6 +141,38 @@ return [
     'add_category' => 'Add Category',
     'disable_category_message' => 'Disable this category? It will be unavailable for new loan products.',
     'disable_category_confirm' => 'Disable ":name"? It will be unavailable for new loan products.',
+
+    // Regions (Tanzania)
+    'regions_title' => 'Tanzania Regions',
+    'regions_description' => 'Manage regions (mikoa) of Tanzania',
+    'add_region' => 'Add Region',
+    'back_to_regions' => 'Back to Regions',
+    'region_name' => 'Region Name',
+    'region_code' => 'Code',
+    'region_created' => 'Region created successfully.',
+    'region_updated' => 'Region updated successfully.',
+    'region_deleted' => 'Region deleted successfully.',
+    'region_delete_confirm' => 'Are you sure you want to delete this region?',
+    'no_regions' => 'No regions yet',
+    'add_first_region' => 'Add the first Tanzania region.',
+    'add_region_description' => 'Add a new region to the list',
+    'edit_region' => 'Edit Region',
+    'edit_region_description' => 'Update region details',
+    'create_region' => 'Create Region',
+    'update_region' => 'Update Region',
+    'sort_order_hint' => 'Lower numbers appear first',
+    'delete' => 'Delete',
+
+    // Loan product – regions
+    'regions_product_available' => 'Regions (where product is shown & can lend)',
+    'regions_product_available_hint' => 'Select Tanzania regions where this product is visible to borrowers and where you can lend. Leave all unchecked for all regions.',
+    'select_all_regions' => 'Select all regions',
+    'clear_regions' => 'Clear selection',
+    'regions_selected_count' => ':count region(s) selected.',
+    'regions_all_if_empty' => 'No regions selected = product available in all regions.',
+    'assigned_regions' => 'Assigned regions',
+    'regions_where_shown_and_lend' => 'Product is shown and available for lending in these regions only.',
+    'regions_all_regions' => 'All regions (product available nationwide).',
     
     // Company Verification
     'company_verification_title' => 'Company Verification',

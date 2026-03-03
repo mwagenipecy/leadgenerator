@@ -24,10 +24,10 @@ class LenderStatusChangeNotification extends Mailable implements ShouldQueue
 
     public function envelope(): Envelope
     {
-        $action = $this->isDisabled ? 'Disabled' : 'Enabled';
-        $subject = $this->isAdminNotification 
-            ? "Lender Account {$action} - {$this->lender->company_name}"
-            : "Your Lender Account Has Been {$action}";
+        $action = $this->isDisabled ? 'disabled' : 'enabled';
+        $subject = $this->isAdminNotification
+            ? "Lender account {$action} – {$this->lender->company_name} (Fanikisha Marketplace)"
+            : "Your lender account has been {$action} – Fanikisha Marketplace";
 
         return new Envelope(subject: $subject);
     }

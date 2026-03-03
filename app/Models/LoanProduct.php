@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -109,6 +110,11 @@ class LoanProduct extends Model
     public function loanCategory(): BelongsTo
     {
         return $this->belongsTo(LoanCategory::class, 'loan_category_id');
+    }
+
+    public function regions(): BelongsToMany
+    {
+        return $this->belongsToMany(Region::class, 'loan_product_region')->withTimestamps();
     }
 
     public function applications()

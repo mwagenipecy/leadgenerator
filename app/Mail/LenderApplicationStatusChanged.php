@@ -22,10 +22,10 @@ class LenderApplicationStatusChanged extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         $subject = match($this->status) {
-            'approved' => 'Account Reactivated - Lead Generator',
-            'rejected' => 'Application Update - Lead Generator',
-            'suspended' => 'Account Suspended - Lead Generator',
-            default => 'Application Status Update - Lead Generator'
+            'approved' => 'Application approved – Fanikisha Marketplace',
+            'rejected' => 'Application update – Fanikisha Marketplace',
+            'suspended' => 'Account suspended – Fanikisha Marketplace',
+            default => 'Application status update – Fanikisha Marketplace'
         };
 
         return new Envelope(subject: $subject);

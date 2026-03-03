@@ -143,6 +143,25 @@
                         </div>
                     @endif
 
+                    <div>
+                        <h4 class="text-sm font-semibold text-black mb-2">{{ __('admin.assigned_regions') }}</h4>
+                        @if($product->regions && $product->regions->isNotEmpty())
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($product->regions as $region)
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-sidebar-green/10 text-sidebar-green border border-sidebar-green/30">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.196-5.196a2.25 2.25 0 013.182-3.182L9 13.182l5.196-5.196a2.25 2.25 0 013.182 3.182L9 20z"/>
+                                        </svg>
+                                        {{ $region->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">{{ __('admin.regions_where_shown_and_lend') }}</p>
+                        @else
+                            <p class="text-gray-600 text-sm">{{ __('admin.regions_all_regions') }}</p>
+                        @endif
+                    </div>
+
                     @if($product->description)
                         <div>
                             <h4 class="text-sm font-semibold text-black mb-2">Description</h4>

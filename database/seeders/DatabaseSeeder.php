@@ -31,6 +31,10 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             LoanCategorySeeder::class,
             LoanProductSeeder::class,
+            CreditInfoServiceSeeder::class,
+            CreditInfoAlertNotificationSeeder::class,
+            SidebarMenuItemSeeder::class,
+            TanzaniaRegionsSeeder::class,
         ]);
     }
 }

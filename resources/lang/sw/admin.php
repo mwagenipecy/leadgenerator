@@ -55,7 +55,15 @@ return [
     'translation_key' => 'Ufunguo wa Tafsiri',
     'translation_value' => 'Thamani ya Tafsiri',
     'manage_users_description' => 'Simamia watumiaji wa mfumo na akaunti zao',
-    
+
+    // Menu Management
+    'menu_management_description' => 'Onyesha au ficha vitu vya menyu na amilisha au zimisha viungo vya menyu kwa watumiaji wote.',
+    'menu_item' => 'Kipengele cha Menyu',
+    'route' => 'Njia',
+    'show_in_menu' => 'Onyesha kwenye menyu',
+    'enable_link' => 'Amilisha kiungo',
+    'menu_management_hint' => 'Inapo zimwa "Onyesha kwenye menyu", kipengele kinafichwa kwenye upau. Inapo zimwa "Amilisha kiungo", kipengele kinaonekana lakini kiungo hakikiwezi.',
+
     // Role Management
     'role_management' => 'Usimamizi wa Majukumu',
     'manage_roles_description' => 'Simamia majukumu ya mfumo na ruhusa zao',
@@ -133,6 +141,38 @@ return [
     'add_category' => 'Ongeza Jamii',
     'disable_category_message' => 'Zima jamii hii? Haitapatikana kwa bidhaa mpya za mkopo.',
     'disable_category_confirm' => 'Zima ":name"? Haitapatikana kwa bidhaa mpya za mkopo.',
+
+    // Regions (Tanzania)
+    'regions_title' => 'Mikoa ya Tanzania',
+    'regions_description' => 'Simamia mikoa ya Tanzania',
+    'add_region' => 'Ongeza Mkoa',
+    'back_to_regions' => 'Rudi kwa Mikoa',
+    'region_name' => 'Jina la Mkoa',
+    'region_code' => 'Msimbo',
+    'region_created' => 'Mkoa umeongezwa kwa mafanikio.',
+    'region_updated' => 'Mkoa umesasishwa kwa mafanikio.',
+    'region_deleted' => 'Mkoa umefutwa kwa mafanikio.',
+    'region_delete_confirm' => 'Una uhakika unataka kufuta mkoa huu?',
+    'no_regions' => 'Hakuna mikoa bado',
+    'add_first_region' => 'Ongeza mkoa wa kwanza wa Tanzania.',
+    'add_region_description' => 'Ongeza mkoa mpya kwenye orodha',
+    'edit_region' => 'Hariri Mkoa',
+    'edit_region_description' => 'Sasisha maelezo ya mkoa',
+    'create_region' => 'Unda Mkoa',
+    'update_region' => 'Sasisha Mkoa',
+    'sort_order_hint' => 'Nambari ndogo zinaonekana kwanza',
+    'delete' => 'Futa',
+
+    // Loan product – regions
+    'regions_product_available' => 'Mikoa (bidhaa inaonyeshwa na inaweza kukopesha)',
+    'regions_product_available_hint' => 'Chagua mikoa ya Tanzania ambapo bidhaa hii inaonekana kwa waombaji na ambapo unaweza kukopesha. Acha zote zisichaguliwe kwa mikoa yote.',
+    'select_all_regions' => 'Chagua mikoa yote',
+    'clear_regions' => 'Futa uchaguzi',
+    'regions_selected_count' => 'Mikoa :count imechaguliwa.',
+    'regions_all_if_empty' => 'Hakuna mkoa uliochaguliwa = bidhaa inapatikana katika mikoa yote.',
+    'assigned_regions' => 'Mikoa iliyopangiwa',
+    'regions_where_shown_and_lend' => 'Bidhaa inaonyeshwa na inapatikana kukopesha katika mikoa hii tu.',
+    'regions_all_regions' => 'Mikoa yote (bidhaa inapatikana kote nchini).',
     
     // Company Verification
     'company_verification_title' => 'Uthibitishaji wa Kampuni',
