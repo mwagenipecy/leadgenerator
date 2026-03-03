@@ -7,6 +7,7 @@ services:
     restart: unless-stopped
     env_file: .env
     entrypoint: ["/entrypoint.sh"]
+    command: ["php-fpm", "-F"]
     volumes:
       - ./.env:/var/www/html/.env:ro
       - ./storage/app:/var/www/html/storage/app
