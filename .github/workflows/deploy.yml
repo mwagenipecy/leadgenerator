@@ -1,5 +1,5 @@
 # CI/CD: Deploy to Azure server via SSH + Docker (no tests)
-# SSH key: when adding DEPLOY_SSH_KEY from a .pem file, use: chmod 400 file.pem then paste its full content.
+# Only secret needed: DEPLOY_SSH_KEY (full .pem content). chmod 400 file.pem then cat file.pem to copy.
 name: CI/CD Deploy
 
 on:
@@ -7,31 +7,37 @@ on:
     branches: [refined01]
   workflow_dispatch:
 
+# Server connection (edit if different). Only DEPLOY_SSH_KEY is a secret.
+env:
+  DEPLOY_HOST: 20.164.19.2
+  DEPLOY_USER: AdminFanikisha
+  DEPLOY_PATH: /var/www/lead_generator
+
 jobs:
   deploy:
     name: Build and deploy on server
     runs-on: ubuntu-latest
     steps:
-      - name: Check required secrets
+      - name: Check SSH key secret
         run: |
-          if [ -z "${{ secrets.DEPLOY_HOST }}" ]; then echo "::error::DEPLOY_HOST is not set. Add it in Settings → Secrets and variables → Actions (e.g. 20.164.19.2)."; exit 1; fi
-          if [ -z "${{ secrets.DEPLOY_USER }}" ]; then echo "::error::DEPLOY_USER is not set (e.g. AdminFanikisha)."; exit 1; fi
-          if [ -z "${{ secrets.DEPLOY_SSH_KEY }}" ]; then echo "::error::DEPLOY_SSH_KEY is not set. Paste the full .pem file content (chmod 400 the file locally, then cat file.pem)."; exit 1; fi
-          if [ -z "${{ secrets.DEPLOY_PATH }}" ]; then echo "::error::DEPLOY_PATH is not set (e.g. /var/www/lead_generator)."; exit 1; fi
-          echo "All required secrets are set."
+          if [ -z "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            echo "::error::DEPLOY_SSH_KEY is not set. In repo Settings → Secrets and variables → Actions, add secret DEPLOY_SSH_KEY with the full .pem file content (chmod 400 the file, then cat file.pem)."
+            exit 1
+          fi
+          echo "DEPLOY_SSH_KEY is set."
 
       - name: Auto build and deploy on server (SSH)
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: 22
           script_stop: true
           command_timeout: 15m
           script: |
             set -e
-            DEPLOY_PATH="${{ secrets.DEPLOY_PATH }}"
+            DEPLOY_PATH="${{ env.DEPLOY_PATH }}"
             echo "==> Switching to app directory..."
             cd "$DEPLOY_PATH"
             echo "==> Pulling latest code..."
