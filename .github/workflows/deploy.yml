@@ -1,4 +1,5 @@
 # CI/CD: Deploy to Azure server via SSH + Docker (no tests)
+# SSH key: when adding DEPLOY_SSH_KEY from a .pem file, use: chmod 400 file.pem then paste its full content.
 name: CI/CD Deploy
 
 on:
@@ -11,6 +12,14 @@ jobs:
     name: Build and deploy on server
     runs-on: ubuntu-latest
     steps:
+      - name: Check required secrets
+        run: |
+          if [ -z "${{ secrets.DEPLOY_HOST }}" ]; then echo "::error::DEPLOY_HOST is not set. Add it in Settings → Secrets and variables → Actions (e.g. 20.164.19.2)."; exit 1; fi
+          if [ -z "${{ secrets.DEPLOY_USER }}" ]; then echo "::error::DEPLOY_USER is not set (e.g. AdminFanikisha)."; exit 1; fi
+          if [ -z "${{ secrets.DEPLOY_SSH_KEY }}" ]; then echo "::error::DEPLOY_SSH_KEY is not set. Paste the full .pem file content (chmod 400 the file locally, then cat file.pem)."; exit 1; fi
+          if [ -z "${{ secrets.DEPLOY_PATH }}" ]; then echo "::error::DEPLOY_PATH is not set (e.g. /var/www/lead_generator)."; exit 1; fi
+          echo "All required secrets are set."
+
       - name: Auto build and deploy on server (SSH)
         uses: appleboy/ssh-action@v1.0.3
         with:
