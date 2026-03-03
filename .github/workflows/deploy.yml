@@ -3,7 +3,7 @@ name: CI/CD Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [refined01]
   workflow_dispatch:
 
 env:
@@ -50,7 +50,7 @@ jobs:
     name: Build and deploy on server
     runs-on: ubuntu-latest
     needs: test
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/refined01'
     steps:
       - name: Auto build and deploy on server (SSH)
         uses: appleboy/ssh-action@v1.0.3
@@ -67,8 +67,8 @@ jobs:
             echo "==> Switching to app directory..."
             cd "$DEPLOY_PATH"
             echo "==> Pulling latest code..."
-            git fetch origin main
-            git reset --hard origin/main
+            git fetch origin refined01
+            git reset --hard origin/refined01
             echo "==> Auto-building Docker images on server..."
             docker compose build --no-cache app queue
             echo "==> Starting containers..."

@@ -2,7 +2,7 @@
 
 ## Overview
 
-- **CI/CD**: GitHub Actions runs tests on every push; on **push to `main`**, auto-deploys to the Azure server via SSH.
+- **CI/CD**: GitHub Actions runs tests on every push; on **push to `refined01`**, auto-deploys to the Azure server via SSH.
 - **Server**: Azure VM (Ubuntu) at `20.164.19.2`, user `AdminFanikisha`, SSH key in repo at `config/fanikisha-app-_key.pem` (do **not** commit this key; use GitHub Secrets).
 - **Stack**: Docker Compose (app, nginx, **PostgreSQL**, queue worker, **Portainer**).
 - **Documentation**: The `system-documentation` folder is excluded from the Docker image (see `.dockerignore`). Deploy it separately if you need it on the server.
@@ -81,12 +81,12 @@ docker compose exec app php artisan passport:install
 
 ## 3. Auto deploy on push (GitHub Actions)
 
-On every **push to `main`**:
+On every **push to `refined01`**:
 
 1. **Test** job runs: `composer install`, `php artisan test`.
-2. **Deploy** job runs: SSH to server, `cd DEPLOY_PATH`, `git fetch` / `git reset --hard origin/main`, `docker compose build app`, `docker compose up -d`, then migrations and cache.
+2. **Deploy** job runs: SSH to server, `cd DEPLOY_PATH`, `git fetch` / `git reset --hard origin/refined01`, `docker compose build app`, `docker compose up -d`, then migrations and cache.
 
-No extra steps needed after the one-time setup and GitHub Secrets. Push to `main` = auto deploy.
+No extra steps needed after the one-time setup and GitHub Secrets. Push to `refined01` = auto deploy.
 
 To deploy manually: **Actions → CI/CD Deploy → Run workflow.**
 

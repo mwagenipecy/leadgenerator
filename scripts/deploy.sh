@@ -6,8 +6,8 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "==> Pulling latest code..."
-git fetch origin main
-git reset --hard origin/main
+git fetch origin refined01
+git reset --hard origin/refined01
 
 echo "==> Building and starting containers..."
 docker compose build --no-cache app

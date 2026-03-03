@@ -30,11 +30,11 @@ cd "$APP_DIR"
 
 if [ ! -d ".git" ]; then
     echo "==> Cloning repository..."
-    git clone --depth 1 --branch main "$REPO_URL" .
+    git clone --depth 1 --branch refined01 "$REPO_URL" .
 else
     echo "==> Repository already present, pulling latest..."
-    git fetch origin main
-    git reset --hard origin/main
+    git fetch origin refined01
+    git reset --hard origin/refined01
 fi
 
 echo "==> Creating .env from example (customize before first deploy)..."
