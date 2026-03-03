@@ -41,10 +41,12 @@ jobs:
             echo "==> Auto-building Docker image on server (app + queue use same image)..."
             sudo docker compose build --no-cache app
             echo "==> Starting containers..."
-            sudo docker compose up -d
+            sudo docker compose up -d --remove-orphans
+            echo "==> Waiting for app container to be ready..."
+            sleep 15
             echo "==> Running migrations and caches..."
-            sudo docker compose exec -T app php artisan migrate --force
-            sudo docker compose exec -T app php artisan config:cache
-            sudo docker compose exec -T app php artisan route:cache
-            sudo docker compose exec -T app php artisan view:cache
+            sudo docker compose run --rm app php artisan migrate --force
+            sudo docker compose run --rm app php artisan config:cache
+            sudo docker compose run --rm app php artisan route:cache
+            sudo docker compose run --rm app php artisan view:cache
             echo "==> Deploy completed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
