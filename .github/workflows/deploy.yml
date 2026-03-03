@@ -36,15 +36,15 @@ jobs:
             echo "==> Switching to app directory..."
             cd "$DEPLOY_PATH"
             echo "==> Pulling latest code..."
-            git fetch origin refined01
-            git reset --hard origin/refined01
+            sudo git fetch origin refined01
+            sudo git reset --hard origin/refined01
             echo "==> Auto-building Docker images on server..."
-            docker compose build --no-cache app queue
+            sudo docker compose build --no-cache app queue
             echo "==> Starting containers..."
-            docker compose up -d
+            sudo docker compose up -d
             echo "==> Running migrations and caches..."
-            docker compose exec -T app php artisan migrate --force
-            docker compose exec -T app php artisan config:cache
-            docker compose exec -T app php artisan route:cache
-            docker compose exec -T app php artisan view:cache
+            sudo docker compose exec -T app php artisan migrate --force
+            sudo docker compose exec -T app php artisan config:cache
+            sudo docker compose exec -T app php artisan route:cache
+            sudo docker compose exec -T app php artisan view:cache
             echo "==> Deploy completed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
