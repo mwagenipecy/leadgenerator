@@ -55,8 +55,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# PHP-FPM: listen on all interfaces so nginx (other container) can connect
-RUN sed -i 's/listen = 127.0.0.1:9000/listen = 9000/' /usr/local/etc/php-fpm.d/www.conf
+# PHP-FPM: listen on all interfaces so nginx (other container) can connect (fixes 502)
+RUN sed -i 's/^listen = .*/listen = 9000/' /usr/local/etc/php-fpm.d/www.conf || true
 
 # Permissions for Laravel (php-fpm runs as www-data internally)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
