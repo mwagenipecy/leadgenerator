@@ -1,4 +1,4 @@
-# Debug app container crash
+<!-- # Debug app container crash
 
 Run these **on the server** to see why the app container exits.
 
@@ -36,4 +36,4 @@ php-fpm -F
 # (copy any error, then type exit)
 ```
 
-Share the error output so we can fix the root cause.
+Share the error output so we can fix the root cause. -->

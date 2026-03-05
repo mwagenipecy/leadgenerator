@@ -144,7 +144,6 @@ class SetLocale
             if (!$sessionHasLocale) {
                 try {
                     Session::put('locale', $storedLocale);
-                    Session::save();
                 } catch (\Exception $e) {
                     // Continue
                 }

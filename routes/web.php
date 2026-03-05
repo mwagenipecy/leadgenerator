@@ -150,7 +150,7 @@ Route::middleware('guest')->group(function () {
             }
         }
 
-        Log::warning('Authentication failed', ['email' => $credentials['email']]);
+        Log::warning('Authentication failed', [$login_type => $request->input('login')]);
 
         throw ValidationException::withMessages([
             'email' => 'The provided credentials do not match our records.',

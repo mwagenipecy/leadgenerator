@@ -1,4 +1,4 @@
-# Server setup – one-time (Azure)
+<!-- # Server setup – one-time (Azure)
 
 The error `cd: /var/www/leadgenerator: No such file or directory` means the app directory and repo do not exist on the server yet. Do this **once** on the server so GitHub Actions can deploy.
 
@@ -114,4 +114,4 @@ The server must be able to `git fetch` without a password:
 3. In GitHub: repo → **Settings** → **Deploy keys** → **Add deploy key** → paste key, allow read-only.
 4. Clone with SSH: `git clone --branch refined01 git@github.com:YOUR_ORG/lead_generator.git .`
 
-Then GitHub Actions’ deploy will run `git fetch origin refined01` on the server and it will succeed.
+Then GitHub Actions’ deploy will run `git fetch origin refined01` on the server and it will succeed. -->
