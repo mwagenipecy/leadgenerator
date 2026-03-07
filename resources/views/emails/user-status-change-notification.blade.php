@@ -88,7 +88,7 @@
     <div class="container">
         <div class="header">
             <div class="logo-wrap">
-                <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Marketplace" style="max-width: 160px; height: auto; display: block;">
+                <img src="{{ rtrim(config('app.url'), '/') }}/landing/redlogo.png" alt="Fanikisha Marketplace" style="max-width: 160px; height: auto; display: block;">
             </div>
             <h1>Account status update</h1>
         </div>

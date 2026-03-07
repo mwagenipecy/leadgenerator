@@ -119,7 +119,7 @@
     <div class="container">
         <div class="header">
             <div class="logo-wrap">
-                <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Marketplace" style="max-width: 180px; height: auto; display: block;">
+                <img src="{{ rtrim(config('app.url'), '/') }}/landing/redlogo.png" alt="Fanikisha Marketplace" style="max-width: 180px; height: auto; display: block;">
             </div>
             <h1>Your lender account is ready</h1>
             <p class="subtitle">Welcome to Fanikisha Marketplace</p>

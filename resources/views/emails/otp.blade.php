@@ -184,7 +184,7 @@
         <!-- Header with Logo -->
         <div class="header">
             <div class="logo-container">
-                <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Marketplace" class="logo">
+                <img src="{{ rtrim(config('app.url'), '/') }}/landing/redlogo.png" alt="Fanikisha Marketplace" class="logo">
             </div>
         </div>
         
