@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             AdminUserSeeder::class,
             LoanCategorySeeder::class,
-            LoanProductSeeder::class,
+          //  LoanProductSeeder::class,
             CreditInfoServiceSeeder::class,
             CreditInfoAlertNotificationSeeder::class,
             SidebarMenuItemSeeder::class,

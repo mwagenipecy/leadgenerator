@@ -46,6 +46,7 @@ jobs:
             sleep 15
             echo "==> Running migrations and caches..."
             sudo docker compose run --rm app php artisan migrate --force
+            sudo docker compose run --rm app php artisan db:seed --force
             sudo docker compose run --rm app php artisan config:cache
             sudo docker compose run --rm app php artisan route:cache
             sudo docker compose run --rm app php artisan view:cache

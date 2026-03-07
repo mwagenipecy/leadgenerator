@@ -2,6 +2,31 @@
 
 When you get **ERR_CONNECTION_TIMED_OUT** at your server IP (e.g. `http://20.164.19.2`), the browser never gets a response. The app and Docker are usually fine; the problem is **network/firewall** between the internet and your VM.
 
+---
+
+## Do this in Azure Portal (open port 80)
+
+1. Go to **https://portal.azure.com** and sign in.
+2. Search for your VM (e.g. **fanikisha-app-prod**) or go to **Virtual machines** and open it.
+3. In the left menu, click **Networking** (under Settings).
+4. Open the **Inbound port rules** tab.
+5. Click **+ Add inbound port rule** (or **Create port rule** → **Inbound**).
+6. Set:
+   - **Source:** Any  
+   - **Source port ranges:** *  
+   - **Destination:** Any  
+   - **Service:** HTTP (this fills port 80) — or set **Destination port ranges:** 80  
+   - **Protocol:** TCP  
+   - **Action:** Allow  
+   - **Priority:** 1010 (or any free number)  
+   - **Name:** Allow-HTTP
+7. Click **Add**.
+8. Wait ~30 seconds, then try **http://20.164.19.2** in your browser again.
+
+If the VM has a **public IP** different from 20.164.19.2, use that IP instead (VM → Overview → Public IP address).
+
+---
+
 ## 1. Confirm the IP and that the server is reachable
 
 - **20.164.19.2** – Check in Azure Portal whether this is the VM’s **public** IP. If it’s a private/internal IP, use the VM’s **Public IP** from the Azure Portal (VM → Overview → Public IP address).

@@ -13,9 +13,15 @@ class CreditInfoAlertNotificationSeeder extends Seeder
 {
     /**
      * Populate sample Notifications & activities for the CreditInfo Alert page.
+     * Skips if any creditinfo_alert notifications already exist (safe for CD re-runs).
      */
     public function run(): void
     {
+        if (DB::table('notifications')->where('type', CreditInfoAlertNotification::class)->exists()) {
+            $this->command->info('CreditInfo alert notifications already exist. Skipping...');
+            return;
+        }
+
         $users = User::limit(5)->get();
         if ($users->isEmpty()) {
             return;

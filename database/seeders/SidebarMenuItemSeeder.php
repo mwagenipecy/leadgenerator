@@ -50,17 +50,19 @@ class SidebarMenuItemSeeder extends Seeder
             $parentKey = $item['parent_key'] ?? null;
             unset($item['parent_key']);
             $parentId = $parentKey && isset($byKey[$parentKey]) ? $byKey[$parentKey]->id : null;
-            $model = SidebarMenuItem::create([
-                'key' => $item['key'],
-                'label_key' => $item['label_key'],
-                'route' => $item['route'],
-                'icon' => $item['icon'],
-                'roles' => $item['roles'],
-                'parent_id' => $parentId,
-                'is_visible' => true,
-                'is_enabled' => true,
-                'sort_order' => $item['sort_order'],
-            ]);
+            $model = SidebarMenuItem::updateOrCreate(
+                ['key' => $item['key']],
+                [
+                    'label_key' => $item['label_key'],
+                    'route' => $item['route'],
+                    'icon' => $item['icon'],
+                    'roles' => $item['roles'],
+                    'parent_id' => $parentId,
+                    'is_visible' => true,
+                    'is_enabled' => true,
+                    'sort_order' => $item['sort_order'],
+                ]
+            );
             $byKey[$item['key']] = $model;
         }
 

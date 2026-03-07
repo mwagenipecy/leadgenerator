@@ -2,20 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds. Safe to run multiple times (no duplicates).
      */
     public function run(): void
     {
-        $now = Carbon::now();
-
-        // Create Permissions
+        // Permissions: firstOrCreate by name so CD can re-run without duplicate key errors
         $permissions = [
             // User Management
             ['name' => 'users.view', 'display_name' => 'View Users', 'description' => 'View user list and details', 'category' => 'users'],
@@ -70,76 +68,34 @@ class RolesAndPermissionsSeeder extends Seeder
             ['name' => 'transactions.view', 'display_name' => 'View Transactions', 'description' => 'View transaction records', 'category' => 'financial'],
         ];
 
-        // Insert permissions
-        foreach ($permissions as &$permission) {
-            $permission['created_at'] = $now;
-            $permission['updated_at'] = $now;
+        foreach ($permissions as $data) {
+            Permission::firstOrCreate(
+                ['name' => $data['name']],
+                array_merge($data, ['is_active' => true])
+            );
         }
-        DB::table('permissions')->insert($permissions);
 
-        // Create Roles
+        // Roles: firstOrCreate by name
         $roles = [
-            [
-                //'id'=>1,
-                'name' => 'super_admin',
-                'display_name' => 'Super Administrator',
-                'description' => 'Full system access with all permissions',
-                'level' => 100,
-                'is_system_role' => true
-            ],
-            [
-                //'id'=>2,    
-                'name' => 'admin',
-                'display_name' => 'Administrator',
-                'description' => 'System administrator with most permissions',
-                'level' => 80,
-                'is_system_role' => true
-            ],
-            [
-               // 'id'=>3,
-                'name' => 'lender',
-                'display_name' => 'Lender',
-                'description' => 'Lending institution user',
-                'level' => 50,
-                'is_system_role' => true
-            ],
-            [
-               // 'id'=>4,
-                'name' => 'borrower',
-                'display_name' => 'Borrower',
-                'description' => 'Loan applicant/borrower',
-                'level' => 10,
-                'is_system_role' => true
-            ]
+            ['name' => 'super_admin', 'display_name' => 'Super Administrator', 'description' => 'Full system access with all permissions', 'level' => 100, 'is_system_role' => true],
+            ['name' => 'admin', 'display_name' => 'Administrator', 'description' => 'System administrator with most permissions', 'level' => 80, 'is_system_role' => true],
+            ['name' => 'lender', 'display_name' => 'Lender', 'description' => 'Lending institution user', 'level' => 50, 'is_system_role' => true],
+            ['name' => 'borrower', 'display_name' => 'Borrower', 'description' => 'Loan applicant/borrower', 'level' => 10, 'is_system_role' => true],
         ];
 
-        // Insert roles
-        foreach ($roles as &$role) {
-            $role['created_at'] = $now;
-            $role['updated_at'] = $now;
+        foreach ($roles as $data) {
+            Role::firstOrCreate(
+                ['name' => $data['name']],
+                array_merge($data, ['is_active' => true])
+            );
         }
-        DB::table('roles')->insert($roles);
 
-        // Get role IDs
-        $superAdminId = DB::table('roles')->where('name', 'super_admin')->first()->id;
-        $adminId = DB::table('roles')->where('name', 'admin')->first()->id;
-        $lenderId = DB::table('roles')->where('name', 'lender')->first()->id;
-        $borrowerId = DB::table('roles')->where('name', 'borrower')->first()->id;
+        $superAdmin = Role::where('name', 'super_admin')->first();
+        $admin = Role::where('name', 'admin')->first();
+        $lender = Role::where('name', 'lender')->first();
+        $borrower = Role::where('name', 'borrower')->first();
 
-        // Get all permission IDs
-        $allPermissions = DB::table('permissions')->pluck('id');
-
-        // Super Admin gets all permissions
-        $superAdminPermissions = $allPermissions->map(function ($permissionId) use ($superAdminId, $now) {
-            return [
-                'role_id' => $superAdminId,
-                'permission_id' => $permissionId,
-                'created_at' => $now,
-                'updated_at' => $now
-            ];
-        });
-
-        // Admin permissions (most permissions except system maintenance)
+        $allPermissionNames = Permission::pluck('name')->toArray();
         $adminPermissionNames = [
             'users.view', 'users.create', 'users.edit', 'users.activate',
             'roles.view', 'roles.assign',
@@ -147,52 +103,18 @@ class RolesAndPermissionsSeeder extends Seeder
             'lenders.view', 'lenders.create', 'lenders.edit', 'lenders.approve', 'lenders.suspend',
             'products.view', 'products.create', 'products.edit', 'products.delete',
             'reports.view', 'reports.export', 'analytics.view',
-            'commissions.view', 'commissions.manage', 'transactions.view'
+            'commissions.view', 'commissions.manage', 'transactions.view',
         ];
-        $adminPermissionIds = DB::table('permissions')->whereIn('name', $adminPermissionNames)->pluck('id');
-        $adminPermissions = $adminPermissionIds->map(function ($permissionId) use ($adminId, $now) {
-            return [
-                'role_id' => $adminId,
-                'permission_id' => $permissionId,
-                'created_at' => $now,
-                'updated_at' => $now
-            ];
-        });
-
-        // Lender permissions
         $lenderPermissionNames = [
             'applications.view', 'applications.review', 'applications.approve', 'applications.reject', 'applications.disburse',
             'products.view', 'products.create', 'products.edit',
-            'reports.view', 'commissions.view', 'transactions.view'
+            'reports.view', 'commissions.view', 'transactions.view',
         ];
-        $lenderPermissionIds = DB::table('permissions')->whereIn('name', $lenderPermissionNames)->pluck('id');
-        $lenderPermissions = $lenderPermissionIds->map(function ($permissionId) use ($lenderId, $now) {
-            return [
-                'role_id' => $lenderId,
-                'permission_id' => $permissionId,
-                'created_at' => $now,
-                'updated_at' => $now
-            ];
-        });
+        $borrowerPermissionNames = ['applications.view', 'applications.create', 'applications.edit'];
 
-        // Borrower permissions
-        $borrowerPermissionNames = [
-            'applications.view', 'applications.create', 'applications.edit'
-        ];
-        $borrowerPermissionIds = DB::table('permissions')->whereIn('name', $borrowerPermissionNames)->pluck('id');
-        $borrowerPermissions = $borrowerPermissionIds->map(function ($permissionId) use ($borrowerId, $now) {
-            return [
-                'role_id' => $borrowerId,
-                'permission_id' => $permissionId,
-                'created_at' => $now,
-                'updated_at' => $now
-            ];
-        });
-
-        // Insert role permissions
-        DB::table('role_permissions')->insert($superAdminPermissions->toArray());
-        DB::table('role_permissions')->insert($adminPermissions->toArray());
-        DB::table('role_permissions')->insert($lenderPermissions->toArray());
-        DB::table('role_permissions')->insert($borrowerPermissions->toArray());
+        $superAdmin->syncPermissions($allPermissionNames);
+        $admin->syncPermissions($adminPermissionNames);
+        $lender->syncPermissions($lenderPermissionNames);
+        $borrower->syncPermissions($borrowerPermissionNames);
     }
 }
