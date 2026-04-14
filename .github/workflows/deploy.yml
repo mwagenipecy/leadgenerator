@@ -44,6 +44,8 @@ jobs:
             sudo docker compose up -d --remove-orphans
             echo "==> Waiting for app container to be ready..."
             sleep 15
+            echo "==> Fixing Laravel storage/log permissions..."
+            sudo docker compose exec -T -u root app sh /var/www/html/scripts/fix-laravel-permissions.sh /var/www/html
             echo "==> Running migrations and caches..."
             sudo docker compose run --rm app php artisan migrate --force
             sudo docker compose run --rm app php artisan db:seed --force

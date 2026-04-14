@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Kq+/vlxiLUfp2G9x3AvfSEuaVhyNdW4xR6Ed6cPgjms=",
+  "Source": "LeadNet.Api",
+  "BasePath": "_content/LeadNet.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

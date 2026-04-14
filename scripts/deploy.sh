@@ -13,6 +13,9 @@ echo "==> Building and starting containers..."
 docker compose build --no-cache app
 docker compose up -d
 
+echo "==> Fixing Laravel storage/log permissions..."
+docker compose exec -T -u root app sh /var/www/html/scripts/fix-laravel-permissions.sh /var/www/html
+
 echo "==> Running migrations and caches..."
 docker compose exec -T app php artisan migrate --force
 docker compose exec -T app php artisan config:cache

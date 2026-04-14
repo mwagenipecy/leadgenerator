@@ -5,10 +5,8 @@ set -e
 # Laravel Docker entrypoint adjustments for Nginx
 # -------------------------------------------------
 
-# Ensure Laravel storage and cache directories have correct permissions.
-# Only chown these dirs: .env is mounted read-only and must not be touched.
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Ensure storage/log permissions are always fixed on container start.
+sh /var/www/html/scripts/fix-laravel-permissions.sh /var/www/html
 
 # Sync public assets into shared volume so nginx can serve them (public_assets → nginx root).
 cp -a /var/www/html/public/. /var/www/html/public_shared/

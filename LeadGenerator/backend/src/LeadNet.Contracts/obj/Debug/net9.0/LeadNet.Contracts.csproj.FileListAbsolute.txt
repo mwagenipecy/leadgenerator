@@ -1,0 +1,12 @@
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/bin/Debug/net9.0/LeadNet.Contracts.deps.json
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/bin/Debug/net9.0/LeadNet.Contracts.dll
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/bin/Debug/net9.0/LeadNet.Contracts.pdb
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/LeadNet.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/LeadNet.Contracts.AssemblyInfoInputs.cache
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/LeadNet.Contracts.AssemblyInfo.cs
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/LeadNet.Contracts.csproj.CoreCompileInputs.cache
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/LeadNet.Contracts.sourcelink.json
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/LeadNet.Contracts.dll
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/refint/LeadNet.Contracts.dll
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/LeadNet.Contracts.pdb
+/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/obj/Debug/net9.0/ref/LeadNet.Contracts.dll

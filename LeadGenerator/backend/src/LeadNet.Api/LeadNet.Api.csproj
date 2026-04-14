@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../LeadNet.Application/LeadNet.Application.csproj" />
+    <ProjectReference Include="../LeadNet.Contracts/LeadNet.Contracts.csproj" />
+    <ProjectReference Include="../LeadNet.Infrastructure/LeadNet.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

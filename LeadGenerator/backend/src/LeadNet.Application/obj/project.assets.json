@@ -1,0 +1,114 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "LeadNet.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/LeadNet.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LeadNet.Contracts.dll": {}
+        }
+      },
+      "LeadNet.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/LeadNet.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LeadNet.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LeadNet.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../LeadNet.Contracts/LeadNet.Contracts.csproj",
+      "msbuildProject": "../LeadNet.Contracts/LeadNet.Contracts.csproj"
+    },
+    "LeadNet.Domain/1.0.0": {
+      "type": "project",
+      "path": "../LeadNet.Domain/LeadNet.Domain.csproj",
+      "msbuildProject": "../LeadNet.Domain/LeadNet.Domain.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "LeadNet.Contracts >= 1.0.0",
+      "LeadNet.Domain >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/Users/mac/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Application/LeadNet.Application.csproj",
+      "projectName": "LeadNet.Application",
+      "projectPath": "/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Application/LeadNet.Application.csproj",
+      "packagesPath": "/Users/mac/.nuget/packages/",
+      "outputPath": "/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Application/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/Users/mac/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/LeadNet.Contracts.csproj": {
+              "projectPath": "/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Contracts/LeadNet.Contracts.csproj"
+            },
+            "/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Domain/LeadNet.Domain.csproj": {
+              "projectPath": "/Users/mac/Herd/lead_generator/LeadGenerator/backend/src/LeadNet.Domain/LeadNet.Domain.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.200"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
