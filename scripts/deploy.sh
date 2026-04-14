@@ -9,6 +9,13 @@ BRANCH="${1:-refined01}"
 
 echo "==> Ensuring repository ownership for deploy user..."
 sudo chown -R "$(id -un)":"$(id -gn)" "$PWD"
+sudo chmod -R u+rwX "$PWD"
+
+echo "==> Normalizing writable Laravel directories before git reset..."
+sudo mkdir -p "$PWD/storage/app" "$PWD/storage/framework" "$PWD/storage/logs" "$PWD/bootstrap/cache"
+sudo chown -R "$(id -un)":"$(id -gn)" "$PWD/storage" "$PWD/bootstrap/cache"
+sudo find "$PWD/storage" "$PWD/bootstrap/cache" -type d -exec chmod 775 {} \;
+sudo find "$PWD/storage" "$PWD/bootstrap/cache" -type f -exec chmod 664 {} \;
 
 echo "==> Pulling latest code..."
 git fetch origin "$BRANCH"
