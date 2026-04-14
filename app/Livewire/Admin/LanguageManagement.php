@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Validation\ValidationException;
 
 class LanguageManagement extends Component
 {
@@ -116,6 +117,18 @@ class LanguageManagement extends Component
     private function saveTranslations()
     {
         $filePath = resource_path("lang/{$this->currentLanguage}/{$this->selectedFile}.php");
+        $directory = dirname($filePath);
+
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0775, true);
+        }
+
+        if (!is_writable($directory)) {
+            throw ValidationException::withMessages([
+                'translation' => 'Language file directory is not writable. Please contact support.',
+            ]);
+        }
+
         $content = "<?php\n\nreturn [\n";
         
         foreach ($this->translations as $key => $value) {
@@ -125,7 +138,12 @@ class LanguageManagement extends Component
         
         $content .= "];\n";
         
-        File::put($filePath, $content);
+        if (File::put($filePath, $content) === false) {
+            throw ValidationException::withMessages([
+                'translation' => 'Unable to save translations at the moment. Please try again.',
+            ]);
+        }
+
         $this->loadTranslations();
     }
 

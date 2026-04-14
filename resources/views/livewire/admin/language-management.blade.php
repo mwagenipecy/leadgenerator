@@ -78,6 +78,12 @@
             </div>
         @endif
 
+        @error('translation')
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ $message }}
+            </div>
+        @enderror
+
         <!-- Translations Table -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div class="overflow-x-auto">
@@ -91,19 +97,20 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($filteredTranslations as $key => $value)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <tr class="align-top">
+                                <td class="px-6 py-4 text-sm font-medium text-gray-900 break-all">
                                     {{ $key }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-700">
                                     @if($editingKey === $key)
-                                        <input 
-                                            type="text" 
+                                        <textarea
                                             wire:model="editingValue"
-                                            class="w-full border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-red-500"
-                                        >
+                                            rows="3"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                        ></textarea>
+                                        <p class="text-xs text-gray-500 mt-1">Tip: click Save to apply changes.</p>
                                     @else
-                                        {{ $value }}
+                                        <div class="whitespace-pre-wrap break-words">{{ $value }}</div>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -111,12 +118,12 @@
                                         <div class="flex justify-end gap-2">
                                             <button 
                                                 wire:click="saveTranslation"
-                                                class="text-green-600 hover:text-green-900">
+                                                class="px-3 py-1.5 rounded-md bg-green-600 text-white hover:bg-green-700 transition-colors">
                                                 {{ __('common.save') }}
                                             </button>
                                             <button 
                                                 wire:click="cancelEdit"
-                                                class="text-gray-600 hover:text-gray-900">
+                                                class="px-3 py-1.5 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors">
                                                 {{ __('common.cancel') }}
                                             </button>
                                         </div>
@@ -124,14 +131,8 @@
                                         <div class="flex justify-end gap-2">
                                             <button 
                                                 wire:click="startEdit('{{ $key }}')"
-                                                class="text-blue-600 hover:text-blue-900">
+                                                class="px-3 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors">
                                                 {{ __('common.edit') }}
-                                            </button>
-                                            <button 
-                                                wire:click="deleteTranslation('{{ $key }}')"
-                                                onclick="return confirm('{{ __('common.confirm_delete') }}')"
-                                                class="text-red-600 hover:text-red-900">
-                                                {{ __('common.delete') }}
                                             </button>
                                         </div>
                                     @endif

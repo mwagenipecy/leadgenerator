@@ -2,24 +2,32 @@
 # Run on the server to deploy (or called by GitHub Actions via SSH).
 # Usage: ./scripts/deploy.sh   or   cd /var/www/leadgenerator && ./scripts/deploy.sh
 
-set -e
+set -euo pipefail
 cd "$(dirname "$0")/.."
 
+BRANCH="${1:-refined01}"
+
+echo "==> Ensuring repository ownership for deploy user..."
+sudo chown -R "$(id -un)":"$(id -gn)" "$PWD"
+
 echo "==> Pulling latest code..."
-git fetch origin refined01
-git reset --hard origin/refined01
+git fetch origin "$BRANCH"
+git reset --hard "origin/$BRANCH"
 
 echo "==> Building and starting containers..."
-docker compose build --no-cache app
-docker compose up -d
+sudo docker compose build --no-cache app
+sudo docker compose up -d --remove-orphans
+sleep 15
 
 echo "==> Fixing Laravel storage/log permissions..."
-docker compose exec -T -u root app sh /var/www/html/scripts/fix-laravel-permissions.sh /var/www/html
+sudo docker compose exec -T -u root app sh /var/www/html/scripts/fix-laravel-permissions.sh /var/www/html
 
 echo "==> Running migrations and caches..."
-docker compose exec -T app php artisan migrate --force
-docker compose exec -T app php artisan config:cache
-docker compose exec -T app php artisan route:cache
-docker compose exec -T app php artisan view:cache
+sudo docker compose exec -T app php artisan optimize:clear
+sudo docker compose exec -T app php artisan migrate --force
+sudo docker compose exec -T app php artisan db:seed --force
+sudo docker compose exec -T app php artisan config:cache
+sudo docker compose exec -T app php artisan route:cache
+sudo docker compose exec -T app php artisan view:cache
 
 echo "==> Deploy finished at $(date -u +%Y-%m-%dT%H:%M:%SZ)"

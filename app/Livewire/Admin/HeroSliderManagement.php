@@ -6,7 +6,6 @@ use App\Models\HeroSlider;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -34,9 +33,9 @@ class HeroSliderManagement extends Component
     {
         return [
             'image',
+            'mimes:jpg,jpeg,png,webp',
             'max:5120',
-            Rule::mimes(['jpg', 'jpeg', 'png', 'webp']),
-            Rule::dimensions()->maxWidth(6000)->maxHeight(6000),
+            'dimensions:max_width=6000,max_height=6000',
             $required ? 'required' : 'nullable',
         ];
     }
