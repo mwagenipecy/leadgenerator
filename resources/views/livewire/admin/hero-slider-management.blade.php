@@ -100,7 +100,8 @@
                         <!-- Image Upload -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Image *</label>
-                            <input type="file" wire:model="image" accept="image/*" class="w-full border border-gray-300 rounded-lg p-2">
+                            <input type="file" wire:model="image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
                             @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             @if($image)
                                 <div class="mt-2">
@@ -167,7 +168,8 @@
                         <!-- Image Upload -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Change Image (Optional)</label>
-                            <input type="file" wire:model="image" accept="image/*" class="w-full border border-gray-300 rounded-lg p-2">
+                            <input type="file" wire:model="image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
                             @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             @if($image)
                                 <div class="mt-2">

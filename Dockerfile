@@ -58,6 +58,9 @@ RUN chmod +x /entrypoint.sh
 # PHP-FPM: listen on all interfaces so nginx (other container) can connect (fixes 502)
 RUN sed -i 's/^listen = .*/listen = 9000/' /usr/local/etc/php-fpm.d/www.conf || true
 
+# Allow uploads required by Livewire image management (aligned with nginx body limit).
+RUN printf "upload_max_filesize=10M\npost_max_size=10M\nmax_file_uploads=20\n" > /usr/local/etc/php/conf.d/uploads.ini
+
 # Permissions for Laravel (php-fpm runs as www-data internally)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache

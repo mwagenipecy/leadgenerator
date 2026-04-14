@@ -54,13 +54,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
-                        <input wire:model.live.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search applications...">
+                        <input wire:model.live="search" type="text" class="block w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green placeholder-gray-500 text-gray-900 text-sm transition-all duration-200" placeholder="Search applications...">
                     </div>
                 </div>
 
                 <!-- Filters -->
                 <div class="flex items-center space-x-4">
-                    <select wire:model.live.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                    <select wire:model.live="statusFilter" class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                         <option value="all">All Status</option>
                         <option value="draft">Draft</option>
                         <option value="submitted">Submitted</option>
@@ -291,7 +291,7 @@
                         </label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                            <input wire:model.live.live="prequalify_amount" 
+                            <input wire:model.live="prequalify_amount" 
                                    type="number" 
                                    step="1000" 
                                    min="1000" 
@@ -308,7 +308,7 @@
                         <label class="block text-sm font-bold text-gray-700 mb-2">
                             Loan Period (Months) *
                         </label>
-                        <select wire:model.live.live="prequalify_tenure" 
+                        <select wire:model.live="prequalify_tenure" 
                                 class="w-full px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green text-lg font-bold bg-gray-50">
                             <option value="">Select period</option>
                             <option value="6">6 months</option>
@@ -335,7 +335,7 @@
                         </label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                            <input wire:model.live.live="prequalify_monthly_income" 
+                            <input wire:model.live="prequalify_monthly_income" 
                                    type="number" 
                                    step="1000" 
                                    min="0" 
@@ -355,7 +355,7 @@
                         </label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
-                            <input wire:model.live.live="prequalify_existing_loans" 
+                            <input wire:model.live="prequalify_existing_loans" 
                                    type="number" 
                                    step="1000" 
                                    min="0" 
