@@ -36,8 +36,8 @@ jobs:
             echo "==> Switching to app directory..."
             cd "$DEPLOY_PATH"
             echo "==> Pulling latest code..."
-            sudo git fetch origin refined01
-            sudo git reset --hard origin/refined01
+            git fetch origin refined01
+            git reset --hard origin/refined01
             echo "==> Auto-building Docker image on server (app + queue use same image)..."
             sudo docker compose build --no-cache app
             echo "==> Starting containers..."
