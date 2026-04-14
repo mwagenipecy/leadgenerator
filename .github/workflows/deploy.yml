@@ -35,6 +35,8 @@ jobs:
             DEPLOY_PATH="${{ env.DEPLOY_PATH }}"
             echo "==> Switching to app directory..."
             cd "$DEPLOY_PATH"
+            echo "==> Ensuring repository ownership for deploy user..."
+            sudo chown -R "$(id -un)":"$(id -gn)" "$DEPLOY_PATH/.git"
             echo "==> Pulling latest code..."
             git fetch origin refined01
             git reset --hard origin/refined01
