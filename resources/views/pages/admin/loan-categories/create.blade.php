@@ -13,7 +13,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 max-w-2xl">
-            <form action="{{ route('admin.loan-categories.store') }}" method="POST">
+            <form action="{{ route('admin.loan-categories.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="space-y-6">
@@ -45,6 +45,21 @@
                         @error('description')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <div>
+                        <label for="image" class="block text-sm font-medium text-black mb-2">
+                            Category Image
+                        </label>
+                        <input type="file"
+                               id="image"
+                               name="image"
+                               accept=".jpg,.jpeg,.png,.webp,.svg,image/jpeg,image/png,image/webp,image/svg+xml"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('image') border-red-500 @enderror">
+                        @error('image')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                        <p class="text-xs text-gray-500 mt-1">Upload JPG, PNG, WEBP, or SVG (max 2MB)</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">

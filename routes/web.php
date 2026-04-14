@@ -401,6 +401,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
    /********************************** HERO SLIDER MANAGEMENT  ***************************************/
    Route::get('hero-slider-management', \App\Livewire\Admin\HeroSliderManagement::class)->name('admin.hero-slider.management');
 
+   /********************************** PARTNER MANAGEMENT  ***************************************/
+   Route::get('partner-management', \App\Livewire\Admin\PartnerManagement::class)->name('admin.partner.management');
+
    /********************************** PROMOTION MANAGEMENT  ***************************************/
    Route::get('promotion-management', \App\Livewire\Admin\PromotionManagement::class)->name('admin.promotion.management');
 

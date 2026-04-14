@@ -7,6 +7,7 @@ use App\Models\LoanCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Services\LogService;
 
@@ -37,6 +38,7 @@ class LoanCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:loan_categories,name',
             'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:2048',
             'is_active' => 'boolean',
             'sort_order' => 'nullable|integer|min:0',
         ]);
@@ -44,6 +46,10 @@ class LoanCategoryController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         $validated['is_active'] = $request->has('is_active') ? true : false;
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
+
+        if ($request->hasFile('image')) {
+            $validated['image_path'] = $request->file('image')->store('loan-categories', 'public');
+        }
 
         $category = LoanCategory::create($validated);
 
@@ -83,6 +89,7 @@ class LoanCategoryController extends Controller
                 Rule::unique('loan_categories')->ignore($loanCategory->id),
             ],
             'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:2048',
             'is_active' => 'boolean',
             'sort_order' => 'nullable|integer|min:0',
         ]);
@@ -90,6 +97,13 @@ class LoanCategoryController extends Controller
         $validated['slug'] = Str::slug($validated['name']);
         $validated['is_active'] = $request->has('is_active') ? true : false;
         $validated['sort_order'] = $validated['sort_order'] ?? $loanCategory->sort_order;
+
+        if ($request->hasFile('image')) {
+            if ($loanCategory->image_path) {
+                Storage::disk('public')->delete($loanCategory->image_path);
+            }
+            $validated['image_path'] = $request->file('image')->store('loan-categories', 'public');
+        }
 
         $oldValues = $loanCategory->toArray();
         $loanCategory->update($validated);

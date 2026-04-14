@@ -81,7 +81,7 @@
         /* Hero Slider - Covers full row, increased height */
         .hero-slider {
             position: relative;
-            height: 45vh;
+            height: 48vh;
             min-height: 280px;
             overflow: hidden;
             border-radius: 0;
@@ -91,14 +91,14 @@
         
         @media (min-width: 768px) {
             .hero-slider {
-                height: 50vh;
+                height: 53vh;
                 min-height: 340px;
             }
         }
         
         @media (min-width: 1024px) {
             .hero-slider {
-                height: 55vh;
+                height: 58vh;
                 min-height: 400px;
             }
         }
@@ -113,21 +113,21 @@
             opacity: 0;
             transition: opacity 1s ease-in-out;
             background-size: cover;
-            background-position: center center;
+            background-position: center top;
             background-repeat: no-repeat;
         }
         
         @media (min-width: 768px) {
             .slide {
                 background-size: cover;
-                background-position: center center;
+                background-position: center top;
             }
         }
         
         @media (max-width: 767px) {
             .slide {
                 background-size: cover;
-                background-position: center center;
+                background-position: center top;
             }
         }
         
@@ -299,18 +299,84 @@
         .slide::after {
             display: none;
         }
+
+        /* Floating transparent navbar */
+        .floating-navbar-shell {
+            border-radius: 1.15rem;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.09);
+            transition: all 0.3s ease;
+        }
+
+        .floating-navbar-shell.navbar-scrolled {
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.12));
+            border-color: rgba(255, 255, 255, 0.48);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .floating-navbar-shell .nav-scroll-link,
+        .floating-navbar-shell #language-switcher-button {
+            color: #ffffff;
+        }
+
+        .floating-navbar-shell.navbar-scrolled .nav-scroll-link,
+        .floating-navbar-shell.navbar-scrolled #language-switcher-button {
+            color: #C40F11;
+        }
+
+        .partners-track {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            width: max-content;
+            animation: scrollPartners 30s linear infinite;
+            padding: 0 1rem;
+        }
+
+        .partners-track-static {
+            width: 100%;
+            animation: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0;
+        }
+
+        .partners-marquee:hover .partners-track {
+            animation-play-state: paused;
+        }
+
+        .partner-pill {
+            padding: 0.65rem 1.15rem;
+            border-radius: 9999px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            color: #111827;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        @keyframes scrollPartners {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
     </style>
 
     
 </head>
 <body class="bg-white text-gray-900 font-inter overflow-x-hidden">
     <!-- Navigation -->
-    <nav id="mainNavbar" class="sticky top-0 z-50 bg-white transition-all duration-300" style="box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
+    <nav id="mainNavbar" class="fixed top-0 inset-x-0 z-50 px-3 sm:px-4 lg:px-6 pt-0 transition-all duration-300">
+        <div class="max-w-7xl mx-auto floating-navbar-shell px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 lg:h-[4.25rem]">
                 <!-- Logo -->
                 <a href="/" class="flex items-center group">
-                    <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-12 lg:h-14 w-auto transition-transform duration-300 group-hover:scale-105">
+                    <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-10 lg:h-11 w-auto transition-transform duration-300 group-hover:scale-105">
                 </a>
                 
                 <!-- Desktop Navigation -->
@@ -320,25 +386,22 @@
                         <x-language-switcher />
                     </div>
                     <a href="#eligibility" 
-                       class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
-                       style="color: #C40F11;">
+                       class="nav-link nav-scroll-link px-4 py-2 rounded-lg hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group">
                         <span class="relative z-10">{{ __('landing.eligibility') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="#process" 
-                       class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
-                       style="color: #C40F11;">
+                       class="nav-link nav-scroll-link px-4 py-2 rounded-lg hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group">
                         <span class="relative z-10">{{ __('landing.process') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="{{ route('blog.index') }}" 
-                       class="nav-link px-4 py-2 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group"
-                       style="color: #C40F11;">
+                       class="nav-link nav-scroll-link px-4 py-2 rounded-lg hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group">
                         <span class="relative z-10">{{ __('landing.blog') }}</span>
                         <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                     </a>
                     <a href="{{ route('login') }}" 
-                       class="ml-2 px-6 py-2.5 rounded-lg text-white font-semibold text-sm lg:text-base hover:shadow-lg hover:scale-105 transition-all duration-300 relative overflow-hidden group"
+                       class="ml-2 px-5 py-2 rounded-lg text-white font-semibold text-sm lg:text-base hover:shadow-lg hover:scale-105 transition-all duration-300 relative overflow-hidden group"
                        style="background-color: #C40F11;">
                         <span class="relative z-10 flex items-center">
                         {{ __('landing.get_started') }}
@@ -359,7 +422,7 @@
             </div>
             
             <!-- Mobile Navigation -->
-            <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 bg-white">
+            <div id="mobileMenu" class="hidden md:hidden border-t border-white/40 bg-white/85 backdrop-blur-md">
                 <div class="py-4 space-y-1">
                     <!-- Mobile Language Switcher -->
                     <div class="px-4 py-2">
@@ -395,7 +458,7 @@
     </nav>
 
     <!-- Hero Section - Full Width, No Top Margin -->
-    <div class="hero-slider-wrapper" style="margin-top: 0; padding-top: 0;">
+    <div class="hero-slider-wrapper">
         <section class="hero-slider">
             @php
                 $sliders = $heroSliders ?? \App\Models\HeroSlider::active()->ordered()->get();
@@ -447,7 +510,187 @@
         </section>
     </div>
 
+    <section class="py-6 md:py-8 bg-white">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-3 md:mb-4">
+                <h3 class="text-xl md:text-2xl font-bold font-poppins text-gray-900">Trusted Partners</h3>
+                <p class="mt-1 text-sm text-gray-600">Leading institutions we work with.</p>
+            </div>
+            @php
+                $partners = \Illuminate\Support\Facades\Schema::hasTable('partners')
+                    ? \App\Models\Partner::active()->ordered()->get()
+                    : collect();
+                $useMarquee = $partners->count() > 5;
+                $displayPartners = $useMarquee ? $partners->concat($partners) : $partners;
+            @endphp
+            <div class="partners-marquee overflow-hidden relative">
+                <div class="partners-track {{ $useMarquee ? '' : 'partners-track-static' }}">
+                    @forelse($displayPartners as $partner)
+                    <a
+                        href="{{ $partner->website_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex h-20 w-52 items-center justify-center px-4 transition-opacity duration-200 hover:opacity-100 opacity-95"
+                        title="Visit {{ $partner->name }} website">
+                        <img src="{{ asset('storage/' . $partner->logo_path) }}" alt="{{ $partner->name }} logo" loading="lazy" class="max-h-14 w-auto object-contain">
+                    </a>
+                    @empty
+                    <span class="partner-pill">Partners will appear here after admin setup.</span>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </section>
 
+
+
+    @php
+        $activeLoanCategories = \Illuminate\Support\Facades\Schema::hasTable('loan_categories')
+            ? \App\Models\LoanCategory::active()->ordered()->get()
+            : collect();
+    @endphp
+
+    @if($activeLoanCategories->isNotEmpty())
+        <section class="py-10 md:py-12 bg-white border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="text-center mb-8 md:mb-10">
+                    <p class="text-xs tracking-[0.3em] uppercase text-brand-green font-semibold mb-3">
+                        What We Offer
+                    </p>
+                    <h3 class="text-3xl md:text-4xl font-bold leading-tight text-[#1F3868] font-poppins">
+                        Apply for your loan today .
+                    </h3>
+                    <div class="mt-4 flex items-center justify-center gap-2">
+                        <div class="h-px w-14 bg-brand-green/40"></div>
+                        <div class="w-2 h-2 rounded-full bg-brand-green/70"></div>
+                        <div class="h-px w-14 bg-brand-green/40"></div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button
+                        type="button"
+                        onclick="scrollLendingCards('left')"
+                        class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/95 border border-gray-200 rounded-full p-2 shadow-md hover:bg-red-50 transition-colors"
+                        aria-label="Scroll cards left">
+                        <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+
+                <div id="lendingCardsContainer" class="overflow-x-auto pb-2 px-10 scroll-smooth">
+                    <div class="flex min-w-max items-stretch">
+                    @foreach($activeLoanCategories as $category)
+                        <div class="relative w-[280px] md:w-[300px] shrink-0 px-4 py-5 text-center group hover:bg-red-50 rounded-xl transition-colors duration-300">
+                            @if(!$loop->first)
+                                <div class="absolute left-0 top-10 bottom-10 w-px bg-gradient-to-b from-transparent via-brand-green/35 to-transparent"></div>
+                            @endif
+                            <div class="absolute top-0 left-8 right-8 h-0.5 bg-brand-green rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                            <div class="w-full h-28 mb-5 flex items-center justify-center transform group-hover:-translate-y-1 transition-transform duration-300">
+                                @if($category->image_path)
+                                    <img src="{{ asset('storage/' . $category->image_path) }}"
+                                         alt="{{ $category->name }}"
+                                         class="max-h-24 w-auto object-contain">
+                                @else
+                                    <div class="text-sm text-gray-400">No image</div>
+                                @endif
+                            </div>
+
+                            <h4 class="text-lg font-bold leading-snug text-[#1F3868] group-hover:text-brand-green mb-3 transition-colors duration-300">{{ $category->name }}</h4>
+                            <p class="text-sm leading-relaxed text-gray-600 group-hover:text-gray-700 min-h-[95px] transition-colors duration-300">
+                                {{ $category->description ?: 'Flexible lending options designed to support your financial goals.' }}
+                            </p>
+                            <a href="{{ route('user.register') }}"
+                               class="mt-5 inline-flex items-center text-sm font-semibold text-brand-green gap-1.5 group-hover:gap-2.5 transition-all duration-300">
+                                <span>Apply  
+                                </span>
+                                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    @endforeach
+                    </div>
+                </div>
+
+                    <button
+                        type="button"
+                        onclick="scrollLendingCards('right')"
+                        class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/95 border border-gray-200 rounded-full p-2 shadow-md hover:bg-red-50 transition-colors"
+                        aria-label="Scroll cards right">
+                        <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-8 flex items-center gap-4">
+                    <div class="flex-1 h-px bg-gradient-to-r from-transparent to-brand-green/30"></div>
+                    <div class="flex gap-1.5">
+                        @foreach($activeLoanCategories as $category)
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#1F3868]/20"></div>
+                        @endforeach
+                    </div>
+                    <div class="flex-1 h-px bg-gradient-to-l from-transparent to-brand-green/30"></div>
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <section class="py-12 md:py-14 bg-gray-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="text-center mb-8 md:mb-10">
+                <p class="text-xs tracking-[0.3em] uppercase text-brand-green font-semibold mb-3">
+                    Testimonials
+                </p>
+                <h3 class="text-2xl md:text-3xl font-bold text-[#1F3868] font-poppins">
+                    What Our Customers Say
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center mb-4 text-brand-green">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">"The application process was straightforward and I got matched with a lender quickly. Highly recommend this platform."</p>
+                    <p class="font-semibold text-gray-900">Amina J.</p>
+                    <p class="text-xs text-gray-500">Small Business Owner</p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center mb-4 text-brand-green">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">"I compared offers from multiple lenders in one place. It saved me time and gave me better terms for my loan."</p>
+                    <p class="font-semibold text-gray-900">Joseph M.</p>
+                    <p class="text-xs text-gray-500">Retail Trader</p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center mb-4 text-brand-green">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4">"Very professional support team and transparent process. I felt confident from application to approval."</p>
+                    <p class="font-semibold text-gray-900">Rehema K.</p>
+                    <p class="text-xs text-gray-500">Entrepreneur</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section id="eligibility" class="py-16 md:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
@@ -978,7 +1221,7 @@
 
 
     <!-- Footer -->
-    <footer class="bg-white text-gray-900 py-12 border-t border-gray-200">
+    <footer id="contact" class="bg-white text-gray-900 py-12 border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
             <!-- Main Footer Content -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
@@ -1108,22 +1351,25 @@
                     menuIcon.style.transform = 'rotate(0deg)';
                 }
             }
+
         });
 
-        // Navbar scroll effect - add shadow on scroll
-        let lastScroll = 0;
+        // Navbar scroll effect - keep transparent while slightly enhancing depth
         const navbar = document.getElementById('mainNavbar');
+        const navbarShell = navbar ? navbar.querySelector('.floating-navbar-shell') : null;
         
         window.addEventListener('scroll', function() {
             const currentScroll = window.pageYOffset;
             
-            if (currentScroll > 10) {
-                navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-            } else {
-                navbar.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+            if (!navbarShell) {
+                return;
             }
-            
-            lastScroll = currentScroll;
+
+            if (currentScroll > 10) {
+                navbarShell.classList.add('navbar-scrolled');
+            } else {
+                navbarShell.classList.remove('navbar-scrolled');
+            }
         });
 
         // Smooth scroll for anchor links
@@ -1148,6 +1394,17 @@
                 }
             });
         });
+
+        function scrollLendingCards(direction) {
+            const container = document.getElementById('lendingCardsContainer');
+            if (!container) return;
+
+            const scrollAmount = 340;
+            container.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
 
         // FAQ Accordion Functionality
         function toggleFAQ(index) {
@@ -1182,7 +1439,7 @@
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.slider-dot');
-        
+
         // Debug: Log slider info
         console.log('Hero Slider initialized:', {
             slidesCount: slides.length,

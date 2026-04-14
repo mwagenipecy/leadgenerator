@@ -21,6 +21,7 @@ return [
     'billing' => 'Billing',
     'integrations' => 'Integrations',
     'hero_slider' => 'Hero Slider',
+    'partner_management' => 'Partner Management',
     'promotions' => 'Promotions',
     'blog_management' => 'Blog Management',
     'self_services' => 'Self Services',
