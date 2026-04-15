@@ -31,12 +31,14 @@ sudo docker compose exec -T -u root app sh /var/www/html/scripts/fix-laravel-per
 
 echo "==> Running migrations and caches..."
 sudo docker compose exec -T app php artisan optimize:clear
+sudo docker compose exec -T app php artisan cache:clear || true
 sudo docker compose exec -T app php artisan migrate --force
 sudo docker compose exec -T app php artisan db:seed --force
 sudo docker compose exec -T app php artisan storage:link || true
 sudo docker compose exec -T app php artisan config:cache
 sudo docker compose exec -T app php artisan route:cache
 sudo docker compose exec -T app php artisan view:cache
+sudo docker compose exec -T app php artisan queue:restart || true
 
 echo "==> Verifying runtime URL configuration..."
 APP_URL_VALUE="$(sudo docker compose exec -T app php -r 'echo config("app.url");')"

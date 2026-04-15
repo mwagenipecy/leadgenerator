@@ -515,11 +515,11 @@
                             @endif
                             <div class="absolute top-0 left-8 right-8 h-0.5 bg-brand-green rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                            <div class="w-full h-24 mb-4 flex items-center justify-center transform group-hover:-translate-y-1 transition-transform duration-300">
+                            <div class="w-full h-24 mb-4 overflow-hidden transform group-hover:-translate-y-1 transition-transform duration-300">
                                 @if($category->image_path)
                                     <img src="{{ asset('storage/' . $category->image_path) }}"
                                          alt="{{ $category->localized_name }}"
-                                         class="max-h-20 w-auto object-contain">
+                                         class="w-full h-full object-cover">
                                 @else
                                     <div class="text-sm text-gray-400">{{ __('landing.no_image') }}</div>
                                 @endif
@@ -704,8 +704,8 @@
 
 
     <!-- Process Section -->
-    <section id="process" class=" md:py-8 bg-white">
-        <div class="max-w-7xl mx-auto px-4 lg:px-4">
+    <section id="process" class=" md:py-8 bg-white max-w-7xl ">
+        <div class=" mx-auto px-4 lg:px-4">
            
 
         
@@ -759,7 +759,7 @@
 
             </div>
 
-            <div class="mt-1 md:mt-4">
+            <!-- <div class="mt-1 md:mt-4">
                 <div class="bg-white rounded-2xl p-8 md:p-12 text-center border border-gray-100">
                     <h3 class="text-2xl md:text-3xl font-semibold font-poppins text-black mb-4">
                         {{ __('landing.customer_help') }}
@@ -771,7 +771,7 @@
                         {{ __('landing.customer_help') }}
                     </a>
                 </div>
-            </div>
+            </div> -->
 
            
         </div>

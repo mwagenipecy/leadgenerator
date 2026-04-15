@@ -217,7 +217,7 @@ class HeroSliderManagement extends Component
         $this->validateOnly('imageEnglish');
         if ($this->imageEnglish) {
             $this->assertUploadedImageIsSafe($this->imageEnglish, 'imageEnglish');
-            $this->imagePreviewEnglish = $this->imageEnglish->temporaryUrl();
+            $this->imagePreviewEnglish = null;
         }
     }
 
@@ -226,7 +226,7 @@ class HeroSliderManagement extends Component
         $this->validateOnly('imageSwahili');
         if ($this->imageSwahili) {
             $this->assertUploadedImageIsSafe($this->imageSwahili, 'imageSwahili');
-            $this->imagePreviewSwahili = $this->imageSwahili->temporaryUrl();
+            $this->imagePreviewSwahili = null;
         }
     }
 

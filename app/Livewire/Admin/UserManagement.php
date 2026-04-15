@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log; 
 use App\Models\Permission;
 use App\Services\LogService; 
+use App\Jobs\SendAdminCredentialsEmail;
+use Illuminate\Support\Str;
 
 class UserManagement extends Component
 {
@@ -40,16 +42,8 @@ class UserManagement extends Component
     // Create User Properties
     public $name = '';
     public $email = '';
-    public $password = '';
-    public $password_confirmation = '';
-    public $role = 'user';
-    public $first_name = '';
-    public $last_name = '';
-    public $phone = '';
-    public $nida_number = '';
-    public $date_of_birth = '';
+    public $role = 'admin';
     public $is_active = true;
-    public $selected_lender_id = '';
 
     // Create Lender Properties
     public $company_name = '';
@@ -153,15 +147,8 @@ class UserManagement extends Component
         $rules = [
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,lender,user',
-            'first_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:255',
-            'nida_number' => 'nullable|string|max:255|unique:users,nida_number',
-            'date_of_birth' => 'nullable|date|before:today',
+            'role' => 'required|in:admin,super_admin',
             'is_active' => 'boolean',
-            'selected_lender_id' => 'nullable|exists:lenders,id',
         ];
 
         return $rules;
@@ -242,30 +229,24 @@ class UserManagement extends Component
             return;
         }
 
+        $generatedPassword = Str::random(12);
+        $createdUser = null;
+
         try {
-            DB::transaction(function () {
+            DB::transaction(function () use ($generatedPassword, &$createdUser) {
                 // Create user data
                 $userData = [
                     'name' => $this->name,
                     'email' => $this->email,
-                    'password' => Hash::make($this->password),
+                    'password' => Hash::make($generatedPassword),
                     'role' => $this->role,
-                    'first_name' => $this->first_name,
-                    'last_name' => $this->last_name,
-                    'phone' => $this->phone,
-                    'nida_number' => $this->nida_number,
-                    'date_of_birth' => $this->date_of_birth,
                     'is_active' => $this->is_active,
                     'email_verified_at' => now(),
                 ];
 
-                // Add lender association if selected and role is appropriate
-                if ($this->selected_lender_id && in_array($this->role, ['lender', 'user'])) {
-                    $userData['lender_id'] = $this->selected_lender_id;
-                }
-
                 // Create the user
                 $user = User::create($userData);
+                $createdUser = $user;
 
                 // Assign role using the new role system
                 $this->assignRoleToUser($user, $this->role);
@@ -281,10 +262,14 @@ class UserManagement extends Component
                 ]);
             });
 
+            if ($createdUser) {
+                SendAdminCredentialsEmail::dispatch($createdUser, $generatedPassword);
+            }
+
             $this->loadStats();
             $this->closeCreateUserModal();
             
-            session()->flash('message', 'User created successfully!');
+            session()->flash('message', 'User created successfully. Login credentials were sent to the user email.');
             
         } catch (\Exception $e) {
             Log::error('User creation failed', [
@@ -584,11 +569,9 @@ class UserManagement extends Component
     public function resetCreateUserForm()
     {
         $this->reset([
-            'name', 'email', 'password', 'password_confirmation', 'role',
-            'first_name', 'last_name', 'phone', 'nida_number', 'date_of_birth',
-            'is_active', 'selected_lender_id'
+            'name', 'email', 'role', 'is_active'
         ]);
-        $this->role = 'user';
+        $this->role = 'admin';
         $this->is_active = true;
     }
 

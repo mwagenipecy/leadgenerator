@@ -117,7 +117,7 @@
     <!-- Create Modal -->
     @if($showCreateModal)
     <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" wire:click="closeCreateModal">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" x-data="{ previewEn: null, previewSw: null }" x-on:click.stop>
             <div class="p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">{{ __('slider.add_hero_slider_image') }}</h3>
                 
@@ -126,27 +126,27 @@
                         <!-- English Image Upload -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">English Hero Image *</label>
-                            <input type="file" wire:model="imageEnglish" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <input type="file" wire:model="imageEnglish" x-on:change="previewEn = $event.target.files[0] ? URL.createObjectURL($event.target.files[0]) : null" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
                             <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
                             @error('imageEnglish') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            @if($imageEnglish)
+                            <template x-if="previewEn">
                                 <div class="mt-2">
-                                    <img src="{{ $imageEnglish->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                    <img :src="previewEn" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
                                 </div>
-                            @endif
+                            </template>
                         </div>
 
                         <!-- Swahili Image Upload -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Swahili Hero Image *</label>
-                            <input type="file" wire:model="imageSwahili" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <input type="file" wire:model="imageSwahili" x-on:change="previewSw = $event.target.files[0] ? URL.createObjectURL($event.target.files[0]) : null" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
                             <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
                             @error('imageSwahili') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            @if($imageSwahili)
+                            <template x-if="previewSw">
                                 <div class="mt-2">
-                                    <img src="{{ $imageSwahili->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                    <img :src="previewSw" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
                                 </div>
-                            @endif
+                            </template>
                         </div>
 
                         <!-- Title -->
@@ -190,23 +190,23 @@
     <!-- Edit Modal -->
     @if($showEditModal && $selectedSlider)
     <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" wire:click="closeEditModal">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" wire:click.stop>
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" x-data="{ previewEn: null, previewSw: null }" x-on:click.stop>
             <div class="p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">Edit Hero Slider Image</h3>
                 
                 <form wire:submit.prevent="update">
                     <div class="space-y-4">
                         <!-- Current English Image Preview -->
-                        @if($imagePreviewEnglish && !$imageEnglish)
-                            <div>
+                        @if($imagePreviewEnglish)
+                            <div x-show="!previewEn">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Current English Hero Image</label>
                                 <img src="{{ asset('storage/' . $imagePreviewEnglish) }}" alt="Current English image" class="max-w-full h-48 object-cover rounded-lg">
                             </div>
                         @endif
 
                         <!-- Current Swahili Image Preview -->
-                        @if($imagePreviewSwahili && !$imageSwahili)
-                            <div>
+                        @if($imagePreviewSwahili)
+                            <div x-show="!previewSw">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Current Swahili Hero Image</label>
                                 <img src="{{ asset('storage/' . $imagePreviewSwahili) }}" alt="Current Swahili image" class="max-w-full h-48 object-cover rounded-lg">
                             </div>
@@ -215,27 +215,27 @@
                         <!-- English Image Upload -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Change English Hero Image (Optional)</label>
-                            <input type="file" wire:model="imageEnglish" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <input type="file" wire:model="imageEnglish" x-on:change="previewEn = $event.target.files[0] ? URL.createObjectURL($event.target.files[0]) : null" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
                             <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
                             @error('imageEnglish') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            @if($imageEnglish)
+                            <template x-if="previewEn">
                                 <div class="mt-2">
-                                    <img src="{{ $imageEnglish->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                    <img :src="previewEn" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
                                 </div>
-                            @endif
+                            </template>
                         </div>
 
                         <!-- Swahili Image Upload -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Change Swahili Hero Image (Optional)</label>
-                            <input type="file" wire:model="imageSwahili" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <input type="file" wire:model="imageSwahili" x-on:change="previewSw = $event.target.files[0] ? URL.createObjectURL($event.target.files[0]) : null" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
                             <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
                             @error('imageSwahili') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            @if($imageSwahili)
+                            <template x-if="previewSw">
                                 <div class="mt-2">
-                                    <img src="{{ $imageSwahili->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                    <img :src="previewSw" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
                                 </div>
-                            @endif
+                            </template>
                         </div>
 
                         <!-- Title -->
@@ -279,7 +279,7 @@
     <!-- Delete Modal -->
     @if($showDeleteModal && $selectedSlider)
     <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" wire:click="closeDeleteModal">
-        <div class="bg-white rounded-2xl max-w-md w-full" wire:click.stop>
+        <div class="bg-white rounded-2xl max-w-md w-full" x-on:click.stop>
             <div class="p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">Delete Hero Slider</h3>
                 <p class="text-gray-600 mb-6">Are you sure you want to delete this slider image? This action cannot be undone.</p>

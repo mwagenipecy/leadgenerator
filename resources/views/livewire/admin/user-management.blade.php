@@ -64,81 +64,19 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                            <input wire:model="first_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('first_name') border-sidebar-green @enderror">
-                            @error('first_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                            <input wire:model="last_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('last_name') border-sidebar-green @enderror">
-                            @error('last_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                            <input wire:model="phone" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('phone') border-sidebar-green @enderror">
-                            @error('phone') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">NIDA Number</label>
-                            <input wire:model="nida_number" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('nida_number') border-sidebar-green @enderror">
-                            @error('nida_number') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                            <input wire:model="date_of_birth" type="date" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('date_of_birth') border-sidebar-green @enderror">
-                            @error('date_of_birth') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">User Role *</label>
                             <select wire:model="role" 
                                     class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('role') border-sidebar-green @enderror">
-                                <option value="user">Borrower</option>
-                                @foreach($roles as $roleOption)
-                                    <option value="{{ $roleOption->name }}">{{ ucfirst($roleOption->name) }}</option>
-                                @endforeach
+                                <option value="admin">Admin</option>
+                                <option value="super_admin">Super Admin</option>
                             </select>
                             @error('role') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
-
-                        <!-- Lender Association (only show for lender and user roles) -->
-                        @if(in_array($role, ['lender', 'user']))
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Associated Lender</label>
-                                <select wire:model="selected_lender_id" 
-                                        class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('selected_lender_id') border-sidebar-green @enderror">
-                                    <option value="">No Lender Association</option>
-                                    @foreach($availableLenders as $lender)
-                                        <option value="{{ $lender->id }}">{{ $lender->company_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('selected_lender_id') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                            </div>
-                        @endif
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Password *</label>
-                            <input wire:model="password" type="password" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('password') border-sidebar-green @enderror">
-                            @error('password') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password *</label>
-                            <input wire:model="password_confirmation" type="password" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('password_confirmation') border-sidebar-green @enderror">
-                            @error('password_confirmation') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
                     </div>
+
+                    <p class="text-sm text-gray-500">
+                        A secure temporary password will be auto-generated and sent to this user by email.
+                    </p>
 
                     <!-- Active Status -->
                     <div class="flex items-center">

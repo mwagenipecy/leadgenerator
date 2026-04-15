@@ -37,46 +37,43 @@
 </head>
 <body class="font-inter">
 @php
-    $authSideImage = \App\Models\SystemSetting::getValue('auth_side_image_login_' . app()->getLocale())
+    $resolveAuthImageUrl = function (?string $value): string {
+        if (empty($value)) {
+            return asset('landing/register-login.jpg');
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+
+        if (str_starts_with($value, '/storage/')) {
+            return asset(ltrim($value, '/'));
+        }
+
+        if (str_starts_with($value, 'storage/')) {
+            return asset($value);
+        }
+
+        return asset('storage/' . ltrim($value, '/'));
+    };
+
+    $authSideImageValue = \App\Models\SystemSetting::getValue('auth_side_image_login_' . app()->getLocale())
         ?: \App\Models\SystemSetting::getValue('auth_side_image_login_en')
         ?: \App\Models\SystemSetting::getValue('auth_side_image_' . app()->getLocale())
         ?: \App\Models\SystemSetting::getValue('auth_side_image_en')
-        ?: asset('landing/register-login.jpg');
+        ?: null;
+
+    $authSideImage = $resolveAuthImageUrl($authSideImageValue);
 @endphp
 <div class="h-screen flex overflow-hidden">
 <!-- Left Side - Welcome Content (Hidden on mobile) -->
   <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden h-screen" style="background-image: url('{{ $authSideImage }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <!-- Gradient Overlay at Bottom -->
-            <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-brand-red/90 via-brand-red/60 to-transparent"></div>
+            <!-- <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-brand-red/90 via-brand-red/60 to-transparent"></div> -->
             
             <!-- Marketing Content at Bottom - Squeezed to Right -->
             <div class="absolute bottom-0 right-0 z-20 p-6 pr-8 max-w-sm">
-                <!-- Red Gradient Background for Text Section -->
-                <div class="bg-gradient-to-t from-brand-red via-brand-red/95 to-brand-red/80 rounded-lg p-5 backdrop-blur-sm">
-                    <h2 class="text-xl md:text-2xl font-bold font-poppins text-white mb-3 leading-tight">
-                        Connect. Grow. Succeed.
-                    </h2>
-                    <div class="space-y-2 mb-4">
-                        <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Lenders</h3>
-                            <p class="text-white text-sm leading-snug">
-                                Access verified borrowers and expand your portfolio with confidence.
-                            </p>
-                        </div>
-                        <div>
-                            <h3 class="text-base font-semibold text-white mb-1">For Borrowers</h3>
-                            <p class="text-white text-sm leading-snug">
-                                Get matched with trusted lenders and secure the funding you need.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span class="text-white text-xs font-medium">NIDA-Verified & Secure</span>
-                    </div>
-                </div>
+              
             </div>
         </div>
 
