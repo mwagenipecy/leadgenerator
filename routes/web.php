@@ -13,8 +13,8 @@ use App\Http\Controllers\SystemSettingController;
 use App\Http\Controllers\TRAController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\CompanyVerificationController;
+use App\Http\Controllers\CustomerHelpController;
 use App\Http\Controllers\TermsController;
-use App\Models\CustomerHelpRequest;
 use App\Models\NidaVerification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NidaVerificationController;
@@ -48,18 +48,9 @@ Route::get('/', function () {
     return view('welcome', compact('heroSliders'));
 });
 
-Route::post('/customer-help-request', function (Request $request) {
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'phone' => 'nullable|string|max:50',
-        'message' => 'required|string|max:2000',
-    ]);
-
-    CustomerHelpRequest::create($validated);
-
-    return redirect('/')->with('help_success', 'Your request has been received. We will contact you shortly.');
-})->name('customer-help.request');
+Route::get('/customer-help', [CustomerHelpController::class, 'index'])->name('customer-help.index');
+Route::post('/customer-help/tickets', [CustomerHelpController::class, 'createTicket'])->name('customer-help.request');
+Route::post('/customer-help/tickets/{customerHelpRequest}/messages', [CustomerHelpController::class, 'addMessage'])->name('customer-help.message');
 
 // PUBLIC BLOG ROUTES
 Route::get('/blog', function () {
@@ -348,6 +339,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
     
     /*********************************** LANGUAGE MANAGEMENT ****************************************/
     Route::get('language-management', \App\Livewire\Admin\LanguageManagement::class)->name('admin.language.management');
+
+    /*********************************** AUTH CONTENT MANAGEMENT ****************************************/
+    Route::get('auth-content-management', \App\Livewire\Admin\AuthContentManagement::class)->name('admin.auth-content.management');
 
     /*********************************** MENU MANAGEMENT ****************************************/
     Route::get('menu-management', \App\Livewire\Admin\MenuManagement::class)->name('admin.menu.management');

@@ -1,6 +1,13 @@
+@php
+    $authSideImage = \App\Models\SystemSetting::getValue('auth_side_image_register_' . app()->getLocale())
+        ?: \App\Models\SystemSetting::getValue('auth_side_image_register_en')
+        ?: \App\Models\SystemSetting::getValue('auth_side_image_' . app()->getLocale())
+        ?: \App\Models\SystemSetting::getValue('auth_side_image_en')
+        ?: asset('landing/register-login.jpg');
+@endphp
 <div class="h-screen flex overflow-hidden">
 <!-- Left Side - Welcome Content (Hidden on mobile) -->
-  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden h-screen" style="background-image: url('{{ asset("landing/register-login.jpg") }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden h-screen" style="background-image: url('{{ $authSideImage }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <!-- Gradient Overlay at Bottom -->
             <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-brand-red/90 via-brand-red/60 to-transparent"></div>
             

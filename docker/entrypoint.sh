@@ -8,6 +8,12 @@ set -e
 # Ensure storage/log permissions are always fixed on container start.
 sh /var/www/html/scripts/fix-laravel-permissions.sh /var/www/html
 
+# Ensure storage symlink exists inside container with container path.
+if [ -L /var/www/html/public/storage ] || [ -e /var/www/html/public/storage ]; then
+  rm -rf /var/www/html/public/storage
+fi
+ln -s /var/www/html/storage/app/public /var/www/html/public/storage
+
 # Sync public assets into shared volume so nginx can serve them (public_assets → nginx root).
 cp -a /var/www/html/public/. /var/www/html/public_shared/
 

@@ -10,7 +10,8 @@
         </div>
     @endif
 
-    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden xl:col-span-2">
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="bg-gray-50 border-b border-gray-200">
@@ -19,6 +20,7 @@
                         <th class="px-5 py-3 font-semibold">Email</th>
                         <th class="px-5 py-3 font-semibold">Phone</th>
                         <th class="px-5 py-3 font-semibold">Message</th>
+                        <th class="px-5 py-3 font-semibold">Last Update</th>
                         <th class="px-5 py-3 font-semibold">Date</th>
                         <th class="px-5 py-3 font-semibold">Status</th>
                         <th class="px-5 py-3 font-semibold text-right">Action</th>
@@ -31,6 +33,7 @@
                             <td class="px-5 py-3 text-gray-700">{{ $helpRequest->email }}</td>
                             <td class="px-5 py-3 text-gray-700">{{ $helpRequest->phone ?: '-' }}</td>
                             <td class="px-5 py-3 text-gray-700 max-w-xs">{{ \Illuminate\Support\Str::limit($helpRequest->message, 90) }}</td>
+                            <td class="px-5 py-3 text-gray-600">{{ optional($helpRequest->messages->last())->created_at?->format('d M Y, H:i') ?? '-' }}</td>
                             <td class="px-5 py-3 text-gray-600">{{ $helpRequest->created_at->format('d M Y, H:i') }}</td>
                             <td class="px-5 py-3">
                                 @if($helpRequest->status === 'attended')
@@ -41,6 +44,9 @@
                             </td>
                             <td class="px-5 py-3">
                                 <div class="flex items-center justify-end">
+                                    <button wire:click="selectRequest({{ $helpRequest->id }})" class="px-3 py-1.5 text-xs rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50">
+                                        View
+                                    </button>
                                     @if($helpRequest->status === 'attended')
                                         <button wire:click="markAsNew({{ $helpRequest->id }})" class="px-3 py-1.5 text-xs rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50">
                                             Mark New
@@ -55,7 +61,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-5 py-10 text-center text-gray-500">
+                            <td colspan="8" class="px-5 py-10 text-center text-gray-500">
                                 No customer help requests yet.
                             </td>
                         </tr>
@@ -63,6 +69,35 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-2xl p-5">
+        @if($activeRequest)
+            <h3 class="text-base font-semibold text-gray-900 mb-2">Conversation #{{ $activeRequest->id }}</h3>
+            <div class="text-xs text-gray-500 mb-4">{{ $activeRequest->name }} · {{ $activeRequest->email }}</div>
+            <div class="space-y-3 max-h-96 overflow-y-auto bg-gray-50 rounded-lg p-3">
+                @foreach($activeRequest->messages as $msg)
+                    <div class="{{ $msg->sender_type === 'admin' ? 'text-right' : 'text-left' }}">
+                        <div class="inline-block max-w-[90%] rounded-lg px-3 py-2 text-sm {{ $msg->sender_type === 'admin' ? 'bg-sidebar-green text-white' : 'bg-white text-gray-700 border border-gray-200' }}">
+                            {{ $msg->message }}
+                        </div>
+                        <div class="text-[11px] text-gray-400 mt-1">
+                            {{ $msg->created_at->format('d M Y, H:i') }}
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="mt-3">
+                <textarea wire:model="adminReply" rows="3" class="w-full rounded-lg border-gray-300 focus:border-red-500 focus:ring-red-500" placeholder="Write a reply..."></textarea>
+                @error('adminReply') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+                <button wire:click="sendAdminReply" class="mt-2 px-4 py-2 text-sm rounded-lg bg-sidebar-green text-white hover:bg-sidebar-green-light">
+                    Send Reply
+                </button>
+            </div>
+        @else
+            <div class="text-sm text-gray-500">Select a request to view conversation.</div>
+        @endif
+    </div>
     </div>
 
     @if($requests->hasPages())

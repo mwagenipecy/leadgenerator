@@ -36,14 +36,18 @@ class LoanCategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:loan_categories,name',
-            'description' => 'nullable|string|max:1000',
+            'name_en' => 'required|string|max:255|unique:loan_categories,name_en',
+            'name_sw' => 'required|string|max:255|unique:loan_categories,name_sw',
+            'description_en' => 'nullable|string|max:1000',
+            'description_sw' => 'nullable|string|max:1000',
             'image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:2048',
             'is_active' => 'boolean',
             'sort_order' => 'nullable|integer|min:0',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        $validated['name'] = $validated['name_en'];
+        $validated['description'] = $validated['description_en'] ?? $validated['description_sw'] ?? null;
+        $validated['slug'] = Str::slug($validated['name_en']);
         $validated['is_active'] = $request->has('is_active') ? true : false;
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
 
@@ -82,19 +86,28 @@ class LoanCategoryController extends Controller
     public function update(Request $request, LoanCategory $loanCategory)
     {
         $validated = $request->validate([
-            'name' => [
+            'name_en' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('loan_categories')->ignore($loanCategory->id),
+                Rule::unique('loan_categories', 'name_en')->ignore($loanCategory->id),
             ],
-            'description' => 'nullable|string|max:1000',
+            'name_sw' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('loan_categories', 'name_sw')->ignore($loanCategory->id),
+            ],
+            'description_en' => 'nullable|string|max:1000',
+            'description_sw' => 'nullable|string|max:1000',
             'image' => 'nullable|file|mimes:jpg,jpeg,png,webp,svg|max:2048',
             'is_active' => 'boolean',
             'sort_order' => 'nullable|integer|min:0',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        $validated['name'] = $validated['name_en'];
+        $validated['description'] = $validated['description_en'] ?? $validated['description_sw'] ?? null;
+        $validated['slug'] = Str::slug($validated['name_en']);
         $validated['is_active'] = $request->has('is_active') ? true : false;
         $validated['sort_order'] = $validated['sort_order'] ?? $loanCategory->sort_order;
 

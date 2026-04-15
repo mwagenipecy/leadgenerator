@@ -29,6 +29,8 @@ return [
     'creditinfo_alert' => 'Arifa za CreditInfo',
     'subscribe_to_services' => 'Jiandikishe kwa huduma',
     'menu_management' => 'Usimamizi wa Menyu',
+    'auth_content_management' => 'Usimamizi wa Maudhui ya Uthibitishaji',
+    'content_management' => 'Usimamizi wa Maudhui',
     'regions' => 'Mikoa',
 ];
 

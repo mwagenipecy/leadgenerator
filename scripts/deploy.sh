@@ -33,8 +33,21 @@ echo "==> Running migrations and caches..."
 sudo docker compose exec -T app php artisan optimize:clear
 sudo docker compose exec -T app php artisan migrate --force
 sudo docker compose exec -T app php artisan db:seed --force
+sudo docker compose exec -T app php artisan storage:link || true
 sudo docker compose exec -T app php artisan config:cache
 sudo docker compose exec -T app php artisan route:cache
 sudo docker compose exec -T app php artisan view:cache
+
+echo "==> Verifying runtime URL configuration..."
+APP_URL_VALUE="$(sudo docker compose exec -T app php -r 'echo config("app.url");')"
+PUBLIC_URL_VALUE="$(sudo docker compose exec -T app php -r 'echo config("filesystems.disks.public.url");')"
+echo "    APP_URL=$APP_URL_VALUE"
+echo "    FILESYSTEM_PUBLIC_URL=$PUBLIC_URL_VALUE"
+
+echo "==> Performing basic HTTP health checks..."
+curl -fsS "http://127.0.0.1/" >/dev/null
+if [ -n "$APP_URL_VALUE" ]; then
+  curl -fsS "$APP_URL_VALUE" >/dev/null || true
+fi
 
 echo "==> Deploy finished at $(date -u +%Y-%m-%dT%H:%M:%SZ)"

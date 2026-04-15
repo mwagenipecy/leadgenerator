@@ -51,8 +51,7 @@ class SidebarMenuItemSeeder extends Seeder
             ['key' => 'loan_categories', 'label_key' => 'navigation.loan_categories', 'route' => 'admin.loan-categories.index', 'icon' => 'tag', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 180],
             ['key' => 'regions', 'label_key' => 'navigation.regions', 'route' => 'admin.regions.index', 'icon' => 'map', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 185],
             ['key' => 'blog_management', 'label_key' => 'navigation.blog_management', 'route' => 'admin.blog.management', 'icon' => 'pencil', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 190],
-            ['key' => 'hero_slider', 'label_key' => 'navigation.hero_slider', 'route' => 'admin.hero-slider.management', 'icon' => 'photo', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 200],
-            ['key' => 'partner_management', 'label_key' => 'navigation.partner_management', 'route' => 'admin.partner.management', 'icon' => 'building-library', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 205],
+            ['key' => 'content_management', 'label_key' => 'navigation.content_management', 'route' => null, 'icon' => 'photo', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 195],
             ['key' => 'customer_help_management', 'label_key' => 'navigation.customer_help_management', 'route' => 'admin.customer-help.management', 'icon' => 'lifebuoy', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 206],
             ['key' => 'promotions', 'label_key' => 'navigation.promotions', 'route' => 'admin.promotion.management', 'icon' => 'megaphone', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 210],
             // Self services children
@@ -66,6 +65,10 @@ class SidebarMenuItemSeeder extends Seeder
             ['key' => 'permissions', 'label_key' => 'navigation.permissions', 'route' => 'user.management.permissions', 'icon' => 'lock', 'roles' => ['super_admin'], 'parent_key' => 'admin_manager', 'sort_order' => 3],
             ['key' => 'language_management', 'label_key' => 'admin.language_management', 'route' => 'admin.language.management', 'icon' => 'language', 'roles' => ['super_admin'], 'parent_key' => 'admin_manager', 'sort_order' => 4],
             ['key' => 'menu_management', 'label_key' => 'navigation.menu_management', 'route' => 'admin.menu.management', 'icon' => 'bars-3', 'roles' => ['super_admin'], 'parent_key' => 'admin_manager', 'sort_order' => 5],
+            // Content management children
+            ['key' => 'auth_content_management', 'label_key' => 'navigation.auth_content_management', 'route' => 'admin.auth-content.management', 'icon' => 'photo', 'roles' => ['super_admin'], 'parent_key' => 'content_management', 'sort_order' => 1],
+            ['key' => 'hero_slider', 'label_key' => 'navigation.hero_slider', 'route' => 'admin.hero-slider.management', 'icon' => 'photo', 'roles' => ['super_admin'], 'parent_key' => 'content_management', 'sort_order' => 2],
+            ['key' => 'partner_management', 'label_key' => 'navigation.partner_management', 'route' => 'admin.partner.management', 'icon' => 'building-library', 'roles' => ['super_admin'], 'parent_key' => 'content_management', 'sort_order' => 3],
         ];
 
         $byKey = [];

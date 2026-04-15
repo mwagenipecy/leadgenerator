@@ -29,6 +29,8 @@ return [
     'creditinfo_alert' => 'CreditInfo Alert',
     'subscribe_to_services' => 'Subscribe to services',
     'menu_management' => 'Menu Management',
+    'auth_content_management' => 'Auth Content Management',
+    'content_management' => 'Content Management',
     'regions' => 'Regions',
 ];
 

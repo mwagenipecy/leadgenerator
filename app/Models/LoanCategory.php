@@ -16,8 +16,12 @@ class LoanCategory extends Model
 
     protected $fillable = [
         'name',
+        'name_en',
+        'name_sw',
         'slug',
         'description',
+        'description_en',
+        'description_sw',
         'image_path',
         'is_active',
         'sort_order',
@@ -37,7 +41,8 @@ class LoanCategory extends Model
 
         static::creating(function ($category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $slugSource = $category->name_en ?? $category->name ?? $category->name_sw;
+                $category->slug = Str::slug($slugSource);
             }
         });
     }
@@ -55,7 +60,25 @@ class LoanCategory extends Model
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sort_order')->orderBy('name');
+        return $query->orderBy('sort_order')->orderBy('name_en')->orderBy('name');
+    }
+
+    public function getLocalizedNameAttribute(): string
+    {
+        if (app()->getLocale() === 'sw') {
+            return $this->name_sw ?: $this->name_en ?: $this->name;
+        }
+
+        return $this->name_en ?: $this->name_sw ?: $this->name;
+    }
+
+    public function getLocalizedDescriptionAttribute(): ?string
+    {
+        if (app()->getLocale() === 'sw') {
+            return $this->description_sw ?: $this->description_en ?: $this->description;
+        }
+
+        return $this->description_en ?: $this->description_sw ?: $this->description;
     }
 
     /**

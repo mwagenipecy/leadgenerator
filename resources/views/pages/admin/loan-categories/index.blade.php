@@ -27,7 +27,7 @@
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Image</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('admin.image') }}</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('admin.name') }}</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('admin.description') }}</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">{{ __('common.status') }}</th>
@@ -41,18 +41,18 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($category->image_path)
                                     <div class="h-12 w-20 border border-gray-200 rounded-lg bg-white flex items-center justify-center">
-                                        <img src="{{ asset('storage/' . $category->image_path) }}" alt="{{ $category->name }}" class="max-h-8 w-auto object-contain">
+                                        <img src="{{ asset('storage/' . $category->image_path) }}" alt="{{ $category->localized_name }}" class="max-h-8 w-auto object-contain">
                                     </div>
                                 @else
-                                    <span class="text-xs text-gray-400">No image</span>
+                                    <span class="text-xs text-gray-400">{{ __('admin.no_image') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-semibold text-black">{{ $category->name }}</div>
+                                <div class="text-sm font-semibold text-black">{{ $category->localized_name }}</div>
                                 <div class="text-xs text-gray-500">{{ $category->slug }}</div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-sm text-gray-700">{{ Str::limit($category->description, 50) ?: 'N/A' }}</div>
+                                <div class="text-sm text-gray-700">{{ Str::limit($category->localized_description, 50) ?: __('admin.not_available') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $category->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">

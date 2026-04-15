@@ -6,10 +6,10 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
-                Back to Categories
+                {{ __('admin.back_to_categories') }}
             </a>
-            <h1 class="text-2xl font-bold text-black">Create Loan Category</h1>
-            <p class="text-gray-600 mt-1">Add a new loan category</p>
+            <h1 class="text-2xl font-bold text-black">{{ __('admin.create_loan_category') }}</h1>
+            <p class="text-gray-600 mt-1">{{ __('admin.add_a_new_loan_category') }}</p>
         </div>
 
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 max-w-2xl">
@@ -17,39 +17,71 @@
                 @csrf
 
                 <div class="space-y-6">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-black mb-2">
-                            Category Name *
-                        </label>
-                        <input type="text" 
-                               id="name" 
-                               name="name" 
-                               value="{{ old('name') }}"
-                               required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('name') border-red-500 @enderror"
-                               placeholder="e.g., Personal, Business">
-                        @error('name')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="name_en" class="block text-sm font-medium text-black mb-2">
+                                {{ __('admin.category_name_english') }} *
+                            </label>
+                            <input type="text"
+                                   id="name_en"
+                                   name="name_en"
+                                   value="{{ old('name_en') }}"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('name_en') border-red-500 @enderror"
+                                   placeholder="{{ __('admin.category_name_placeholder_en') }}">
+                            @error('name_en')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label for="name_sw" class="block text-sm font-medium text-black mb-2">
+                                {{ __('admin.category_name_swahili') }} *
+                            </label>
+                            <input type="text"
+                                   id="name_sw"
+                                   name="name_sw"
+                                   value="{{ old('name_sw') }}"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('name_sw') border-red-500 @enderror"
+                                   placeholder="{{ __('admin.category_name_placeholder_sw') }}">
+                            @error('name_sw')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
 
-                    <div>
-                        <label for="description" class="block text-sm font-medium text-black mb-2">
-                            Description
-                        </label>
-                        <textarea id="description" 
-                                  name="description" 
-                                  rows="4"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('description') border-red-500 @enderror"
-                                  placeholder="Brief description of this loan category">{{ old('description') }}</textarea>
-                        @error('description')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="description_en" class="block text-sm font-medium text-black mb-2">
+                                {{ __('admin.description_english') }}
+                            </label>
+                            <textarea id="description_en"
+                                      name="description_en"
+                                      rows="4"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('description_en') border-red-500 @enderror"
+                                      placeholder="{{ __('admin.category_description_placeholder_en') }}">{{ old('description_en') }}</textarea>
+                            @error('description_en')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label for="description_sw" class="block text-sm font-medium text-black mb-2">
+                                {{ __('admin.description_swahili') }}
+                            </label>
+                            <textarea id="description_sw"
+                                      name="description_sw"
+                                      rows="4"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('description_sw') border-red-500 @enderror"
+                                      placeholder="{{ __('admin.category_description_placeholder_sw') }}">{{ old('description_sw') }}</textarea>
+                            @error('description_sw')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
 
                     <div>
                         <label for="image" class="block text-sm font-medium text-black mb-2">
-                            Category Image
+                            {{ __('admin.category_image') }}
                         </label>
                         <input type="file"
                                id="image"
@@ -59,13 +91,13 @@
                         @error('image')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
-                        <p class="text-xs text-gray-500 mt-1">Upload JPG, PNG, WEBP, or SVG (max 2MB)</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ __('admin.upload_image_hint') }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="sort_order" class="block text-sm font-medium text-black mb-2">
-                                Sort Order
+                                {{ __('admin.sort_order') }}
                             </label>
                             <input type="number" 
                                    id="sort_order" 
@@ -76,7 +108,7 @@
                             @error('sort_order')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
-                            <p class="text-xs text-gray-500 mt-1">Lower numbers appear first</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ __('admin.sort_order_hint') }}</p>
                         </div>
 
                         <div class="flex items-end">
@@ -86,7 +118,7 @@
                                        value="1"
                                        {{ old('is_active', true) ? 'checked' : '' }}
                                        class="w-4 h-4 text-sidebar-green border-gray-300 rounded focus:ring-sidebar-green">
-                                <span class="text-sm font-medium text-black">Active</span>
+                                <span class="text-sm font-medium text-black">{{ __('common.active') }}</span>
                             </label>
                         </div>
                     </div>
@@ -94,11 +126,11 @@
                     <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
                         <a href="{{ route('admin.loan-categories.index') }}" 
                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                            Cancel
+                            {{ __('common.cancel') }}
                         </a>
                         <button type="submit" 
                                 class="px-6 py-2 bg-sidebar-green hover:bg-sidebar-green-light text-white rounded-lg font-semibold transition-colors">
-                            Create Category
+                            {{ __('admin.create_category') }}
                         </button>
                     </div>
                 </div>

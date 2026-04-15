@@ -6,7 +6,7 @@
     <div class="h-20 flex items-center {{ $isCollapsed ? 'justify-center' : 'px-6' }} border-b border-sidebar-green-light/30">
         @if(!$isCollapsed)
         <div class="flex items-center gap-2">
-            <img src="{{ asset('logo/logoOnGreenBg.png') }}" alt="Logo" class="h-10 w-auto">
+            <img src="{{ asset('logo/logoOnGreenBg.png') }}" alt="Logo" class="h-12 w-auto">
         </div>
         @else
         <div class="w-10 h-10 bg-white/15 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20">

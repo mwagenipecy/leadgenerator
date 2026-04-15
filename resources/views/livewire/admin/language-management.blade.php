@@ -102,40 +102,21 @@
                                     {{ $key }}
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-700">
-                                    @if($editingKey === $key)
-                                        <textarea
-                                            wire:model="editingValue"
-                                            rows="3"
-                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                                        ></textarea>
-                                        <p class="text-xs text-gray-500 mt-1">Tip: click Save to apply changes.</p>
-                                    @else
-                                        <div class="whitespace-pre-wrap break-words">{{ $value }}</div>
-                                    @endif
+                                    <div class="whitespace-pre-wrap break-words">{{ $value }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    @if($editingKey === $key)
-                                        <div class="flex justify-end gap-2">
-                                            <button 
-                                                wire:click="saveTranslation"
-                                                class="px-3 py-1.5 rounded-md bg-green-600 text-white hover:bg-green-700 transition-colors">
-                                                {{ __('common.save') }}
-                                            </button>
-                                            <button 
-                                                wire:click="cancelEdit"
-                                                class="px-3 py-1.5 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors">
-                                                {{ __('common.cancel') }}
-                                            </button>
-                                        </div>
-                                    @else
-                                        <div class="flex justify-end gap-2">
-                                            <button 
-                                                wire:click="startEdit('{{ $key }}')"
-                                                class="px-3 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors">
-                                                {{ __('common.edit') }}
-                                            </button>
-                                        </div>
-                                    @endif
+                                    <div class="flex justify-end">
+                                        <button
+                                            wire:click="startEdit(@js($key))"
+                                            type="button"
+                                            class="inline-flex h-9 w-9 items-center justify-center rounded-md text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                                            title="{{ __('common.edit') }}"
+                                            aria-label="{{ __('common.edit') }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M17.414 2.586a2 2 0 010 2.828l-8.5 8.5a1 1 0 01-.39.242l-4 1.5a1 1 0 01-1.286-1.286l1.5-4a1 1 0 01.242-.39l8.5-8.5a2 2 0 012.828 0zM6.121 10.707l-.793 2.118 2.118-.794 7.554-7.554-.707-.707-7.172 7.172z" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -150,5 +131,49 @@
             </div>
         </div>
     </div>
+
+    @if($editingKey !== null)
+        <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/50 px-4" wire:click="cancelEdit">
+            <div class="w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl" wire:click.stop>
+                <div class="mb-4 flex items-start justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900">{{ __('common.edit') }}</h2>
+                        <p class="mt-1 text-sm text-gray-600 break-all">{{ $editingKey }}</p>
+                    </div>
+                    <button
+                        type="button"
+                        wire:click="cancelEdit"
+                        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                        aria-label="{{ __('common.close') ?? 'Close' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+
+                <textarea
+                    wire:model="editingValue"
+                    rows="6"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                ></textarea>
+                <p class="mt-2 text-xs text-gray-500">{{ __('admin.translation_edit_tip') }}</p>
+
+                <div class="mt-6 flex justify-end gap-2">
+                    <button
+                        wire:click="cancelEdit"
+                        type="button"
+                        class="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors">
+                        {{ __('common.cancel') }}
+                    </button>
+                    <button
+                        wire:click="saveTranslation"
+                        type="button"
+                        class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors">
+                        {{ __('common.save') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 
