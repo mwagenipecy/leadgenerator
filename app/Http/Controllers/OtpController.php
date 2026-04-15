@@ -91,7 +91,6 @@ class OtpController extends Controller
 
         Log::info('Verifying OTP', [
             'user_id' => $userId,
-            'provided_otp' => $request->otp,
             'session_before_verification' => [
                 'otp_user_id' => Session::get('otp_user_id'),
                 'otp_verified' => Session::get('otp_verified', 'not_set')
@@ -173,7 +172,6 @@ class OtpController extends Controller
         } else {
             Log::warning('Invalid OTP verification attempt', [
                 'user_id' => $user->id,
-                'provided_otp' => $request->otp
             ]);
             
             throw ValidationException::withMessages([

@@ -53,6 +53,7 @@ class SidebarMenuItemSeeder extends Seeder
             ['key' => 'blog_management', 'label_key' => 'navigation.blog_management', 'route' => 'admin.blog.management', 'icon' => 'pencil', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 190],
             ['key' => 'hero_slider', 'label_key' => 'navigation.hero_slider', 'route' => 'admin.hero-slider.management', 'icon' => 'photo', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 200],
             ['key' => 'partner_management', 'label_key' => 'navigation.partner_management', 'route' => 'admin.partner.management', 'icon' => 'building-library', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 205],
+            ['key' => 'customer_help_management', 'label_key' => 'navigation.customer_help_management', 'route' => 'admin.customer-help.management', 'icon' => 'lifebuoy', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 206],
             ['key' => 'promotions', 'label_key' => 'navigation.promotions', 'route' => 'admin.promotion.management', 'icon' => 'megaphone', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 210],
             // Self services children
             ['key' => 'verify_tin', 'label_key' => 'verification.verify_tin_number', 'route' => 'taxpayer.verification', 'icon' => 'document-text', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 1],

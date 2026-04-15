@@ -9,10 +9,13 @@ use App\Models\NidaVerification;
 use App\Services\LoanProductMatchingService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class BorrowerDashboard extends Component
 {
+    private const DASHBOARD_CACHE_TTL_MINUTES = 5;
+
     // Core metrics
     public $totalApplications = 0;
     public $approvedApplications = 0;
@@ -64,6 +67,14 @@ class BorrowerDashboard extends Component
     public function loadDashboardData()
     {
         $user = Auth::user();
+        $cacheKey = "dashboard:borrower:{$user->id}:v1";
+        $cachedData = Cache::store('redis')->get($cacheKey);
+        if (is_array($cachedData)) {
+            foreach ($cachedData as $property => $value) {
+                $this->{$property} = $value;
+            }
+            return;
+        }
         
         // Load application statistics
         $this->loadApplicationStats($user);
@@ -76,6 +87,37 @@ class BorrowerDashboard extends Component
         
         // Load collections and activity
         $this->loadCollections($user);
+
+        Cache::store('redis')->put($cacheKey, [
+            'totalApplications' => $this->totalApplications,
+            'approvedApplications' => $this->approvedApplications,
+            'rejectedApplications' => $this->rejectedApplications,
+            'pendingApplications' => $this->pendingApplications,
+            'disbursedApplications' => $this->disbursedApplications,
+            'cancelledApplications' => $this->cancelledApplications,
+            'totalApprovedAmount' => $this->totalApprovedAmount,
+            'totalDisbursedAmount' => $this->totalDisbursedAmount,
+            'outstandingBalance' => $this->outstandingBalance,
+            'nextPaymentDue' => $this->nextPaymentDue,
+            'monthlyPayment' => $this->monthlyPayment,
+            'nidaVerificationStatus' => $this->nidaVerificationStatus,
+            'creditScore' => $this->creditScore,
+            'completionPercentage' => $this->completionPercentage,
+            'myApplications' => $this->myApplications,
+            'availableLoanProducts' => $this->availableLoanProducts,
+            'applicationsByStatus' => $this->applicationsByStatus,
+            'maxPossibleAmount' => $this->maxPossibleAmount,
+            'recentActivity' => $this->recentActivity,
+            'monthlyApplicationTrend' => $this->monthlyApplicationTrend,
+        ], now()->addMinutes(self::DASHBOARD_CACHE_TTL_MINUTES));
+    }
+
+    private function clearDashboardCache(): void
+    {
+        $userId = Auth::id();
+        if ($userId) {
+            Cache::store('redis')->forget("dashboard:borrower:{$userId}:v1");
+        }
     }
 
     private function loadApplicationStats($user)
@@ -326,6 +368,7 @@ class BorrowerDashboard extends Component
                 'notes' => 'Cancelled by borrower on ' . now()->format('Y-m-d H:i:s')
             ]);
             
+            $this->clearDashboardCache();
             $this->loadDashboardData();
             session()->flash('message', 'Application #' . $application->application_number . ' has been withdrawn successfully.');
         }

@@ -370,6 +370,12 @@
     
 </head>
 <body class="bg-white text-gray-900 font-inter overflow-x-hidden">
+    @if(session('help_success'))
+        <div class="fixed top-24 right-4 z-[80] bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg shadow-md">
+            {{ session('help_success') }}
+        </div>
+    @endif
+
     <!-- Navigation -->
     <nav id="mainNavbar" class="fixed top-0 inset-x-0 z-50 px-3 sm:px-4 lg:px-6 pt-0 transition-all duration-300">
         <div class="max-w-7xl mx-auto floating-navbar-shell px-4 sm:px-6 lg:px-8">
@@ -463,12 +469,19 @@
             @php
                 $sliders = $heroSliders ?? \App\Models\HeroSlider::active()->ordered()->get();
                 $sliderCount = $sliders->count();
+                $locale = app()->getLocale();
+                $isSwahili = in_array($locale, ['sw', 'swahili'], true);
             @endphp
             
             @if($sliderCount > 0)
                 @foreach($sliders as $index => $slider)
+                    @php
+                        $englishImage = $slider->image_path_en ?? $slider->image_path;
+                        $swahiliImage = $slider->image_path_sw;
+                        $selectedImage = $isSwahili ? ($swahiliImage ?: $englishImage) : $englishImage;
+                    @endphp
                     <div class="slide slide-{{ $index + 1 }} {{ $index === 0 ? 'active' : '' }}" 
-                         style="background-image: url('{{ asset('storage/' . $slider->image_path) }}');">
+                         style="background-image: url('{{ asset('storage/' . $selectedImage) }}');">
                         <div class="slide-content">
                             <!-- Text content hidden -->
                             <div class="slide-info opacity-0 pointer-events-none">
@@ -579,30 +592,31 @@
                     </button>
 
                 <div id="lendingCardsContainer" class="overflow-x-auto pb-2 px-10 scroll-smooth">
-                    <div class="flex min-w-max items-stretch">
+                    <div class="flex min-w-max lg:min-w-full items-stretch gap-2 lg:gap-0">
                     @foreach($activeLoanCategories as $category)
-                        <div class="relative w-[280px] md:w-[300px] shrink-0 px-4 py-5 text-center group hover:bg-red-50 rounded-xl transition-colors duration-300">
+                        <div class="relative w-[230px] md:w-[240px] lg:w-1/5 lg:basis-1/5 lg:max-w-[20%] shrink-0 lg:flex-none px-3 py-4 text-center group hover:bg-red-50 rounded-xl transition-colors duration-300">
                             @if(!$loop->first)
                                 <div class="absolute left-0 top-10 bottom-10 w-px bg-gradient-to-b from-transparent via-brand-green/35 to-transparent"></div>
                             @endif
                             <div class="absolute top-0 left-8 right-8 h-0.5 bg-brand-green rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                            <div class="w-full h-28 mb-5 flex items-center justify-center transform group-hover:-translate-y-1 transition-transform duration-300">
+                            <div class="w-full h-24 mb-4 flex items-center justify-center transform group-hover:-translate-y-1 transition-transform duration-300">
                                 @if($category->image_path)
                                     <img src="{{ asset('storage/' . $category->image_path) }}"
                                          alt="{{ $category->name }}"
-                                         class="max-h-24 w-auto object-contain">
+                                         class="max-h-20 w-auto object-contain">
                                 @else
                                     <div class="text-sm text-gray-400">No image</div>
                                 @endif
                             </div>
 
-                            <h4 class="text-lg font-bold leading-snug text-[#1F3868] group-hover:text-brand-green mb-3 transition-colors duration-300">{{ $category->name }}</h4>
-                            <p class="text-sm leading-relaxed text-gray-600 group-hover:text-gray-700 min-h-[95px] transition-colors duration-300">
+                            <h4 class="text-base font-bold leading-snug text-[#1F3868] group-hover:text-brand-green mb-2 transition-colors duration-300">{{ $category->name }}</h4>
+                            <p class="text-sm leading-relaxed text-gray-600 group-hover:text-gray-700 min-h-[70px] max-h-[72px] overflow-hidden group-hover:max-h-[180px] transition-all duration-300"
+                               title="{{ $category->description ?: 'Flexible lending options designed to support your financial goals.' }}">
                                 {{ $category->description ?: 'Flexible lending options designed to support your financial goals.' }}
                             </p>
                             <a href="{{ route('user.register') }}"
-                               class="mt-5 inline-flex items-center text-sm font-semibold text-brand-green gap-1.5 group-hover:gap-2.5 transition-all duration-300">
+                               class="mt-4 inline-flex items-center text-sm font-semibold text-brand-green gap-1.5 group-hover:gap-2.5 transition-all duration-300">
                                 <span>Apply  
                                 </span>
                                 <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 16 16" fill="none">
@@ -1326,6 +1340,13 @@
 
     <!-- JavaScript for Mobile Menu and Navbar Scroll Effect -->
     <script>
+        function toggleHelpModal() {
+            const helpModal = document.getElementById('helpModal');
+            if (helpModal) {
+                helpModal.classList.toggle('hidden');
+            }
+        }
+
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
             const menuIcon = document.getElementById('menuIcon');
@@ -1399,7 +1420,7 @@
             const container = document.getElementById('lendingCardsContainer');
             if (!container) return;
 
-            const scrollAmount = 340;
+            const scrollAmount = 260;
             container.scrollBy({
                 left: direction === 'left' ? -scrollAmount : scrollAmount,
                 behavior: 'smooth'
@@ -1521,5 +1542,53 @@
             }
         }
     </script>
+
+    <!-- Floating Customer Help Button -->
+    <button
+        type="button"
+        onclick="toggleHelpModal()"
+        class="fixed bottom-5 right-5 z-[70] bg-brand-green text-white px-5 py-3 rounded-full shadow-lg hover:bg-red-700 transition-colors duration-300 inline-flex items-center gap-2"
+        aria-label="Open customer help form">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4v-4z"/>
+        </svg>
+        <span class="font-semibold text-sm">Customer Help</span>
+    </button>
+
+    <!-- Customer Help Modal -->
+    <div id="helpModal" class="hidden fixed inset-0 z-[75] bg-black/50 p-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl mx-auto mt-16">
+            <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">Need Help?</h3>
+                <button type="button" onclick="toggleHelpModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <form action="{{ route('customer-help.request') }}" method="POST" class="p-6 space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                    <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                    <input type="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input type="text" name="phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+                    <textarea name="message" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                    Send Request
+                </button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

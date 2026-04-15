@@ -20,12 +20,14 @@ class HeroSliderManagement extends Component
     public $selectedSlider = null;
 
     // Create/Edit properties
-    public $image = null;
+    public $imageEnglish = null;
+    public $imageSwahili = null;
     public $title = '';
     public $description = '';
     public $order = 0;
     public $is_active = true;
-    public $imagePreview = null;
+    public $imagePreviewEnglish = null;
+    public $imagePreviewSwahili = null;
 
     protected $paginationTheme = 'tailwind';
 
@@ -43,7 +45,8 @@ class HeroSliderManagement extends Component
     protected function rules(): array
     {
         return [
-            'image' => $this->imageRules(),
+            'imageEnglish' => $this->imageRules(),
+            'imageSwahili' => $this->imageRules(),
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'order' => 'required|integer|min:0',
@@ -78,8 +81,10 @@ class HeroSliderManagement extends Component
         $this->description = $this->selectedSlider->description;
         $this->order = $this->selectedSlider->order;
         $this->is_active = $this->selectedSlider->is_active;
-        $this->imagePreview = $this->selectedSlider->image_path;
-        $this->image = null;
+        $this->imagePreviewEnglish = $this->selectedSlider->image_path_en ?? $this->selectedSlider->image_path;
+        $this->imagePreviewSwahili = $this->selectedSlider->image_path_sw;
+        $this->imageEnglish = null;
+        $this->imageSwahili = null;
         $this->showEditModal = true;
     }
 
@@ -104,29 +109,36 @@ class HeroSliderManagement extends Component
 
     public function resetForm()
     {
-        $this->image = null;
+        $this->imageEnglish = null;
+        $this->imageSwahili = null;
         $this->title = '';
         $this->description = '';
         $this->order = HeroSlider::max('order') + 1 ?? 0;
         $this->is_active = true;
-        $this->imagePreview = null;
+        $this->imagePreviewEnglish = null;
+        $this->imagePreviewSwahili = null;
     }
 
     public function store()
     {
         $this->validate([
-            'image' => $this->imageRules(true),
+            'imageEnglish' => $this->imageRules(true),
+            'imageSwahili' => $this->imageRules(true),
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'order' => 'required|integer|min:0',
             'is_active' => 'boolean',
         ]);
-        $this->assertUploadedImageIsSafe();
+        $this->assertUploadedImageIsSafe($this->imageEnglish, 'imageEnglish');
+        $this->assertUploadedImageIsSafe($this->imageSwahili, 'imageSwahili');
 
-        $imagePath = $this->storeOptimizedImage($this->image);
+        $imagePathEn = $this->storeOptimizedImage($this->imageEnglish);
+        $imagePathSw = $this->storeOptimizedImage($this->imageSwahili);
 
         HeroSlider::create([
-            'image_path' => $imagePath,
+            'image_path' => $imagePathEn,
+            'image_path_en' => $imagePathEn,
+            'image_path_sw' => $imagePathSw,
             'title' => $this->title,
             'description' => $this->description,
             'order' => $this->order,
@@ -140,13 +152,15 @@ class HeroSliderManagement extends Component
     public function update()
     {
         $this->validate([
-            'image' => $this->imageRules(),
+            'imageEnglish' => $this->imageRules(),
+            'imageSwahili' => $this->imageRules(),
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'order' => 'required|integer|min:0',
             'is_active' => 'boolean',
         ]);
-        $this->assertUploadedImageIsSafe();
+        $this->assertUploadedImageIsSafe($this->imageEnglish, 'imageEnglish');
+        $this->assertUploadedImageIsSafe($this->imageSwahili, 'imageSwahili');
 
         $data = [
             'title' => $this->title,
@@ -155,12 +169,22 @@ class HeroSliderManagement extends Component
             'is_active' => $this->is_active,
         ];
 
-        if ($this->image) {
-            // Delete old image
-            if ($this->selectedSlider->image_path) {
+        if ($this->imageEnglish) {
+            if ($this->selectedSlider->image_path_en) {
+                Storage::disk('public')->delete($this->selectedSlider->image_path_en);
+            } elseif ($this->selectedSlider->image_path) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path);
             }
-            $data['image_path'] = $this->storeOptimizedImage($this->image);
+
+            $data['image_path_en'] = $this->storeOptimizedImage($this->imageEnglish);
+            $data['image_path'] = $data['image_path_en'];
+        }
+
+        if ($this->imageSwahili) {
+            if ($this->selectedSlider->image_path_sw) {
+                Storage::disk('public')->delete($this->selectedSlider->image_path_sw);
+            }
+            $data['image_path_sw'] = $this->storeOptimizedImage($this->imageSwahili);
         }
 
         $this->selectedSlider->update($data);
@@ -173,8 +197,14 @@ class HeroSliderManagement extends Component
     {
         if ($this->selectedSlider) {
             // Delete image file
-            if ($this->selectedSlider->image_path) {
+            if ($this->selectedSlider->image_path_en) {
+                Storage::disk('public')->delete($this->selectedSlider->image_path_en);
+            } elseif ($this->selectedSlider->image_path) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path);
+            }
+
+            if ($this->selectedSlider->image_path_sw) {
+                Storage::disk('public')->delete($this->selectedSlider->image_path_sw);
             }
             $this->selectedSlider->delete();
             session()->flash('success', 'Hero slider deleted successfully!');
@@ -182,25 +212,34 @@ class HeroSliderManagement extends Component
         $this->closeDeleteModal();
     }
 
-    public function updatedImage()
+    public function updatedImageEnglish()
     {
-        $this->validateOnly('image');
-        if ($this->image) {
-            $this->assertUploadedImageIsSafe();
-            $this->imagePreview = $this->image->temporaryUrl();
+        $this->validateOnly('imageEnglish');
+        if ($this->imageEnglish) {
+            $this->assertUploadedImageIsSafe($this->imageEnglish, 'imageEnglish');
+            $this->imagePreviewEnglish = $this->imageEnglish->temporaryUrl();
         }
     }
 
-    protected function assertUploadedImageIsSafe(): void
+    public function updatedImageSwahili()
     {
-        if (!$this->image) {
+        $this->validateOnly('imageSwahili');
+        if ($this->imageSwahili) {
+            $this->assertUploadedImageIsSafe($this->imageSwahili, 'imageSwahili');
+            $this->imagePreviewSwahili = $this->imageSwahili->temporaryUrl();
+        }
+    }
+
+    protected function assertUploadedImageIsSafe($image, string $field): void
+    {
+        if (!$image) {
             return;
         }
 
-        $path = $this->image->getRealPath();
+        $path = $image->getRealPath();
         if (!$path || @getimagesize($path) === false) {
             throw \Illuminate\Validation\ValidationException::withMessages([
-                'image' => 'Invalid image file.',
+                $field => 'Invalid image file.',
             ]);
         }
     }

@@ -22,6 +22,7 @@ return [
     'integrations' => 'Integrations',
     'hero_slider' => 'Hero Slider',
     'partner_management' => 'Partner Management',
+    'customer_help_management' => 'Customer Help',
     'promotions' => 'Promotions',
     'blog_management' => 'Blog Management',
     'self_services' => 'Self Services',

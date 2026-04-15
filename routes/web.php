@@ -14,6 +14,7 @@ use App\Http\Controllers\TRAController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\CompanyVerificationController;
 use App\Http\Controllers\TermsController;
+use App\Models\CustomerHelpRequest;
 use App\Models\NidaVerification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NidaVerificationController;
@@ -46,6 +47,19 @@ Route::get('/', function () {
     $heroSliders = \App\Models\HeroSlider::active()->ordered()->get();
     return view('welcome', compact('heroSliders'));
 });
+
+Route::post('/customer-help-request', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'nullable|string|max:50',
+        'message' => 'required|string|max:2000',
+    ]);
+
+    CustomerHelpRequest::create($validated);
+
+    return redirect('/')->with('help_success', 'Your request has been received. We will contact you shortly.');
+})->name('customer-help.request');
 
 // PUBLIC BLOG ROUTES
 Route::get('/blog', function () {
@@ -403,6 +417,9 @@ Route::middleware([  'auth:sanctum',config('jetstream.auth_session'), 'verified'
 
    /********************************** PARTNER MANAGEMENT  ***************************************/
    Route::get('partner-management', \App\Livewire\Admin\PartnerManagement::class)->name('admin.partner.management');
+
+   /********************************** CUSTOMER HELP MANAGEMENT  ***************************************/
+   Route::get('customer-help-management', \App\Livewire\Admin\CustomerHelpManagement::class)->name('admin.customer-help.management');
 
    /********************************** PROMOTION MANAGEMENT  ***************************************/
    Route::get('promotion-management', \App\Livewire\Admin\PromotionManagement::class)->name('admin.promotion.management');

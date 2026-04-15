@@ -9,10 +9,13 @@ use App\Models\LoanProduct;
 use App\Models\Lender;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class LenderDashboard extends Component
 {
+    private const DASHBOARD_CACHE_TTL_MINUTES = 5;
+
     public $newApplications;
     public $totalApplications;
     public $approvedApplications;
@@ -40,6 +43,15 @@ class LenderDashboard extends Component
         $lender = Auth::user()->lender ?? Lender::where('user_id', Auth::id())->first();
         
         if (!$lender) {
+            return;
+        }
+
+        $cacheKey = "dashboard:lender:{$lender->id}:v1";
+        $cachedData = Cache::store('redis')->get($cacheKey);
+        if (is_array($cachedData)) {
+            foreach ($cachedData as $property => $value) {
+                $this->{$property} = $value;
+            }
             return;
         }
 
@@ -202,6 +214,32 @@ class LenderDashboard extends Component
 
         // Product performance insights - from application_lender_submissions
         $this->productInsights = $this->getProductInsights($lender->id);
+
+        Cache::store('redis')->put($cacheKey, [
+            'newApplications' => $this->newApplications,
+            'totalApplications' => $this->totalApplications,
+            'approvedApplications' => $this->approvedApplications,
+            'rejectedApplications' => $this->rejectedApplications,
+            'pendingApplications' => $this->pendingApplications,
+            'totalDisbursed' => $this->totalDisbursed,
+            'monthlyDisbursed' => $this->monthlyDisbursed,
+            'conversionRate' => $this->conversionRate,
+            'recentApplications' => $this->recentApplications,
+            'loanProducts' => $this->loanProducts,
+            'applicationsByStatus' => $this->applicationsByStatus,
+            'applicationsByProduct' => $this->applicationsByProduct,
+            'topPerformingProducts' => $this->topPerformingProducts,
+            'applicationTrends' => $this->applicationTrends,
+            'productInsights' => $this->productInsights,
+        ], now()->addMinutes(self::DASHBOARD_CACHE_TTL_MINUTES));
+    }
+
+    private function clearDashboardCache(): void
+    {
+        $lender = Auth::user()?->lender ?? Lender::where('user_id', Auth::id())->first();
+        if ($lender) {
+            Cache::store('redis')->forget("dashboard:lender:{$lender->id}:v1");
+        }
     }
 
     private function getMonthlyTrends($lenderId)
@@ -315,6 +353,7 @@ class LenderDashboard extends Component
             'reviewed_by' => Auth::id()
         ]);
         
+        $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->dispatch('dashboardUpdated'); // Trigger chart updates
         session()->flash('message', 'Application approved successfully!');
@@ -336,6 +375,7 @@ class LenderDashboard extends Component
             'rejection_reasons' => json_encode(['reason' => $reason])
         ]);
         
+        $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->dispatch('dashboardUpdated'); // Trigger chart updates
         session()->flash('message', 'Application rejected.');
@@ -356,6 +396,7 @@ class LenderDashboard extends Component
             'reviewed_by' => Auth::id()
         ]);
         
+        $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->dispatch('dashboardUpdated'); // Trigger chart updates
         session()->flash('message', 'Application moved to review.');

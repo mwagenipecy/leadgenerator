@@ -11,6 +11,8 @@ class HeroSlider extends Model
 
     protected $fillable = [
         'image_path',
+        'image_path_en',
+        'image_path_sw',
         'title',
         'description',
         'order',

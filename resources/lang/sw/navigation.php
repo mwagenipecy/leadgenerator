@@ -22,6 +22,7 @@ return [
     'integrations' => 'Muunganisho',
     'hero_slider' => 'Kisukuku cha Picha',
     'partner_management' => 'Usimamizi wa Washirika',
+    'customer_help_management' => 'Msaada wa Wateja',
     'promotions' => 'Matangazo',
     'blog_management' => 'Usimamizi wa Blogu',
     'self_services' => 'Huduma za Kibinafsi',

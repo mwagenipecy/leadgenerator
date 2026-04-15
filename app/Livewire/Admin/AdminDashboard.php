@@ -9,10 +9,13 @@ use App\Models\Lender;
 use App\Models\Application;
 use App\Models\LoanProduct;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class AdminDashboard extends Component
 {
+    private const DASHBOARD_CACHE_TTL_MINUTES = 5;
+
     public $totalLenders;
     public $pendingLenders;
     public $approvedLenders;
@@ -46,6 +49,15 @@ class AdminDashboard extends Component
 
     public function loadDashboardData()
     {
+        $cacheKey = 'dashboard:admin:data:v1';
+        $cachedData = $this->getCachedData($cacheKey);
+        if (is_array($cachedData)) {
+            foreach ($cachedData as $property => $value) {
+                $this->{$property} = $value;
+            }
+            return;
+        }
+
         // Basic counts
         $this->totalLenders = Lender::count();
         $this->pendingLenders = Lender::where('status', 'pending')->count();
@@ -158,10 +170,35 @@ class AdminDashboard extends Component
         $this->recentActivity = collect($activities);
 
 
+        $this->putCachedData($cacheKey, [
+            'totalLenders' => $this->totalLenders,
+            'pendingLenders' => $this->pendingLenders,
+            'approvedLenders' => $this->approvedLenders,
+            'totalApplications' => $this->totalApplications,
+            'totalBorrowers' => $this->totalBorrowers,
+            'recentApplications' => $this->recentApplications,
+            'applicationsByStatus' => $this->applicationsByStatus,
+            'pendingLendersList' => $this->pendingLendersList,
+            'recentActivity' => $this->recentActivity,
+            'totalRevenue' => $this->totalRevenue,
+            'monthlyRevenue' => $this->monthlyRevenue,
+            'approvedApplications' => $this->approvedApplications,
+            'rejectedApplications' => $this->rejectedApplications,
+            'conversionRate' => $this->conversionRate,
+        ]);
     }
 
     public function loadChartData()
     {
+        $cacheKey = 'dashboard:admin:charts:v1';
+        $cachedData = $this->getCachedData($cacheKey);
+        if (is_array($cachedData)) {
+            foreach ($cachedData as $property => $value) {
+                $this->{$property} = $value;
+            }
+            return;
+        }
+
         // Get current year for monthly trends
         $currentYear = now()->year;
         
@@ -211,6 +248,71 @@ class AdminDashboard extends Component
                 $this->statusData[] = $count;
             }
         }
+
+        $this->putCachedData($cacheKey, [
+            'monthlyLabels' => $this->monthlyLabels,
+            'monthlyApplications' => $this->monthlyApplications,
+            'monthlyApproved' => $this->monthlyApproved,
+            'monthlyRejected' => $this->monthlyRejected,
+            'monthlyDisbursed' => $this->monthlyDisbursed,
+            'statusLabels' => $this->statusLabels,
+            'statusData' => $this->statusData,
+        ]);
+    }
+
+    private function clearDashboardCache(): void
+    {
+        $this->forgetCachedData('dashboard:admin:data:v1');
+        $this->forgetCachedData('dashboard:admin:charts:v1');
+    }
+
+    private function getCachedData(string $key): mixed
+    {
+        try {
+            return Cache::store('redis')->get($key);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        try {
+            return Cache::get($key);
+        } catch (\Throwable $e) {
+            report($e);
+            return null;
+        }
+    }
+
+    private function putCachedData(string $key, array $data): void
+    {
+        $ttl = now()->addMinutes(self::DASHBOARD_CACHE_TTL_MINUTES);
+
+        try {
+            Cache::store('redis')->put($key, $data, $ttl);
+            return;
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        try {
+            Cache::put($key, $data, $ttl);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+    }
+
+    private function forgetCachedData(string $key): void
+    {
+        try {
+            Cache::store('redis')->forget($key);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        try {
+            Cache::forget($key);
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
     public function approveLender($lenderId)
@@ -222,6 +324,7 @@ class AdminDashboard extends Component
             'approved_by' => auth()->id()
         ]);
         
+        $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->loadChartData();
         session()->flash('message', 'Lender approved successfully!');
@@ -235,6 +338,7 @@ class AdminDashboard extends Component
             'rejection_reason' => $reason
         ]);
         
+        $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->loadChartData();
         session()->flash('message', 'Lender rejected.');
@@ -245,6 +349,7 @@ class AdminDashboard extends Component
         $lender = Lender::find($lenderId);
         $lender->update(['status' => 'suspended']);
         
+        $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->loadChartData();
         session()->flash('message', 'Lender suspended.');
@@ -252,6 +357,7 @@ class AdminDashboard extends Component
 
     public function refreshCharts()
     {
+        $this->clearDashboardCache();
         $this->loadChartData();
         $this->dispatch('refreshCharts');
     }

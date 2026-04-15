@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\UserOtp;
+use App\Models\OtpCode;
 use App\Mail\OtpMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Exception;
 
@@ -29,20 +30,18 @@ class OtpService
             $this->invalidateExistingOtps($user);
 
             // Generate new OTP
-            $otpCode = UserOtp::generateOtp();
+            $otpCode = OtpCode::generateOtp();
             
             // Create OTP record
-            $otp = UserOtp::create([
+            $otp = OtpCode::create([
                 'user_id' => $user->id,
-                'otp' => $otpCode,
+                'otp_hash' => Hash::make($otpCode),
                 'expires_at' => Carbon::now()->addMinutes(self::OTP_EXPIRY_MINUTES),
                 'is_used' => false
             ]);
 
             Log::info('OTP record created', [
                 'user_id' => $user->id,
-                //'otp_id' => $otp->id,
-                //'otp_code' => $otpCode,
                 'expires_at' => $otp->expires_at
             ]);
 
@@ -60,7 +59,6 @@ class OtpService
                 Log::info('OTP email sent successfully', [
                     'user_id' => $user->id,
                     'email' => $user->email,
-                    'otp_code' => $otpCode
                 ]);
             } catch (Exception $mailException) {
                 Log::error('Failed to send OTP email', [
@@ -94,40 +92,27 @@ class OtpService
     {
         Log::info('Starting OTP verification', [
             'user_id' => $user->id,
-            'provided_otp' => $otpCode
         ]);
 
-        $otp = UserOtp::where('user_id', $user->id)
-                      ->where('otp', $otpCode)
-                      ->where('is_used', false)
-                      ->where('expires_at', '>', Carbon::now())
-                      ->first();
+        $otp = OtpCode::where('user_id', $user->id)
+            ->where('is_used', false)
+            ->where('expires_at', '>', Carbon::now())
+            ->orderByDesc('id')
+            ->first();
 
-        if (!$otp) {
-            // Check if OTP exists but is used or expired
-            $existingOtp = UserOtp::where('user_id', $user->id)
-                                 ->where('otp', $otpCode)
-                                 ->first();
-            
-            if ($existingOtp) {
-                Log::warning('OTP exists but invalid', [
-                    'user_id' => $user->id,
-                   // 'provided_otp' => $otpCode,
-                    'is_used' => $existingOtp->is_used,
-                    'is_expired' => $existingOtp->isExpired(),
-                    'expires_at' => $existingOtp->expires_at
-                ]);
-            } else {
-                Log::warning('OTP not found', [
-                    'user_id' => $user->id,
-                    'provided_otp' => $otpCode
-                ]);
-            }
+        if (!$otp || !Hash::check($otpCode, $otp->otp_hash)) {
+            Log::warning('OTP verification failed', ['user_id' => $user->id]);
             return false;
         }
 
         // Mark OTP as used
         $otp->markAsUsed();
+
+        // Enforce single-use semantics strictly: invalidate any other active OTP sessions
+        // for this user immediately after the first successful verification.
+        OtpCode::where('user_id', $user->id)
+            ->where('is_used', false)
+            ->update(['is_used' => true]);
 
         Log::info('OTP verified successfully', [
             'user_id' => $user->id,
@@ -176,7 +161,7 @@ class OtpService
      */
     private function invalidateExistingOtps(User $user): void
     {
-        $updated = UserOtp::where('user_id', $user->id)
+        $updated = OtpCode::where('user_id', $user->id)
                ->where('is_used', false)
                ->update(['is_used' => true]);
                
@@ -191,7 +176,7 @@ class OtpService
      */
     public function cleanupExpiredOtps(): int
     {
-        return UserOtp::where('expires_at', '<', Carbon::now())
+        return OtpCode::where('expires_at', '<', Carbon::now())
                      ->delete();
     }
 

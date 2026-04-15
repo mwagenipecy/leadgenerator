@@ -29,55 +29,81 @@
             </div>
         @endif
 
-        <!-- Sliders Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @forelse($sliders as $slider)
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="{{ asset('storage/' . $slider->image_path) }}" 
-                             alt="{{ $slider->title ?? 'Hero Slider' }}" 
-                             class="w-full h-full object-cover">
-                        @if($slider->is_active)
-                            <span class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">{{ __('slider.active') }}</span>
-                        @else
-                            <span class="absolute top-2 right-2 bg-gray-400 text-white px-2 py-1 rounded-full text-xs font-medium">{{ __('slider.inactive') }}</span>
-                        @endif
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-900 mb-1">{{ $slider->title ?? 'Untitled' }}</h3>
-                        @if($slider->description)
-                            <p class="text-sm text-gray-600 mb-2">{{ Str::limit($slider->description, 60) }}</p>
-                        @endif
-                        <div class="flex items-center justify-between mt-4">
-                            <span class="text-xs text-gray-500">{{ __('slider.order') }}: {{ $slider->order }}</span>
-                            <div class="flex items-center space-x-2">
-                                <button wire:click="openEditModal({{ $slider->id }})" 
-                                        class="p-2 text-sidebar-green hover:bg-sidebar-green/10 rounded-lg transition-colors" 
-                                        title="{{ __('slider.edit') }}">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                    </svg>
-                                </button>
-                                <button wire:click="openDeleteModal({{ $slider->id }})" 
-                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
-                                        title="{{ __('slider.delete') }}">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-span-full text-center py-12">
-                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <p class="text-gray-500 text-lg">{{ __('slider.no_slider_images') }}</p>
-                    <p class="text-gray-400 text-sm mt-2">{{ __('slider.click_add_image') }}</p>
-                </div>
-            @endforelse
+        <!-- Sliders Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">English Hero Image</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Swahili Hero Image</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ __('slider.order') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                            <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        @forelse($sliders as $slider)
+                            <tr>
+                                <td class="px-4 py-3">
+                                    @if($slider->image_path_en ?? $slider->image_path)
+                                        <img src="{{ asset('storage/' . ($slider->image_path_en ?? $slider->image_path)) }}" alt="English hero" class="h-16 w-28 object-cover rounded-md border border-gray-200">
+                                    @else
+                                        <span class="text-xs text-gray-500">No image</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3">
+                                    @if($slider->image_path_sw)
+                                        <img src="{{ asset('storage/' . $slider->image_path_sw) }}" alt="Swahili hero" class="h-16 w-28 object-cover rounded-md border border-gray-200">
+                                    @else
+                                        <span class="text-xs text-gray-500">No image</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3">
+                                    <p class="font-semibold text-gray-900">{{ $slider->title ?? 'Untitled' }}</p>
+                                    @if($slider->description)
+                                        <p class="text-xs text-gray-500 mt-1">{{ Str::limit($slider->description, 70) }}</p>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $slider->order }}</td>
+                                <td class="px-4 py-3">
+                                    @if($slider->is_active)
+                                        <span class="inline-flex items-center rounded-full bg-green-100 text-green-700 px-2.5 py-1 text-xs font-medium">{{ __('slider.active') }}</span>
+                                    @else
+                                        <span class="inline-flex items-center rounded-full bg-gray-100 text-gray-600 px-2.5 py-1 text-xs font-medium">{{ __('slider.inactive') }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <button wire:click="openEditModal({{ $slider->id }})"
+                                                class="p-2 text-sidebar-green hover:bg-sidebar-green/10 rounded-lg transition-colors"
+                                                title="{{ __('slider.edit') }}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </button>
+                                        <button wire:click="openDeleteModal({{ $slider->id }})"
+                                                class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="{{ __('slider.delete') }}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-4 py-10 text-center">
+                                    <p class="text-gray-500 text-lg">{{ __('slider.no_slider_images') }}</p>
+                                    <p class="text-gray-400 text-sm mt-2">{{ __('slider.click_add_image') }}</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Pagination -->
@@ -97,15 +123,28 @@
                 
                 <form wire:submit.prevent="store">
                     <div class="space-y-4">
-                        <!-- Image Upload -->
+                        <!-- English Image Upload -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Image *</label>
-                            <input type="file" wire:model="image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">English Hero Image *</label>
+                            <input type="file" wire:model="imageEnglish" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
                             <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
-                            @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            @if($image)
+                            @error('imageEnglish') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            @if($imageEnglish)
                                 <div class="mt-2">
-                                    <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                    <img src="{{ $imageEnglish->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Swahili Image Upload -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Swahili Hero Image *</label>
+                            <input type="file" wire:model="imageSwahili" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
+                            @error('imageSwahili') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            @if($imageSwahili)
+                                <div class="mt-2">
+                                    <img src="{{ $imageSwahili->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
                                 </div>
                             @endif
                         </div>
@@ -157,23 +196,44 @@
                 
                 <form wire:submit.prevent="update">
                     <div class="space-y-4">
-                        <!-- Current Image Preview -->
-                        @if($imagePreview && !$image)
+                        <!-- Current English Image Preview -->
+                        @if($imagePreviewEnglish && !$imageEnglish)
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Current Image</label>
-                                <img src="{{ asset('storage/' . $imagePreview) }}" alt="Current" class="max-w-full h-48 object-cover rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Current English Hero Image</label>
+                                <img src="{{ asset('storage/' . $imagePreviewEnglish) }}" alt="Current English image" class="max-w-full h-48 object-cover rounded-lg">
                             </div>
                         @endif
 
-                        <!-- Image Upload -->
+                        <!-- Current Swahili Image Preview -->
+                        @if($imagePreviewSwahili && !$imageSwahili)
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Current Swahili Hero Image</label>
+                                <img src="{{ asset('storage/' . $imagePreviewSwahili) }}" alt="Current Swahili image" class="max-w-full h-48 object-cover rounded-lg">
+                            </div>
+                        @endif
+
+                        <!-- English Image Upload -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Change Image (Optional)</label>
-                            <input type="file" wire:model="image" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Change English Hero Image (Optional)</label>
+                            <input type="file" wire:model="imageEnglish" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
                             <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
-                            @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            @if($image)
+                            @error('imageEnglish') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            @if($imageEnglish)
                                 <div class="mt-2">
-                                    <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                    <img src="{{ $imageEnglish->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Swahili Image Upload -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Change Swahili Hero Image (Optional)</label>
+                            <input type="file" wire:model="imageSwahili" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="w-full border border-gray-300 rounded-lg p-2">
+                            <p class="text-xs text-gray-500 mt-1">Allowed: JPG, PNG, WEBP (max 5MB).</p>
+                            @error('imageSwahili') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            @if($imageSwahili)
+                                <div class="mt-2">
+                                    <img src="{{ $imageSwahili->temporaryUrl() }}" alt="Preview" class="max-w-full h-48 object-cover rounded-lg">
                                 </div>
                             @endif
                         </div>
