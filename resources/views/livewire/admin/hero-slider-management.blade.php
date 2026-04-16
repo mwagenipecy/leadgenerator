@@ -179,7 +179,16 @@
 
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" wire:click="closeCreateModal" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
-                        <button type="submit" class="px-6 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light">Add Image</button>
+                        <button
+                            type="button"
+                            wire:click="store"
+                            wire:loading.attr="disabled"
+                            wire:target="store,imageEnglish,imageSwahili"
+                            class="px-6 py-2 bg-sidebar-green text-white rounded-lg hover:bg-sidebar-green-light disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            <span wire:loading.remove wire:target="store,imageEnglish,imageSwahili">Add Image</span>
+                            <span wire:loading wire:target="store,imageEnglish,imageSwahili">Uploading...</span>
+                        </button>
                     </div>
                 </form>
             </div>
