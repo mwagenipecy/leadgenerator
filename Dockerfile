@@ -10,22 +10,21 @@ COPY public ./public
 RUN npm run build
 
 # Stage 2: PHP application
-FROM php:8.2-fpm-alpine AS app
+FROM php:8.2-fpm AS app
 WORKDIR /var/www/html
 
 # Install system deps + PHP extensions Laravel needs (PostgreSQL + SQLite)
-RUN apk add --no-cache \
-    git \
-    unzip \
-    libzip-dev \
-    libpng-dev \
-    libxml2-dev \
-    oniguruma-dev \
-    sqlite-dev \
-    icu-dev \
-    libpq \
-    postgresql16-dev \
-    linux-headers \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        git \
+        unzip \
+        libzip-dev \
+        libpng-dev \
+        libxml2-dev \
+        libonig-dev \
+        libsqlite3-dev \
+        libicu-dev \
+        libpq-dev \
     && docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) \
         bcmath \
@@ -39,7 +38,8 @@ RUN apk add --no-cache \
         gd \
         dom \
         xml \
-        mbstring
+        mbstring \
+    && rm -rf /var/lib/apt/lists/*
 
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
