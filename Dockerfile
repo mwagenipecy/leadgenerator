@@ -23,7 +23,8 @@ RUN apk add --no-cache \
     oniguruma-dev \
     sqlite-dev \
     icu-dev \
-    postgresql-dev \
+    libpq \
+    postgresql16-dev \
     linux-headers \
     && docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) \
