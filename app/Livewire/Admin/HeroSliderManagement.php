@@ -290,9 +290,16 @@ class HeroSliderManagement extends Component
         $storedExtension = 'webp';
         if (function_exists('imagewebp')) {
             imagewebp($targetImage, null, 80);
-        } else {
+        } elseif (function_exists('imagejpeg')) {
             $storedExtension = 'jpg';
             imagejpeg($targetImage, null, 82);
+        } else {
+            imagedestroy($sourceImage);
+            imagedestroy($targetImage);
+
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'image' => 'Image conversion is not available on this server (WebP/JPEG support missing).',
+            ]);
         }
         $optimizedBinary = ob_get_clean();
 

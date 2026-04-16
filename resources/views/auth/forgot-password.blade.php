@@ -47,12 +47,12 @@
 <!-- Left Side - Welcome Content (Hidden on mobile) -->
   <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden h-screen" style="background-image: url('{{ $authSideImage }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <!-- Gradient Overlay at Bottom -->
-            <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-brand-red/90 via-brand-red/60 to-transparent"></div>
+            <!-- <div class="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-brand-red/90 via-brand-red/60 to-transparent"></div> -->
             
             <!-- Marketing Content at Bottom - Squeezed to Right -->
             <div class="absolute bottom-0 right-0 z-20 p-6 pr-8 max-w-sm">
                 <!-- Red Gradient Background for Text Section -->
-                <div class="bg-gradient-to-t from-brand-red via-brand-red/95 to-brand-red/80 rounded-lg p-5 backdrop-blur-sm">
+                <!-- <div class="bg-gradient-to-t from-brand-red via-brand-red/95 to-brand-red/80 rounded-lg p-5 backdrop-blur-sm">
                     <h2 class="text-xl md:text-2xl font-bold font-poppins text-white mb-3 leading-tight">
                         {{ __('auth.connect_grow_succeed') }}
                     </h2>
@@ -76,7 +76,7 @@
                         </svg>
                         <span class="text-white text-xs font-medium">{{ __('auth.nida_verified_secure') }}</span>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 

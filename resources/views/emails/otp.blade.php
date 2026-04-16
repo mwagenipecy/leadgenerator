@@ -1,224 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ $locale === 'sw' ? 'sw' : 'en' }}">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Code – Fanikisha Marketplace</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333333;
-            background-color: #f5f5f5;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .email-wrapper {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-        }
-        
-        /* Header – Fanikisha brand */
-        .header {
-            background: linear-gradient(135deg, #C40F11 0%, #A00E11 100%);
-            padding: 40px 20px;
-            text-align: center;
-        }
-        
-        .logo-container {
-            display: inline-block;
-            background-color: #ffffff;
-            padding: 20px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .logo {
-            max-width: 200px;
-            height: auto;
-            display: block;
-        }
-        
-        /* Main content */
-        .content {
-            padding: 50px 40px;
-            background-color: #ffffff;
-        }
-        
-        .title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-        
-        .message {
-            font-size: 15px;
-            color: #555555;
-            margin-bottom: 20px;
-            line-height: 1.8;
-            text-align: left;
-        }
-        
-        /* Verification code section */
-        .code-section {
-            text-align: center;
-            margin: 40px 0;
-            padding: 30px 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .code-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #666666;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .otp-code {
-            font-size: 48px;
-            font-weight: 700;
-            color: #1a1a1a;
-            letter-spacing: 8px;
-            font-family: 'Courier New', monospace;
-            margin: 15px 0;
-            user-select: all;
-        }
-        
-        .code-validity {
-            font-size: 13px;
-            color: #888888;
-            margin-top: 15px;
-            font-style: italic;
-        }
-        
-        /* Security notice */
-        .security-notice {
-            background-color: #fff9e6;
-            border-left: 4px solid #ffc107;
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 4px;
-        }
-        
-        .security-notice p {
-            font-size: 14px;
-            color: #555555;
-            margin: 0;
-            line-height: 1.6;
-        }
-        
-        /* Footer */
-        .footer {
-            background-color: #f9f9f9;
-            padding: 30px 40px;
-            border-top: 1px solid #e0e0e0;
-            text-align: left;
-        }
-        
-        .footer p {
-            font-size: 12px;
-            color: #888888;
-            margin: 8px 0;
-            line-height: 1.6;
-        }
-        
-        .footer-company {
-            font-weight: 600;
-            color: #666666;
-        }
-        
-        /* Responsive */
-        @media only screen and (max-width: 600px) {
-            .email-wrapper {
-                width: 100% !important;
-            }
-            
-            .header {
-                padding: 30px 20px;
-            }
-            
-            .logo-container {
-                padding: 15px 20px;
-            }
-            
-            .logo {
-                max-width: 150px;
-            }
-            
-            .content {
-                padding: 30px 20px;
-            }
-            
-            .title {
-                font-size: 20px;
-            }
-            
-            .otp-code {
-                font-size: 36px;
-                letter-spacing: 4px;
-            }
-            
-            .footer {
-                padding: 20px;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ $locale === 'sw' ? 'Nambari Yako ya Uthibitishaji' : 'Your Verification Code' }}</title>
 </head>
-<body>
-    <div class="email-wrapper">
-        <!-- Header with Logo -->
-        <div class="header">
-            <div class="logo-container">
-                <img src="{{ rtrim(config('app.url'), '/') }}/landing/redlogo.png" alt="Fanikisha Marketplace" class="logo">
-            </div>
-        </div>
-        
-        <!-- Main Content -->
-        <div class="content">
-            <h1 class="title">Your verification code</h1>
-            
-            <p class="message">
-                You requested a verification code to sign in or complete registration on Fanikisha Marketplace. Enter the code below when prompted on our platform.
-            </p>
-            
-            <!-- Verification Code -->
-            <div class="code-section">
-                <div class="code-label">Verification code</div>
-                <div class="otp-code">{{ $otp }}</div>
-                <div class="code-validity">This code expires in 10 minutes. Do not share it with anyone.</div>
-            </div>
-            
-            <!-- Security Notice -->
-            <div class="security-notice">
-                <p>
-                    <strong>Security:</strong> Fanikisha Marketplace will never ask you for your password, bank details, or card number by email. If you did not request this code, ignore this email and ensure your password is secure.
+<body style="margin:0;padding:0;background:#0f0d08;font-family:Georgia,'Times New Roman',serif;color:#ffffff;">
+  @php
+      $otpDigits = str_split(str_pad((string) $otp, 6, '0', STR_PAD_LEFT));
+  @endphp
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="520" cellpadding="0" cellspacing="0">
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <img src="{{ rtrim(config('app.url'), '/') }}/landing/redlogo.png" alt="Fanikisha Marketplace" style="max-width:180px;height:auto;display:block;">
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 20px;">
+              <div style="background:#1a1610;border-radius:16px;padding:40px 32px;border:1px solid #2a261e;">
+                <p style="font-size:15px;color:#ffffff;margin:0 0 4px;">
+                  {{ $locale === 'sw' ? 'Habari,' : 'Hello,' }}
                 </p>
-            </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <p class="footer-company">Fanikisha Marketplace</p>
-            <p>This is an automated message from Fanikisha Marketplace, the loan marketplace connecting borrowers and lenders in Tanzania. &copy; {{ date('Y') }} Fanikisha Marketplace. All rights reserved. Powered by CreditInfo Tanzania.</p>
-            <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-                If you did not request this code, please disregard this email.
-            </p>
-        </div>
-    </div>
+                <h2 style="font-family:Georgia,serif;font-size:22px;color:#ffffff;margin:0 0 8px;">
+                  {{ $locale === 'sw' ? 'Nambari yako ya uthibitishaji' : 'Your verification code' }}
+                </h2>
+                <p style="font-size:14px;color:#ffffff;line-height:1.6;margin:0 0 28px;">
+                  @if($locale === 'sw')
+                    Tumia nambari hii ya muda mmoja kukamilisha kuingia. Nambari hii itaisha ndani ya
+                    <strong style="color:#C40F11;">dakika {{ $expiryMinutes }}</strong>.
+                  @else
+                    Use this one-time password to complete your sign-in. This code expires in
+                    <strong style="color:#C40F11;">{{ $expiryMinutes }} minutes</strong>.
+                  @endif
+                </p>
+                <div style="text-align:center;margin-bottom:28px;">
+                  @foreach($otpDigits as $digit)
+                    <span style="display:inline-block;width:52px;height:64px;background:#0f0d08;border-radius:12px;border:1.5px solid #2a261e;font-size:28px;font-weight:700;color:#C40F11;line-height:64px;text-align:center;margin:0 4px;">{{ $digit }}</span>
+                  @endforeach
+                </div>
+                <div style="height:1px;background:#2a261e;margin:0 0 20px;"></div>
+                <div style="background:rgba(196,15,17,0.10);padding:14px 16px;border-radius:10px;border:1px solid rgba(196,15,17,0.20);">
+                  <p style="font-size:12.5px;color:#ffffff;line-height:1.6;margin:0;">
+                    @if($locale === 'sw')
+                      ⚠ Kama hukuomba nambari hii, tafadhali puuza barua pepe hii au wasiliana na msaada. Usimpe mtu yeyote nambari hii.
+                    @else
+                      ⚠ If you did not request this code, please ignore this email or contact support. Never share this code.
+                    @endif
+                  </p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:28px 20px 0;">
+              <p style="font-size:12px;color:#ffffff;margin:0 0 6px;">
+                © {{ date('Y') }} Fanikisha Marketplace · {{ $locale === 'sw' ? 'Haki zote zimehifadhiwa' : 'All rights reserved' }}
+              </p>
+              <p style="margin:0;">
+                <a href="{{ url('/terms') }}" style="font-size:11.5px;color:#ffffff;text-decoration:none;margin:0 9px;">
+                  {{ $locale === 'sw' ? 'Masharti ya Matumizi' : 'Terms of Service' }}
+                </a>
+                <a href="{{ url('/customer-help') }}" style="font-size:11.5px;color:#ffffff;text-decoration:none;margin:0 9px;">
+                  {{ $locale === 'sw' ? 'Kituo cha Msaada' : 'Help Center' }}
+                </a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>

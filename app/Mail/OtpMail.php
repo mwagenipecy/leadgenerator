@@ -16,14 +16,16 @@ class OtpMail extends Mailable implements ShouldQueue
 
     public User $user;
     public string $otp;
+    public string $mailLocale;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, string $otp)
+    public function __construct(User $user, string $otp, ?string $locale = null)
     {
         $this->user = $user;
         $this->otp = $otp;
+        $this->mailLocale = $locale ?? app()->getLocale();
     }
 
     /**
@@ -31,8 +33,12 @@ class OtpMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $subject = $this->mailLocale === 'sw'
+            ? 'Nambari yako ya uthibitishaji - Fanikisha Marketplace'
+            : 'Your verification code - Fanikisha Marketplace';
+
         return new Envelope(
-            subject: 'Your verification code – Fanikisha Marketplace',
+            subject: $subject,
             from: config('mail.from.address', 'noreply@fanikisha.com'),
         );
     }
@@ -48,6 +54,7 @@ class OtpMail extends Mailable implements ShouldQueue
                 'user' => $this->user,
                 'otp' => $this->otp,
                 'expiryMinutes' => 10,
+                'locale' => $this->mailLocale,
             ]
         );
     }

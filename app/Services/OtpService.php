@@ -55,7 +55,7 @@ class OtpService
 
             // Send OTP via email
             try {
-                Mail::to($user->email)->send(new OtpMail($user, $otpCode));
+                Mail::to($user->email)->send(new OtpMail($user, $otpCode, app()->getLocale()));
                 Log::info('OTP email sent successfully', [
                     'user_id' => $user->id,
                     'email' => $user->email,
