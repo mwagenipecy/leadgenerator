@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Hubballi&display=swap" rel="stylesheet">
    
    
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -587,7 +587,7 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4">"The application process was straightforward and I got matched with a lender quickly. Highly recommend this platform."</p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4" style="font-family: 'Hubballi', sans-serif;">"The application process was straightforward and I got matched with a lender quickly. Highly recommend this platform."</p>
                     <p class="font-semibold text-gray-900">Amina J.</p>
                     <p class="text-xs text-gray-500">Small Business Owner</p>
                 </div>
@@ -600,7 +600,7 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4">"I compared offers from multiple lenders in one place. It saved me time and gave me better terms for my loan."</p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4" style="font-family: 'Hubballi', sans-serif;">"I compared offers from multiple lenders in one place. It saved me time and gave me better terms for my loan."</p>
                     <p class="font-semibold text-gray-900">Joseph M.</p>
                     <p class="text-xs text-gray-500">Retail Trader</p>
                 </div>
@@ -613,7 +613,7 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4">"Very professional support team and transparent process. I felt confident from application to approval."</p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-4" style="font-family: 'Hubballi', sans-serif;">"Very professional support team and transparent process. I felt confident from application to approval."</p>
                     <p class="font-semibold text-gray-900">Rehema K.</p>
                     <p class="text-xs text-gray-500">Entrepreneur</p>
                 </div>

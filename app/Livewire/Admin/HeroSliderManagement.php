@@ -7,12 +7,14 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class HeroSliderManagement extends Component
 {
     use WithFileUploads, WithPagination;
+    protected ?bool $supportsLocalizedImageColumns = null;
 
     public $showCreateModal = false;
     public $showEditModal = false;
@@ -135,15 +137,20 @@ class HeroSliderManagement extends Component
         $imagePathEn = $this->storeOptimizedImage($this->imageEnglish);
         $imagePathSw = $this->storeOptimizedImage($this->imageSwahili);
 
-        HeroSlider::create([
+        $data = [
             'image_path' => $imagePathEn,
-            'image_path_en' => $imagePathEn,
-            'image_path_sw' => $imagePathSw,
             'title' => $this->title,
             'description' => $this->description,
             'order' => $this->order,
             'is_active' => $this->is_active,
-        ]);
+        ];
+
+        if ($this->hasLocalizedImageColumns()) {
+            $data['image_path_en'] = $imagePathEn;
+            $data['image_path_sw'] = $imagePathSw;
+        }
+
+        HeroSlider::create($data);
 
         session()->flash('success', 'Hero slider image added successfully!');
         $this->closeCreateModal();
@@ -170,21 +177,28 @@ class HeroSliderManagement extends Component
         ];
 
         if ($this->imageEnglish) {
-            if ($this->selectedSlider->image_path_en) {
+            if ($this->hasLocalizedImageColumns() && $this->selectedSlider->image_path_en) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path_en);
             } elseif ($this->selectedSlider->image_path) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path);
             }
 
-            $data['image_path_en'] = $this->storeOptimizedImage($this->imageEnglish);
-            $data['image_path'] = $data['image_path_en'];
+            $newEnPath = $this->storeOptimizedImage($this->imageEnglish);
+            $data['image_path'] = $newEnPath;
+
+            if ($this->hasLocalizedImageColumns()) {
+                $data['image_path_en'] = $newEnPath;
+            }
         }
 
         if ($this->imageSwahili) {
-            if ($this->selectedSlider->image_path_sw) {
+            if ($this->hasLocalizedImageColumns() && $this->selectedSlider->image_path_sw) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path_sw);
             }
-            $data['image_path_sw'] = $this->storeOptimizedImage($this->imageSwahili);
+
+            if ($this->hasLocalizedImageColumns()) {
+                $data['image_path_sw'] = $this->storeOptimizedImage($this->imageSwahili);
+            }
         }
 
         $this->selectedSlider->update($data);
@@ -197,19 +211,33 @@ class HeroSliderManagement extends Component
     {
         if ($this->selectedSlider) {
             // Delete image file
-            if ($this->selectedSlider->image_path_en) {
+            if ($this->hasLocalizedImageColumns() && $this->selectedSlider->image_path_en) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path_en);
             } elseif ($this->selectedSlider->image_path) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path);
             }
 
-            if ($this->selectedSlider->image_path_sw) {
+            if ($this->hasLocalizedImageColumns() && $this->selectedSlider->image_path_sw) {
                 Storage::disk('public')->delete($this->selectedSlider->image_path_sw);
             }
             $this->selectedSlider->delete();
             session()->flash('success', 'Hero slider deleted successfully!');
         }
         $this->closeDeleteModal();
+    }
+
+    protected function hasLocalizedImageColumns(): bool
+    {
+        if ($this->supportsLocalizedImageColumns !== null) {
+            return $this->supportsLocalizedImageColumns;
+        }
+
+        $this->supportsLocalizedImageColumns = Schema::hasColumns('hero_sliders', [
+            'image_path_en',
+            'image_path_sw',
+        ]);
+
+        return $this->supportsLocalizedImageColumns;
     }
 
     public function updatedImageEnglish()
