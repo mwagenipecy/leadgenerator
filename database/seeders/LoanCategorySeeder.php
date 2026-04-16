@@ -72,10 +72,17 @@ class LoanCategorySeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            LoanCategory::updateOrCreate(
-                ['slug' => $category['slug']],
-                $category
-            );
+            $existingCategory = LoanCategory::query()
+                ->where('slug', $category['slug'])
+                ->orWhere('name', $category['name'])
+                ->first();
+
+            if ($existingCategory) {
+                $existingCategory->update($category);
+                continue;
+            }
+
+            LoanCategory::create($category);
         }
     }
 }
