@@ -10,6 +10,7 @@ use App\Models\Lender;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Carbon\Carbon;
 
 class LenderDashboard extends Component
@@ -47,7 +48,7 @@ class LenderDashboard extends Component
         }
 
         $cacheKey = "dashboard:lender:{$lender->id}:v1";
-        $cachedData = Cache::store('redis')->get($cacheKey);
+        $cachedData = $this->getCacheStore()->get($cacheKey);
         if (is_array($cachedData)) {
             foreach ($cachedData as $property => $value) {
                 $this->{$property} = $value;
@@ -215,7 +216,7 @@ class LenderDashboard extends Component
         // Product performance insights - from application_lender_submissions
         $this->productInsights = $this->getProductInsights($lender->id);
 
-        Cache::store('redis')->put($cacheKey, [
+        $this->getCacheStore()->put($cacheKey, [
             'newApplications' => $this->newApplications,
             'totalApplications' => $this->totalApplications,
             'approvedApplications' => $this->approvedApplications,
@@ -238,8 +239,24 @@ class LenderDashboard extends Component
     {
         $lender = Auth::user()?->lender ?? Lender::where('user_id', Auth::id())->first();
         if ($lender) {
-            Cache::store('redis')->forget("dashboard:lender:{$lender->id}:v1");
+            $this->getCacheStore()->forget("dashboard:lender:{$lender->id}:v1");
         }
+    }
+
+    private function getCacheStore(): CacheRepository
+    {
+        $redisConfigured = is_array(config('cache.stores.redis'));
+        $phpRedisAvailable = class_exists(\Redis::class);
+
+        if ($redisConfigured && $phpRedisAvailable) {
+            try {
+                return Cache::store('redis');
+            } catch (\Throwable $e) {
+                // Fall back to default cache store when Redis store is not usable.
+            }
+        }
+
+        return Cache::store(config('cache.default'));
     }
 
     private function getMonthlyTrends($lenderId)

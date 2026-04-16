@@ -236,6 +236,7 @@
 
                 <!-- Powered By -->
                 <div class="mt-6 text-center">
+                    
                     <p class="text-xs text-gray-400">Powered by CreditInfo Tanzania</p>
                 </div>
                 </div>

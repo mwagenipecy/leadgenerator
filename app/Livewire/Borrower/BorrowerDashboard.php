@@ -10,6 +10,7 @@ use App\Services\LoanProductMatchingService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Carbon\Carbon;
 
 class BorrowerDashboard extends Component
@@ -68,7 +69,7 @@ class BorrowerDashboard extends Component
     {
         $user = Auth::user();
         $cacheKey = "dashboard:borrower:{$user->id}:v1";
-        $cachedData = Cache::store('redis')->get($cacheKey);
+        $cachedData = $this->getCacheStore()->get($cacheKey);
         if (is_array($cachedData)) {
             foreach ($cachedData as $property => $value) {
                 $this->{$property} = $value;
@@ -88,7 +89,7 @@ class BorrowerDashboard extends Component
         // Load collections and activity
         $this->loadCollections($user);
 
-        Cache::store('redis')->put($cacheKey, [
+        $this->getCacheStore()->put($cacheKey, [
             'totalApplications' => $this->totalApplications,
             'approvedApplications' => $this->approvedApplications,
             'rejectedApplications' => $this->rejectedApplications,
@@ -116,8 +117,24 @@ class BorrowerDashboard extends Component
     {
         $userId = Auth::id();
         if ($userId) {
-            Cache::store('redis')->forget("dashboard:borrower:{$userId}:v1");
+            $this->getCacheStore()->forget("dashboard:borrower:{$userId}:v1");
         }
+    }
+
+    private function getCacheStore(): CacheRepository
+    {
+        $redisConfigured = is_array(config('cache.stores.redis'));
+        $phpRedisAvailable = class_exists(\Redis::class);
+
+        if ($redisConfigured && $phpRedisAvailable) {
+            try {
+                return Cache::store('redis');
+            } catch (\Throwable $e) {
+                // Fall back to default cache store when Redis store is not usable.
+            }
+        }
+
+        return Cache::store(config('cache.default'));
     }
 
     private function loadApplicationStats($user)
