@@ -36,11 +36,33 @@
 </head>
 <body class="font-inter">
 @php
-    $authSideImage = \App\Models\SystemSetting::getValue('auth_side_image_otp_' . app()->getLocale())
+    $resolveAuthImageUrl = function (?string $value): string {
+        if (empty($value)) {
+            return asset('landing/register-login.jpg');
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+
+        if (str_starts_with($value, '/storage/')) {
+            return asset(ltrim($value, '/'));
+        }
+
+        if (str_starts_with($value, 'storage/')) {
+            return asset($value);
+        }
+
+        return asset('storage/' . ltrim($value, '/'));
+    };
+
+    $authSideImageValue = \App\Models\SystemSetting::getValue('auth_side_image_otp_' . app()->getLocale())
         ?: \App\Models\SystemSetting::getValue('auth_side_image_otp_en')
         ?: \App\Models\SystemSetting::getValue('auth_side_image_' . app()->getLocale())
         ?: \App\Models\SystemSetting::getValue('auth_side_image_en')
-        ?: asset('landing/register-login.jpg');
+        ?: null;
+
+    $authSideImage = $resolveAuthImageUrl($authSideImageValue);
 @endphp
 <div class="h-screen flex overflow-hidden">
 <!-- Left Side - Welcome Content (Hidden on mobile) -->
