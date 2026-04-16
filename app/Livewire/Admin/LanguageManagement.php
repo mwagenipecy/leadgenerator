@@ -14,10 +14,34 @@ class LanguageManagement extends Component
     public $translations = [];
     public $searchKey = '';
     public $selectedFile = 'common';
+    public string $landingGroup = 'all'; // For landing.php: header/footer grouping
     public $newKey = '';
     public $newValue = '';
     public $editingKey = null;
     public $editingValue = '';
+
+    private array $landingHeaderKeys = [
+        // Landing navbar
+        'eligibility',
+        'process',
+        'customer_help',
+        'blog',
+        'get_started',
+    ];
+
+    private array $landingFooterKeys = [
+        // Landing footer
+        'connecting_borrowers',
+        'quick_links',
+        'home',
+        'eligibility',
+        'how_it_works',
+        'customer_help',
+        'support',
+        'help_center',
+        'contact',
+        'blog',
+    ];
 
     public function mount()
     {
@@ -53,17 +77,27 @@ class LanguageManagement extends Component
 
     public function updatedSelectedFile()
     {
+        // Reset section when switching files (only landing uses this grouping)
+        $this->landingGroup = 'all';
         $this->loadTranslations();
     }
 
     public function getFilteredTranslations()
     {
-        if (empty($this->searchKey)) {
-            return $this->translations;
+        $translations = $this->translations;
+
+        // Optional grouping for the landing page header/footer.
+        if ($this->selectedFile === 'landing' && $this->landingGroup !== 'all') {
+            $groupKeys = $this->landingGroup === 'header' ? $this->landingHeaderKeys : $this->landingFooterKeys;
+            $translations = array_intersect_key($translations, array_flip($groupKeys));
         }
 
-        return collect($this->translations)->filter(function ($value, $key) {
-            return stripos($key, $this->searchKey) !== false || 
+        if (empty($this->searchKey)) {
+            return $translations;
+        }
+
+        return collect($translations)->filter(function ($value, $key) {
+            return stripos($key, $this->searchKey) !== false ||
                    stripos($value, $this->searchKey) !== false;
         })->toArray();
     }

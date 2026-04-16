@@ -152,5 +152,7 @@ return [
     'featured' => 'Iliyojadiliwa',
     'by' => 'Na',
     'lenders' => 'Wakopeshaji',
+    'trusted_partners' => 'Washirika wa Kuaminika',
+    'trusted_partners_description' => 'Taasisi kuu tunazoshirikiana nazo.',
 ];
 

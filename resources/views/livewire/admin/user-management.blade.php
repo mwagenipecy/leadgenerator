@@ -138,78 +138,33 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                             <input wire:model="edit_email" type="email" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_email') border-sidebar-green @enderror">
+                                   readonly
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 bg-gray-100 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_email') border-sidebar-green @enderror">
                             @error('edit_email') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                            <input wire:model="edit_first_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_first_name') border-sidebar-green @enderror">
-                            @error('edit_first_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                            <input wire:model="edit_last_name" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_last_name') border-sidebar-green @enderror">
-                            @error('edit_last_name') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                             <input wire:model="edit_phone" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_phone') border-sidebar-green @enderror">
+                                   readonly
+                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 bg-gray-100 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_phone') border-sidebar-green @enderror">
                             @error('edit_phone') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">NIDA Number</label>
-                            <input wire:model="edit_nida_number" type="text" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_nida_number') border-sidebar-green @enderror">
-                            @error('edit_nida_number') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                            <input wire:model="edit_date_of_birth" type="date" 
-                                   class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_date_of_birth') border-sidebar-green @enderror">
-                            @error('edit_date_of_birth') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">User Role *</label>
+                            @php
+                                $actorIsSuperAdmin = (auth()->user()?->hasRole('super_admin') ?? false)
+                                    || strtolower((string) (auth()->user()?->role ?? '')) === 'super_admin';
+                            @endphp
                             <select wire:model="edit_role" 
+                                    @if(!$actorIsSuperAdmin) disabled @endif
                                     class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_role') border-sidebar-green @enderror">
-                                <option value="user">Borrower</option>
-                                @foreach($roles as $roleOption)
-                                    <option value="{{ $roleOption->name }}">{{ ucfirst($roleOption->name) }}</option>
-                                @endforeach
+                                <option value="admin" {{ $edit_role === 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="super_admin" {{ $edit_role === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                             </select>
                             @error('edit_role') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
-
-                        <!-- Lender Association -->
-                        @if(in_array($edit_role, ['lender', 'user']))
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Associated Lender</label>
-                                <select wire:model="edit_selected_lender_id" 
-                                        class="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green @error('edit_selected_lender_id') border-sidebar-green @enderror">
-                                    <option value="">No Lender Association</option>
-                                    @foreach($availableLenders as $lender)
-                                        <option value="{{ $lender->id }}">{{ $lender->company_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('edit_selected_lender_id') <span class="text-sidebar-green text-xs mt-1 block">{{ $message }}</span> @enderror
-                            </div>
-                        @endif
-                    </div>
-
-                    <!-- Active Status -->
-                    <div class="flex items-center">
-                        <input wire:model="edit_is_active" type="checkbox" id="edit_is_active" 
-                               class="h-4 w-4 text-sidebar-green focus:ring-sidebar-green border-gray-300 rounded">
-                        <label for="edit_is_active" class="ml-2 block text-sm text-gray-700">User is active</label>
                     </div>
 
                     <!-- Action Buttons -->

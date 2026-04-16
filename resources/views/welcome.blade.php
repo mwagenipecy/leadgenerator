@@ -441,8 +441,8 @@
     <section class="py-6 md:py-8 bg-white">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
             <div class="text-center mb-3 md:mb-4">
-                <h3 class="text-xl md:text-2xl font-bold font-poppins text-gray-900">Trusted Partners</h3>
-                <p class="mt-1 text-sm text-gray-600">Leading institutions we work with.</p>
+                <h3 class="text-xl md:text-2xl font-bold font-poppins text-gray-900">{{ __('landing.trusted_partners') }}</h3>
+                <p class="mt-1 text-sm text-gray-600">{{ __('landing.trusted_partners_description') }}</p>
             </div>
             @php
                 $partners = \Illuminate\Support\Facades\Schema::hasTable('partners')
@@ -458,9 +458,9 @@
                         href="{{ $partner->website_url }}"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="inline-flex h-20 w-52 items-center justify-center px-4 transition-opacity duration-200 hover:opacity-100 opacity-95"
+                        class="inline-flex h-20 w-52 items-center justify-center px-0 transition-opacity duration-200 hover:opacity-100 opacity-95"
                         title="Visit {{ $partner->name }} website">
-                        <img src="{{ asset('storage/' . $partner->logo_path) }}" alt="{{ $partner->name }} logo" loading="lazy" class="max-h-14 w-auto object-contain">
+                        <img src="{{ asset('storage/' . $partner->logo_path) }}" alt="{{ $partner->name }} logo" loading="lazy" class="h-full w-full object-cover">
                     </a>
                     @empty
                     <span class="partner-pill">Partners will appear here after admin setup.</span>

@@ -49,7 +49,7 @@ class AdminDashboard extends Component
 
     public function loadDashboardData()
     {
-        $cacheKey = 'dashboard:admin:data:v1';
+        $cacheKey = 'dashboard:admin:data:' . app()->getLocale() . ':v1';
         $cachedData = $this->getCachedData($cacheKey);
         if (is_array($cachedData)) {
             foreach ($cachedData as $property => $value) {
@@ -113,8 +113,8 @@ class AdminDashboard extends Component
         foreach ($recentLenders as $lender) {
             $activities[] = [
                 'type' => 'lender_approved',
-                'message' => 'New lender approved',
-                'details' => $lender->company_name . ' approved',
+                'message' => __('dashboard.recent_activity.new_lender_approved'),
+                'details' => __('dashboard.recent_activity.lender_approved_details', ['name' => $lender->company_name]),
                 'time' => $lender->approved_at->diffForHumans(),
                 'color' => 'green'
             ];
@@ -129,10 +129,12 @@ class AdminDashboard extends Component
         foreach ($recentApplications as $application) {
             $activities[] = [
                 'type' => 'application_submitted',
-                'message' => 'New application received',
-                'details' => $application->first_name . ' ' . $application->last_name . ' submitted loan application',
+                'message' => __('dashboard.recent_activity.new_application_received'),
+                'details' => __('dashboard.recent_activity.application_submitted_details', [
+                    'name' => $application->first_name . ' ' . $application->last_name,
+                ]),
                 'time' => $application->created_at->diffForHumans(),
-                'color' => 'brand-red'
+                'color' => 'red'
             ];
         }
         
@@ -146,8 +148,11 @@ class AdminDashboard extends Component
         foreach ($approvedApplications as $application) {
             $activities[] = [
                 'type' => 'application_approved',
-                'message' => 'Application approved',
-                'details' => $application->first_name . ' ' . $application->last_name . ' - TZS ' . number_format($application->requested_amount),
+                'message' => __('dashboard.recent_activity.application_approved'),
+                'details' => __('dashboard.recent_activity.application_approved_details', [
+                    'name' => $application->first_name . ' ' . $application->last_name,
+                    'amount' => number_format($application->requested_amount),
+                ]),
                 'time' => $application->approved_at->diffForHumans(),
                 'color' => 'blue'
             ];
@@ -158,9 +163,9 @@ class AdminDashboard extends Component
         if ($nidaCount > 0) {
             $activities[] = [
                 'type' => 'system_update',
-                'message' => 'System maintenance',
-                'details' => 'NIDA integration updated',
-                'time' => '3 hours ago',
+                'message' => __('dashboard.recent_activity.system_maintenance'),
+                'details' => __('dashboard.recent_activity.nida_integration_updated'),
+                'time' => Carbon::now()->subHours(3)->diffForHumans(),
                 'color' => 'purple'
             ];
         }
@@ -190,7 +195,7 @@ class AdminDashboard extends Component
 
     public function loadChartData()
     {
-        $cacheKey = 'dashboard:admin:charts:v1';
+        $cacheKey = 'dashboard:admin:charts:' . app()->getLocale() . ':v1';
         $cachedData = $this->getCachedData($cacheKey);
         if (is_array($cachedData)) {
             foreach ($cachedData as $property => $value) {
@@ -244,7 +249,7 @@ class AdminDashboard extends Component
         foreach ($allStatuses as $status) {
             $count = $statusCounts->get($status)?->count ?? 0;
             if ($count > 0) { // Only include statuses with data
-                $this->statusLabels[] = ucfirst(str_replace('_', ' ', $status));
+                $this->statusLabels[] = __('dashboard.status_' . $status);
                 $this->statusData[] = $count;
             }
         }
@@ -262,8 +267,9 @@ class AdminDashboard extends Component
 
     private function clearDashboardCache(): void
     {
-        $this->forgetCachedData('dashboard:admin:data:v1');
-        $this->forgetCachedData('dashboard:admin:charts:v1');
+        $locale = app()->getLocale();
+        $this->forgetCachedData("dashboard:admin:data:{$locale}:v1");
+        $this->forgetCachedData("dashboard:admin:charts:{$locale}:v1");
     }
 
     private function getCachedData(string $key): mixed
@@ -327,7 +333,7 @@ class AdminDashboard extends Component
         $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->loadChartData();
-        session()->flash('message', 'Lender approved successfully!');
+        session()->flash('message', __('dashboard.lender_approved_success'));
     }
 
     public function rejectLender($lenderId, $reason = 'Requirements not met')
@@ -341,7 +347,7 @@ class AdminDashboard extends Component
         $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->loadChartData();
-        session()->flash('message', 'Lender rejected.');
+        session()->flash('message', __('dashboard.lender_rejected_success'));
     }
 
     public function suspendLender($lenderId)
@@ -352,7 +358,7 @@ class AdminDashboard extends Component
         $this->clearDashboardCache();
         $this->loadDashboardData();
         $this->loadChartData();
-        session()->flash('message', 'Lender suspended.');
+        session()->flash('message', __('dashboard.lender_suspended_success'));
     }
 
     public function refreshCharts()

@@ -99,7 +99,7 @@
                         </svg>
                         <span class="text-xs font-semibold">{{ $conversionRate }}%</span>
                     </div>
-                    <span class="text-xs text-gray-500">conversion rate</span>
+                    <span class="text-xs text-gray-500">{{ __('dashboard.conversion_rate_label') }}</span>
                 </div>
             </div>
 
@@ -112,7 +112,7 @@
                         </svg>
                     </div>
                     <div class="text-right">
-                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Total Disbursed</p>
+                        <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">{{ __('dashboard.total_disbursed') }}</p>
                         <p class="text-2xl font-bold text-gray-900 group-hover:text-sidebar-green transition-colors">
                             @if($totalDisbursed >= 1000000000)
                                 TSh {{ number_format($totalDisbursed/1000000000, 1) }}B
@@ -143,7 +143,7 @@
                             @endif
                         </span>
                     </div>
-                    <span class="text-xs text-gray-500">this month</span>
+                    <span class="text-xs text-gray-500">{{ __('dashboard.this_month') }}</span>
                 </div>
             </div>
         </div>
@@ -154,17 +154,17 @@
             <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Application Trends</h3>
-                        <p class="text-gray-600">Monthly application volume and approval rates</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('dashboard.application_trends') }}</h3>
+                        <p class="text-gray-600">{{ __('dashboard.application_trends_description') }}</p>
                     </div>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center space-x-2">
                             <div class="w-3 h-3 bg-sidebar-green rounded-full"></div>
-                            <span class="text-sm font-medium text-gray-600">Applications</span>
+                            <span class="text-sm font-medium text-gray-600">{{ __('dashboard.chart_applications') }}</span>
                         </div>
                         <div class="flex items-center space-x-2">
                             <div class="w-3 h-3 bg-black rounded-full"></div>
-                            <span class="text-sm font-medium text-gray-600">Approved</span>
+                            <span class="text-sm font-medium text-gray-600">{{ __('dashboard.chart_approved') }}</span>
                         </div>
                     </div>
                 </div>
@@ -177,10 +177,10 @@
             <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Product Performance</h3>
-                        <p class="text-gray-600">Applications by lender's products</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('dashboard.product_performance') }}</h3>
+                        <p class="text-gray-600">{{ __('dashboard.product_performance_description') }}</p>
                     </div>
-                    <div class="text-sm font-medium text-gray-500">Total: {{ number_format($totalApplications) }}</div>
+                    <div class="text-sm font-medium text-gray-500">{{ __('dashboard.total') }}: {{ number_format($totalApplications) }}</div>
                 </div>
                 <div class="relative h-80">
                     <canvas id="productPerformanceChart"></canvas>
@@ -194,8 +194,8 @@
             <div class="lg:col-span-2 bg-white rounded-lg shadow-sm p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Application Status Distribution</h3>
-                        <p class="text-gray-600">Current status breakdown of all applications</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('dashboard.application_status_distribution_title') }}</h3>
+                        <p class="text-gray-600">{{ __('dashboard.application_status_distribution_description') }}</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -205,11 +205,11 @@
                     <div class="space-y-4">
                         @php
                             $statuses = [
-                                'submitted' => ['name' => 'Submitted', 'color' => '#1D753F', 'count' => $applicationsByStatus['submitted'] ?? 0],
-                                'under_review' => ['name' => 'Under Review', 'color' => '#f59e0b', 'count' => $applicationsByStatus['under_review'] ?? 0],
-                                'approved' => ['name' => 'Approved', 'color' => '#000000', 'count' => $applicationsByStatus['approved'] ?? 0],
-                                'disbursed' => ['name' => 'Disbursed', 'color' => '#6b7280', 'count' => $applicationsByStatus['disbursed'] ?? 0],
-                                'rejected' => ['name' => 'Rejected', 'color' => '#ef4444', 'count' => $applicationsByStatus['rejected'] ?? 0]
+                                'submitted' => ['name' => __('dashboard.status_submitted'), 'color' => '#3b82f6', 'count' => $applicationsByStatus['submitted'] ?? 0],
+                                'under_review' => ['name' => __('dashboard.status_under_review'), 'color' => '#f59e0b', 'count' => $applicationsByStatus['under_review'] ?? 0],
+                                'approved' => ['name' => __('dashboard.status_approved'), 'color' => '#22c55e', 'count' => $applicationsByStatus['approved'] ?? 0],
+                                'disbursed' => ['name' => __('dashboard.status_disbursed'), 'color' => '#a855f7', 'count' => $applicationsByStatus['disbursed'] ?? 0],
+                                'rejected' => ['name' => __('dashboard.status_rejected'), 'color' => '#C40F11', 'count' => $applicationsByStatus['rejected'] ?? 0]
                             ];
                         @endphp
                         @foreach($statuses as $status => $config)
@@ -234,7 +234,7 @@
             <!-- Key Insights -->
             <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-900">Key Insights</h3>
+                    <h3 class="text-xl font-bold text-gray-900">{{ __('dashboard.key_insights_title') }}</h3>
                     <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
                 <div class="space-y-6">
@@ -248,11 +248,19 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold text-green-900">Top Product</h4>
+                                    <h4 class="text-sm font-bold text-green-900">{{ __('dashboard.top_product_title') }}</h4>
                                     <p class="text-xs text-green-700">{{ $topPerformingProducts->first()->name }}</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-green-600">{{ $topPerformingProducts->first()->applications_count }} applications with {{ $topPerformingProducts->first()->applications_count > 0 ? round(($topPerformingProducts->first()->approved_count / $topPerformingProducts->first()->applications_count) * 100) : 0 }}% approval rate</p>
+                            @php
+                                $topProduct = $topPerformingProducts->first();
+                                $topApprovalRate = $topProduct->applications_count > 0
+                                    ? round(($topProduct->approved_count / $topProduct->applications_count) * 100)
+                                    : 0;
+                            @endphp
+                            <p class="text-xs text-green-600">
+                                {{ __('dashboard.top_product_summary', ['count' => $topProduct->applications_count, 'approval_rate' => $topApprovalRate]) }}
+                            </p>
                         </div>
                     @endif
 
@@ -265,17 +273,17 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="text-sm font-bold text-blue-900">Conversion Rate</h4>
-                                <p class="text-xs text-blue-700">{{ $conversionRate }}% approval rate</p>
+                                <h4 class="text-sm font-bold text-blue-900">{{ __('dashboard.conversion_rate_title') }}</h4>
+                                <p class="text-xs text-blue-700">{{ __('dashboard.approval_rate_label', ['rate' => $conversionRate]) }}</p>
                             </div>
                         </div>
                         <p class="text-xs text-blue-600">
                             @if($conversionRate >= 70)
-                                Excellent approval rate! Your products are well-matched to applicants.
+                                {{ __('dashboard.conversion_rate_excellent') }}
                             @elseif($conversionRate >= 50)
-                                Good approval rate. Consider reviewing criteria for improvement.
+                                {{ __('dashboard.conversion_rate_good') }}
                             @else
-                                Review your loan criteria to improve approval rates.
+                                {{ __('dashboard.conversion_rate_needs_review') }}
                             @endif
                         </p>
                     </div>
@@ -289,17 +297,17 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="text-sm font-bold text-purple-900">Pending Review</h4>
-                                <p class="text-xs text-purple-700">{{ $pendingApplications }} applications</p>
+                                <h4 class="text-sm font-bold text-purple-900">{{ __('dashboard.pending_review_title') }}</h4>
+                                <p class="text-xs text-purple-700">{{ $pendingApplications }} {{ __('dashboard.applications') }}</p>
                             </div>
                         </div>
                         <p class="text-xs text-purple-600">
                             @if($pendingApplications > 10)
-                                High volume of pending applications. Consider prioritizing reviews.
+                                {{ __('dashboard.pending_review_many') }}
                             @elseif($pendingApplications > 0)
-                                {{ $pendingApplications }} applications awaiting your review.
+                                {{ __('dashboard.pending_review_some', ['count' => $pendingApplications]) }}
                             @else
-                                All applications are up to date!
+                                {{ __('dashboard.pending_review_none') }}
                             @endif
                         </p>
                     </div>
@@ -320,7 +328,7 @@
                             Filter
                         </button> -->
                         <a  href="{{ route('application.list') }}" class="bg-sidebar-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sidebar-green-light transition-all duration-200 shadow-lg shadow-sidebar-green/25">
-                            View All Applications
+                            {{ __('dashboard.view_all_applications') }}
                         </a>
                         
                     </div>
@@ -330,11 +338,11 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Applicant Information</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Loan Details</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Product</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Applied Date</th>
+                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_applicant_information') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_loan_details') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_product') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_status') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_applied_date') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-100">
@@ -359,15 +367,15 @@
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     <div class="text-sm font-bold text-gray-900">TSh {{ number_format($application->requested_amount) }}</div>
-                                    <div class="text-xs text-gray-500">{{ $application->requested_tenure_months }} months tenure</div>
-                                    <div class="text-xs text-gray-500 mt-1">{{ $application->loan_purpose ?? 'General purpose' }}</div>
+                                    <div class="text-xs text-gray-500">{{ $application->requested_tenure_months }} {{ __('dashboard.months') }} tenure</div>
+                                    <div class="text-xs text-gray-500 mt-1">{{ $application->loan_purpose ?? __('dashboard.loan_purpose_general') }}</div>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
                                     @if($application->loanProduct)
                                         <div class="text-sm text-gray-900">{{ $application->loanProduct->name }}</div>
                                         <div class="text-xs text-gray-500">{{ $application->loanProduct->interest_rate_min }}% - {{ $application->loanProduct->interest_rate_max }}%</div>
                                     @else
-                                        <span class="text-xs text-gray-400">No Product Assigned</span>
+                                        <span class="text-xs text-gray-400">{{ __('dashboard.no_product_assigned') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
@@ -379,7 +387,7 @@
                                         @elseif($application->status === 'disbursed') bg-purple-100 text-purple-800 border border-purple-200
                                         @else bg-gray-100 text-gray-800 border border-gray-200
                                         @endif">
-                                        {{ ucfirst(str_replace('_', ' ', $application->status)) }}
+                                        {{ __('dashboard.status_' . $application->status) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
@@ -396,8 +404,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                         </svg>
                                     </div>
-                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">No Applications Found</h4>
-                                    <p class="text-gray-500">There are no loan applications to display at this time.</p>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ __('dashboard.no_applications_found') }}</h4>
+                                    <p class="text-gray-500">{{ __('dashboard.no_applications_found_description') }}</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -416,50 +424,26 @@
             const trendsChart = new Chart(trendsCtx, {
                 type: 'line',
                 data: {
-                    labels: [
-                        @if(isset($applicationTrends) && $applicationTrends->count() > 0)
-                            @foreach($applicationTrends as $trend)
-                                '{{ $trend['month'] }}',
-                            @endforeach
-                        @else
-                            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-                        @endif
-                    ],
+                    labels: @json($applicationTrends?->pluck('month')->toArray() ?? []),
                     datasets: [{
-                        label: 'Total Applications',
-                        data: [
-                            @if(isset($applicationTrends) && $applicationTrends->count() > 0)
-                                @foreach($applicationTrends as $trend)
-                                    {{ $trend['applications'] }},
-                                @endforeach
-                            @else
-                                45, 52, 38, 65, 72, 58, 63, 71, 55, 68, 74, 82
-                            @endif
-                        ],
-                        borderColor: '#1D753F',
-                        backgroundColor: 'rgba(29, 117, 63, 0.1)',
+                        label: @json(__('dashboard.chart_total_applications')),
+                        data: @json($applicationTrends?->pluck('applications')->toArray() ?? []),
+                        borderColor: '#C40F11',
+                        backgroundColor: 'rgba(196, 15, 17, 0.10)',
                         tension: 0.4,
                         fill: false,
-                        pointBackgroundColor: '#1D753F',
+                        pointBackgroundColor: '#C40F11',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 5
                     }, {
-                        label: 'Approved Applications',
-                        data: [
-                            @if(isset($applicationTrends) && $applicationTrends->count() > 0)
-                                @foreach($applicationTrends as $trend)
-                                    {{ $trend['approved'] }},
-                                @endforeach
-                            @else
-                                32, 38, 25, 48, 54, 41, 45, 52, 38, 49, 55, 62
-                            @endif
-                        ],
-                        borderColor: '#000000',
-                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        label: @json(__('dashboard.chart_approved_applications')),
+                        data: @json($applicationTrends?->pluck('approved')->toArray() ?? []),
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.10)',
                         tension: 0.4,
                         fill: false,
-                        pointBackgroundColor: '#000000',
+                        pointBackgroundColor: '#22c55e',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 5
@@ -475,10 +459,10 @@
                         tooltip: {
                             mode: 'index',
                             intersect: false,
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            backgroundColor: 'rgba(196, 15, 17, 0.92)',
                             titleColor: '#ffffff',
                             bodyColor: '#ffffff',
-                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderColor: 'rgba(255, 255, 255, 0.2)',
                             borderWidth: 1
                         }
                     },
@@ -513,40 +497,16 @@
             const productChart = new Chart(productCtx, {
                 type: 'bar',
                 data: {
-                    labels: [
-                        @if($topPerformingProducts->count() > 0)
-                            @foreach($topPerformingProducts as $product)
-                                '{{ $product->name }}',
-                            @endforeach
-                        @else
-                            'Personal Loan', 'Business Loan', 'Emergency Loan', 'Asset Finance', 'Working Capital'
-                        @endif
-                    ],
+                    labels: @json($topPerformingProducts?->pluck('name')->toArray() ?? []),
                     datasets: [{
-                        label: 'Total Applications',
-                        data: [
-                            @if($topPerformingProducts->count() > 0)
-                                @foreach($topPerformingProducts as $product)
-                                    {{ $product->applications_count }},
-                                @endforeach
-                            @else
-                                24, 18, 15, 12, 8
-                            @endif
-                        ],
-                        backgroundColor: '#1D753F',
+                        label: @json(__('dashboard.chart_total_applications')),
+                        data: @json($topPerformingProducts?->pluck('applications_count')->toArray() ?? []),
+                        backgroundColor: '#C40F11',
                         borderRadius: 6
                     }, {
-                        label: 'Approved',
-                        data: [
-                            @if($topPerformingProducts->count() > 0)
-                                @foreach($topPerformingProducts as $product)
-                                    {{ $product->approved_count }},
-                                @endforeach
-                            @else
-                                18, 12, 10, 8, 5
-                            @endif
-                        ],
-                        backgroundColor: '#000000',
+                        label: @json(__('dashboard.chart_approved_applications')),
+                        data: @json($topPerformingProducts?->pluck('approved_count')->toArray() ?? []),
+                        backgroundColor: '#22c55e',
                         borderRadius: 6
                     }]
                 },
@@ -579,21 +539,27 @@
             const statusChart = new Chart(statusCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Submitted', 'Under Review', 'Approved', 'Disbursed', 'Rejected'],
+                    labels: [
+                        @json(__('dashboard.status_submitted')),
+                        @json(__('dashboard.status_under_review')),
+                        @json(__('dashboard.status_approved')),
+                        @json(__('dashboard.status_disbursed')),
+                        @json(__('dashboard.status_rejected'))
+                    ],
                     datasets: [{
                         data: [
-                            {{ $applicationsByStatus['submitted'] ?? 15 }},
-                            {{ $applicationsByStatus['under_review'] ?? 12 }},
-                            {{ $applicationsByStatus['approved'] ?? 25 }},
-                            {{ $applicationsByStatus['disbursed'] ?? 20 }},
-                            {{ $applicationsByStatus['rejected'] ?? 8 }}
+                            {{ $applicationsByStatus['submitted'] ?? 0 }},
+                            {{ $applicationsByStatus['under_review'] ?? 0 }},
+                            {{ $applicationsByStatus['approved'] ?? 0 }},
+                            {{ $applicationsByStatus['disbursed'] ?? 0 }},
+                            {{ $applicationsByStatus['rejected'] ?? 0 }}
                         ],
                         backgroundColor: [
-                            '#1D753F',
-                            '#f59e0b',
-                            '#000000',
-                            '#6b7280',
-                            '#ef4444'
+                            '#3b82f6',  // submitted
+                            '#f59e0b',  // under_review
+                            '#22c55e',  // approved
+                            '#a855f7',  // disbursed
+                            '#C40F11'   // rejected
                         ],
                         borderWidth: 0,
                         cutout: '60%'

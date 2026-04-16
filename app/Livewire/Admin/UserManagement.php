@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\Lender;
 use App\Mail\UserStatusChangeNotification;
+use App\Mail\UserRoleChangeNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -118,7 +119,7 @@ class UserManagement extends Component
         $this->totalUsers = User::count();
         $this->totalLenders = User::where('role', 'lender')->count();
         $this->totalBorrowers = User::where('role', 'borrower')->count();
-        $this->totalAdmins = User::where('role', 'Super_admin')->count();
+        $this->totalAdmins = User::where('role', 'super_admin')->count();
         $this->recentUsers = User::with('lender')->latest()->limit(5)->get();
     }
 
@@ -159,7 +160,7 @@ class UserManagement extends Component
         return [
             'edit_name' => 'required|string|max:255',
             'edit_email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->selectedUser?->id)],
-            'edit_role' => 'required|in:admin,lender,user',
+            'edit_role' => 'required|in:admin,super_admin',
             'edit_first_name' => 'nullable|string|max:255',
             'edit_last_name' => 'nullable|string|max:255',
             'edit_phone' => 'nullable|string|max:255',
@@ -194,10 +195,27 @@ class UserManagement extends Component
         }
 
         $this->resetValidation();
-        
+
+        // Role can be stored either in `users.role` (column) and/or in the role pivot (used by hasRole()).
+        // For reliability, allow toggling if either source says the user is admin/super_admin.
+        $roleColumn = strtolower((string) ($this->selectedUser->role ?? ''));
+        $hasSuperAdminPivot = $this->selectedUser->hasRole('super_admin');
+        $hasAdminPivot = $this->selectedUser->hasRole('admin');
+
+        $isSuperAdmin = $hasSuperAdminPivot || $roleColumn === 'super_admin';
+        $isAdmin = $hasAdminPivot || $roleColumn === 'admin';
+
+        if (!$isSuperAdmin && !$isAdmin) {
+            session()->flash('error', 'Role changes are only allowed for admin/super_admin users.');
+            $this->showEditUserModal = false;
+            return;
+        }
+
+        $normalizedRole = $isSuperAdmin ? 'super_admin' : 'admin';
+
         $this->edit_name = $this->selectedUser->name;
         $this->edit_email = $this->selectedUser->email;
-        $this->edit_role = $this->selectedUser->role;
+        $this->edit_role = $normalizedRole;
         $this->edit_first_name = $this->selectedUser->first_name;
         $this->edit_last_name = $this->selectedUser->last_name;
         $this->edit_phone = $this->selectedUser->phone;
@@ -287,14 +305,59 @@ class UserManagement extends Component
 
     public function updateUser()
     {
+        $actor = auth()->user();
+        $actorRole = strtolower((string) ($actor?->role ?? ''));
+
+        
+        $actorIsSuperAdmin = ($actor?->hasRole('super_admin') ?? false) || $actorRole === 'super_admin';
+
+   
+        $oldRoleName = $this->selectedUser->role=='super_admin'
+            ? 'super_admin'
+            : ($this->selectedUser->role =='admin' ? 'admin' : strtolower((string) ($this->selectedUser?->role ?? '')));
+
+        $newRoleName = strtolower((string) ($this->edit_role ?? ''));
+        $this->edit_role = $newRoleName;
+
+        // Normalize empty string to null so `nullable|exists:` validations behave correctly.
+        if ($this->edit_selected_lender_id === '') {
+            $this->edit_selected_lender_id = null;
+        }
+
         try {
             $this->validate($this->editRules());
         } catch (\Illuminate\Validation\ValidationException $e) {
             return;
         }
 
+
+        // Super admin can only toggle between admin <-> super_admin.
+        // Non-super-admins are blocked from switching between those two roles.
+        if ($oldRoleName !== $newRoleName) {
+            $isAdminSuperAdminSwitch = in_array($oldRoleName, ['admin', 'super_admin'], true)
+                && in_array($newRoleName, ['admin', 'super_admin'], true);
+
+            if (!$actorIsSuperAdmin && $isAdminSuperAdminSwitch) {
+                $this->addError('edit_role', 'Only super admin can change roles between admin and super admin.');
+                return;
+            }
+
+            if ($actorIsSuperAdmin && !$isAdminSuperAdminSwitch) {
+                $this->addError('edit_role', 'Super admin can only toggle roles between admin and super admin.');
+                return;
+            }
+        }
+
+        $roleChangeOld = $oldRoleName;
+        $roleChangeNew = $newRoleName;
+        $roleChangeTargetUser = $this->selectedUser;
+        $shouldNotifyRoleChange = $actorIsSuperAdmin
+            && $oldRoleName !== $newRoleName
+            && in_array($oldRoleName, ['admin', 'super_admin'], true)
+            && in_array($newRoleName, ['admin', 'super_admin'], true);
+
         try {
-            DB::transaction(function () {
+            DB::transaction(function () use (&$shouldNotifyRoleChange,$roleChangeOld,$roleChangeNew) {
                 // Get old values before update
                 $oldValues = $this->selectedUser->toArray();
                 
@@ -310,27 +373,33 @@ class UserManagement extends Component
                     'is_active' => $this->edit_is_active,
                 ];
 
+
                 // Handle lender association
-                if ($this->edit_selected_lender_id && in_array($this->edit_role, ['lender', 'user'])) {
-                    $userData['lender_id'] = $this->edit_selected_lender_id;
-                } else {
-                    $userData['lender_id'] = null;
+                if (in_array($this->edit_role, ['lender', 'borrower'], true)) {
+                    $userData['lender_id'] = $this->edit_selected_lender_id ?: null;
                 }
 
-                // Update user data
-                $this->selectedUser->update($userData);
-                
-                // Get new values after update
-                $newValues = array_intersect_key($this->selectedUser->fresh()->toArray(), $userData);
+                $oldRole = strtolower((string) ($this->selectedUser->role ?? ''));
+                $roleChanged = $oldRole !== $this->edit_role;
 
-                // Update role assignment if role changed
-                if ($this->selectedUser->role !== $this->edit_role) {
+                // Update role pivot BEFORE updating the `role` column
+                // so loggers/email can use correct old/new values.
+                if ($roleChanged) {
                     $this->updateUserRole($this->selectedUser, $this->edit_role);
                 }
+
+                // Update user data (including `role` column)
+                $this->selectedUser->update($userData);
+
+                // Get new values after update
+                $newValues = array_intersect_key($this->selectedUser->fresh()->toArray(), $userData);
 
                 // Log user update
                 LogService::logUserUpdated($this->selectedUser, $oldValues, $newValues);
 
+                if ($shouldNotifyRoleChange) {
+                    LogService::logUserRoleChanged($this->selectedUser, $roleChangeOld, $roleChangeNew);
+                    }
                 Log::info('User updated successfully', [
                     'user_id' => $this->selectedUser->id,
                     'updated_by' => auth()->id(),
@@ -342,6 +411,19 @@ class UserManagement extends Component
             $this->closeEditUserModal();
             
             session()->flash('message', 'User updated successfully!');
+
+            if ($shouldNotifyRoleChange && $roleChangeTargetUser) {
+                try {
+                    Mail::to($roleChangeTargetUser->email)->send(
+                        new UserRoleChangeNotification($roleChangeTargetUser, $roleChangeOld, $roleChangeNew)
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Failed to send user role change email', [
+                        'user_id' => $roleChangeTargetUser->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
             
         } catch (\Exception $e) {
             Log::error('User update failed', [
@@ -356,10 +438,16 @@ class UserManagement extends Component
 
     private function assignRoleToUser($user, $roleName)
     {
-        $role = Role::where('name', $roleName)->first();
+        $roleName = strtolower((string) $roleName);
+        $normalizedRoleName = in_array($roleName, ['admin', 'super_admin'], true) ? $roleName : null;
+        if ($normalizedRoleName === null) {
+            throw new \Exception("Invalid role '{$roleName}' for assignment.");
+        }
+
+        $role = Role::where('name', $normalizedRoleName)->first();
         
         if (!$role) {
-            throw new \Exception("Role '{$roleName}' not found.");
+            throw new \Exception("Role '{$normalizedRoleName}' not found.");
         }
 
         if (method_exists($user, 'assignRole')) {
@@ -378,28 +466,39 @@ class UserManagement extends Component
         }
 
         // Log role assignment
-        LogService::logRoleAssigned($user, $roleName, auth()->user());
+        LogService::logRoleAssigned($user, $normalizedRoleName, auth()->user());
 
         Log::info('Role assigned to user', [
             'user_id' => $user->id,
-            'role' => $roleName,
+            'role' => $normalizedRoleName,
             'assigned_by' => auth()->id()
         ]);
+
+        // Ensure the column keeps canonical casing/format.
+        $user->update(['role' => $normalizedRoleName]);
     }
 
     private function updateUserRole($user, $newRoleName)
     {
-        $newRole = Role::where('name', $newRoleName)->first();
-        
-        if (!$newRole) {
-            throw new \Exception("Role '{$newRoleName}' not found.");
+        $newRoleName = strtolower((string) $newRoleName);
+        $normalizedRoleName = in_array($newRoleName, ['admin', 'super_admin'], true) ? $newRoleName : null;
+        if ($normalizedRoleName === null) {
+            throw new \Exception("Invalid role '{$newRoleName}' for update.");
         }
 
-        $oldRoleName = $user->role;
+
+        $newRole = Role::where('name', $normalizedRoleName)->first();
+        
+        if (!$newRole) {
+            throw new \Exception("Role '{$normalizedRoleName}' not found.");
+        }
+
+        $oldRoleName = strtolower((string) ($user->role ?? ''));
         $user->roles()->detach();
         
         if (method_exists($user, 'assignRole')) {
             $user->assignRole($newRole, auth()->user());
+
         } else {
             $user->roles()->attach($newRole->id, [
                 'assigned_at' => now(),
@@ -407,19 +506,24 @@ class UserManagement extends Component
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+
             
             $user->update(['role_level' => $newRole->level ?? 1]);
         }
 
         // Log role change
-        LogService::logRoleAssigned($user, $newRoleName, auth()->user());
+        LogService::logRoleAssigned($user, $normalizedRoleName, auth()->user());
 
         Log::info('User role updated', [
             'user_id' => $user->id,
             'old_role' => $oldRoleName,
-            'new_role' => $newRoleName,
+            'new_role' => $normalizedRoleName,
             'updated_by' => auth()->id()
         ]);
+
+        // Ensure the column keeps canonical casing/format.
+        $user->update(['role' => $normalizedRoleName]);
     }
 
     public function confirmToggleStatus($userId)

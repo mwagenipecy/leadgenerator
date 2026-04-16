@@ -115,5 +115,98 @@ return [
     'actions' => 'Vitendo',
     'amount_this_lender_offer' => 'Kiasi mkopeshaji anaweza kutoa',
     'apply' => 'Omba',
+
+    // Admin/Lender Dashboard (charts + multilingual support)
+    'application_trends' => 'Mienendo ya Maombi',
+    'chart_applications' => 'Maombi',
+    'chart_approved' => 'Imeidhinishwa',
+    'product_performance' => 'Utendaji wa Bidhaa',
+    'product_performance_description' => 'Maombi kwa bidhaa za mkopeshaji',
+    'total' => 'Jumla',
+
+    'application_status_distribution_title' => 'Usambazaji wa Hali ya Maombi',
+    'application_status_distribution_description' => 'Mgawanyo wa sasa wa hali zote za maombi',
+    'application_status_overview' => 'Muhtasari wa Hali ya Maombi',
+    'application_status_overview_description' => 'Mgawanyo wa kina kwa viashiria vya maendeleo',
+
+    'live' => 'MOJA KWA MOJA',
+    'contact' => 'Wasiliana',
+    'no_license' => 'Hakuna Leseni',
+    'pending_assignment' => 'Inasubiri Uainishaji',
+
+    'recent_applications' => 'Maombi ya Hivi Karibuni',
+    'recent_applications_description' => 'Maombi mapya ya mkopo na hali zao za usindikaji',
+
+    'key_insights_title' => 'Maarifa Muhimu',
+    'top_product_title' => 'Bidhaa Inayoongoza',
+    'top_product_summary' => ':count maombi yenye :approval_rate% kiwango cha idhini',
+
+    'conversion_rate_title' => 'Kiwango cha Uongofu',
+    'approval_rate_label' => ':rate% kiwango cha idhini',
+    'conversion_rate_excellent' => 'Kiwango bora cha idhini! Bidhaa zako zinaendana vizuri na waombaji.',
+    'conversion_rate_good' => 'Kiwango kizuri cha idhini. Fikiria kupitia vigezo ili kuboresha.',
+    'conversion_rate_needs_review' => 'Pitia vigezo vya mkopo ili kuboresha viwango vya idhini.',
+
+    'pending_review_title' => 'Inasubiri Ukaguzi',
+    'applications' => 'maombi',
+    'pending_review_many' => 'Maombi mengi yanayosubiri. Fikiria kuharakisha ukaguzi.',
+    'pending_review_some' => ':count maombi yanayosubiri ukaguzi wako.',
+    'pending_review_none' => 'Maombi yote yamesasishwa!',
+
+    'view_all_applications' => 'Angalia Maombi Yote',
+
+    'table_applicant_information' => 'Taarifa za Muombaji',
+    'table_loan_details' => 'Taarifa za Mkopo',
+    'table_product' => 'Bidhaa',
+    'table_status' => 'Hali',
+    'table_applied_date' => 'Tarehe ya Ombi',
+
+    // Shared table headings (Admin)
+    'table_applicant' => 'Muombaji',
+    'table_amount' => 'Kiasi',
+    'table_lender' => 'Mkopeshaji',
+    'table_date' => 'Tarehe',
+
+    // Lender-specific fallbacks
+    'loan_purpose_general' => 'Kusudi la jumla',
+    'no_product_assigned' => 'Hakuna Bidhaa Iliyoainishwa',
+    'no_applications_found' => 'Hakuna Maombi',
+    'no_applications_found_description' => 'Hakuna maombi ya mkopo ya kuonyesha kwa wakati huu.',
+
+    // Status labels (used in dashboards)
+    'status_submitted' => 'Imewasilishwa',
+    'status_under_review' => 'Inakaguliwa',
+    'status_approved' => 'Imeidhinishwa',
+    'status_disbursed' => 'Imesambazwa',
+    'status_rejected' => 'Imekataliwa',
+
+    // Chart labels (used in Chart.js)
+    'chart_total_applications' => 'Jumla ya Maombi',
+    'chart_approved_applications' => 'Maombi Yanayoidhinishwa',
+    'chart_approved' => 'Imeidhinishwa',
+    'chart_rejected' => 'Imekataliwa',
+    'chart_disbursed' => 'Imesambazwa',
+    'chart_applications' => 'Maombi',
+
+    'current_year' => 'Mwaka Huu',
+
+    // Lender top cards
+    'conversion_rate_label' => 'Kiwango cha Uongofu',
+    'total_disbursed' => 'Jumla ya Kilichotolewa',
+
+    // Recent activity (Admin)
+    'recent_activity.new_lender_approved' => 'Mkopeshaji mpya ameidhinishwa',
+    'recent_activity.lender_approved_details' => ':name ameidhinishwa',
+    'recent_activity.new_application_received' => 'Ombi jipya limepokelewa',
+    'recent_activity.application_submitted_details' => ':name amewasilisha ombi la mkopo',
+    'recent_activity.application_approved' => 'Ombi limeidhinishwa',
+    'recent_activity.application_approved_details' => ':name - TZS :amount',
+    'recent_activity.system_maintenance' => 'Matengenezo ya mfumo',
+    'recent_activity.nida_integration_updated' => 'Muunganisho wa NIDA umesasishwa',
+
+    // Admin flash messages
+    'lender_approved_success' => 'Mkopeshaji ameidhinishwa kwa mafanikio!',
+    'lender_rejected_success' => 'Mkopeshaji amekataliwa.',
+    'lender_suspended_success' => 'Mkopeshaji amesimamishwa.',
 ];
 

@@ -41,6 +41,7 @@ class AuthContentManagement extends Component
     public function openCreateModal(): void
     {
         $this->resetForm();
+        $this->showEditModal = false; // prevent both modals using same image props
         $this->showCreateModal = true;
     }
 
@@ -58,6 +59,7 @@ class AuthContentManagement extends Component
 
         $this->resetForm();
         $this->selectedPage = $page;
+        $this->showCreateModal = false; // prevent both modals using same image props
         $this->showEditModal = true;
     }
 

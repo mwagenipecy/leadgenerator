@@ -153,6 +153,22 @@ class LogService
     }
 
     /**
+     * Log role change between admin/super_admin (or any other explicit role switch).
+     */
+    public static function logUserRoleChanged($user, string $oldRole, string $newRole): SystemLog
+    {
+        return self::log(
+            'user_role_changed',
+            "User {$user->email} role changed from {$oldRole} to {$newRole}",
+            'high',
+            $user,
+            ['role' => $oldRole],
+            ['role' => $newRole],
+            ['changed_by_role' => Auth::user()?->role]
+        );
+    }
+
+    /**
      * Log permission change
      */
     public static function logPermissionChanged($user, string $permission, bool $granted): SystemLog

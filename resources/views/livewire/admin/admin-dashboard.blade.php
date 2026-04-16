@@ -139,7 +139,7 @@
                         <p class="text-gray-600">{{ __('dashboard.application_trends_description') }}</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <button class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-sidebar-green/25">Current Year</button>
+                        <button class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-sidebar-green/25">{{ __('dashboard.current_year') }}</button>
                         <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium text-sm hover:bg-gray-200 transition-colors">Export</button> -->
                     </div>
                 </div>
@@ -152,8 +152,8 @@
             <div class="bg-white rounded-lg shadow-sm p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Application Status Distribution</h3>
-                        <p class="text-gray-600">Current breakdown of all application statuses</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('dashboard.application_status_distribution_title') }}</h3>
+                        <p class="text-gray-600">{{ __('dashboard.application_status_distribution_description') }}</p>
                     </div>
                     <div class="flex items-center space-x-3">
                         <!-- <button class="bg-sidebar-green text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg shadow-sidebar-green/25">Live View</button>
@@ -179,8 +179,8 @@
             <div class="lg:col-span-5 bg-white rounded-lg shadow-sm p-8 border border-gray-100">
                 <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Application Status Overview</h3>
-                        <p class="text-gray-600">Detailed breakdown with progress indicators</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('dashboard.application_status_overview') }}</h3>
+                        <p class="text-gray-600">{{ __('dashboard.application_status_overview_description') }}</p>
                     </div>
                 </div>
                 <div class="space-y-4">
@@ -196,7 +196,7 @@
                                     @else bg-gray-500
                                     @endif">
                                 </div>
-                                <span class="text-sm font-semibold text-gray-700">{{ ucfirst(str_replace('_', ' ', $status)) }}</span>
+                                <span class="text-sm font-semibold text-gray-700">{{ __('dashboard.status_' . $status) }}</span>
                             </div>
                             <div class="flex items-center space-x-4">
                                 <div class="w-32 bg-gray-200 rounded-full h-2">
@@ -224,7 +224,7 @@
                     <h3 class="text-xl font-bold text-gray-900">{{ __('dashboard.live_activity') }}</h3>
                     <div class="flex items-center space-x-2">
                         <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span class="text-xs font-semibold text-green-600">LIVE</span>
+                        <span class="text-xs font-semibold text-green-600">{{ __('dashboard.live') }}</span>
                     </div>
                 </div>
                 <div class="space-y-4 max-h-80 overflow-y-auto">
@@ -282,7 +282,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{{ $lender->company_name }}</div>
-                                                <div class="text-xs text-gray-500">Contact: {{ $lender->contact_person }}</div>
+                                                <div class="text-xs text-gray-500">{{ __('dashboard.contact') }}: {{ $lender->contact_person }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -301,7 +301,7 @@
                                             </span>
                                         @else
                                             <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-sidebar-green-100 text-sidebar-green-800 border border-sidebar-green-200">
-                                                No License
+                                                {{ __('dashboard.no_license') }}
                                             </span>
                                         @endif
                                     </td>
@@ -330,8 +330,8 @@
             <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Recent Applications</h3>
-                        <p class="text-gray-600">Latest loan applications and their processing status</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">{{ __('dashboard.recent_applications') }}</h3>
+                        <p class="text-gray-600">{{ __('dashboard.recent_applications_description') }}</p>
                     </div>
                     <div class="flex items-center space-x-3">
                         <!-- <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-medium hover:bg-gray-200 transition-colors">
@@ -347,11 +347,11 @@
                 <table class="w-full">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Applicant</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Amount</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Lender</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-8 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_applicant') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_amount') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_lender') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_status') }}</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{{ __('dashboard.table_date') }}</th>
                             <!-- <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th> -->
                         </tr>
                     </thead>
@@ -378,7 +378,7 @@
                                     @if($application->lender)
                                         <div class="text-sm text-gray-900">{{ $application->lender->company_name }}</div>
                                     @else
-                                        <span class="text-xs text-gray-400">Pending Assignment</span>
+                                        <span class="text-xs text-gray-400">{{ __('dashboard.pending_assignment') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
@@ -403,7 +403,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                                             </svg>
                                         @endif
-                                        {{ ucfirst(str_replace('_', ' ', $application->status)) }}
+                                        {{ __('dashboard.status_' . $application->status) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-6 whitespace-nowrap">
@@ -434,8 +434,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                         </svg>
                                     </div>
-                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">No Applications Found</h4>
-                                    <p class="text-gray-500">There are no loan applications to display at this time.</p>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ __('dashboard.no_applications_found') }}</h4>
+                                    <p class="text-gray-500">{{ __('dashboard.no_applications_found_description') }}</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -459,20 +459,20 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: {!! json_encode($monthlyLabels) !!},
             datasets: [
                 {
-                    label: 'Total Applications',
+                    label: @json(__('dashboard.chart_total_applications')),
                     data: {!! json_encode($monthlyApplications) !!},
-                    borderColor: 'rgb(29, 117, 63)',
-                    backgroundColor: 'rgba(29, 117, 63, 0.1)',
+                    borderColor: 'rgb(196, 15, 17)',
+                    backgroundColor: 'rgba(196, 15, 17, 0.1)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4,
-                    pointBackgroundColor: 'rgb(29, 117, 63)',
+                    pointBackgroundColor: 'rgb(196, 15, 17)',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 6
                 },
                 {
-                    label: 'Approved',
+                    label: @json(__('dashboard.chart_approved')),
                     data: {!! json_encode($monthlyApproved) !!},
                     borderColor: 'rgb(34, 197, 94)',
                     backgroundColor: 'rgba(34, 197, 94, 0.1)',
@@ -485,27 +485,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     pointRadius: 6
                 },
                 {
-                    label: 'Rejected',
+                    label: @json(__('dashboard.chart_rejected')),
                     data: {!! json_encode($monthlyRejected) !!},
-                    borderColor: 'rgb(156, 163, 175)',
-                    backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                    borderColor: 'rgb(196, 15, 17)',
+                    backgroundColor: 'rgba(196, 15, 17, 0.1)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4,
-                    pointBackgroundColor: 'rgb(156, 163, 175)',
+                    pointBackgroundColor: 'rgb(196, 15, 17)',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 6
                 },
                 {
-                    label: 'Disbursed',
+                    label: @json(__('dashboard.chart_disbursed')),
                     data: {!! json_encode($monthlyDisbursed) !!},
-                    borderColor: 'rgb(147, 51, 234)',
-                    backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                    borderColor: 'rgb(168, 85, 247)',
+                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4,
-                    pointBackgroundColor: 'rgb(147, 51, 234)',
+                    pointBackgroundColor: 'rgb(168, 85, 247)',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 6
@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    backgroundColor: 'rgba(196, 15, 17, 0.92)',
                     titleColor: '#fff',
                     bodyColor: '#fff',
                     borderColor: '#374151',
@@ -588,10 +588,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: {!! json_encode($statusData) !!},
                 backgroundColor: [
                     'rgb(59, 130, 246)',   // submitted - blue
-                    'rgb(29, 117, 63)',    // under_review - red  
+                    'rgb(245, 158, 11)',   // under_review - yellow
                     'rgb(34, 197, 94)',    // approved - green
-                    'rgb(156, 163, 175)',  // rejected - gray
-                    'rgb(147, 51, 234)'    // disbursed - purple
+                    'rgb(196, 15, 17)',    // rejected - sidebar-green
+                    'rgb(168, 85, 247)'    // disbursed - purple
                 ],
                 borderWidth: 0,
                 hoverOffset: 10
@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    backgroundColor: 'rgba(196, 15, 17, 0.92)',
                     titleColor: '#fff',
                     bodyColor: '#fff',
                     borderColor: '#374151',
@@ -645,21 +645,21 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: {!! json_encode($statusLabels) !!},
             datasets: [{
-                label: 'Applications',
+                label: @json(__('dashboard.chart_applications')),
                 data: {!! json_encode($statusData) !!},
                 backgroundColor: [
                     'rgba(59, 130, 246, 0.8)',   // submitted - blue
-                    'rgba(29, 117, 63, 0.8)',    // under_review - red  
+                    'rgba(245, 158, 11, 0.8)',   // under_review - yellow
                     'rgba(34, 197, 94, 0.8)',    // approved - green
-                    'rgba(156, 163, 175, 0.8)',  // rejected - gray
-                    'rgba(147, 51, 234, 0.8)'    // disbursed - purple
+                    'rgba(196, 15, 17, 0.8)',    // rejected - sidebar-green
+                    'rgba(168, 85, 247, 0.8)'   // disbursed - purple
                 ],
                 borderColor: [
                     'rgb(59, 130, 246)',   
-                    'rgb(29, 117, 63)',    
+                    'rgb(245, 158, 11)',    
                     'rgb(34, 197, 94)',    
-                    'rgb(156, 163, 175)',  
-                    'rgb(147, 51, 234)'    
+                    'rgb(196, 15, 17)',  
+                    'rgb(168, 85, 247)'    
                 ],
                 borderWidth: 2,
                 borderRadius: 8,
@@ -674,7 +674,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     display: false
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                    backgroundColor: 'rgba(196, 15, 17, 0.92)',
                     titleColor: '#fff',
                     bodyColor: '#fff',
                     borderColor: '#374151',

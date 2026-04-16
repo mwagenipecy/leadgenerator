@@ -115,5 +115,98 @@ return [
     'actions' => 'Actions',
     'amount_this_lender_offer' => 'Amount this lender can offer',
     'apply' => 'Apply',
+
+    // Admin/Lender Dashboard (charts + multilingual support)
+    'application_trends' => 'Application Trends',
+    'chart_applications' => 'Applications',
+    'chart_approved' => 'Approved',
+    'product_performance' => 'Product Performance',
+    'product_performance_description' => "Applications by lender's products",
+    'total' => 'Total',
+
+    'application_status_distribution_title' => 'Application Status Distribution',
+    'application_status_distribution_description' => 'Current breakdown of all application statuses',
+    'application_status_overview' => 'Application Status Overview',
+    'application_status_overview_description' => 'Detailed breakdown with progress indicators',
+
+    'live' => 'LIVE',
+    'contact' => 'Contact',
+    'no_license' => 'No License',
+    'pending_assignment' => 'Pending Assignment',
+
+    'recent_applications' => 'Recent Applications',
+    'recent_applications_description' => 'Latest loan applications and their processing status',
+
+    'key_insights_title' => 'Key Insights',
+    'top_product_title' => 'Top Product',
+    'top_product_summary' => ':count applications with :approval_rate% approval rate',
+
+    'conversion_rate_title' => 'Conversion Rate',
+    'approval_rate_label' => ':rate% approval rate',
+    'conversion_rate_excellent' => 'Excellent approval rate! Your products are well-matched to applicants.',
+    'conversion_rate_good' => 'Good approval rate. Consider reviewing criteria for improvement.',
+    'conversion_rate_needs_review' => 'Review your loan criteria to improve approval rates.',
+
+    'pending_review_title' => 'Pending Review',
+    'applications' => 'applications',
+    'pending_review_many' => 'High volume of pending applications. Consider prioritizing reviews.',
+    'pending_review_some' => ':count applications awaiting your review.',
+    'pending_review_none' => 'All applications are up to date!',
+
+    'view_all_applications' => 'View All Applications',
+
+    'table_applicant_information' => 'Applicant Information',
+    'table_loan_details' => 'Loan Details',
+    'table_product' => 'Product',
+    'table_status' => 'Status',
+    'table_applied_date' => 'Applied Date',
+
+    // Shared table headings (Admin)
+    'table_applicant' => 'Applicant',
+    'table_amount' => 'Amount',
+    'table_lender' => 'Lender',
+    'table_date' => 'Date',
+
+    // Lender-specific fallbacks
+    'loan_purpose_general' => 'General purpose',
+    'no_product_assigned' => 'No Product Assigned',
+    'no_applications_found' => 'No Applications Found',
+    'no_applications_found_description' => 'There are no loan applications to display at this time.',
+
+    // Status labels (used in dashboards)
+    'status_submitted' => 'Submitted',
+    'status_under_review' => 'Under Review',
+    'status_approved' => 'Approved',
+    'status_disbursed' => 'Disbursed',
+    'status_rejected' => 'Rejected',
+
+    // Chart labels (used in Chart.js)
+    'chart_total_applications' => 'Total Applications',
+    'chart_approved_applications' => 'Approved Applications',
+    'chart_approved' => 'Approved',
+    'chart_rejected' => 'Rejected',
+    'chart_disbursed' => 'Disbursed',
+    'chart_applications' => 'Applications',
+
+    'current_year' => 'Current Year',
+
+    // Lender top cards
+    'conversion_rate_label' => 'Conversion Rate',
+    'total_disbursed' => 'Total Disbursed',
+
+    // Recent activity (Admin)
+    'recent_activity.new_lender_approved' => 'New lender approved',
+    'recent_activity.lender_approved_details' => ':name approved',
+    'recent_activity.new_application_received' => 'New application received',
+    'recent_activity.application_submitted_details' => ':name submitted loan application',
+    'recent_activity.application_approved' => 'Application approved',
+    'recent_activity.application_approved_details' => ':name - TZS :amount',
+    'recent_activity.system_maintenance' => 'System maintenance',
+    'recent_activity.nida_integration_updated' => 'NIDA integration updated',
+
+    // Admin flash messages
+    'lender_approved_success' => 'Lender approved successfully!',
+    'lender_rejected_success' => 'Lender rejected.',
+    'lender_suspended_success' => 'Lender suspended.',
 ];
 

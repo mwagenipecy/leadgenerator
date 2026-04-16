@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Creditinfo Lead Generator</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
+
     <meta http-equiv="Cross-Origin-Resource-Policy" content="same-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">

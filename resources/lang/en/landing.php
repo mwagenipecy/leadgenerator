@@ -152,5 +152,7 @@ return [
     'featured' => 'Featured',
     'by' => 'By',
     'lenders' => 'Lenders',
+    'trusted_partners' => 'Trusted Partners',
+    'trusted_partners_description' => 'Leading institutions we work with.',
 ];
 
