@@ -24,10 +24,6 @@
                     <span class="relative z-10">{{ __('landing.process') }}</span>
                     <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
                 </a>
-                <a href="{{ route('customer-help.index') }}" class="nav-link nav-scroll-link px-4 py-2 rounded-lg hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group">
-                    <span class="relative z-10">{{ __('landing.customer_help') }}</span>
-                    <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
-                </a>
                 <a href="{{ route('blog.index') }}" class="nav-link nav-scroll-link px-4 py-2 rounded-lg hover:text-white hover:bg-red-600 transition-all duration-300 font-medium text-sm lg:text-base relative group">
                     <span class="relative z-10">{{ __('landing.blog') }}</span>
                     <span class="absolute inset-0 bg-red-600 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
@@ -60,9 +56,6 @@
                 </a>
                 <a href="{{ $processLink }}" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium" style="color: #C40F11;">
                     {{ __('landing.process') }}
-                </a>
-                <a href="{{ route('customer-help.index') }}" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium" style="color: #C40F11;">
-                    {{ __('landing.customer_help') }}
                 </a>
                 <a href="{{ route('blog.index') }}" onclick="toggleMobileMenu()" class="block px-4 py-3 rounded-lg text-gray-700 hover:text-white hover:bg-red-600 transition-all duration-300 font-medium" style="color: #C40F11;">
                     {{ __('landing.blog') }}
