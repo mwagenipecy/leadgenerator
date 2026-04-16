@@ -1,27 +1,49 @@
 <div>
+<style>
+    .floating-navbar-shell {
+        border-radius: 1.15rem;
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.09);
+        transition: all 0.3s ease;
+    }
+
+    .floating-navbar-shell.navbar-scrolled {
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.12));
+        border-color: rgba(255, 255, 255, 0.48);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .floating-navbar-shell .nav-scroll-link,
+    .floating-navbar-shell #language-switcher-button {
+        color: #C40F11;
+    }
+
+    .floating-navbar-shell.navbar-scrolled .nav-scroll-link,
+    .floating-navbar-shell.navbar-scrolled #language-switcher-button {
+        color: #C40F11;
+    }
+</style>
 <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-14 sm:h-16">
-                <a href="/" class="inline-block">
-                    <img src="{{ asset('logo/logoOnWhitebg.png') }}" alt="Logo" class="h-8 sm:h-10 md:h-12 w-auto">
-                </a>
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <span class="hidden sm:inline text-xs sm:text-sm text-gray-500">Welcome, {{ auth()->user()?->first_name ?? 'User' }}</span>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="text-xs sm:text-sm text-brand-green hover:text-brand-green-light transition-colors font-medium">
-                            Logout
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </header>
+    <x-landing.navbar :is-home="false" />
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto py-4 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-4xl mx-auto pt-24 pb-12 sm:pt-26 sm:pb-14 md:pt-28 md:pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="mb-4 sm:mb-6">
+            <button
+                type="button"
+                wire:click="backToMethodSelection"
+                class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back
+            </button>
+        </div>
+
         <!-- Progress Indicator -->
         <div class="mb-6 sm:mb-8">
             <!-- Mobile Progress - Simplified -->
@@ -261,6 +283,10 @@
         </div>
     </main>
 
+    <div class="mt-4 md:mt-6">
+        <x-landing.footer />
+    </div>
+
     <!-- Loading Overlay - Only shows during form submission -->
     <div wire:loading.flex wire:target="submitCurrentQuestion,retryVerification,goToProfile,redirectToDashboard" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center z-50">
         <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
@@ -271,4 +297,37 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        if (!menu) return;
+        menu.classList.toggle('hidden');
+    }
+
+    const handleNavbarScroll = () => {
+        const navbar = document.getElementById('mainNavbar');
+        const navbarShell = navbar ? navbar.querySelector('.floating-navbar-shell') : null;
+        if (!navbarShell) return;
+
+        if (window.scrollY > 20) {
+            navbarShell.classList.add('navbar-scrolled');
+        } else {
+            navbarShell.classList.remove('navbar-scrolled');
+        }
+    };
+
+    window.addEventListener('scroll', handleNavbarScroll);
+    document.addEventListener('DOMContentLoaded', handleNavbarScroll);
+
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobileMenu');
+        if (!menu) return;
+        const button = event.target.closest('button[onclick="toggleMobileMenu()"]');
+
+        if (!menu.contains(event.target) && !button && !menu.classList.contains('hidden')) {
+            menu.classList.add('hidden');
+        }
+    });
+</script>
 </div>
