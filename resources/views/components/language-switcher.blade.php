@@ -23,7 +23,7 @@
         id="language-switcher-button">
         <span class="text-base leading-none">{{ $currentLocale === 'en' ? '🇬🇧' : '🇹🇿' }}</span>
         <!-- Current Language -->
-        <span class="hidden sm:inline">{{ $currentLocale === 'en' ? __('common.english') : 'Tanzania (Swahili)' }}</span>
+        <span class="hidden sm:inline">{{ $currentLocale === 'en' ? __('common.english') : 'Swahili' }}</span>
         <span class="sm:hidden uppercase">{{ $currentLocale }}</span>
         <!-- Dropdown Arrow -->
         <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +59,7 @@
             href="{{ route('language.switch', 'sw') }}?redirect={{ urlencode(request()->url()) }}"
             class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors {{ $currentLocale === 'sw' ? 'bg-sidebar-green-50 text-sidebar-green font-medium' : '' }}">
             <span class="w-6 text-center text-base leading-none">🇹🇿</span>
-            <span>Tanzania (Swahili)</span>
+            <span>Swahili</span>
             @if($currentLocale === 'sw')
                 <svg class="w-4 h-4 ml-auto text-sidebar-green" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>

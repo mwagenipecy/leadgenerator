@@ -1,6 +1,12 @@
 <?php
 
 return [
+    // Navbar
+    'go_to_marketplace' => 'Nenda Sokoni',
+    'register' => 'Jisajili',
+    'my_dashboard' => 'Dashibodi Yangu',
+    'notifications' => 'Arifa',
+
     'get_started' => 'Anza',
     'eligibility' => 'Kustahili',
     'process' => 'Mchakato',

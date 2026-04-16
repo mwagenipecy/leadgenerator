@@ -1,6 +1,12 @@
 <?php
 
 return [
+    // Navbar
+    'go_to_marketplace' => 'Go to Marketplace',
+    'register' => 'Register',
+    'my_dashboard' => 'My Dashboard',
+    'notifications' => 'Notifications',
+
     'get_started' => 'Get Started',
     'eligibility' => 'Eligibility',
     'process' => 'Process',

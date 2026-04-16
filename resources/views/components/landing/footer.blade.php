@@ -1,4 +1,4 @@
-<footer id="contact" class="bg-white text-gray-900 py-16 border-t border-gray-200">
+<footer id="contact" class="bg-gray-100 text-gray-900 py-16 border-t border-gray-200">
     <div class="max-w-7xl mx-auto px-4 lg:px-8">
         {{-- Top Section: Brand, Company, Resources, Video --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-12">
