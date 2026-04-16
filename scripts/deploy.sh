@@ -52,4 +52,23 @@ if [ -n "$APP_URL_VALUE" ]; then
   curl -fsS "$APP_URL_VALUE" >/dev/null || true
 fi
 
+echo "==> Checking admin route reachability (expect 200/302)..."
+check_admin_route() {
+  local url="$1"
+  local code
+  code="$(curl -s -o /dev/null -w "%{http_code}" "$url")"
+  case "$code" in
+    200|301|302|401|403)
+      echo "    OK $url -> $code"
+      ;;
+    *)
+      echo "    FAIL $url -> $code"
+      exit 1
+      ;;
+  esac
+}
+
+check_admin_route "http://127.0.0.1/partner-management"
+check_admin_route "http://127.0.0.1/hero-slider-management"
+
 echo "==> Deploy finished at $(date -u +%Y-%m-%dT%H:%M:%SZ)"

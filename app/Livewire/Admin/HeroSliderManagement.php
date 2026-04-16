@@ -283,12 +283,16 @@ class HeroSliderManagement extends Component
             ]);
         }
 
+        // Keep the uploader resilient in production: if GD helpers are unavailable,
+        // fallback to storing the original file (same approach as partner uploads).
+        if (!function_exists('imagecreatefromstring') || !function_exists('imagecreatetruecolor')) {
+            return $this->storeOriginalImage($uploadedFile);
+        }
+
         $sourceData = @file_get_contents($sourcePath);
         $sourceImage = $sourceData ? @imagecreatefromstring($sourceData) : false;
         if ($sourceImage === false) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'image' => 'Unsupported image format.',
-            ]);
+            return $this->storeOriginalImage($uploadedFile);
         }
 
         $originalWidth = (int) $imageInfo[0];
@@ -324,10 +328,7 @@ class HeroSliderManagement extends Component
         } else {
             imagedestroy($sourceImage);
             imagedestroy($targetImage);
-
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'image' => 'Image conversion is not available on this server (WebP/JPEG support missing).',
-            ]);
+            return $this->storeOriginalImage($uploadedFile);
         }
         $optimizedBinary = ob_get_clean();
 
@@ -335,15 +336,21 @@ class HeroSliderManagement extends Component
         imagedestroy($targetImage);
 
         if (!$optimizedBinary) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'image' => 'Unable to optimize image file.',
-            ]);
+            return $this->storeOriginalImage($uploadedFile);
         }
 
         $storagePath = 'hero-slider/' . Str::uuid() . '.' . $storedExtension;
         Storage::disk('public')->put($storagePath, $optimizedBinary);
 
         return $storagePath;
+    }
+
+    protected function storeOriginalImage($uploadedFile): string
+    {
+        $extension = strtolower($uploadedFile->getClientOriginalExtension() ?: 'png');
+        $filename = Str::uuid() . '.' . $extension;
+
+        return $uploadedFile->storeAs('hero-slider', $filename, 'public');
     }
 
     public function render()
