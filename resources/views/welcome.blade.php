@@ -567,8 +567,8 @@
         </section>
     @endif
 
-    <section class="py-12 md:py-14 bg-gray-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <section class="py-10 md:py-14 bg-gray-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 lg:px-4">
             <div class="text-center mb-8 md:mb-10">
                 <p class="text-xs tracking-[0.3em] uppercase text-brand-green font-semibold mb-3">
                     Testimonials
@@ -579,41 +579,41 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <div class="flex items-center mb-4 text-brand-green">
+                <div class="bg-white rounded-2xl border border-gray-200 p-3 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center mb-2 text-brand-green">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4" style="font-family: 'Hubballi', sans-serif;">"The application process was straightforward and I got matched with a lender quickly. Highly recommend this platform."</p>
+                    <p class="text-gray-600 text-xl mb-2" style="font-family: 'Hubballi', sans-serif;">"The application process was straightforward and I got matched with a lender quickly. Highly recommend this platform."</p>
                     <p class="font-semibold text-gray-900">Amina J.</p>
                     <p class="text-xs text-gray-500">Small Business Owner</p>
                 </div>
 
-                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <div class="flex items-center mb-4 text-brand-green">
+                <div class="bg-white rounded-2xl border border-gray-200 p-3 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center mb-2 text-brand-green">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4" style="font-family: 'Hubballi', sans-serif;">"I compared offers from multiple lenders in one place. It saved me time and gave me better terms for my loan."</p>
+                    <p class="text-gray-600 text-xl mb-2" style="font-family: 'Hubballi', sans-serif;">"I compared offers from multiple lenders in one place. It saved me time and gave me better terms for my loan."</p>
                     <p class="font-semibold text-gray-900">Joseph M.</p>
                     <p class="text-xs text-gray-500">Retail Trader</p>
                 </div>
 
-                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <div class="flex items-center mb-4 text-brand-green">
+                <div class="bg-white rounded-2xl border border-gray-200 p-3 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div class="flex items-center mb-2 text-brand-green">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927C9.469 1.701 10.531 1.701 10.951 2.927l.7 2.04a1 1 0 00.95.69h2.146c1.288 0 1.82 1.65.78 2.41l-1.736 1.262a1 1 0 00-.364 1.118l.663 2.028c.398 1.216-.99 2.224-2.03 1.464l-1.75-1.27a1 1 0 00-1.176 0l-1.75 1.27c-1.04.76-2.428-.248-2.03-1.464l.663-2.028a1 1 0 00-.364-1.118L3.473 8.067c-1.04-.76-.508-2.41.78-2.41H6.4a1 1 0 00.95-.69l.7-2.04z"/></svg>
                     </div>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-4" style="font-family: 'Hubballi', sans-serif;">"Very professional support team and transparent process. I felt confident from application to approval."</p>
+                    <p class="text-gray-600 text-xl leading-flex mb-2" style="font-family: 'Hubballi', sans-serif;">"Very professional support team and transparent process. I felt confident from application to approval."</p>
                     <p class="font-semibold text-gray-900">Rehema K.</p>
                     <p class="text-xs text-gray-500">Entrepreneur</p>
                 </div>
