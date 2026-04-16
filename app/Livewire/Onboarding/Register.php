@@ -3,12 +3,13 @@
 namespace App\Livewire\Onboarding;
 
 use App\Models\Role;
+use App\Services\OtpService;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Session;
 use App\Livewire\Concerns\WithLocale;
 
 class Register extends Component
@@ -241,16 +242,33 @@ class Register extends Component
                 return $user;
             });
     
-                // Auto-login the user
-            auth()->login($user);
+            // Auto-login the user first so any auth listeners keep working.
+            Auth::login($user);
             
-            session()->flash('success', 'Account created successfully! Please complete your verification.');
+            // Store user details for OTP flow, then log out until OTP verification completes.
+            Session::forget('otp_verified');
+            Session::put('otp_user_id', $user->id);
+            Session::put('login_timestamp', now()->timestamp);
+            
+            $guard = Auth::guard();
+            if (method_exists($guard, 'logout')) {
+                $guard->logout();
+            }
+            
+            $otpService = app(OtpService::class);
+            if (!$otpService->generateAndSendOtp($user)) {
+                Session::forget(['otp_user_id', 'login_timestamp']);
+                session()->flash('error', 'Account created, but failed to send verification code. Please login and try again.');
+                return redirect()->route('login');
+            }
+            
+            session()->flash('success', 'Account created successfully! Please check your email for the verification code.');
             
             // Reset form
             $this->reset();
             
-            // Redirect to verification options for both individual and company users
-            return redirect()->route('verification.options');
+            // Redirect to OTP page; post-OTP flow remains handled in OtpController.
+            return redirect()->route('otp.show');
             
         } catch (\Exception $e) {
             // Log the detailed error
