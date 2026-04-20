@@ -320,24 +320,24 @@
                                 <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
-                                Company Information
+                                {{ __('profile.company_information') }}
                             </h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="bg-white rounded-lg p-4 border border-gray-100">
-                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Company Name</label>
-                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->company_name ?? 'Not Provided' }}</p>
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.company_name') }}</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->company_name ?? __('profile.not_provided') }}</p>
                                 </div>
                                 <div class="bg-white rounded-lg p-4 border border-gray-100">
-                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Company TIN</label>
-                                    <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->company_tin ?? 'Not Provided' }}</p>
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.company_tin') }}</label>
+                                    <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->company_tin ?? __('profile.not_provided') }}</p>
                                 </div>
                                 <div class="bg-white rounded-lg p-4 border border-gray-100">
-                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Country of Registration</label>
-                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->country ?? 'Not Provided' }}</p>
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.country_of_registration') }}</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->country ?? __('profile.not_provided') }}</p>
                                 </div>
                                 <div class="bg-white rounded-lg p-4 border border-gray-100">
-                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Registration Type</label>
-                                    <p class="text-gray-900 font-semibold text-lg capitalize">{{ auth()->user()->registration_type ?? 'Not Provided' }}</p>
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.registration_type') }}</label>
+                                    <p class="text-gray-900 font-semibold text-lg capitalize">{{ auth()->user()->registration_type ?? __('profile.not_provided') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -348,11 +348,11 @@
                                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
-                                Company Representative
+                                {{ __('profile.company_representative') }}
                             </h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="bg-white rounded-lg p-4 border border-blue-100">
-                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Representative Name</label>
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.representative_name') }}</label>
                                     <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
                                 </div>
                                 <div class="bg-white rounded-lg p-4 border border-blue-100">
@@ -361,18 +361,18 @@
                                 </div>
                                 @if(auth()->user()->isFromTanzania())
                                     <div class="bg-white rounded-lg p-4 border border-blue-100">
-                                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Representative NIDA Number</label>
-                                        <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->company_contact_nida ?? 'Not Provided' }}</p>
+                                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.representative_nida_number') }}</label>
+                                        <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->company_contact_nida ?? __('profile.not_provided') }}</p>
                                     </div>
                                 @else
                                     <div class="bg-white rounded-lg p-4 border border-blue-100">
-                                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Passport Number</label>
-                                        <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->passport_number ?? 'Not Provided' }}</p>
+                                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.passport_number') }}</label>
+                                        <p class="text-gray-900 font-semibold text-lg font-mono">{{ auth()->user()->passport_number ?? __('profile.not_provided') }}</p>
                                     </div>
                                 @endif
                                 <div class="bg-white rounded-lg p-4 border border-blue-100">
-                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Phone Number</label>
-                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->phone ?? 'Not Provided' }}</p>
+                                    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">{{ __('profile.phone_number') }}</label>
+                                    <p class="text-gray-900 font-semibold text-lg">{{ auth()->user()->phone ?? __('profile.not_provided') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -383,7 +383,7 @@
                                 <svg class="w-5 h-5 {{ auth()->user()->isCompanyVerified() ? 'text-green-600' : (auth()->user()->isCompanyVerificationPending() ? 'text-yellow-600' : 'text-gray-600') }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                                 </svg>
-                                Verification Status
+                                {{ __('profile.verification_status') }}
                             </h3>
                             
                             @if(auth()->user()->isCompanyVerified())
@@ -395,13 +395,13 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="text-green-800 font-bold text-lg">Company Verified</p>
-                                            <p class="text-green-600 text-sm">Your company has been verified and approved</p>
+                                            <p class="text-green-800 font-bold text-lg">{{ __('profile.company_verified') }}</p>
+                                            <p class="text-green-600 text-sm">{{ __('profile.company_verified_description') }}</p>
                                         </div>
                                     </div>
                                     @if(auth()->user()->company_verified_at)
                                         <p class="text-sm text-gray-600 mt-2">
-                                            <span class="font-medium">Verified on:</span> 
+                                            <span class="font-medium">{{ __('profile.verified_on') }}</span> 
                                             {{ \Carbon\Carbon::parse(auth()->user()->company_verified_at)->format('F d, Y \a\t h:i A') }}
                                         </p>
                                     @endif
@@ -415,11 +415,11 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="text-yellow-800 font-bold text-lg">Verification Pending</p>
-                                            <p class="text-yellow-600 text-sm">Your documents are being reviewed by our team</p>
+                                            <p class="text-yellow-800 font-bold text-lg">{{ __('profile.verification_pending') }}</p>
+                                            <p class="text-yellow-600 text-sm">{{ __('profile.verification_pending_description') }}</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm text-gray-600 mt-2">This usually takes 1-3 business days. You will be notified once the review is complete.</p>
+                                    <p class="text-sm text-gray-600 mt-2">{{ __('profile.verification_pending_note') }}</p>
                                 </div>
                             @elseif(auth()->user()->isCompanyVerificationRejected())
                                 <div class="bg-white rounded-lg p-4 border border-red-100">
@@ -430,13 +430,13 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="text-red-800 font-bold text-lg">Verification Rejected</p>
-                                            <p class="text-red-600 text-sm">Your company verification was not approved</p>
+                                            <p class="text-red-800 font-bold text-lg">{{ __('profile.verification_rejected') }}</p>
+                                            <p class="text-red-600 text-sm">{{ __('profile.verification_rejected_description') }}</p>
                                         </div>
                                     </div>
                                     @if(auth()->user()->company_verification_notes)
                                         <div class="mt-3 p-3 bg-red-50 rounded-lg border border-red-200">
-                                            <p class="text-sm font-medium text-red-800">Reason:</p>
+                                            <p class="text-sm font-medium text-red-800">{{ __('profile.reason') }}</p>
                                             <p class="text-sm text-red-700 mt-1">{{ auth()->user()->company_verification_notes }}</p>
                                         </div>
                                     @endif
@@ -444,7 +444,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                         </svg>
-                                        Re-submit Documents
+                                        {{ __('profile.resubmit_documents') }}
                                     </a>
                                 </div>
                             @else
@@ -456,15 +456,15 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="text-gray-800 font-bold text-lg">Not Yet Verified</p>
-                                            <p class="text-gray-600 text-sm">Please complete company verification to access all features</p>
+                                            <p class="text-gray-800 font-bold text-lg">{{ __('profile.not_yet_verified') }}</p>
+                                            <p class="text-gray-600 text-sm">{{ __('profile.not_yet_verified_description') }}</p>
                                         </div>
                                     </div>
                                     <a href="{{ route('company.kyc') }}" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
-                                        Start Verification
+                                        {{ __('profile.start_verification') }}
                                     </a>
                                 </div>
                             @endif
@@ -474,11 +474,11 @@
                     <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('overview')" 
                                 class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
-                            Back to Overview
+                            {{ __('profile.back_to_overview') }}
                         </button>
                         <button wire:click="goToStep('personal')" 
                                 class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
-                            Continue to Personal Info
+                            {{ __('profile.continue_to_personal_info') }}
                         </button>
                     </div>
                 </div>
@@ -487,8 +487,8 @@
             @elseif($currentStep === 'personal')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Personal Information</h2>
-                        <p class="text-gray-600">Basic personal details and identification</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.personal_information') }}</h2>
+                        <p class="text-gray-600">{{ __('profile.personal_information_description') }}</p>
                     </div>
                     
                     <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
@@ -527,10 +527,10 @@
                                 <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Gender *</label>
                                 <select wire:model="gender" 
                                         class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                    <option value="">Select gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
+                                    <option value="">{{ __('profile.select_gender') }}</option>
+                                    <option value="male">{{ __('profile.gender_male') }}</option>
+                                    <option value="female">{{ __('profile.gender_female') }}</option>
+                                    <option value="other">{{ __('profile.gender_other') }}</option>
                                 </select>
                                 @error('gender') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
                             </div>
@@ -538,7 +538,7 @@
                                 <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Marital Status *</label>
                                 <select wire:model="marital_status" 
                                         class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                    <option value="">Select status</option>
+                                    <option value="">{{ __('profile.select_status') }}</option>
                                     @foreach($maritalStatuses as $key => $status)
                                         <option value="{{ $key }}">{{ $status }}</option>
                                     @endforeach
@@ -576,7 +576,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                                 <div>
-                                    <h4 class="text-sm font-medium text-blue-800">Information Note</h4>
+                                    <h4 class="text-sm font-medium text-blue-800">{{ __('profile.information_note') }}</h4>
                                     <p class="text-sm text-blue-700 mt-1">Some fields (First Name, Last Name, and National ID) are automatically filled from your verified account information and cannot be edited here. If you need to update these details, please contact support.</p>
                                 </div>
                             </div>
@@ -586,16 +586,16 @@
                     <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('overview')" 
                                 class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
-                            Back to Overview
+                            {{ __('profile.back_to_overview') }}
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
                                     class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
-                                Save
+                                {{ __('common.save') }}
                             </button>
                             <button wire:click="saveAndContinue('address')" 
                                     class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
-                                Save & Continue
+                                {{ __('profile.save_and_continue') }}
                             </button>
                         </div>
                     </div>
@@ -605,17 +605,17 @@
             @elseif($currentStep === 'address')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Address Information</h2>
-                        <p class="text-sm sm:text-base text-gray-600">Your current and permanent address details</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.address_information') }}</h2>
+                        <p class="text-sm sm:text-base text-gray-600">{{ __('profile.address_information_description') }}</p>
                     </div>
                     
                     <div class="p-6 space-y-8">
                         <!-- Current Address -->
                         <div>
-                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Current Address</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ __('profile.current_address') }}</h3>
                             <div class="space-y-6">
                                 <div>
-                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Street Address *</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">{{ __('profile.street_address') }} *</label>
                                     <textarea wire:model="current_address" rows="3" 
                                               class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green" 
                                               placeholder="Enter your current street address"></textarea>
@@ -647,7 +647,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Years at Current Address *</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">{{ __('profile.years_at_current_address') }} *</label>
                                     <input wire:model="years_at_current_address" type="number" min="0" max="50" 
                                            class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
                                     @error('years_at_current_address') <span class="text-sidebar-green text-sm mt-1 block">{{ $message }}</span> @enderror
@@ -705,16 +705,16 @@
                     <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('personal')" 
                                 class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
-                            Previous
+                            {{ __('common.previous') }}
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
                                     class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
-                                Save
+                                {{ __('common.save') }}
                             </button>
                             <button wire:click="saveAndContinue('employment')" 
                                     class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
-                                Save & Continue
+                                {{ __('profile.save_and_continue') }}
                             </button>
                         </div>
                     </div>
@@ -724,8 +724,8 @@
             @elseif($currentStep === 'employment')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Employment Information</h2>
-                        <p class="text-sm sm:text-base text-gray-600">Your work and business details</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.employment_information') }}</h2>
+                        <p class="text-sm sm:text-base text-gray-600">{{ __('profile.employment_information_description') }}</p>
                     </div>
                     
                     <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
@@ -734,9 +734,9 @@
                             <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Employment Status *</label>
                             <select wire:model.live="employment_status" 
                                     class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-sidebar-green">
-                                <option value="">Select employment status</option>
-                                <option value="employed">Employed</option>
-                                <option value="self_employed">Sole trader </option>
+                                <option value="">{{ __('profile.select_employment_status') }}</option>
+                                <option value="employed">{{ __('profile.employed') }}</option>
+                                <option value="self_employed">{{ __('profile.self_employed') }}</option>
                                 <!-- <option value="unemployed">Unemployed</option>
                                 <option value="retired">Retired</option>
                                 <option value="student">Student</option> -->
@@ -747,7 +747,7 @@
                         <!-- Employment Details (if employed) -->
                         @if($employment_status === 'employed')
                             <div class="bg-blue-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-blue-100">
-                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Employment Details</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ __('profile.employment_details') }}</h3>
                                 <div class="space-y-6">
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                         <div>
@@ -787,7 +787,7 @@
                         <!-- Business Details (if self-employed) -->
                         @if($employment_status === 'self_employed')
                             <div class="bg-green-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-green-100">
-                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Business Details</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ __('profile.business_details') }}</h3>
                                 <div class="space-y-6">
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                         <div>
@@ -833,16 +833,16 @@
                     <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('address')" 
                                 class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
-                            Previous
+                            {{ __('common.previous') }}
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
                                     class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
-                                Save
+                                {{ __('common.save') }}
                             </button>
                             <button wire:click="saveAndContinue('financial')" 
                                     class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
-                                Save & Continue
+                                {{ __('profile.save_and_continue') }}
                             </button>
                         </div>
                     </div>
@@ -852,14 +852,14 @@
             @elseif($currentStep === 'financial')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-yellow-50 to-orange-50">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Financial Information</h2>
-                        <p class="text-sm sm:text-base text-gray-600">Your income, expenses, and financial obligations</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.financial_information') }}</h2>
+                        <p class="text-sm sm:text-base text-gray-600">{{ __('profile.financial_information_description') }}</p>
                     </div>
                     
                     <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
                         <!-- Income Section -->
                         <div class="bg-green-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-green-100">
-                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Monthly Income</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ __('profile.monthly_income') }}</h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-5 lg:gap-6">
                                 @if($employment_status === 'employed')
                                     <div>
@@ -886,7 +886,7 @@
                                 @endif
                                 
                                 <div>
-                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Other Monthly Income (TSh)</label>
+                                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">{{ __('profile.other_monthly_income') }} (TSh)</label>
                                     <div class="relative">
                                         <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">TSh</span>
                                         <input wire:model.live="other_monthly_income" type="number" step="1000" min="0" 
@@ -900,7 +900,7 @@
                             @if($total_monthly_income > 0)
                                 <div class="mt-4 p-4 bg-green-100 rounded-lg">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-green-700 font-medium">Total Monthly Income:</span>
+                                        <span class="text-green-700 font-medium">{{ __('profile.total_monthly_income') }}:</span>
                                         <span class="text-xl font-bold text-green-800">TSh {{ number_format($total_monthly_income) }}</span>
                                     </div>
                                 </div>
@@ -967,16 +967,16 @@
                     <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('employment')" 
                                 class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
-                            Previous
+                            {{ __('common.previous') }}
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
                                     class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
-                                Save
+                                {{ __('common.save') }}
                             </button>
                             <button wire:click="saveAndContinue('bank')" 
                                     class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
-                                Save & Continue
+                                {{ __('profile.save_and_continue') }}
                             </button>
                         </div>
                     </div>
@@ -986,25 +986,25 @@
             @elseif($currentStep === 'bank')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-blue-50">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Banking Information</h2>
-                        <p class="text-sm sm:text-base text-gray-600">Your bank account and financial institution details</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.banking_information') }}</h2>
+                        <p class="text-sm sm:text-base text-gray-600">{{ __('profile.banking_information_description') }}</p>
                     </div>
                     
                     <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
                         <!-- Bank Account Question -->
                         <div class="bg-blue-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 border border-blue-100">
-                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Do you have a bank account?</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">{{ __('profile.do_you_have_bank_account') }}</h3>
                             
                             <div class="flex gap-4">
                                 <label class="flex items-center">
                                     <input wire:model.live="has_bank_account" type="radio" value="1" 
                                            class="mr-2 text-sidebar-green focus:ring-sidebar-green">
-                                    <span class="text-gray-700">Yes, I have a bank account</span>
+                                    <span class="text-gray-700">{{ __('profile.yes_i_have_bank_account') }}</span>
                                 </label>
                                 <label class="flex items-center">
                                     <input wire:model.live="has_bank_account" type="radio" value="0" 
                                            class="mr-2 text-sidebar-green focus:ring-sidebar-green">
-                                    <span class="text-gray-700">No, I don't have a bank account</span>
+                                    <span class="text-gray-700">{{ __('profile.no_i_do_not_have_bank_account') }}</span>
                                 </label>
                             </div>
                         </div>
@@ -1057,7 +1057,7 @@
                                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                     </svg>
                                     <div>
-                                        <h4 class="text-sm font-medium text-yellow-800">No Bank Account</h4>
+                                        <h4 class="text-sm font-medium text-yellow-800">{{ __('profile.no_bank_account') }}</h4>
                                         <p class="text-sm text-yellow-700 mt-1">You've indicated that you don't have a bank account. You may need to open one to receive loan disbursements.</p>
                                     </div>
                                 </div>
@@ -1080,16 +1080,16 @@
                     <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('financial')" 
                                 class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
-                            Previous
+                            {{ __('common.previous') }}
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
                                     class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
-                                Save
+                                {{ __('common.save') }}
                             </button>
                             <button wire:click="saveAndContinue('emergency')" 
                                     class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green transition-colors">
-                                Save & Continue
+                                {{ __('profile.save_and_continue') }}
                             </button>
                         </div>
                     </div>
@@ -1099,8 +1099,8 @@
             @elseif($currentStep === 'emergency')
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="p-4 sm:p-5 lg:p-6 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Emergency Contact</h2>
-                        <p class="text-sm sm:text-base text-gray-600">Provide details of someone we can contact in case of emergency</p>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{{ __('profile.emergency_contact_information_title') }}</h2>
+                        <p class="text-sm sm:text-base text-gray-600">{{ __('profile.emergency_contact_information_description') }}</p>
                     </div>
                     
                     <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
@@ -1111,7 +1111,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                                 <div>
-                                    <h4 class="text-sm font-medium text-blue-800">Required Section</h4>
+                                    <h4 class="text-sm font-medium text-blue-800">{{ __('profile.required_section') }}</h4>
                                     <p class="text-xs sm:text-sm text-blue-700 mt-1">Emergency contact information is mandatory. Please provide complete details of someone we can reach in case of emergency.</p>
                                 </div>
                             </div>
@@ -1157,16 +1157,16 @@
                     <div class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between gap-3">
                         <button wire:click="goToStep('bank')" 
                                 class="w-full sm:w-auto bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-gray-200 transition-colors">
-                            Previous
+                            {{ __('common.previous') }}
                         </button>
                         <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <button wire:click="saveCurrentStep" 
                                     class="w-full sm:w-auto bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-green-700 transition-colors">
-                                Save
+                                {{ __('common.save') }}
                             </button>
                             <button wire:click="saveStep('emergency')" 
                                     class="w-full sm:w-auto bg-sidebar-green text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:bg-sidebar-green-light transition-colors">
-                                Save Profile
+                                {{ __('profile.save_profile') }}
                             </button>
                         </div>
                     </div>
@@ -1185,7 +1185,7 @@
                     </svg>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-lg font-bold text-yellow-900 mb-2">Complete Your Profile</h3>
+                    <h3 class="text-lg font-bold text-yellow-900 mb-2">{{ __('profile.complete_your_profile') }}</h3>
                     <p class="text-yellow-800 mb-4">
                         Your profile is {{ $completionPercentage }}% complete. Complete at least 70% of your profile to apply for loans and get better pre-qualification results.
                     </p>

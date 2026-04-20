@@ -18,54 +18,62 @@
                         <div wire:click="selectLoanCategory('{{ $category->slug }}')" 
                              class="bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-sidebar-green hover:shadow-lg transition-all duration-300 cursor-pointer group {{ $loan_category === $category->name || $loan_category === $category->slug ? 'border-sidebar-green bg-sidebar-green-50' : '' }}">
                             <div class="text-center">
-                                <!-- Category Icon -->
-                                <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center {{ ($loan_category === $category->name || $loan_category === $category->slug) ? 'bg-sidebar-green text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-sidebar-green group-hover:text-white' }} transition-colors">
-                                    @switch($category->slug)
-                                        @case('personal')
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                            </svg>
-                                            @break
-                                        @case('business')
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                            </svg>
-                                            @break
-                                        @case('auto')
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v9a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7V3m0 18v-4"/>
-                                            </svg>
-                                            @break
-                                        @case('home')
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                                            </svg>
-                                            @break
-                                        @case('education')
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                                            </svg>
-                                            @break
-                                        @case('agriculture')
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                            </svg>
-                                            @break
-                                        @case('emergency')
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
-                                            @break
-                                        @default
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                            </svg>
-                                    @endswitch
-                                </div>
-                                
-                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $category->name }}</h3>
-                                <p class="text-sm text-gray-600 leading-relaxed">{{ $category->description ?: $this->getLoanCategoryDescription($category->slug) }}</p>
+                                <!-- Category Image/Icon -->
+                                @if($category->image_path)
+                                    <div class="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border border-gray-200 bg-white">
+                                        <img src="{{ asset('storage/' . $category->image_path) }}"
+                                             alt="{{ $category->localized_name }}"
+                                             class="w-full h-full object-cover">
+                                    </div>
+                                @else
+                                    <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center {{ ($loan_category === $category->name || $loan_category === $category->slug) ? 'bg-sidebar-green text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-sidebar-green group-hover:text-white' }} transition-colors">
+                                        @switch($category->slug)
+                                            @case('personal')
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                                </svg>
+                                                @break
+                                            @case('business')
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                                </svg>
+                                                @break
+                                            @case('auto')
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8a2 2 0 012 2v9a2 2 0 01-2 2H8a2 2 0 01-2-2V9a2 2 0 012-2z"/>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7V3m0 18v-4"/>
+                                                </svg>
+                                                @break
+                                            @case('home')
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                                </svg>
+                                                @break
+                                            @case('education')
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                                </svg>
+                                                @break
+                                            @case('agriculture')
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                                </svg>
+                                                @break
+                                            @case('emergency')
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                @break
+                                            @default
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                                </svg>
+                                        @endswitch
+                                    </div>
+                                @endif
+
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $category->localized_name }}</h3>
+                                <p class="text-sm text-gray-600 leading-relaxed">{{ $category->localized_description ?: $this->getLoanCategoryDescription($category->slug) }}</p>
                                 
                                 @if($loan_category === $category->name || $loan_category === $category->slug)
                                     <div class="mt-4">
@@ -94,7 +102,7 @@
                             @php
                                 $selectedCategory = $loanCategories->firstWhere('name', $loan_category) ?? $loanCategories->firstWhere('slug', $loan_category);
                             @endphp
-                            <span class="text-gray-500">{{ __('admin.category') }}: <span class="font-medium text-sidebar-green">{{ $selectedCategory->name ?? $loan_category }}</span></span>
+                            <span class="text-gray-500">{{ __('admin.category') }}: <span class="font-medium text-sidebar-green">{{ $selectedCategory->localized_name ?? $loan_category }}</span></span>
                         </div>
                     </div>
                     <button wire:click="backToCategory" class="text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all duration-200 flex items-center text-sm">

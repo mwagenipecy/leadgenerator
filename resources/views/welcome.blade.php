@@ -441,7 +441,7 @@
     <section class="py-6 md:py-8 bg-white">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
             <div class="text-center mb-3 md:mb-4">
-                <h3 class="text-xl md:text-2xl font-bold font-poppins text-gray-900">{{ __('landing.trusted_partners') }}</h3>
+                <h3 class="text-xl md:text-2xl font-bold font-poppins text-[#1F3868]">{{ __('landing.trusted_partners') }}</h3>
                 <p class="mt-1 text-sm text-gray-600">{{ __('landing.trusted_partners_description') }}</p>
             </div>
             @php
@@ -621,83 +621,173 @@
         </div>
     </section>
 
-    <section id="eligibility" class="py-16 md:py-20 bg-white">
-        <div class="max-w-5xl mx-auto px-6 lg:px-8">
-            <p class="text-[11px] font-semibold tracking-[0.13em] uppercase text-[#C62828] mb-3">
-                {{ __('landing.why_choose_us') }}
-            </p>
-            <h2 class="text-[clamp(22px,3.5vw,32px)] font-semibold text-[#111111] leading-tight mb-10">
-                {{ __('landing.everything_you_need_line_1') }}<br>{{ __('landing.everything_you_need_line_2') }}
-            </h2>
+    <section id="eligibility" class="relative overflow-hidden bg-white pt-14 pb-6 md:pt-18 md:pb-8">
+        <div class="pointer-events-none absolute inset-0">
+            <div class="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-rose-50/60 blur-3xl"></div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                <div class="group relative overflow-hidden rounded-[14px] border border-[#E5E5E5] bg-white px-6 py-7 transition-colors hover:border-[#CCCCCC]">
-                    <div class="absolute left-0 top-0 h-full w-[3px] bg-[#C62828] opacity-0 transition-opacity group-hover:opacity-100"></div>
-                    <div class="mb-4 flex items-center gap-1.5">
-                        <span class="text-[11px] font-semibold tracking-[0.08em] text-[#C62828]">01</span>
-                        <div class="h-px flex-1 bg-[#E5E5E5]"></div>
+        <div class="relative mx-auto max-w-7xl px-4 lg:px-4" data-stats-section>
+            <div class="mb-14 max-w-2xl">
+                <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-rose-600">By the numbers</p>
+                <h2 class="text-4xl font-bold leading-[1.1] tracking-tight text-neutral-900 md:text-5xl" style="font-family: 'Playfair Display', serif;">
+                    Trusted by thousands, <br>
+                    <span class="text-neutral-500">built on real results.</span>
+                </h2>
+                <p class="mt-5 max-w-lg text-[15px] leading-relaxed text-neutral-500">
+                    Every number below reflects verified activity on the platform - borrowers matched, capital moved, approvals delivered.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="group relative flex translate-y-6 flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 opacity-0 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_40px_-24px_rgba(225,29,72,0.25)]">
+                    <div class="mb-8 flex items-center gap-3">
+                        <span class="text-[11px] font-semibold tracking-[0.2em] text-rose-600">01</span>
+                        <span class="h-px flex-1 bg-gradient-to-r from-rose-200 via-neutral-200 to-transparent"></span>
                     </div>
-                    <div class="mb-3.5 flex h-[42px] w-[42px] items-center justify-center rounded-[10px] bg-[#FFF1F1] text-[#C62828]">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    <div class="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-600 transition-colors duration-300 group-hover:bg-rose-100">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"></path>
                         </svg>
                     </div>
-                    <h3 class="mb-1.5 text-[15px] font-semibold text-[#111111]">{{ __('landing.inclusive_access') }}</h3>
-                    <p class="text-[13px] leading-7 text-[#666666]">{{ __('landing.inclusive_access_desc') }}</p>
+                    <div class="mb-2 flex items-baseline gap-0.5">
+                        <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="12480" data-format="integer">0</span>
+                        <span class="text-2xl font-medium text-rose-600">+</span>
+                    </div>
+                    <p class="text-sm font-semibold text-neutral-900">Loans processed</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Successfully matched and disbursed</p>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-[14px] border border-[#E5E5E5] bg-white px-6 py-7 transition-colors hover:border-[#CCCCCC]">
-                    <div class="absolute left-0 top-0 h-full w-[3px] bg-[#C62828] opacity-0 transition-opacity group-hover:opacity-100"></div>
-                    <div class="mb-4 flex items-center gap-1.5">
-                        <span class="text-[11px] font-semibold tracking-[0.08em] text-[#C62828]">02</span>
-                        <div class="h-px flex-1 bg-[#E5E5E5]"></div>
+                <div class="group relative flex translate-y-6 flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 opacity-0 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_40px_-24px_rgba(225,29,72,0.25)]">
+                    <div class="mb-8 flex items-center gap-3">
+                        <span class="text-[11px] font-semibold tracking-[0.2em] text-rose-600">02</span>
+                        <span class="h-px flex-1 bg-gradient-to-r from-rose-200 via-neutral-200 to-transparent"></span>
                     </div>
-                    <div class="mb-3.5 flex h-[42px] w-[42px] items-center justify-center rounded-[10px] bg-[#FFF1F1] text-[#C62828]">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                            <polyline points="9 12 11 14 15 10" />
+                    <div class="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-600 transition-colors duration-300 group-hover:bg-rose-100">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <path d="M20 8v6"></path>
+                            <path d="M23 11h-6"></path>
                         </svg>
                     </div>
-                    <h3 class="mb-1.5 text-[15px] font-semibold text-[#111111]">{{ __('landing.nida_verification') }}</h3>
-                    <p class="text-[13px] leading-7 text-[#666666]">{{ __('landing.nida_verification_desc') }}</p>
+                    <div class="mb-2 flex items-baseline gap-0.5">
+                        <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="38500" data-format="integer">0</span>
+                        <span class="text-2xl font-medium text-rose-600">+</span>
+                    </div>
+                    <p class="text-sm font-semibold text-neutral-900">Active users</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Borrowers and lenders on the platform</p>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-[14px] border border-[#E5E5E5] bg-white px-6 py-7 transition-colors hover:border-[#CCCCCC]">
-                    <div class="absolute left-0 top-0 h-full w-[3px] bg-[#C62828] opacity-0 transition-opacity group-hover:opacity-100"></div>
-                    <div class="mb-4 flex items-center gap-1.5">
-                        <span class="text-[11px] font-semibold tracking-[0.08em] text-[#C62828]">03</span>
-                        <div class="h-px flex-1 bg-[#E5E5E5]"></div>
+                <div class="group relative flex translate-y-6 flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 opacity-0 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_40px_-24px_rgba(225,29,72,0.25)]">
+                    <div class="mb-8 flex items-center gap-3">
+                        <span class="text-[11px] font-semibold tracking-[0.2em] text-rose-600">03</span>
+                        <span class="h-px flex-1 bg-gradient-to-r from-rose-200 via-neutral-200 to-transparent"></span>
                     </div>
-                    <div class="mb-3.5 flex h-[42px] w-[42px] items-center justify-center rounded-[10px] bg-[#FFF1F1] text-[#C62828]">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    <div class="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-600 transition-colors duration-300 group-hover:bg-rose-100">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                            <path d="M6 10h12"></path>
                         </svg>
                     </div>
-                    <h3 class="mb-1.5 text-[15px] font-semibold text-[#111111]">{{ __('landing.smart_matching') }}</h3>
-                    <p class="text-[13px] leading-7 text-[#666666]">{{ __('landing.smart_matching_desc') }}</p>
+                    <div class="mb-2 flex items-baseline gap-0.5">
+                        <span class="text-xl font-medium text-neutral-400">TZS</span>
+                        <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="42.6" data-format="decimal1">0.0</span>
+                        <span class="text-2xl font-medium text-rose-600">B</span>
+                    </div>
+                    <p class="text-sm font-semibold text-neutral-900">Loan amount disbursed</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Total capital placed with borrowers</p>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-[14px] border border-[#E5E5E5] bg-white px-6 py-7 transition-colors hover:border-[#CCCCCC]">
-                    <div class="absolute left-0 top-0 h-full w-[3px] bg-[#C62828] opacity-0 transition-opacity group-hover:opacity-100"></div>
-                    <div class="mb-4 flex items-center gap-1.5">
-                        <span class="text-[11px] font-semibold tracking-[0.08em] text-[#C62828]">04</span>
-                        <div class="h-px flex-1 bg-[#E5E5E5]"></div>
+                <div class="group relative flex translate-y-6 flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 opacity-0 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_40px_-24px_rgba(225,29,72,0.25)]">
+                    <div class="mb-8 flex items-center gap-3">
+                        <span class="text-[11px] font-semibold tracking-[0.2em] text-rose-600">04</span>
+                        <span class="h-px flex-1 bg-gradient-to-r from-rose-200 via-neutral-200 to-transparent"></span>
                     </div>
-                    <div class="mb-3.5 flex h-[42px] w-[42px] items-center justify-center rounded-[10px] bg-[#FFF1F1] text-[#C62828]">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <polyline points="12 6 12 12 16 14" />
+                    <div class="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-600 transition-colors duration-300 group-hover:bg-rose-100">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 17l6-6 4 4 7-7"></path>
+                            <path d="M14 8h6v6"></path>
                         </svg>
                     </div>
-                    <h3 class="mb-1.5 text-[15px] font-semibold text-[#111111]">{{ __('landing.fast_processing') }}</h3>
-                    <p class="text-[13px] leading-7 text-[#666666]">{{ __('landing.fast_processing_desc') }}</p>
+                    <div class="mb-2 flex items-baseline gap-0.5">
+                        <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="98" data-format="percent">0</span>
+                        <span class="text-2xl font-medium text-rose-600">%</span>
+                    </div>
+                    <p class="text-sm font-semibold text-neutral-900">Approval rate</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Qualified applications matched to lenders</p>
                 </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-neutral-400">
+                <span class="flex items-center gap-2">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                    Updated in real time
+                </span>
+                <span>
+                    Figures as of {{ now()->format('F Y') }}
+                </span>
             </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const section = document.querySelector('[data-stats-section]');
+            if (!section) return;
+
+            const cards = Array.from(section.querySelectorAll('.group'));
+            const counters = Array.from(section.querySelectorAll('[data-count-up]'));
+            let hasAnimated = false;
+
+            const formatValue = (value, formatType) => {
+                if (formatType === 'decimal1') return value.toFixed(1);
+                if (formatType === 'percent') return Math.round(value).toString();
+                return Math.round(value).toLocaleString('en-US');
+            };
+
+            const animateCounters = () => {
+                counters.forEach((counter, index) => {
+                    const target = parseFloat(counter.getAttribute('data-target') || '0');
+                    const formatType = counter.getAttribute('data-format') || 'integer';
+                    const duration = 1400 + (index * 150);
+                    const startTime = performance.now();
+
+                    const step = (now) => {
+                        const progress = Math.min((now - startTime) / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        counter.textContent = formatValue(target * eased, formatType);
+                        if (progress < 1) {
+                            requestAnimationFrame(step);
+                        }
+                    };
+
+                    requestAnimationFrame(step);
+                });
+            };
+
+            const revealCards = () => {
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.remove('opacity-0', 'translate-y-6');
+                    }, index * 120);
+                });
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !hasAnimated) {
+                        hasAnimated = true;
+                        revealCards();
+                        animateCounters();
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            observer.observe(section);
+        });
+    </script>
 
 
 

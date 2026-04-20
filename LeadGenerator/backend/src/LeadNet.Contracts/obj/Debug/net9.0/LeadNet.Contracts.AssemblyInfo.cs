@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LeadNet.Contracts")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d48f65ec4c798324a77805d3701917fa7284740f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1eed287ed37bb52710c4839c99d562e10cca1a58")]
 [assembly: System.Reflection.AssemblyProductAttribute("LeadNet.Contracts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LeadNet.Contracts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

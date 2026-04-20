@@ -90,5 +90,5 @@ return [
     'email_unsubscribe_body' => 'This email confirms that you have unsubscribed from the following CreditInfo alert service.',
     'email_unsubscribe_time' => 'Unsubscribed at',
     'email_unsubscribe_footer' => 'You can subscribe again anytime from the Subscribe to services page.',
-    'email_unsubscribe_powered' => 'Powered by CreditInfo Tanzania.',
+    'email_unsubscribe_powered' => 'Powered by CreditInfo.',
 ];

@@ -79,7 +79,7 @@ class LoanProductManagement extends Component
             })->count(),
         ];  
 
-        return view('livewire.loan-product.Loan-product-management', [
+        return view('livewire.loan-product.loan-product-management', [
             'products' => $products,
             'stats' => $stats
         ]);
