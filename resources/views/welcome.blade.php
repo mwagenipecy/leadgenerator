@@ -627,14 +627,14 @@
         </div>
 
         <div class="relative mx-auto max-w-7xl px-4 lg:px-4" data-stats-section>
-            <div class="mb-14 max-w-2xl">
-                <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-rose-600">By the numbers</p>
+            <div class="mb-14 max-w-2xl text-center mx-auto">
+                <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-rose-600">{{ __('landing.by_the_numbers') }}</p>
                 <h2 class="text-4xl font-bold leading-[1.1] tracking-tight text-neutral-900 md:text-5xl" style="font-family: 'Playfair Display', serif;">
-                    Trusted by thousands, <br>
-                    <span class="text-neutral-500">built on real results.</span>
+                    {{ __('landing.trusted_by_thousands_line_1') }} <br>
+                    <span class="text-neutral-500">{{ __('landing.trusted_by_thousands_line_2') }}</span>
                 </h2>
-                <p class="mt-5 max-w-lg text-[15px] leading-relaxed text-neutral-500">
-                    Every number below reflects verified activity on the platform - borrowers matched, capital moved, approvals delivered.
+                <p class="mt-5 max-w-lg text-[15px] leading-relaxed text-neutral-500 mx-auto">
+                    {{ __('landing.trusted_by_thousands_description') }}
                 </p>
             </div>
 
@@ -654,8 +654,8 @@
                         <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="12480" data-format="integer">0</span>
                         <span class="text-2xl font-medium text-rose-600">+</span>
                     </div>
-                    <p class="text-sm font-semibold text-neutral-900">Loans processed</p>
-                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Successfully matched and disbursed</p>
+                    <p class="text-sm font-semibold text-neutral-900">{{ __('landing.stats_loans_processed') }}</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">{{ __('landing.stats_loans_processed_desc') }}</p>
                 </div>
 
                 <div class="group relative flex translate-y-6 flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 opacity-0 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_40px_-24px_rgba(225,29,72,0.25)]">
@@ -675,8 +675,8 @@
                         <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="38500" data-format="integer">0</span>
                         <span class="text-2xl font-medium text-rose-600">+</span>
                     </div>
-                    <p class="text-sm font-semibold text-neutral-900">Active users</p>
-                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Borrowers and lenders on the platform</p>
+                    <p class="text-sm font-semibold text-neutral-900">{{ __('landing.stats_active_users') }}</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">{{ __('landing.stats_active_users_desc') }}</p>
                 </div>
 
                 <div class="group relative flex translate-y-6 flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 opacity-0 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_40px_-24px_rgba(225,29,72,0.25)]">
@@ -695,8 +695,8 @@
                         <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="42.6" data-format="decimal1">0.0</span>
                         <span class="text-2xl font-medium text-rose-600">B</span>
                     </div>
-                    <p class="text-sm font-semibold text-neutral-900">Loan amount disbursed</p>
-                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Total capital placed with borrowers</p>
+                    <p class="text-sm font-semibold text-neutral-900">{{ __('landing.stats_loan_amount_disbursed') }}</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">{{ __('landing.stats_loan_amount_disbursed_desc') }}</p>
                 </div>
 
                 <div class="group relative flex translate-y-6 flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 opacity-0 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_20px_40px_-24px_rgba(225,29,72,0.25)]">
@@ -714,8 +714,8 @@
                         <span class="text-4xl font-semibold tracking-tight text-neutral-900 tabular-nums md:text-5xl" style="font-family: 'Playfair Display', serif;" data-count-up data-target="98" data-format="percent">0</span>
                         <span class="text-2xl font-medium text-rose-600">%</span>
                     </div>
-                    <p class="text-sm font-semibold text-neutral-900">Approval rate</p>
-                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">Qualified applications matched to lenders</p>
+                    <p class="text-sm font-semibold text-neutral-900">{{ __('landing.stats_approval_rate') }}</p>
+                    <p class="mt-1.5 text-[13px] leading-relaxed text-neutral-500">{{ __('landing.stats_approval_rate_desc') }}</p>
                 </div>
             </div>
 
