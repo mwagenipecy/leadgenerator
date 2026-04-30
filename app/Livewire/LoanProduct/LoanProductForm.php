@@ -186,7 +186,7 @@ class LoanProductForm extends Component
         $loanCategories = LoanCategory::active()->ordered()->get();
         $regions = Region::active()->ordered()->get();
 
-        return view('livewire.Loan-product.loan-product-form', [
+        return view('livewire.loan-product.loan-product-form', [
             'loanCategories' => $loanCategories,
             'regions' => $regions,
             'documentTypes' => LoanProduct::getAvailableDocumentTypes(),

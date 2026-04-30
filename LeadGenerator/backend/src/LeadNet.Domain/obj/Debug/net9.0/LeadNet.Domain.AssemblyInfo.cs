@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LeadNet.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1eed287ed37bb52710c4839c99d562e10cca1a58")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db8a5b65783464c2e168f93d07b9e877c446b49e")]
 [assembly: System.Reflection.AssemblyProductAttribute("LeadNet.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LeadNet.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

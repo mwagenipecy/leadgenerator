@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Creditinfo Lead Generator</title>
+    <title> Creditinfo Fanikisha</title>
 
     <meta http-equiv="Cross-Origin-Resource-Policy" content="same-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
