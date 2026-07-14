@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\NidaVerification;
 use App\Models\UserProfile;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class QuestionnaireVerification extends Component
 {
@@ -222,7 +223,7 @@ class QuestionnaireVerification extends Component
         switch ($questionKey) {
             case 'dob_verification':
                 // Check if date of birth matches (if user has it in profile)
-                if (!empty($user->date_of_birth) && $user->date_of_birth->format('Y-m-d') === $answer) {
+                if (!empty($user->date_of_birth) && Carbon::parse($user->date_of_birth)->format('Y-m-d') === $answer) {
                     return true;
                 }
                 // For demo: randomly return true/false (70% success rate)

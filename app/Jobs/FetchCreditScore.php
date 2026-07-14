@@ -8,6 +8,7 @@ use App\Services\LogService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class FetchCreditScore implements ShouldQueue
 {
@@ -57,7 +58,7 @@ class FetchCreditScore implements ShouldQueue
             $firstName = $user->first_name ?? '';
             $lastName = $user->last_name ?? '';
             $fullName = $user->name ?? ($firstName . ' ' . $lastName);
-            $dateOfBirth = $user->date_of_birth ? $user->date_of_birth->format('Y-m-d') : null;
+            $dateOfBirth = $user->date_of_birth ? Carbon::parse($user->date_of_birth)->format('Y-m-d') : null;
             $phoneNumber = $user->phone;
 
             // Fetch credit score
@@ -89,12 +90,12 @@ class FetchCreditScore implements ShouldQueue
                 // Log activity
                 LogService::log(
                     'credit_score_fetched',
+                    "Credit score fetched successfully: {$result['cip_score']} ({$rating})",
+                    'medium',
                     $user,
                     null,
                     ['credit_score' => $result['cip_score'], 'rating' => $rating],
-                    null,
-                    'medium',
-                    "Credit score fetched successfully: {$result['cip_score']} ({$rating})"
+                    null,  
                 );
             } else {
                 Log::warning('FetchCreditScore: No credit score returned', [
