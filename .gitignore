@@ -23,3 +23,6 @@ config/*.pem
 /.nova
 /.vscode
 /.zed
+/system-documentation/node_modules
+/system-documentation/dist/assets
+/system-documentation/dist/index.html
