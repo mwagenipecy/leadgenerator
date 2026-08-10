@@ -57,4 +57,16 @@ return [
         'password' => env('SOAP_PASSWORD'),
     ],
 
+    'nida' => [
+        'token_url' => env('NIDA_TOKEN_URL'),
+        'verify_url' => env('NIDA_VERIFY_URL'),
+        'username' => env('NIDA_USERNAME'),
+        'password' => env('NIDA_PASSWORD'),
+        'token_ttl' => env('NIDA_TOKEN_TTL', 30),
+        'timeout' => env('NIDA_TIMEOUT', 15),
+
+        // untrusted/self-signed certificate.
+        'verify_ssl' => env('NIDA_VERIFY_SSL', false),
+    ],
+
 ];
