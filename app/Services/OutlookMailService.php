@@ -122,7 +122,7 @@ class OutlookMailService
                 'to' => $to,
                 'subject' => $subject,
             ]);
-            return false;
+            throw $e;
         }
     }
 
@@ -197,7 +197,8 @@ class OutlookMailService
                 'to' => $to,
                 'subject' => $subject,
             ]);
-            return false;
+            // return false;
+            throw $e;
         }
     }
 }

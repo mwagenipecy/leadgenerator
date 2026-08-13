@@ -202,7 +202,7 @@ class QuestionnaireVerification extends Component
 
             $this->handleNextQuestion($result);
 
-            Log::info('NIDA KBA verification started', [
+            Log::channel('nida')->info('NIDA KBA verification started', [
                 'user_id' => Auth::id(),
                 'nin' => $this->nin,
                 'rqCode' => $this->rqCode,
@@ -211,7 +211,7 @@ class QuestionnaireVerification extends Component
         } catch (NidaException $e) {
             $this->handleNidaException($e);
         } catch (\Throwable $e) {
-            Log::error('NIDA KBA start verification error', [
+            Log::channel('nida')->error('NIDA KBA start verification error', [
                 'user_id' => Auth::id(),
                 'message' => $e->getMessage(),
             ]);
@@ -303,7 +303,7 @@ class QuestionnaireVerification extends Component
             $this->handleNidaException($e);
 
         } catch (\Throwable $e) {
-            Log::error('NIDA KBA answer error', [
+            Log::channel('nida')->error('NIDA KBA answer error', [
                 'user_id' => Auth::id(),
                 'nin' => $this->nin,
                 'rqCode' => $this->rqCode,
@@ -393,7 +393,7 @@ class QuestionnaireVerification extends Component
                 'Your identity has been successfully verified through NIDA. Your profile has been updated. You can now complete your profile information.';
         }
 
-        Log::info('NIDA KBA verification completed', [
+        Log::channel('nida')->info('NIDA KBA verification completed', [
             'user_id' => $user->id,
             'nin' => $profile['nin'] ?? $this->nin,
         ]);

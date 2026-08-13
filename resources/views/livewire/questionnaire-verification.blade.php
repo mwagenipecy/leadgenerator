@@ -337,7 +337,7 @@
                             {{-- Current question --}}
                             @if ($questionEn || $questionSw)
 
-                                <form wire:submit.prevent="submitCurrentQuestion" class="space-y-5 sm:space-y-6">
+                                <form wire:key="nida-question-form-{{ $rqCode }}" wire:submit.prevent="submitCurrentQuestion" class="space-y-5 sm:space-y-6">
 
                                     <!-- Question -->
                                     <div class="text-center mb-5 sm:mb-6">

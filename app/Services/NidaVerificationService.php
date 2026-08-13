@@ -42,7 +42,7 @@ class NidaVerificationService
             $data = $response->json();
 
             if (!$response->successful()) {
-                Log::error('NIDA token request failed', [
+                Log::channel('nida')->error('NIDA token request failed', [
                     'http_status' => $response->status(),
                     'response' => $this->safeResponseForLog($data),
                 ]);
@@ -55,7 +55,7 @@ class NidaVerificationService
             }
 
             if (empty($data['accessToken'])) {
-                Log::error('NIDA did not return an access token');
+                Log::channel('nida')->error('NIDA did not return an access token');
 
                 throw new NidaException(
                     'NIDA did not return an access token',
@@ -76,7 +76,7 @@ class NidaVerificationService
         } catch (NidaException $e) {
             throw $e;
         } catch (Throwable $e) {
-            Log::error('NIDA token error', [
+            Log::channel('nida')->error('NIDA token error', [
                 'message' => $e->getMessage(),
             ]);
 
@@ -193,7 +193,7 @@ class NidaVerificationService
          * contains statusCode = 400.
          */
         if (($data['statusCode'] ?? null) === self::FAILED_STATUS) {
-            Log::warning(
+            Log::channel('nida')->warning(
                 'NIDA verification unsuccessful (200 wrapping failure body)',
                 [
                     ...$context,
@@ -223,7 +223,7 @@ class NidaVerificationService
                 ($header['statusCode'] ?? null) !== self::QUESTION_LOADED_STATUS ||
                 empty($nidaResponse['rqCode'])
             ) {
-                Log::warning(
+                Log::channel('nida')->warning(
                     'NIDA returned rqVerificationResult with unexpected header status',
                     [
                         ...$context,
@@ -241,7 +241,7 @@ class NidaVerificationService
                 );
             }
 
-            Log::info('NIDA verification question received', [
+            Log::channel('nida')->info('NIDA verification question received', [
                 ...$context,
                 'rqCode' => $nidaResponse['rqCode'],
             ]);
@@ -263,7 +263,7 @@ class NidaVerificationService
          * nationalIdNumber is used as the success signal.
          */
         if (!empty($data['nationalIdNumber'])) {
-            Log::info('NIDA verification succeeded', [
+            Log::channel('nida')->info('NIDA verification succeeded', [
                 ...$context,
             ]);
 
@@ -303,7 +303,7 @@ class NidaVerificationService
          * Do NOT log the full NIDA response because it may contain
          * PII, photo and signature.
          */
-        Log::warning(
+        Log::channel('nida')->warning(
             'Unrecognized NIDA response shape',
             [
                 ...$context,
@@ -347,7 +347,7 @@ class NidaVerificationService
             $response?->status() === self::FAILED_STATUS ||
             ($body['statusCode'] ?? null) === self::FAILED_STATUS
         ) {
-            Log::warning(
+            Log::channel('nida')->warning(
                 'NIDA verification unsuccessful',
                 [
                     ...$context,
@@ -365,7 +365,7 @@ class NidaVerificationService
             );
         }
 
-        Log::error(
+        Log::channel('nida')->error(
             'NIDA request failed',
             [
                 ...$context,
