@@ -10,7 +10,7 @@ COPY public ./public
 RUN npm run build
 
 # Stage 2: PHP application
-FROM php:8.2-fpm AS app
+FROM php:8.4-fpm AS app
 WORKDIR /var/www/html
 
 # Install system deps + PHP extensions Laravel needs (PostgreSQL + SQLite)
