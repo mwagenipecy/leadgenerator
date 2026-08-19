@@ -19,7 +19,7 @@ cp -a /var/www/html/public/. /var/www/html/public_shared/
 
 # Optional: run database migrations if needed
 # Uncomment the next line if you want migrations to run automatically
-# php /var/www/html/artisan migrate --force
+php /var/www/html/artisan migrate
 
 # Execute the container CMD (PHP-FPM or other command)
 exec "$@"

@@ -15,7 +15,7 @@
                     <input 
                         type="text" 
                         id="fullName"
-                        wire:model.live="fullName" 
+                        wire:model.blur="fullName" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="{{ __('credit.enter_full_name') }}"
                         wire:loading.attr="disabled"
@@ -32,7 +32,7 @@
                     <input 
                         type="text" 
                         id="idNumber"
-                        wire:model.live="idNumber" 
+                        wire:model.blur="idNumber" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="{{ __('credit.enter_id_number') }}"
                         wire:loading.attr="disabled"
@@ -49,7 +49,7 @@
                     <input 
                         type="text" 
                         id="phoneNumber"
-                        wire:model.live="phoneNumber" 
+                        wire:model.blur="phoneNumber" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="{{ __('credit.enter_phone_number') }}"
                         wire:loading.attr="disabled"

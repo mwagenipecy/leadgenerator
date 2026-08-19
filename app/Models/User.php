@@ -54,6 +54,7 @@ class User extends Authenticatable
         'email_verified_at',
         'nida_verified_at',
         'verification_status',
+        'profile_photo_path',
         'date_of_birth',
         'role',
         'is_active',

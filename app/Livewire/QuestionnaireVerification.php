@@ -8,6 +8,7 @@ use App\Models\NidaVerification;
 use App\Models\UserProfile;
 use App\Services\NidaVerificationService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -439,18 +440,19 @@ class QuestionnaireVerification extends Component
                 'dateOfBirth' => $profile['dateOfBirth'] ?? null,
                 'sex' => $profile['sex'] ?? null,
                 'nationality' => $profile['nationality'] ?? null,
-                'placeOfBirth' => $profile['placeOfBirth'] ?? null,
-                'residentRegion' => $profile['residentRegion'] ?? null,
-                'residentDistrict' => $profile['residentDistrict'] ?? null,
-                'residentWard' => $profile['residentWard'] ?? null,
-                'residentVillage' => $profile['residentVillage'] ?? null,
-                'residentStreet' => $profile['residentStreet'] ?? null,
-                'residentPostalAddress' => $profile['residentPostalAddress'] ?? null,
-                'residentPostCode' => $profile['residentPostCode'] ?? null,
-                'birthCountry' => $profile['birthCountry'] ?? null,
-                'birthRegion' => $profile['birthRegion'] ?? null,
-                'birthDistrict' => $profile['birthDistrict'] ?? null,
-                'birthWard' => $profile['birthWard'] ?? null,
+                'photo' => $profile['photo'] ?? null,
+                // 'placeOfBirth' => $profile['placeOfBirth'] ?? null,
+                // 'residentRegion' => $profile['residentRegion'] ?? null,
+                // 'residentDistrict' => $profile['residentDistrict'] ?? null,
+                // 'residentWard' => $profile['residentWard'] ?? null,
+                // 'residentVillage' => $profile['residentVillage'] ?? null,
+                // 'residentStreet' => $profile['residentStreet'] ?? null,
+                // 'residentPostalAddress' => $profile['residentPostalAddress'] ?? null,
+                // 'residentPostCode' => $profile['residentPostCode'] ?? null,
+                // 'birthCountry' => $profile['birthCountry'] ?? null,
+                // 'birthRegion' => $profile['birthRegion'] ?? null,
+                // 'birthDistrict' => $profile['birthDistrict'] ?? null,
+                // 'birthWard' => $profile['birthWard'] ?? null,
             ],
         ];
 
@@ -521,15 +523,15 @@ class QuestionnaireVerification extends Component
          * uses different names.
          */
         if (!empty($profile['firstName'])) {
-            $updateData['first_name'] = $profile['firstName'];
+            $updateData['first_name'] = $profile['firstName'] ?? '';
         }
 
         if (!empty($profile['middleName'])) {
-            $updateData['middle_name'] = $profile['middleName'];
+            $updateData['middle_name'] = $profile['middleName'] ?? '';
         }
 
         if (!empty($profile['lastName'])) {
-            $updateData['last_name'] = $profile['lastName'];
+            $updateData['last_name'] = $profile['lastName'] ?? '';
         }
 
         if (!empty($profile['dateOfBirth'])) {
@@ -539,6 +541,12 @@ class QuestionnaireVerification extends Component
         if (!empty($profile['sex'])) {
             $updateData['gender'] = $profile['sex'];
         }
+
+        if( !empty($profile['photo']) ) {
+            $updateData['profile_photo_path'] = $this->processPhoto($profile['photo']);
+        }
+
+        $updateData['name'] = $updateData['first_name'] . ' ' . $updateData['middle_name'] . ' ' . $updateData['last_name'];
 
         $user->update($updateData);
 
@@ -812,6 +820,30 @@ class QuestionnaireVerification extends Component
          * than presenting a fake percentage.
          */
         return 0;
+    }
+
+    /**
+     * Process the uploaded photo.
+     */
+    private function processPhoto($photo)
+    {
+        // $base64 = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
+
+        // Decode
+        $imageData = base64_decode($photo, true);
+
+        if ($imageData === false) {
+            throw new \Exception('Invalid Base64 image');
+        }
+
+        // Save to Laravel storage
+        $filename = 'photo_' . time() . '.jpg';
+
+        Storage::disk('public')->put($filename, $imageData);
+
+        $url = Storage::disk('public')->url($filename);
+
+        return $url;
     }
 
     /**

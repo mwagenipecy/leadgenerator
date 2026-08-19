@@ -809,7 +809,7 @@
                                                     @if(isset($rule['@attributes']['id']))
                                                         <div class="text-xs text-gray-600">
                                                             <span class="font-medium">{{ $rule['@attributes']['id'] }}:</span>
-                                                            {{ getValue($rule, 'Result', 'N/A') }} - {{ getValue($rule, 'Description', '') }}
+                                                            {{ getValue($rule, 'Result', 'N/A') }} - {{ implode(', ', getValue($rule, 'Description', [])) }}
                                                         </div>
                                                     @endif
                                                 @endforeach
@@ -878,7 +878,7 @@
                                     <h4 class="font-bold text-gray-900">Scoring Analysis Policy Rules</h4>
                                 </div>
                                 <div class="p-6">
-                                    <div class="space-y-2">
+                                    <div class="gap-2 grid grid-cols-3">
                                         @php
                                             $rules = isset($scoringAnalysis['PolicyRules']['Rule'][0]) ? $scoringAnalysis['PolicyRules']['Rule'] : [$scoringAnalysis['PolicyRules']['Rule']];
                                         @endphp
