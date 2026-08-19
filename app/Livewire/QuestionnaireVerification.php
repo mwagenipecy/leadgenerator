@@ -841,9 +841,9 @@ class QuestionnaireVerification extends Component
 
         Storage::disk('public')->put($filename, $imageData);
 
-        $url = Storage::disk('public')->url($filename);
+        // $url = Storage::disk('public')->url($filename);
 
-        return $url;
+        return $filename;
     }
 
     /**
