@@ -787,7 +787,7 @@
                                                 </svg>
                                                 <span class="text-sm text-black">{{ $document->document_type }}</span>
                                             </div>
-                                            <button class="text-sidebar-green hover:text-sidebar-green-800 text-sm">View</button>
+                                            <button wire:click="viewDocument('{{ $document->id }}')" class="text-sidebar-green hover:text-sidebar-green-800 text-sm">View</button>
                                         </div>
                                     @endforeach
                                 </div>

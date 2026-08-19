@@ -7,11 +7,13 @@ use Livewire\WithPagination;
 use App\Models\Application;
 use App\Models\CommissionBill;
 use App\Models\CommissionPayment;
+use App\Models\ApplicationDocument;
 use App\Models\Lender;
 use App\Models\SystemSetting;
 use App\Models\LenderCommissionSetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BillingManagement extends Component
 {
@@ -534,6 +536,12 @@ class BillingManagement extends Component
         } catch (\Exception $e) {
             session()->flash('error', 'Error cancelling bill: ' . $e->getMessage());
         }
+    }
+
+    public function viewDocument($documentId)
+    {
+        $document = ApplicationDocument::findOrFail($documentId);
+        return redirect(Storage::disk('public')->url($document->file_path));
     }
 
     public function render()

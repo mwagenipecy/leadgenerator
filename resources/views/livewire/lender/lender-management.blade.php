@@ -61,7 +61,7 @@
         <!-- Total Lenders -->
         <div class="bg-white rounded-lg p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
             <div class="flex items-center justify-between">
-                <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green to-sidebar-green rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                <div class="w-12 h-12 bg-gray-500 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
@@ -76,14 +76,14 @@
         <!-- Pending -->
         <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
             <div class="flex items-center justify-between">
-                <div class="w-12 h-12 bg-gradient-to-br from-sidebar-green-400 to-sidebar-green rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
                 <div class="text-right">
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{{ __('admin.pending') }}</p>
-                    <p class="text-2xl font-bold text-sidebar-green">{{ $stats['pending'] }}</p>
+                    <p class="text-2xl font-bold text-yellow-500">{{ $stats['pending'] }}</p>
                 </div>
             </div>
         </div>
@@ -91,14 +91,14 @@
         <!-- Approved -->
         <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
             <div class="flex items-center justify-between">
-                <div class="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
                 <div class="text-right">
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{{ __('admin.approved_lenders') }}</p>
-                    <p class="text-2xl font-bold text-gray-700">{{ $stats['approved'] }}</p>
+                    <p class="text-2xl font-bold text-green-500">{{ $stats['approved'] }}</p>
                 </div>
             </div>
         </div>
@@ -106,14 +106,14 @@
         <!-- Rejected/Suspended -->
         <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group">
             <div class="flex items-center justify-between">
-                <div class="w-12 h-12 bg-gradient-to-br from-gray-800 to-black rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                <div class="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </div>
                 <div class="text-right">
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">{{ __('admin.suspended_lenders') }}</p>
-                    <p class="text-2xl font-bold text-black">{{ $stats['rejected'] + $stats['suspended'] }}</p>
+                    <p class="text-2xl font-bold text-red-500">{{ $stats['rejected'] + $stats['suspended'] }}</p>
                 </div>
             </div>
         </div>
