@@ -45,7 +45,7 @@
                     <div
                         class="w-10 h-10 sm:w-12 sm:h-12 bg-sidebar-green rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
                         @if (auth()->user()->profile_photo_path)
-                            <img src="{{ asset('storage' . auth()->user()->profile_photo_path) }}" alt="Profile Photo"
+                            <img src="{{ asset('storage/' . auth()->user()->profile_photo_path) }}" alt="Profile Photo"
                                 class="w-full h-full object-cover rounded-full">
                         @else
                             {{ strtoupper(substr(auth()->user()->first_name ?? 'U', 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name ?? (auth()->user()->first_name ?? 'U'), 0, 1)) }}
