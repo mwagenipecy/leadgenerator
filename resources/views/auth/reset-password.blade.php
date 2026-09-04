@@ -3,17 +3,16 @@
         <!-- Header -->
         <div class="text-center">
             <!-- Logo -->
-            <div class="text-3xl font-bold font-poppins text-black mb-2">
-                Lead<span class="text-sidebar-green">Generator</span>
+            <div class="text-3xl font-bold font-poppins text-red-700 mb-2">
+                <span class="text-sidebar-red">Fanikisha Marketplace</span>
             </div>
-            <h2 class="text-2xl font-semibold text-gray-900 mb-2">Set New Password</h2>
-            <p class="text-gray-600">Create a strong password for your account</p>
+            <h2 class="text-2xl font-semibold text-red-600 mb-2">Set New Password</h2>
         </div>
 
         <!-- Initial Message with Button to Load Form -->
         <div id="initial-message" class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                 </svg>
             </div>
@@ -24,7 +23,7 @@
             <button 
                 type="button" 
                 onclick="loadResetForm()"
-                class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 focus:ring-4 focus:ring-green-300 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+                class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
             >
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
@@ -38,8 +37,8 @@
             
             <!-- Description -->
             <div class="mb-6 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-sidebar-green/10 rounded-full mb-4">
-                    <svg class="w-8 h-8 text-sidebar-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-sidebar-red/10 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-sidebar-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                     </svg>
                 </div>
@@ -98,7 +97,7 @@
                             type="password" 
                             autocomplete="new-password" 
                             required 
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-red focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Enter your new password"
                         >
                         <button 
@@ -131,7 +130,7 @@
                             type="password" 
                             autocomplete="new-password" 
                             required 
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-green focus:border-transparent placeholder-gray-400 sm:text-sm"
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-red focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="Confirm your new password"
                         >
                         <button 
@@ -176,7 +175,7 @@
                 <div>
                     <button 
                         type="submit" 
-                        class="w-full bg-green-700 text-white py-3 rounded-lg font-semibold hover:bg-sidebar-green-light focus:ring-4 focus:ring-sidebar-green/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
+                        class="w-full bg-red-700 text-white py-3 rounded-lg font-semibold hover:bg-sidebar-red-light focus:ring-4 focus:ring-sidebar-red/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
                     >
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
@@ -213,22 +212,22 @@
             resetForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        function togglePassword(fieldId) {
-            const field = document.getElementById(fieldId);
-            const icon = document.getElementById(fieldId + '-eye-icon');
+        // function togglePassword(fieldId) {
+        //     const field = document.getElementById(fieldId);
+        //     const icon = document.getElementById(fieldId + '-eye-icon');
             
-            if (field.type === 'password') {
-                field.type = 'text';
-                icon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                `;
-            } else {
-                field.type = 'password';
-                icon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                `;
-            }
-        }
+        //     if (field.type === 'password') {
+        //         field.type = 'text';
+        //         icon.innerHTML = `
+        //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+        //         `;
+        //     } else {
+        //         field.type = 'password';
+        //         icon.innerHTML = `
+        //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        //         `;
+        //     }
+        // }
     </script>
 </x-guest-layout>
