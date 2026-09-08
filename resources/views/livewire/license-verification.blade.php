@@ -15,7 +15,7 @@
                 <input 
                     type="text" 
                     id="licenseNumber"
-                    wire:model.live="licenseNumber" 
+                    wire:model="licenseNumber" 
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                     placeholder="{{ __('verification.enter_license_number_placeholder') }}"
                     maxlength="20"
@@ -38,12 +38,12 @@
                 <span wire:loading wire:target="verifyLicense">{{ __('verification.verifying') }}</span>
             </button>
             
-            <button
+            {{-- <button
                 wire:click="resetForm"
                 class="bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition duration-200"
             >
                 {{ __('verification.reset') }}
-            </button>
+            </button> --}}
         </div>
 
         @if($verificationResult || $error || $rawResponse)

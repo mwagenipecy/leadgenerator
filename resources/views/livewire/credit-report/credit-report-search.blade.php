@@ -12,10 +12,10 @@
                     <label for="fullName" class="block text-sm font-medium text-black mb-1">
                         {{ __('credit.full_name') }}
                     </label>
-                    <input 
+                    <input disabled
                         type="text" 
                         id="fullName"
-                        wire:model.blur="fullName" 
+                        wire:model="fullName" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="{{ __('credit.enter_full_name') }}"
                         wire:loading.attr="disabled"
@@ -30,9 +30,10 @@
                         {{ __('credit.id_number') }}
                     </label>
                     <input 
+                        disabled
                         type="text" 
                         id="idNumber"
-                        wire:model.blur="idNumber" 
+                        wire:model="idNumber" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="{{ __('credit.enter_id_number') }}"
                         wire:loading.attr="disabled"
@@ -47,9 +48,10 @@
                         {{ __('credit.phone_number') }}
                     </label>
                     <input 
+                        disabled
                         type="text" 
                         id="phoneNumber"
-                        wire:model.blur="phoneNumber" 
+                        wire:model="phoneNumber" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sidebar-green focus:border-transparent"
                         placeholder="{{ __('credit.enter_phone_number') }}"
                         wire:loading.attr="disabled"

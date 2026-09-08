@@ -371,7 +371,7 @@
                                             Your Answer
                                         </label>
 
-                                        <input id="currentAnswer" type="text" wire:model.live="currentAnswer"
+                                        <input id="currentAnswer" type="text" wire:model="currentAnswer"
                                             autocomplete="off" maxlength="255" autofocus
                                             placeholder="{{ $this->getCurrentQuestionPlaceholder() }}"
                                             class="w-full px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green focus:border-brand-green @error('currentAnswer') border-red-500 @enderror" />
