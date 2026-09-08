@@ -17,9 +17,9 @@ services:
       - ./storage/logs:/var/www/html/storage/logs
       - ./storage/framework:/var/www/html/storage/framework
       - public_assets:/var/www/html/public_shared
-    depends_on:
-      postgres:
-        condition: service_healthy
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
     networks:
       - app
 
@@ -39,25 +39,25 @@ services:
     networks:
       - app
 
-  postgres:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: ${DB_DATABASE:-laravel}
-      POSTGRES_USER: ${DB_USERNAME:-laravel}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "127.0.0.1:5432:5432"
-    networks:
-      - app
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+  # postgres:
+  #   image: postgres:16-alpine
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: ${DB_DATABASE:-laravel}
+  #     POSTGRES_USER: ${DB_USERNAME:-laravel}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "127.0.0.1:5432:5432"
+  #   networks:
+  #     - app
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 10s
 
   queue:
     build:
@@ -72,14 +72,14 @@ services:
       - ./storage:/var/www/html/storage
     depends_on:
       - app
-      - postgres
+      # - postgres
     networks:
       - app
 
   # Portainer not included - use your existing Portainer (ports 9000, 9443)
 
 volumes:
-  postgres_data:
+  # postgres_data:
   public_assets:
 
 networks:
