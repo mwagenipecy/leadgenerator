@@ -445,13 +445,13 @@ class CreditReportSearch extends Component
     private function getSoapEndpoint()
     {
         // First, check if a specific CB5 endpoint is configured
-        $cb5Endpoint = env('CREDITINFO_CB5_ENDPOINT');
+        $cb5Endpoint = config('services.creditinfo.cb5_endpoint');
         if ($cb5Endpoint) {
             Log::info('Using configured CB5 endpoint', ['endpoint' => $cb5Endpoint]);
             return $cb5Endpoint;
         }
         
-        $endpoint = env('CREDITINFO_ENDPOINT') ?: env('SOAP_URL');
+        $endpoint = config('services.creditinfo.endpoint') ?: config('services.soap.url');
         
         // If endpoint contains MultiConnector.svc, the CB5 API is likely on a different endpoint
         if ($endpoint && str_contains($endpoint, 'MultiConnector.svc')) {
@@ -488,20 +488,20 @@ class CreditReportSearch extends Component
      */
     private function getSoapUsername()
     {
-        return env('CREDITINFO_USERNAME') ?: env('SOAP_USERNAME') ?: 'payasyougo';
+        return config('services.creditinfo.username') ?: config('services.soap.username') ?: 'payasyougo';
     }
     
     
     private function getSoapPassword()
     {
-        return env('CREDITINFO_PASSWORD') ?: env('SOAP_PASSWORD') ?: 'pay2025';
+        return config('services.creditinfo.password') ?: config('services.soap.password') ?: 'pay2025';
     }
     
    
     
     private function getConnectorId()
     {
-        return env('CREDITINFO_CONNECTOR_ID') ?: env('SOAP_CONNECTOR_ID');
+        return config('services.creditinfo.connector_id') ?: config('services.soap.connector_id');
     }
     
     /**
@@ -509,7 +509,7 @@ class CreditReportSearch extends Component
      */
     private function getStrategyId()
     {
-        return env('CREDITINFO_STRATEGY_ID');
+        return config('services.creditinfo.strategy_id');
     }
     
     private function searchIndividual()

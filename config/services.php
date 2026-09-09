@@ -49,12 +49,17 @@ return [
         'password' => env('CREDITINFO_PASSWORD'),
         'strategy_id' => env('CREDITINFO_STRATEGY_ID'),
         'connector_id' => env('CREDITINFO_CONNECTOR_ID'),
+        'cb5_endpoint' => env('CREDITINFO_CB5_ENDPOINT'),
     ],
 
     'soap' => [
         'url' => env('SOAP_URL'),
         'username' => env('SOAP_USERNAME'),
         'password' => env('SOAP_PASSWORD'),
+        'connector_id' => env('SOAP_CONNECTOR_ID'),
+        'licence_connector_id' => env('SOAP_LICENCE_CONNECTOR_ID'),
+        'tin_connector_id' => env('SOAP_TIN_CONNECTOR_ID'),
+        'action' => env('SOAP_ACTION'),
     ],
 
     'nida' => [
