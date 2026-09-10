@@ -169,7 +169,7 @@
                 </label>
                 <input 
                     id="first_name" 
-                    wire:model.live="first_name"
+                    wire:model="first_name"
                     type="text" 
                     required 
                     class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('first_name') border-red-500 ring-1 ring-red-500 @enderror"
@@ -185,7 +185,7 @@
                 </label>
                 <input 
                     id="last_name" 
-                    wire:model.live="last_name"
+                    wire:model="last_name"
                     type="text" 
                     required 
                     class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('last_name') border-red-500 ring-1 ring-red-500 @enderror"
@@ -210,7 +210,7 @@
                 </div>
                 <input 
                     id="email" 
-                    wire:model.live="email"
+                    wire:model="email"
                     type="email" 
                     autocomplete="email" 
                     required 
@@ -237,7 +237,7 @@
                     </div>
                     <input 
                         id="phone" 
-                        wire:model.live="phone"
+                        wire:model="phone"
                         type="tel" 
                         required 
                         class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm transition-all @error('phone') border-red-500 ring-1 ring-red-500 @enderror"
@@ -277,7 +277,7 @@
             @else
             <div>
                 <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.company_name') }} *</label>
-                <input id="company_name" wire:model.live="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-red-500 ring-1 ring-red-500 @enderror" placeholder="Acme Ltd">
+                <input id="company_name" wire:model="company_name" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_name') border-red-500 ring-1 ring-red-500 @enderror" placeholder="Acme Ltd">
                 @error('company_name')
                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -292,7 +292,7 @@
             <!-- Country Selection -->
             <div>
                 <label for="country" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.country') }} *</label>
-                <select id="country" wire:model.live="country" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm @error('country') border-red-500 ring-1 ring-red-500 @enderror">
+                <select id="country" wire:model="country" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent text-sm @error('country') border-red-500 ring-1 ring-red-500 @enderror">
                     <option value="">{{ __('auth.select_country') }}</option>
                     <option value="Tanzania">Tanzania</option>
                     <option value="Kenya">Kenya</option>
@@ -308,7 +308,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="company_tin" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.company_tin') }} *</label>
-                    <input id="company_tin" wire:model.live="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-red-500 ring-1 ring-red-500 @enderror" placeholder="123-456-789">
+                    <input id="company_tin" wire:model="company_tin" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('company_tin') border-red-500 ring-1 ring-red-500 @enderror" placeholder="123-456-789">
                     @error('company_tin')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -326,7 +326,7 @@
                 @elseif($country && strtolower($country) !== 'tanzania')
                 <div>
                     <label for="passport_number" class="block text-sm font-medium text-gray-700 mb-1.5">{{ __('auth.passport_number') }} *</label>
-                    <input id="passport_number" wire:model.live="passport_number" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('passport_number') border-red-500 ring-1 ring-red-500 @enderror" placeholder="A12345678">
+                    <input id="passport_number" wire:model="passport_number" type="text" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 text-sm @error('passport_number') border-red-500 ring-1 ring-red-500 @enderror" placeholder="A12345678">
                     @error('passport_number')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -351,7 +351,7 @@
                     </div>
                     <input 
                         id="password" 
-                        wire:model.live="password"
+                        wire:model="password"
                         type="password" 
                         autocomplete="new-password" 
                         required 
@@ -386,7 +386,7 @@
                     </div>
                     <input 
                         id="password_confirmation" 
-                        wire:model.live="password_confirmation"
+                        wire:model="password_confirmation"
                         type="password" 
                         autocomplete="new-password" 
                         required 
@@ -415,7 +415,7 @@
             <div class="flex items-center h-5">
                 <input 
                     id="terms" 
-                    wire:model.live="terms"
+                    wire:model="terms"
                     type="checkbox" 
                     required
                     class="h-4 w-4 text-brand-red focus:ring-brand-red border-gray-300 rounded transition-colors"
