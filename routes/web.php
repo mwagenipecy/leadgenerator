@@ -27,6 +27,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OtpController;
 use App\Http\Middleware\CheckPermissions;
 use App\Services\OtpService;
+use App\Services\SmsOtpService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -136,6 +137,25 @@ Route::middleware('guest')->group(function () {
             Session::put('otp_user_id', $userId);
             Session::put('login_timestamp', now()->timestamp);
 
+            //confirm if phone number is verified, if not redirect to phone verification page(otp verification page)
+            if (!$userModel->isPhoneVerified()) {
+                $smsOtpService = app(SmsOtpService::class);
+                if ($smsOtpService->generateAndSendOtp($userModel)) {
+                    Log::info('OTP sent successfully, redirecting to OTP page', ['user_id' => $userId]);
+                    return redirect()->route('otp.showSmsOtp')
+                        ->with('success', 'Please check your phone for the verification code.');
+                } else {
+                    Log::error('Failed to send OTP', ['user_id' => $userId]);
+                
+                    // Clean up session if OTP fails
+                    Session::forget(['otp_user_id', 'login_timestamp']);
+                    
+                    return back()->withErrors([
+                        'email' => 'Failed to send verification code. Please try again.',
+                    ])->withInput($request->except('password'));
+                }
+            }
+
             // Generate and send OTP
             $otpService = app(OtpService::class);
             if ($otpService->generateAndSendOtp($userModel)) {
@@ -166,6 +186,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/otp', [OtpController::class, 'show'])->name('otp.show');
     Route::post('/otp/verify', [OtpController::class, 'verify'])->name('otp.verify');
     Route::post('/otp/resend', [OtpController::class, 'resend'])->name('otp.resend');
+
+    Route::get('/otp/sms', [OtpController::class, 'showSmsOtp'])->name('otp.showSmsOtp');
+    Route::post('/otp/sms/verify', [OtpController::class, 'verifySmsOtp'])->name('otp.verifySmsOtp');
 });
 
 

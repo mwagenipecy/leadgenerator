@@ -52,6 +52,7 @@ class User extends Authenticatable
         'nida_number',
         'password',
         'email_verified_at',
+        'phone_verified_at',
         'nida_verified_at',
         'verification_status',
         'profile_photo_path',
@@ -107,6 +108,7 @@ class User extends Authenticatable
             'nida_verified_at' => 'datetime',
             'company_verified_at' => 'datetime',
             'credit_score_updated_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -167,6 +169,14 @@ class User extends Authenticatable
     public function isNidaVerified(): bool
     {
         return $this->nida_verified_at !== null;
+    }
+
+    /**
+     * Check if phone number is verified.
+     */
+    public function isPhoneVerified(): bool
+    {
+        return $this->phone_verified_at !== null;
     }
 
     /**

@@ -19,6 +19,7 @@ return [
     'login_title' => 'Sign in to your account',
     'register_title' => 'Create a new account',
     'otp_verification' => 'OTP Verification',
+    'phone_otp_verification' => 'Phone OTP Verification',
     'otp_code' => 'Enter OTP Code',
     'otp_sent' => 'OTP code has been sent to your email',
     'verify' => 'Verify',
@@ -74,6 +75,7 @@ return [
     
     // OTP Verification
     'verify_identity' => 'Verify Your Identity',
+    'phone_verification' => 'Verify Your Phone',
     'otp_sent_to' => 'We\'ve sent a 6-digit code to',
     'enter_6_digit_code' => 'Enter 6-digit verification code',
     'verify_code' => 'Verify Code',

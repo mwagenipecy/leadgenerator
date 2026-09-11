@@ -19,6 +19,7 @@ return [
     'login_title' => 'Ingia kwenye akaunti yako',
     'register_title' => 'Unda akaunti mpya',
     'otp_verification' => 'Uthibitishaji wa OTP',
+    'phone_otp_verification' => 'Uthibitishaji wa OTP kwa Simu',
     'otp_code' => 'Ingiza Msimbo wa OTP',
     'otp_sent' => 'Msimbo wa OTP umetumwa kwenye barua pepe yako',
     'verify' => 'Thibitisha',
@@ -74,6 +75,7 @@ return [
     
     // OTP Verification
     'verify_identity' => 'Thibitisha Utambulisho Wako',
+    'phone_verification' => 'Thibitisha Simu Yako',
     'otp_sent_to' => 'Tumetuma msimbo wa tarakimu 6 kwa',
     'enter_6_digit_code' => 'Ingiza msimbo wa uthibitishaji wa tarakimu 6',
     'verify_code' => 'Thibitisha Msimbo',

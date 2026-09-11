@@ -139,10 +139,10 @@
                     </div>
                     
                     <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $type === 'company' ? __('auth.register_business') : __('auth.register_individual') }}</h2>
-                    <p class="text-gray-600">{{ $type === 'company' ? __('auth.business_onboarding') : __('auth.individual_onboarding') }}</p>
+                    {{-- <p class="text-gray-600">{{ $type === 'company' ? __('auth.business_onboarding') : __('auth.individual_onboarding') }}</p> --}}
                     <div class="mt-6 inline-flex bg-gray-100 p-1 rounded-lg">
                         <a href="{{ route('user.register') }}?type=individual" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='individual' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.individual') }}</a>
-                        <a href="{{ route('user.register') }}?type=company" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.business') }}</a>
+                        {{-- <a href="{{ route('user.register') }}?type=company" class="px-4 py-2 text-sm font-medium rounded-md transition {{ $type==='company' ? 'bg-white shadow text-black' : 'text-gray-600' }}">{{ __('auth.business') }}</a> --}}
                     </div>
                 </div>
 
@@ -162,7 +162,7 @@
     <form wire:submit="register" class="space-y-5" onsubmit="stripNidaDashes(); return true;">
         
         <!-- Name Fields -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {{-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1.5">
                     {{ __('auth.first_name') }} *
@@ -195,7 +195,7 @@
                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
-        </div>
+        </div> --}}
 
         <!-- Email -->
         <div>

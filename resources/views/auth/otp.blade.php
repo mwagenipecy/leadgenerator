@@ -124,15 +124,15 @@
             </div>
             <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{{ __('auth.verify_identity') }}</h2>
             <p class="text-gray-600">{{ __('auth.otp_sent_to') }}</p>
-@php
-    $email = $user->email;
-    $atPos = strpos($email, '@');
-    $maskedEmail = substr($email, 0, 2) . str_repeat('*', $atPos - 2) . substr($email, $atPos);
-@endphp
+        @php
+            $email = $user->email;
+            $atPos = strpos($email, '@');
+            $maskedEmail = substr($email, 0, 2) . str_repeat('*', $atPos - 2) . substr($email, $atPos);
+        @endphp
 
-<p class="text-gray-800 font-medium">{{ $maskedEmail }}</p>
+        <p class="text-gray-800 font-medium">{{ $maskedEmail }}</p>
 
-</div>
+        </div>
 
         <!-- OTP Form -->
         <div class="bg-white rounded-2xl p-8 border border-gray-100">

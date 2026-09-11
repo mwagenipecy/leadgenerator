@@ -4,6 +4,7 @@ namespace App\Livewire\Onboarding;
 
 use App\Models\Role;
 use App\Services\OtpService;
+use App\Services\SmsOtpService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -11,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Livewire\Concerns\WithLocale;
+use Illuminate\Support\Facades\Log;
 
 class Register extends Component
 {
@@ -35,8 +37,8 @@ class Register extends Component
         $isCompany = $this->type === 'company';
 
         $rules = [
-            'first_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\'\.]+$/'],
-            'last_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\'\.]+$/'],
+            // 'first_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\'\.]+$/'],
+            // 'last_name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\-\'\.]+$/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
             'phone' => ['required', 'string', 'max:20', 'unique:users', 'regex:/^[\+]?[0-9\s\-\(\)]+$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -78,8 +80,8 @@ class Register extends Component
     }
 
     protected $messages = [
-        'first_name.required' => 'First name is required.',
-        'last_name.required' => 'Last name is required.',
+        // 'first_name.required' => 'First name is required.',
+        // 'last_name.required' => 'Last name is required.',
         'email.required' => 'Email address is required.',
         'email.email' => 'Please enter a valid email address.',
         'email.unique' => 'This email address is already registered.',
@@ -177,8 +179,8 @@ class Register extends Component
     protected function sanitizeAllInputs()
     {
         $fields = [
-            'first_name',
-            'last_name',
+            // 'first_name',
+            // 'last_name',
             'email',
             'phone',
             'nida_number',
@@ -214,9 +216,10 @@ class Register extends Component
                 }
                 
                 $user = User::create([
-                    'first_name' => $this->first_name,
-                    'last_name' => $this->last_name,
-                    'name' => $this->first_name . ' ' . $this->last_name,
+                    // 'first_name' => $this->first_name,
+                    // 'last_name' => $this->last_name,
+                    // 'name' => $this->first_name . ' ' . $this->last_name,
+                    'name' => "Borrower", // Placeholder name; can be updated later
                     'email' => $this->email,
                     'phone' => $this->phone,
                     'nida_number' => $nidaNumber,
@@ -228,6 +231,7 @@ class Register extends Component
                     'registration_type' => $this->type,
                     'password' => Hash::make($this->password),
                     'email_verified_at' => now(),
+                    'phone_verified_at' => null, // Phone verification can be handled later
                     'verification_status' => 'pending',
                     // company_verification_status will use database default 'pending'
                     'role' => 'borrower',
@@ -254,6 +258,24 @@ class Register extends Component
             if (method_exists($guard, 'logout')) {
                 $guard->logout();
             }
+
+            if(!$user->isPhoneVerified()) {
+                Log::info('User is not phone verified, redirecting to OTP verification', [
+                    'user_id' => $user->id,
+                ]);
+                
+                // Generate and send OTP for phone verification
+                $smsOtpService = app(SmsOtpService::class);
+                if (!$smsOtpService->generateAndSendOtp($user)) {
+                    Session::forget(['otp_user_id', 'login_timestamp']);
+                    Log::error('Failed to send OTP for phone verification', ['user_id' => $user->id]);
+                    session()->flash('error', 'Account created, but failed to send verification code. Please login and try again.');
+                    return redirect()->route('login');
+                }
+                
+                return redirect()->route('otp.showSmsOtp')
+                    ->with('success', 'Account created! Please check your phone for the verification code.');
+            }
             
             $otpService = app(OtpService::class);
             if (!$otpService->generateAndSendOtp($user)) {
@@ -272,7 +294,7 @@ class Register extends Component
             
         } catch (\Exception $e) {
             // Log the detailed error
-            \Log::error('Registration failed', [
+            Log::error('Registration failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'email' => $this->email ?? 'N/A',
