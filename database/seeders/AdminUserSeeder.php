@@ -42,6 +42,7 @@ class AdminUserSeeder extends Seeder
             'is_active' => true,
             'verification_status' => 'verified',
             'role_level' => 100,
+            'phone_verified_at' => now(),
         ]);
 
         // Assign super_admin role to the user (no assigned_by since this is the first user)
