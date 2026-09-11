@@ -74,4 +74,14 @@ return [
         'verify_ssl' => env('NIDA_VERIFY_SSL', false),
     ],
 
+
+    //parameters for selcom sms service
+    'sms' => [
+        'api_url' => env('SMS_API_URL'),
+        'username' => env('SMS_USERNAME'),
+        'password' => env('SMS_PASSWORD'),
+        // 'source_id' => env('SMS_SOURCE_ID'),
+    ],
+
+
 ];
