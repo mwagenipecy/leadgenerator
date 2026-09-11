@@ -246,7 +246,7 @@ class OtpController extends Controller
                 ->with('error', 'Invalid session. Please login again.');
         }
 
-        Log::info('Verifying OTP', [
+        Log::info('Verifying SMS OTP', [
             'user_id' => $userId,
             'session_before_verification' => [
                 'otp_user_id' => Session::get('otp_user_id'),
@@ -256,7 +256,7 @@ class OtpController extends Controller
 
         // Verify OTP
         if ($this->smsOtpService->verifyOtp($user, $request->otp)) {
-            Log::info('OTP verification successful, logging in user', ['user_id' => $userId]);
+            Log::info('SMS OTP verification successful, logging in user', ['user_id' => $userId]);
             
             // Clear OTP session data first
             Session::forget(['otp_user_id', 'login_timestamp']);
@@ -264,20 +264,21 @@ class OtpController extends Controller
             // Log the user in
             Auth::login($user, true);
             
-            // IMPORTANT: Set OTP verification flag AFTER login
-            Session::put('otp_verified', false);
+            // // IMPORTANT: Set OTP verification flag AFTER login
+            // Session::put('otp_verified', false);
             
             // Regenerate session for security but keep the otp_verified flag
             $otpVerified = Session::get('otp_verified');
             $request->session()->regenerate();
-            Session::put('otp_verified', $otpVerified);
+            // Session::put('otp_verified', $otpVerified);
             
             Log::info('User phone verification completed after OTP verification', [
                 'user_id' => $user->id,
                 'is_authenticated' => Auth::check(),
                 'current_user_id' => Auth::id(),
-                'otp_verified_flag' => Session::get('otp_verified'),
-                'session_id' => Session::getId(),
+                'phone_verified_at' => $user->phone_verified_at,
+                // 'otp_verified_flag' => Session::get('otp_verified'),
+                // 'session_id' => Session::getId(),
                 'nida_verified' => $user->isNidaVerified(),
                 'nida_verified_at' => $user->nida_verified_at,
             ]);
