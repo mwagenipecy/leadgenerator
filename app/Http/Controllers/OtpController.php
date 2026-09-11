@@ -284,7 +284,7 @@ class OtpController extends Controller
 
             //redirect to email verification page
             return redirect()->intended(route('otp.show'))
-                ->with('success', 'Phone verification successful! Please proceed to email verification.');
+                ->with('success', 'Phone verification successful! Login to your account.');
                    
         } else {
             Log::warning('Invalid OTP verification attempt', [
