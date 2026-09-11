@@ -117,6 +117,18 @@
                     </div>
                 @endsession
 
+                @session('success')
+                    <div class="mb-4 font-medium text-sm text-green-600">
+                        {{ $value }}
+                    </div>
+                @endsession
+
+                @session('error')
+                    <div class="mb-4 font-medium text-sm text-red-600">
+                        {{ $value }}
+                    </div>
+                @endsession
+
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
                         {{ __('auth.email') }} / {{ __('auth.phone') }}
