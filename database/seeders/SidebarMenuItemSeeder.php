@@ -36,7 +36,7 @@ class SidebarMenuItemSeeder extends Seeder
             ['key' => 'reports', 'label_key' => 'navigation.reports', 'route' => 'reports.booking', 'icon' => 'chart-bar', 'roles' => ['lender', 'super_admin'], 'parent_key' => null, 'sort_order' => 30],
             ['key' => 'user_profile', 'label_key' => 'navigation.user_profile', 'route' => 'loan-application.profile', 'icon' => 'user', 'roles' => ['borrower'], 'parent_key' => null, 'sort_order' => 40],
             ['key' => 'loan_applications', 'label_key' => 'navigation.loan_applications', 'route' => 'user.loan.application', 'icon' => 'document-text', 'roles' => ['borrower'], 'parent_key' => null, 'sort_order' => 50],
-            ['key' => 'self_services', 'label_key' => 'navigation.self_services', 'route' => null, 'icon' => 'chart-bar', 'roles' => ['borrower'], 'parent_key' => null, 'sort_order' => 60],
+            // ['key' => 'self_services', 'label_key' => 'navigation.self_services', 'route' => null, 'icon' => 'chart-bar', 'roles' => ['borrower'], 'parent_key' => null, 'sort_order' => 60],
             ['key' => 'admin_manager', 'label_key' => 'navigation.admin_manager', 'route' => null, 'icon' => 'users', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 70],
             ['key' => 'company_verification', 'label_key' => 'navigation.company_verification', 'route' => 'admin.company.verification', 'icon' => 'check-circle', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 80],
             ['key' => 'lender_management', 'label_key' => 'navigation.lender_management', 'route' => 'lenders.index', 'icon' => 'building', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 90],
@@ -55,10 +55,10 @@ class SidebarMenuItemSeeder extends Seeder
             ['key' => 'customer_help_management', 'label_key' => 'navigation.customer_help_management', 'route' => 'admin.customer-help.management', 'icon' => 'lifebuoy', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 206],
             ['key' => 'promotions', 'label_key' => 'navigation.promotions', 'route' => 'admin.promotion.management', 'icon' => 'megaphone', 'roles' => ['super_admin'], 'parent_key' => null, 'sort_order' => 210],
             // Self services children
-            ['key' => 'verify_tin', 'label_key' => 'verification.verify_tin_number', 'route' => 'taxpayer.verification', 'icon' => 'document-text', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 1],
-            ['key' => 'verify_license', 'label_key' => 'verification.verify_license', 'route' => 'lincense.verification', 'icon' => 'identification', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 2],
-            ['key' => 'verify_vehicle', 'label_key' => 'verification.verify_vehicle', 'route' => 'motor.vehicle.verification', 'icon' => 'truck', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 3],
-            ['key' => 'credit_report', 'label_key' => 'verification.credit_report', 'route' => 'credit.report', 'icon' => 'document-text', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 4],
+            // ['key' => 'verify_tin', 'label_key' => 'verification.verify_tin_number', 'route' => 'taxpayer.verification', 'icon' => 'document-text', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 1],
+            // ['key' => 'verify_license', 'label_key' => 'verification.verify_license', 'route' => 'lincense.verification', 'icon' => 'identification', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 2],
+            // ['key' => 'verify_vehicle', 'label_key' => 'verification.verify_vehicle', 'route' => 'motor.vehicle.verification', 'icon' => 'truck', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 3],
+            // ['key' => 'credit_report', 'label_key' => 'verification.credit_report', 'route' => 'credit.report', 'icon' => 'document-text', 'roles' => ['borrower'], 'parent_key' => 'self_services', 'sort_order' => 4],
             // Admin manager children
             ['key' => 'user_management', 'label_key' => 'navigation.user_management', 'route' => 'user.management', 'icon' => 'users', 'roles' => ['super_admin'], 'parent_key' => 'admin_manager', 'sort_order' => 1],
             ['key' => 'roles', 'label_key' => 'navigation.roles', 'route' => 'user.management.roles', 'icon' => 'shield', 'roles' => ['super_admin'], 'parent_key' => 'admin_manager', 'sort_order' => 2],
