@@ -340,4 +340,39 @@ class OtpController extends Controller
             'canResend' => $this->otpService->canResendOtp($user)
         ]);
     }
+
+     /**
+     * Resend OTP SMS
+     */
+    public function resendSmsOtp(Request $request)
+    {
+        if (!Session::has('otp_user_id')) {
+            return redirect()->route('login')
+                ->with('error', 'Session expired. Please login again.');
+        }
+
+        $userId = Session::get('otp_user_id');
+        $user = User::find($userId);
+
+        if (!$user) {
+            Session::forget(['otp_user_id', 'login_timestamp']);
+            return redirect()->route('login')
+                ->with('error', 'Invalid session. Please login again.');
+        }
+
+        // Check if we can resend (rate limiting)
+        if (!$this->smsOtpService->canResendOtp($user)) {
+            return back()->with('error', 'Please wait before requesting a new verification code.');
+        }
+
+        Log::info('Resending OTP', ['user_id' => $user->id]);
+
+        if ($this->smsOtpService->generateAndSendOtp($user)) {
+            Log::info('OTP resent successfully', ['user_id' => $user->id]);
+            return back()->with('success', 'A new verification code has been sent to your phone.');
+        } else {
+            Log::error('Failed to resend OTP', ['user_id' => $user->id]);
+            return back()->with('error', 'Failed to send verification code. Please try again later.');
+        }
+    }
 }

@@ -189,6 +189,7 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/otp/sms', [OtpController::class, 'showSmsOtp'])->name('otp.showSmsOtp');
     Route::post('/otp/sms/verify', [OtpController::class, 'verifySmsOtp'])->name('otp.verifySmsOtp');
+    Route::post('/otp/sms/resend', [OtpController::class, 'resendSmsOtp'])->name('otp.resendSmsOtp');
 });
 
 

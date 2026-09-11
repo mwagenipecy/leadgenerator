@@ -207,7 +207,7 @@
                     <p class="text-sm text-gray-600 mb-2">
                         {{ __('auth.didnt_receive_code') }}
                     </p>
-                    <form method="POST" action="{{ route('otp.resend') }}" class="inline">
+                    <form method="POST" action="{{ route('otp.resendSmsOtp') }}" class="inline">
                         @csrf
                         <button 
                             type="submit" 
