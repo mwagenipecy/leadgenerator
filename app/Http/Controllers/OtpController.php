@@ -52,12 +52,12 @@ class OtpController extends Controller
 
         // Get remaining time for current OTP
         $remainingTime = $this->otpService->getOtpRemainingTime($user);
-        
+
         Log::info('Showing OTP page', [
             'user_id' => $userId,
             'remaining_time' => $remainingTime
         ]);
-        
+
         return view('auth.otp', [
             'user' => $user,
             'remainingTime' => $remainingTime ?? 0,
@@ -103,21 +103,21 @@ class OtpController extends Controller
         // Verify OTP
         if ($this->otpService->verifyOtp($user, $request->otp)) {
             Log::info('OTP verification successful, logging in user', ['user_id' => $userId]);
-            
+
             // Clear OTP session data first
             Session::forget(['otp_user_id', 'login_timestamp']);
-            
+
             // Log the user in
             Auth::login($user, true);
-            
+
             // IMPORTANT: Set OTP verification flag AFTER login
             Session::put('otp_verified', true);
-            
+
             // Regenerate session for security but keep the otp_verified flag
             $otpVerified = Session::get('otp_verified');
             $request->session()->regenerate();
             Session::put('otp_verified', $otpVerified);
-            
+
             Log::info('User login completed after OTP verification', [
                 'user_id' => $user->id,
                 'is_authenticated' => Auth::check(),
@@ -127,11 +127,11 @@ class OtpController extends Controller
                 'nida_verified' => $user->isNidaVerified(),
                 'nida_verified_at' => $user->nida_verified_at,
             ]);
-            
+
             // Check if user is admin or lender - skip NIDA verification
             $isAdmin = $user->isAdmin() || $user->hasRole('admin') || $user->hasRole('super_admin');
             $isLender = $user->isLender() || $user->hasRole('lender');
-            
+
             // Admin and lender don't need NIDA verification
             if ($isAdmin || $isLender) {
                 Log::info('Admin/Lender user - skipping NIDA verification', [
@@ -139,11 +139,11 @@ class OtpController extends Controller
                     'is_admin' => $isAdmin,
                     'is_lender' => $isLender,
                 ]);
-                
+
                 return redirect()->intended(route('dashboard'))
                     ->with('success', 'Login successful! Welcome back.');
             }
-            
+
             // For company users from non-Tanzania countries, skip NIDA verification
             // They will be handled by RequireCompanyVerification middleware
             if ($user->registration_type === 'company' && !$user->isFromTanzania()) {
@@ -152,23 +152,23 @@ class OtpController extends Controller
                     'country' => $user->country,
                     'registration_type' => $user->registration_type,
                 ]);
-                
+
                 // Redirect to intended page (will be intercepted by RequireCompanyVerification middleware if needed)
                 return redirect()->intended(route('dashboard'))
                     ->with('success', 'Login successful! Welcome back.');
             }
-            
+
             // Check if user is NIDA verified
             // If not verified, redirect to verification options page
             if (!$user->isNidaVerified()) {
                 Log::info('User is not NIDA verified, redirecting to verification options', [
                     'user_id' => $user->id,
                 ]);
-                
+
                 return redirect()->route('verification.options')
                     ->with('info', 'Please complete NIDA verification to access your dashboard.');
             }
-            
+
             // User is verified, redirect to intended page (dashboard)
             return redirect()->intended(route('dashboard'))
                 ->with('success', 'Login successful! Welcome back.');
@@ -176,7 +176,7 @@ class OtpController extends Controller
             Log::warning('Invalid OTP verification attempt', [
                 'user_id' => $user->id,
             ]);
-            
+
             throw ValidationException::withMessages([
                 'otp' => 'The verification code is invalid or has expired. Please try again.',
             ]);
@@ -254,52 +254,24 @@ class OtpController extends Controller
             ]
         ]);
 
-        // Verify OTP
         if ($this->smsOtpService->verifyOtp($user, $request->otp)) {
-            Log::info('SMS OTP verification successful, logging in user', ['user_id' => $userId]);
-            
-            // Clear OTP session data first
-            Session::forget(['otp_user_id', 'login_timestamp']);
-            
-            // Log the user in
-            Auth::login($user, true);
-            
-            // // IMPORTANT: Set OTP verification flag AFTER login
-            // Session::put('otp_verified', false);
-            
-            // Regenerate session for security but keep the otp_verified flag
-            $otpVerified = Session::get('otp_verified');
-            $request->session()->regenerate();
-            // Session::put('otp_verified', $otpVerified);
-            
-            Log::info('User phone verification completed after OTP verification', [
-                'user_id' => $user->id,
-                'is_authenticated' => Auth::check(),
-                'current_user_id' => Auth::id(),
-                'phone_verified_at' => $user->phone_verified_at,
-                // 'otp_verified_flag' => Session::get('otp_verified'),
-                // 'session_id' => Session::getId(),
-                'nida_verified' => $user->isNidaVerified(),
-                'nida_verified_at' => $user->nida_verified_at,
-            ]);
 
-            //redirect to email verification page
-            return redirect()->intended(route('otp.show'))
-                ->with('success', 'Phone verification successful! Login to your account.');
-                   
-        } else {
-            Log::warning('Invalid OTP verification attempt', [
-                'user_id' => $user->id,
-            ]);
-            
-            throw ValidationException::withMessages([
-                'otp' => 'The verification code is invalid or has expired. Please try again.',
-            ]);
+            Session::put('phone_otp_verified', true);
+            Session::put('login_timestamp', now()->timestamp); // refresh the 30-min window
+
+            if (!$this->otpService->generateAndSendOtp($user)) {
+                Session::forget(['otp_user_id', 'login_timestamp', 'phone_otp_verified']);
+                return redirect()->route('login')
+                    ->with('error', 'Phone verified, but we could not send the email code. Please login again.');
+            }
+
+            return redirect()->route('otp.show')
+                ->with('success', 'Phone verified. Please check your email for the verification code.');
         }
     }
 
 
-        /**
+    /**
      * Show OTP verification form
      */
     public function showSmsOtp()
@@ -329,12 +301,12 @@ class OtpController extends Controller
 
         // Get remaining time for current OTP
         $remainingTime = $this->otpService->getOtpRemainingTime($user);
-        
+
         Log::info('Showing OTP page', [
             'user_id' => $userId,
             'remaining_time' => $remainingTime
         ]);
-        
+
         return view('auth.smsOtp', [
             'user' => $user,
             'remainingTime' => $remainingTime ?? 0,
@@ -342,7 +314,7 @@ class OtpController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Resend OTP SMS
      */
     public function resendSmsOtp(Request $request)

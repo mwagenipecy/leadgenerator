@@ -136,7 +136,7 @@
         <!-- OTP Form -->
         <div class="bg-white rounded-2xl p-8 border border-gray-100">
             
-            <form method="POST" action="{{ route('otp.verifySmsOtp') }}" class="space-y-6" id="otpForm">
+            <form method="POST" action="{{ route('otp.verify.sms') }}" class="space-y-6" id="otpForm">
                 @csrf
                 
                 <!-- Validation Errors -->
@@ -207,7 +207,7 @@
                     <p class="text-sm text-gray-600 mb-2">
                         {{ __('auth.didnt_receive_code') }}
                     </p>
-                    <form method="POST" action="{{ route('otp.resendSmsOtp') }}" class="inline">
+                    <form method="POST" action="{{ route('otp.resend.sms') }}" class="inline">
                         @csrf
                         <button 
                             type="submit" 

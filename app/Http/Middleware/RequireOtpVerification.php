@@ -26,7 +26,7 @@ class RequireOtpVerification
         ]);
 
         // Skip OTP check for OTP-related routes and logout
-        if (in_array($routeName, ['otp.show', 'otp.verify', 'otp.resend', 'logout'])) {
+        if (in_array($routeName, ['otp.show', 'otp.verify', 'otp.resend', 'logout', 'otp.verify.sms', 'otp.show.sms', 'otp.resend.sms'])) {
             Log::info('Skipping OTP check for route', ['route' => $routeName]);
             return $next($request);
         }

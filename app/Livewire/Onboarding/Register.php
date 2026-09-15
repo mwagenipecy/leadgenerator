@@ -273,7 +273,7 @@ class Register extends Component
                     return redirect()->route('login');
                 }
                 
-                return redirect()->route('otp.showSmsOtp')
+                return redirect()->route('otp.show.sms')
                     ->with('success', 'Account created! Please check your phone for the verification code.');
             }
             
