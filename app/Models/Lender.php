@@ -202,11 +202,13 @@ class Lender extends Model
         $user = User::create([
             'name' => $this->contact_person,
             'email' => $this->email,
+            'phone' => $this->phone ?? null,
             'password' => Hash::make($password),
             'role' => 'lender',
             'email_verified_at' => now(),
             'is_active' => true,
             'lender_id'=> $this->id,
+            'phone_verified_at' => now(),
         ]);
 
         $this->update([
