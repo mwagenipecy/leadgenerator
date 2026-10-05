@@ -83,5 +83,11 @@ return [
         // 'source_id' => env('SMS_SOURCE_ID'),
     ],
 
+    // Centralized user API (see "centralization of users/" docs) used for
+    // phone OTP, NIN Q&A verification, and web registration/login.
+    'central_user_api' => [
+        'base_url' => env('CENTRAL_USER_API_BASE_URL'),
+        'timeout' => env('CENTRAL_USER_API_TIMEOUT', 15),
+    ],
 
 ];

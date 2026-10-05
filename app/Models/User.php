@@ -50,6 +50,7 @@ class User extends Authenticatable
         'email',
         'phone',
         'nida_number',
+        'central_user_id',
         'password',
         'email_verified_at',
         'phone_verified_at',

@@ -9,7 +9,7 @@ class OnboardingController extends Controller
 {
     public function registerNewUser(){
 
-        return view('pages.onboarding.register');
+        return view('pages.onboarding.central-portal');
     }
 
     public function registerCompany(){
