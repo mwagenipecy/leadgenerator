@@ -87,6 +87,21 @@ class CentralPortal extends Component
         $this->infoMessage = '';
     }
 
+    /**
+     * Record a portal activity event. Phone numbers are logged in full
+     * here (they are not secrets), but OTPs/passwords/answers never are.
+     */
+    protected function logActivity(string $event, array $context = []): void
+    {
+        Log::channel('central_user_api')->info($event, array_merge([
+            'phone' => $this->phone,
+            'step' => $this->step,
+            'central_user_id' => $this->centralUserId,
+            'local_user_id' => Auth::id(),
+            'session_id' => session()->getId(),
+        ], $context));
+    }
+
     protected function normalizePhone(string $phone): string
     {
         $digits = preg_replace('/[^0-9]/', '', $phone) ?? '';
@@ -123,6 +138,10 @@ class CentralPortal extends Component
 
         if (! $result['ok']) {
             $this->errorMessage = $this->extractMessage($result, 'Unable to send the verification code. Please try again.');
+            $this->logActivity('otp_request_failed', [
+                'status' => $result['status'],
+                'error_code' => $result['body']['errorCode'] ?? null,
+            ]);
 
             return;
         }
@@ -130,6 +149,7 @@ class CentralPortal extends Component
         $this->otp = '';
         $this->step = 'otp';
         $this->infoMessage = $result['body']['message'] ?? 'A verification code has been sent to your phone.';
+        $this->logActivity('otp_requested');
     }
 
     public function resendOtp(): void
@@ -148,10 +168,14 @@ class CentralPortal extends Component
             'otp.digits' => 'The verification code must be 6 digits.',
         ]);
 
-        $result = $this->api->verifyOtp($this->phone, $this->otp, 'login', 'web');
+        $result = $this->api->verifyOtp($this->phone, $this->otp, 'registration', 'web');
 
         if (! $result['ok']) {
             $this->errorMessage = $this->extractMessage($result, 'The code is invalid or expired. Please request a new one.');
+            $this->logActivity('otp_verify_failed', [
+                'status' => $result['status'],
+                'error_code' => $result['body']['errorCode'] ?? null,
+            ]);
 
             return;
         }
@@ -178,6 +202,8 @@ class CentralPortal extends Component
             default:
                 $this->errorMessage = 'Unexpected response from the identity service. Please try again.';
         }
+
+        $this->logActivity('otp_verified', ['next_step' => $this->nextStep]);
     }
 
     // ---------------------------------------------------------------
@@ -227,10 +253,15 @@ class CentralPortal extends Component
 
         if (! $result['ok']) {
             $this->errorMessage = $this->extractMessage($result, 'Incorrect phone number or password.');
+            $this->logActivity('password_login_failed', [
+                'status' => $result['status'],
+                'error_code' => $result['body']['errorCode'] ?? null,
+            ]);
 
             return;
         }
 
+        $this->logActivity('password_login_succeeded');
         $this->completeLogin($result['body']);
     }
 
@@ -252,14 +283,18 @@ class CentralPortal extends Component
         $result = $this->api->startNinQa($this->nin, 'web');
 
         if (! $result['ok']) {
-            if (($result['body']['errorCode'] ?? null) === 'NIN_ALREADY_REGISTERED') {
+            $errorCode = $result['body']['errorCode'] ?? null;
+
+            if ($errorCode === 'NIN_ALREADY_REGISTERED') {
                 $this->step = 'blocked';
                 $this->infoMessage = $this->extractMessage($result, 'This identity is already registered. Please contact support.');
+                $this->logActivity('nin_already_registered');
 
                 return;
             }
 
             $this->errorMessage = $this->extractMessage($result, 'Unable to start identity verification. Please try again.');
+            $this->logActivity('nin_start_failed', ['status' => $result['status'], 'error_code' => $errorCode]);
 
             return;
         }
@@ -271,6 +306,7 @@ class CentralPortal extends Component
         $this->answer = '';
         $this->ninAttempts = 0;
         $this->step = 'nin_qa';
+        $this->logActivity('nin_qa_started');
     }
 
     public function submitNinAnswer(): void
@@ -287,10 +323,15 @@ class CentralPortal extends Component
 
         if (! $result['ok']) {
             $this->ninAttempts++;
+            $this->logActivity('nin_answer_rejected', [
+                'attempt' => $this->ninAttempts,
+                'error_code' => $result['body']['errorCode'] ?? null,
+            ]);
 
             if ($this->ninAttempts >= 3) {
                 $this->step = 'blocked';
                 $this->infoMessage = 'Identity verification was not successful. Please contact support.';
+                $this->logActivity('nin_qa_blocked');
 
                 return;
             }
@@ -307,6 +348,7 @@ class CentralPortal extends Component
             $this->preRegToken = $body['preRegistrationToken'] ?? null;
             $this->step = 'set_password';
             $this->infoMessage = 'Identity verified. Please set your password to finish creating your account.';
+            $this->logActivity('nin_qa_completed', ['attempts' => $this->ninAttempts + 1]);
 
             return;
         }
@@ -315,6 +357,7 @@ class CentralPortal extends Component
         $this->questionEn = $body['question']['en'] ?? '';
         $this->questionSw = $body['question']['sw'] ?? '';
         $this->answer = '';
+        $this->logActivity('nin_qa_next_question');
     }
 
     // ---------------------------------------------------------------
@@ -371,10 +414,15 @@ class CentralPortal extends Component
 
         if (! $result['ok']) {
             $this->errorMessage = $this->extractMessage($result, 'We could not complete your registration. Please try again.');
+            $this->logActivity('registration_failed', [
+                'status' => $result['status'],
+                'error_code' => $result['body']['errorCode'] ?? null,
+            ]);
 
             return;
         }
 
+        $this->logActivity('registration_succeeded');
         $this->completeLogin($result['body'], ninVerified: true);
     }
 
@@ -393,20 +441,28 @@ class CentralPortal extends Component
             if (($onboardResult['body']['errorCode'] ?? null) === 'CHANNEL_ALREADY_ONBOARDED') {
                 $this->step = 'login';
                 $this->infoMessage = 'This account already has web access. Please log in with your password.';
+                $this->logActivity('channel_already_onboarded');
 
                 return;
             }
 
             $this->errorMessage = $this->extractMessage($onboardResult, 'We could not set up web access for this account. Please try again.');
+            $this->logActivity('channel_onboarding_failed', [
+                'status' => $onboardResult['status'],
+                'error_code' => $onboardResult['body']['errorCode'] ?? null,
+            ]);
 
             return;
         }
+
+        $this->logActivity('channel_onboarded');
 
         $loginResult = $this->api->loginWeb($this->phone, $this->newPassword);
 
         if (! $loginResult['ok']) {
             $this->step = 'login';
             $this->infoMessage = 'Web access created. Please log in with your new password.';
+            $this->logActivity('post_onboarding_login_failed', ['status' => $loginResult['status']]);
 
             return;
         }
@@ -426,11 +482,13 @@ class CentralPortal extends Component
         if ($status !== 'active') {
             $this->step = 'blocked';
             $this->infoMessage = 'Your account is not active. Please contact support.';
+            $this->logActivity('account_inactive', ['central_user_id' => $centralUser['id'] ?? $this->centralUserId]);
 
             return;
         }
 
         $token = $this->extractToken($body);
+        $wasExistingLocalUser = User::where('phone', $centralUser['phone_number'] ?? $this->phone)->exists();
         $localUser = $this->bridgeLocalUser($centralUser, $ninVerified, $token);
 
         Auth::login($localUser, true);
@@ -440,6 +498,12 @@ class CentralPortal extends Component
         if ($token) {
             Session::put('central_access_token', $token);
         }
+
+        $this->logActivity('session_established', [
+            'local_user_id' => $localUser->id,
+            'local_user_created' => ! $wasExistingLocalUser,
+            'nida_verified' => $ninVerified,
+        ]);
 
         $this->redirect(route('dashboard'));
     }

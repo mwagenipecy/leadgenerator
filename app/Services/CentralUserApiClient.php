@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * Thin HTTP client for the centralized user API described in
@@ -34,7 +35,7 @@ class CentralUserApiClient
         ]);
     }
 
-    public function verifyOtp(string $identifier, string $otp, string $purpose = 'login', string $channel = 'web', string $identifierType = 'phone'): array
+    public function verifyOtp(string $identifier, string $otp, string $purpose = 'registration', string $channel = 'web', string $identifierType = 'phone'): array
     {
         return $this->post('/api/v1/users/verify-otp', [
             'identifier' => $identifier,
@@ -135,19 +136,45 @@ class CentralUserApiClient
             $request = $request->withToken(preg_replace('/^Bearer\s+/i', '', $bearerToken));
         }
 
+        $correlationId = (string) Str::uuid();
+        $startedAt = microtime(true);
+
+        Log::channel('central_user_api')->info('Central user API request', [
+            'correlation_id' => $correlationId,
+            'method' => strtoupper($method),
+            'path' => $path,
+            'payload' => $this->maskPayload($payload),
+            'authenticated' => $bearerToken !== null,
+        ]);
+
         try {
             $response = $method === 'get'
                 ? $request->get($path)
                 : $request->post($path, $payload);
 
+            $body = (array) $response->json();
+
+            Log::channel('central_user_api')->info('Central user API response', [
+                'correlation_id' => $correlationId,
+                'path' => $path,
+                'status' => $response->status(),
+                'ok' => $response->successful(),
+                'duration_ms' => (int) round((microtime(true) - $startedAt) * 1000),
+                'response_status' => $body['status'] ?? null,
+                'error_code' => $body['errorCode'] ?? null,
+                'request_id' => $body['requestId'] ?? null,
+            ]);
+
             return [
                 'ok' => $response->successful(),
                 'status' => $response->status(),
-                'body' => (array) $response->json(),
+                'body' => $body,
             ];
         } catch (\Throwable $e) {
-            Log::error('Central user API request failed', [
+            Log::channel('central_user_api')->error('Central user API request failed', [
+                'correlation_id' => $correlationId,
                 'path' => $path,
+                'duration_ms' => (int) round((microtime(true) - $startedAt) * 1000),
                 'message' => $e->getMessage(),
             ]);
 
@@ -161,5 +188,21 @@ class CentralUserApiClient
                 ],
             ];
         }
+    }
+
+    /**
+     * Redact secrets/credentials before writing a payload to the log.
+     */
+    protected function maskPayload(array $payload): array
+    {
+        $sensitiveKeys = ['secret', 'password', 'otp', 'pin', 'answer', 'phoneProofToken'];
+
+        foreach ($sensitiveKeys as $key) {
+            if (array_key_exists($key, $payload)) {
+                $payload[$key] = '***redacted***';
+            }
+        }
+
+        return $payload;
     }
 }
