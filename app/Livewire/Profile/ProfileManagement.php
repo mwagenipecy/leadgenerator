@@ -35,7 +35,12 @@ class ProfileManagement extends Component
     #[Rule('required|string|min:10|max:20')]
     public $phone_number = '';
 
-    #[Rule('required|email')]
+    // Not edited here — the "Email Address" field in the personal step is
+    // the separate profile.email-verification component, which carries its
+    // own CIT_APP-verified email through to users.email independently of
+    // this component's save cycle. Kept nullable so an unset email never
+    // blocks saving the rest of this step.
+    #[Rule('nullable|email')]
     public $email = '';
 
     // Address Information
@@ -366,7 +371,7 @@ class ProfileManagement extends Component
                     'gender' => 'nullable|in:male,female,other',
                     'marital_status' => 'nullable|in:single,married,divorced,widowed,separated',
                     'phone_number' => 'required|string|min:10|max:20',
-                    'email' => 'required|email',
+                    'email' => 'nullable|email',
                 ]);
                 break;
             case 'address':

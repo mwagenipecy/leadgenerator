@@ -72,6 +72,13 @@ Route::get('/language/{locale}', [\App\Http\Controllers\LanguageController::clas
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
+    // Central user API-backed registration/login prototype — deliberately
+    // kept separate from /login and /register below (not a cutover) so it
+    // can be tested end-to-end first. See the "centralization of users/"
+    // Postman collection/flow diagrams.
+    Route::get('/onboarding/central', \App\Livewire\Onboarding\CentralPortal::class)
+        ->name('onboarding.central');
+
     // Login form
     Route::get('/login', function () {
         return view('auth.login');

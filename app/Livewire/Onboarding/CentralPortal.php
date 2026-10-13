@@ -6,6 +6,8 @@ use App\Models\NidaVerification;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\CentralUserApiClient;
+use App\Services\LogService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -31,6 +33,12 @@ class CentralPortal extends Component
     public string $phone = '';
 
     public string $otp = '';
+
+    // register vs login, resolved from verify-phone's own response — see
+    // CentralUserApiClient::resolveOtpPurpose(). Re-resolved on every
+    // sendPhoneOtp() call (including resendOtp()) in case the phone's
+    // registration state changed since the original request.
+    public string $otpPurpose = 'registration';
 
     public ?string $nextStep = null;
 
@@ -147,9 +155,10 @@ class CentralPortal extends Component
         }
 
         $this->otp = '';
+        $this->otpPurpose = $this->api->resolveOtpPurpose($result);
         $this->step = 'otp';
         $this->infoMessage = $result['body']['message'] ?? 'A verification code has been sent to your phone.';
-        $this->logActivity('otp_requested');
+        $this->logActivity('otp_requested', ['otp_purpose' => $this->otpPurpose]);
     }
 
     public function resendOtp(): void
@@ -168,7 +177,7 @@ class CentralPortal extends Component
             'otp.digits' => 'The verification code must be 6 digits.',
         ]);
 
-        $result = $this->api->verifyOtp($this->phone, $this->otp, 'registration', 'web');
+        $result = $this->api->verifyOtp($this->phone, $this->otp, $this->otpPurpose, 'web');
 
         if (! $result['ok']) {
             $this->errorMessage = $this->extractMessage($result, 'The code is invalid or expired. Please request a new one.');
@@ -505,6 +514,24 @@ class CentralPortal extends Component
             'nida_verified' => $ninVerified,
         ]);
 
+        // Distinct from the "user_login" SystemLog row Auth::login() triggers
+        // via HandleUserLogin — that fires on every login regardless of
+        // cause; this one specifically marks "a brand-new local account was
+        // bridged from the central user API just now," useful when
+        // troubleshooting a live walkthrough (mirrors CLA's
+        // consumer_registration.completed_via_cit_app audit entry).
+        if (! $wasExistingLocalUser) {
+            LogService::log(
+                'borrower_registration.completed_via_central_api',
+                "Borrower {$localUser->phone} registered via the central user API",
+                'medium',
+                $localUser,
+                null,
+                null,
+                ['central_user_id' => $localUser->central_user_id, 'nida_verified' => $ninVerified]
+            );
+        }
+
         $this->redirect(route('dashboard'));
     }
 
@@ -619,8 +646,31 @@ class CentralPortal extends Component
                 $updates['verification_status'] = 'verified';
             }
 
+            // NIN itself encodes date of birth and gender — e.g.
+            // "19900101-12345-12345-21" is dob 1990-01-01, gender digit "2"
+            // (1 = female, 2 = male). Derive both from whichever NIN we have
+            // (just-synced above, or already on the user) rather than relying
+            // on the profile endpoint to supply them separately.
+            $nin = $profile['nin'] ?? $user->nida_number;
+            $ninDetails = $nin ? $this->parseNinDetails($nin) : null;
+
+            if ($ninDetails && $ninDetails['date_of_birth'] && empty($user->date_of_birth)) {
+                $updates['date_of_birth'] = $ninDetails['date_of_birth'];
+            }
+
             if ($updates) {
                 $user->update($updates);
+            }
+
+            if ($ninDetails && $ninDetails['gender']) {
+                $existingProfile = $user->profile;
+
+                if (! $existingProfile || empty($existingProfile->gender)) {
+                    $user->profile()->updateOrCreate([], [
+                        'gender' => $ninDetails['gender'],
+                        'date_of_birth' => $ninDetails['date_of_birth'] ?? $existingProfile?->date_of_birth,
+                    ]);
+                }
             }
         } catch (\Throwable $e) {
             Log::warning('Failed to sync profile from central user API', [
@@ -628,6 +678,43 @@ class CentralPortal extends Component
                 'message' => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Tanzanian NIN is a 20-digit string shaped YYYYMMDD-XXXXX-XXXXX-GX:
+     * the first 8 digits are the date of birth, and of the last two digits
+     * the first (position 19 of 20) is the gender marker — "1" female,
+     * "2" male. Returns nulls for whichever part can't be derived rather
+     * than failing outright, since callers only act on the parts present.
+     */
+    protected function parseNinDetails(string $nin): array
+    {
+        $digits = preg_replace('/[^0-9]/', '', $nin) ?? '';
+        $result = ['date_of_birth' => null, 'gender' => null];
+
+        if (strlen($digits) !== 20) {
+            return $result;
+        }
+
+        $dobDigits = substr($digits, 0, 8);
+
+        try {
+            $dob = Carbon::createFromFormat('Ymd', $dobDigits);
+
+            if ($dob && $dob->format('Ymd') === $dobDigits) {
+                $result['date_of_birth'] = $dob->format('Y-m-d');
+            }
+        } catch (\Throwable $e) {
+            // Not a real calendar date (e.g. rolled-over month/day) — leave null.
+        }
+
+        $result['gender'] = match ($digits[18]) {
+            '1' => 'female',
+            '2' => 'male',
+            default => null,
+        };
+
+        return $result;
     }
 
     protected function extractMessage(array $result, string $fallback): string

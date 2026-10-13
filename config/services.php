@@ -88,6 +88,10 @@ return [
     'central_user_api' => [
         'base_url' => env('CENTRAL_USER_API_BASE_URL'),
         'timeout' => env('CENTRAL_USER_API_TIMEOUT', 15),
+        // TEMPORARY — see the fake-mode note on CentralUserApiClient. Remove
+        // once the central user API is actually reachable; must stay
+        // false/unset outside of local development.
+        'fake' => env('CENTRAL_USER_API_FAKE', false),
     ],
 
 ];
