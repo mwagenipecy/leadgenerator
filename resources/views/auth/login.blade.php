@@ -106,8 +106,9 @@
         <!-- Login Form -->
                 <div class="bg-white rounded-2xl p-8 border border-gray-100">
             
-                    <form method="POST" class="space-y-6" action="{{ route('login') }}" id="loginForm">
-                @csrf 
+                    <form method="POST" class="space-y-6" action="{{ route('login') }}" id="loginForm"
+                          x-data="{ loginValue: '{{ old('login') }}', get isPhone() { return this.loginValue.trim().length > 0 && !this.loginValue.includes('@') } }">
+                @csrf
 
                 <x-validation-errors class="mb-4" />
 
@@ -139,21 +140,26 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                             </svg>
                         </div>
-                        <input 
-                            id="email" 
-                            name="login" 
-                            type="text" 
-                            autocomplete="login" 
+                        <input
+                            id="email"
+                            name="login"
+                            type="text"
+                            autocomplete="login"
                                     value="{{ old('login') }}"
-                            required 
+                            required
+                            maxlength="255"
                                     class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="{{ __('auth.email') }} / {{ __('auth.phone') }}"
+                            x-model="loginValue"
                         >
                     </div>
+                    <p class="mt-2 text-xs text-gray-500" x-show="isPhone" x-cloak>
+                        {{ __('auth.phone_login_hint') }}
+                    </p>
                 </div>
 
-                <!-- Password Field -->
-                <div>
+                <!-- Password Field (email/local accounts only — phone numbers go through the OTP portal) -->
+                <div x-show="!isPhone" x-cloak>
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
                         {{ __('auth.password') }}
                     </label>
@@ -163,17 +169,18 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                             </svg>
                         </div>
-                        <input 
-                            id="password" 
-                            name="password" 
-                            type="password" 
-                            autocomplete="current-password" 
-                            required 
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autocomplete="current-password"
+                            :required="!isPhone"
+                            maxlength="255"
                                     class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
                             placeholder="{{ __('auth.password') }}"
                         >
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             class="absolute inset-y-0 right-0 pr-3 flex items-center"
                             onclick="togglePassword('password')"
                         >
@@ -185,13 +192,13 @@
                     </div>
                 </div>
 
-                <!-- Remember Me & Forgot Password -->
-                <div class="flex items-center justify-between">
+                <!-- Remember Me & Forgot Password (email/local accounts only) -->
+                <div class="flex items-center justify-between" x-show="!isPhone" x-cloak>
                     <div class="flex items-center">
-                        <input 
-                            id="remember-me" 
-                                    name="remember" 
-                            type="checkbox" 
+                        <input
+                            id="remember-me"
+                                    name="remember"
+                            type="checkbox"
                                     class="h-4 w-4 text-brand-red focus:ring-brand-red border-gray-300 rounded"
                         >
                         <label for="remember-me" class="ml-2 block text-sm text-gray-700">
@@ -213,7 +220,7 @@
                                 id="loginSubmitBtn"
                                 class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                     >
-                                <span id="loginBtnText">{{ __('auth.login') }}</span>
+                                <span id="loginBtnText" x-text="isPhone ? '{{ __('auth.continue') }}' : '{{ __('auth.login') }}'">{{ __('auth.login') }}</span>
                                 <span id="loginBtnLoader" class="hidden">
                                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

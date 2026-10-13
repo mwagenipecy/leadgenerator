@@ -11,10 +11,15 @@ use Livewire\Component;
 
 /**
  * Lets a borrower add or change the email on their central (CIT_APP)
- * identity from their profile page: register-email -> verify-email -> the
- * generic verify-otp confirm step (identifierType "email"), per
- * "centralization of users/CIT_APP APIs v5.postman_collection.json". There
- * is no dedicated "submit email otp" endpoint — confirmation reuses
+ * identity from their profile page: verify-email (sends the OTP) -> the
+ * generic verify-otp confirm step (identifierType "email") -> register-email
+ * (persists the now-confirmed address), per
+ * "centralization of users/CIT_APP APIs v5.postman_collection.json".
+ * register-email must come *after* OTP confirmation, not before: calling it
+ * first makes the API consider the email already registered to this user,
+ * so the following verify-email call fails with EMAIL_EXISTS on every
+ * address — confirmed against real traffic in storage/logs/central-user-api-*.log.
+ * There is no dedicated "submit email otp" endpoint — confirmation reuses
  * verify-otp the same way phone OTP confirmation does in CentralPortal.
  *
  * Scoped to borrowers who already have a central_user_id (onboarded via
@@ -90,19 +95,12 @@ class EmailVerification extends Component
             return;
         }
 
-        $registerResult = $this->api->registerEmail($this->email, $user->central_user_id, $token);
-        $registerErrorCode = $registerResult['body']['errorCode'] ?? null;
-
-        // EMAIL_EXISTS here just means this email is already registered to
-        // *this* account (e.g. a retry after the OTP step failed) — fine to
-        // proceed straight to verification.
-        if (! $registerResult['ok'] && $registerErrorCode !== 'EMAIL_EXISTS') {
-            $this->errorMessage = $this->extractMessage($registerResult, 'Unable to register this email. Please try again.');
-            $this->logActivity('email_register_failed', ['status' => $registerResult['status'], 'error_code' => $registerErrorCode]);
-
-            return;
-        }
-
+        // verify-email must be called on an email the central API does not
+        // yet consider "registered" to this user — it's what triggers the
+        // OTP send. registerEmail() only happens after that OTP is
+        // confirmed (see confirmOtp()); calling it first made every
+        // following verify-email call fail with EMAIL_EXISTS, since the
+        // email was already associated with the user by then.
         $verifyResult = $this->api->verifyEmail($this->email, $user->central_user_id, $token);
 
         if (! $verifyResult['ok']) {
@@ -150,6 +148,21 @@ class EmailVerification extends Component
         }
 
         $user = Auth::user();
+
+        // Now that ownership is OTP-confirmed, persist the association on
+        // the central side. EMAIL_EXISTS here would mean a *different* user
+        // already holds this email — a real conflict, not the false
+        // positive we'd get by registering before verifying.
+        $registerResult = $this->api->registerEmail($this->email, $user->central_user_id, $token);
+        $registerErrorCode = $registerResult['body']['errorCode'] ?? null;
+
+        if (! $registerResult['ok'] && $registerErrorCode !== 'EMAIL_EXISTS') {
+            $this->errorMessage = $this->extractMessage($registerResult, 'Your code was correct, but we could not save this email. Please try again.');
+            $this->logActivity('email_register_failed', ['status' => $registerResult['status'], 'error_code' => $registerErrorCode]);
+
+            return;
+        }
+
         $user->forceFill([
             'email' => $this->email,
             'email_verified_at' => now(),

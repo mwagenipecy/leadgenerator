@@ -84,9 +84,27 @@ class CentralPortal extends Component
         }
     }
 
+    /**
+     * Supports the /login handoff: a phone number typed into the main
+     * login form that isn't a local (admin/lender) account is redirected
+     * here as ?phone=..., so the visitor doesn't have to retype it — jump
+     * straight to requesting the OTP instead of showing the phone step.
+     */
+    public function mount(): void
+    {
+        $phone = request()->query('phone');
+
+        if ($phone) {
+            $this->phone = $this->normalizePhone((string) $phone);
+            $this->sendPhoneOtp();
+        }
+    }
+
     public function render()
     {
-        return view('livewire.onboarding.central-portal');
+        return view('livewire.onboarding.central-portal')
+            ->extends('layouts.auth-split', ['imageKey' => 'central_portal'])
+            ->title(__('auth.login_or_register'));
     }
 
     protected function resetMessages(): void

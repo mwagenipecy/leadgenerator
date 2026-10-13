@@ -1,233 +1,303 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <!-- Header -->
-        <div class="text-center">
-            <!-- Logo -->
-            <div class="text-3xl font-bold font-poppins text-red-700 mb-2">
-                <span class="text-sidebar-red">Fanikisha Marketplace</span>
-            </div>
-            <h2 class="text-2xl font-semibold text-red-600 mb-2">Set New Password</h2>
-        </div>
-
-        <!-- Initial Message with Button to Load Form -->
-        <div id="initial-message" class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Ready to Reset Your Password?</h3>
-            <p class="text-sm text-gray-600 mb-6">
-                Click the button below to proceed with setting your new password.
-            </p>
-            <button 
-                type="button" 
-                onclick="loadResetForm()"
-                class="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
-            >
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                </svg>
-                Continue to Reset Password
-            </button>
-        </div>
-
-        <!-- Reset Password Form (Hidden Initially) -->
-        <div id="reset-form" class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hidden">
-            
-            <!-- Description -->
-            <div class="mb-6 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-sidebar-red/10 rounded-full mb-4">
-                    <svg class="w-8 h-8 text-sidebar-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                    </svg>
-                </div>
-                <p class="text-sm text-gray-600 leading-relaxed">
-                    Please enter your new password below. Make sure it's strong and secure.
-                </p>
-            </div>
-
-            <form method="POST" action="{{ route('password.update') }}" class="space-y-6">
-                @csrf
-
-                <!-- Hidden token field -->
-                <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-                <!-- Validation Errors -->
-                <x-validation-errors class="mb-4" />
-
-                <!-- Email Field (readonly) -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <input 
-                            id="email" 
-                            name="email" 
-                            type="email" 
-                            autocomplete="username" 
-                            value="{{ old('email', $request->email) }}"
-                            required 
-                            readonly
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 sm:text-sm cursor-not-allowed"
-                        >
-                    </div>
-                </div>
-
-                <!-- New Password Field -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                        New Password
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                        </div>
-                        <input 
-                            id="password" 
-                            name="password" 
-                            type="password" 
-                            autocomplete="new-password" 
-                            required 
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-red focus:border-transparent placeholder-gray-400 sm:text-sm"
-                            placeholder="Enter your new password"
-                        >
-                        <button 
-                            type="button" 
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
-                            onclick="togglePassword('password')"
-                        >
-                            <svg id="password-eye-icon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Confirm Password Field -->
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
-                        Confirm New Password
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                        </div>
-                        <input 
-                            id="password_confirmation" 
-                            name="password_confirmation" 
-                            type="password" 
-                            autocomplete="new-password" 
-                            required 
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sidebar-red focus:border-transparent placeholder-gray-400 sm:text-sm"
-                            placeholder="Confirm your new password"
-                        >
-                        <button 
-                            type="button" 
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
-                            onclick="togglePassword('password_confirmation')"
-                        >
-                            <svg id="password_confirmation-eye-icon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Password Requirements -->
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <h4 class="text-sm font-medium text-blue-800 mb-2">Password Requirements:</h4>
-                    <ul class="text-xs text-blue-700 space-y-1">
-                        <li class="flex items-center">
-                            <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            At least 8 characters long
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            Include uppercase and lowercase letters
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            Include at least one number
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Submit Button -->
-                <div>
-                    <button 
-                        type="submit" 
-                        class="w-full bg-red-700 text-white py-3 rounded-lg font-semibold hover:bg-sidebar-red-light focus:ring-4 focus:ring-sidebar-red/30 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center"
-                    >
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                        </svg>
-                        Reset Password
-                    </button>
-                </div>
-
-            </form>
-        </div>
-
-        <!-- Security Notice -->
-        <div class="text-center">
-            <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                </svg>
-                <span>Your new password will be encrypted and stored securely</span>
-            </div>
-        </div>
-
-    </x-authentication-card>
-
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ __('auth.reset_password') }} - {{ config('app.name') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('landing/applicationIcon.png') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for language switcher -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .language-dropdown { z-index: 9999 !important; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
-        function loadResetForm() {
-            const initialMessage = document.getElementById('initial-message');
-            const resetForm = document.getElementById('reset-form');
-            
-            // Hide initial message and show form with smooth transition
-            initialMessage.classList.add('hidden');
-            resetForm.classList.remove('hidden');
-            
-            // Smooth scroll to form
-            resetForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-red': '#C40F11',
+                        'brand-dark-red': '#A00E11',
+                        'brand-green': '#C40F11',
+                        'brand-green-light': '#999999',
+                        'brand-gray': '#999999',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter">
+@php
+    $resolveAuthImageUrl = function (?string $value): string {
+        if (empty($value)) {
+            return asset('landing/register-login.jpg');
         }
 
-        // function togglePassword(fieldId) {
-        //     const field = document.getElementById(fieldId);
-        //     const icon = document.getElementById(fieldId + '-eye-icon');
-            
-        //     if (field.type === 'password') {
-        //         field.type = 'text';
-        //         icon.innerHTML = `
-        //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-        //         `;
-        //     } else {
-        //         field.type = 'password';
-        //         icon.innerHTML = `
-        //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-        //         `;
-        //     }
-        // }
-    </script>
-</x-guest-layout>
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+
+        if (str_starts_with($value, '/storage/')) {
+            return asset(ltrim($value, '/'));
+        }
+
+        if (str_starts_with($value, 'storage/')) {
+            return asset($value);
+        }
+
+        return asset('storage/' . ltrim($value, '/'));
+    };
+
+    $authSideImageValue = \App\Models\SystemSetting::getValue('auth_side_image_reset_password_' . app()->getLocale())
+        ?: \App\Models\SystemSetting::getValue('auth_side_image_reset_password_en')
+        ?: \App\Models\SystemSetting::getValue('auth_side_image_' . app()->getLocale())
+        ?: \App\Models\SystemSetting::getValue('auth_side_image_en')
+        ?: null;
+
+    $authSideImage = $resolveAuthImageUrl($authSideImageValue);
+@endphp
+<div class="h-screen flex overflow-hidden">
+<!-- Left Side - Welcome Content (Hidden on mobile) -->
+  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden h-screen" style="background-image: url('{{ $authSideImage }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <div class="absolute bottom-0 right-0 z-20 p-6 pr-8 max-w-sm"></div>
+        </div>
+
+        <!-- Right Side - Reset Password Form -->
+        <div class="w-full lg:w-1/2 h-screen overflow-y-auto relative">
+            <!-- Language Switcher (Top Right) -->
+            <div class="absolute top-4 right-4 z-50">
+                <x-language-switcher />
+            </div>
+            <div class="flex items-center justify-center min-h-full p-6 sm:p-8 lg:p-12">
+                <div class="w-full max-w-lg py-8">
+
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <!-- Desktop Logo -->
+                    <div class="hidden lg:flex justify-center mb-6">
+                        <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-16 w-auto">
+                    </div>
+                    <!-- Mobile Logo -->
+                    <div class="lg:hidden mb-6">
+                        <div class="flex justify-center">
+                            <img src="{{ asset('landing/redlogo.png') }}" alt="Fanikisha Market place Logo" class="h-16 w-auto">
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ __('auth.reset_password') }}</h2>
+                    <p class="text-gray-600">{{ __('auth.reset_password_subtitle') }}</p>
+                </div>
+
+                <!-- Reset Password Form -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-100">
+
+                    <form method="POST" class="space-y-6" action="{{ route('password.update') }}" id="resetPasswordForm">
+                        @csrf
+
+                        <!-- Hidden token field -->
+                        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                        <x-validation-errors class="mb-4" />
+
+                        <!-- Email Field (readonly) -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ __('auth.email') }}
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    autocomplete="username"
+                                    value="{{ old('email', $request->email) }}"
+                                    required
+                                    readonly
+                                    maxlength="255"
+                                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 sm:text-sm cursor-not-allowed"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- New Password Field -->
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ __('auth.new_password') }}
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                    </svg>
+                                </div>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    required
+                                    autofocus
+                                    minlength="8"
+                                    maxlength="255"
+                                    class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                                    placeholder="{{ __('auth.enter_new_password') }}"
+                                >
+                                <button
+                                    type="button"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                    onclick="togglePassword('password')"
+                                >
+                                    <svg id="eye-icon-password" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">{{ __('auth.password_min_chars') }}</p>
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ __('auth.confirm_new_password') }}
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                    </svg>
+                                </div>
+                                <input
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    required
+                                    minlength="8"
+                                    maxlength="255"
+                                    class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-transparent placeholder-gray-400 sm:text-sm"
+                                    placeholder="{{ __('auth.confirm_new_password_placeholder') }}"
+                                >
+                                <button
+                                    type="button"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                    onclick="togglePassword('password_confirmation')"
+                                >
+                                    <svg id="eye-icon-password_confirmation" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Password Requirements -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="text-sm font-medium text-blue-800 mb-2">{{ __('auth.password_requirements') }}:</h4>
+                            <ul class="text-xs text-blue-700 space-y-1">
+                                <li class="flex items-center">
+                                    <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ __('auth.password_min_chars') }}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div>
+                            <button
+                                type="submit"
+                                id="resetSubmitBtn"
+                                class="w-full bg-brand-red text-white py-3 rounded-lg font-semibold hover:bg-brand-dark-red focus:ring-4 focus:ring-brand-red/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            >
+                                <span id="resetBtnText">{{ __('auth.reset_password') }}</span>
+                                <span id="resetBtnLoader" class="hidden">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    {{ __('common.loading') }}
+                                </span>
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Security Notice -->
+                <div class="mt-6 text-center">
+                    <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                        <span>{{ __('auth.new_password_secure_note') }}</span>
+                    </div>
+                </div>
+
+                <!-- Powered By -->
+                <div class="mt-6 text-center">
+                    <p class="text-xs text-gray-400">Powered by CreditInfo</p>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+function togglePassword(fieldId) {
+    const passwordInput = document.getElementById(fieldId);
+    const eyeIcon = document.getElementById('eye-icon-' + fieldId);
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+        `;
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        `;
+    }
+}
+
+// Prevent double click on reset password form
+document.addEventListener('DOMContentLoaded', function() {
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    const resetSubmitBtn = document.getElementById('resetSubmitBtn');
+    const resetBtnText = document.getElementById('resetBtnText');
+    const resetBtnLoader = document.getElementById('resetBtnLoader');
+
+    if (resetPasswordForm && resetSubmitBtn) {
+        resetPasswordForm.addEventListener('submit', function(e) {
+            if (resetSubmitBtn.disabled) {
+                e.preventDefault();
+                return false;
+            }
+
+            resetSubmitBtn.disabled = true;
+            resetBtnText.classList.add('hidden');
+            resetBtnLoader.classList.remove('hidden');
+        });
+    }
+});
+</script>
+</body>
+</html>

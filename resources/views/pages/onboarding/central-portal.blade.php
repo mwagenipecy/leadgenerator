@@ -1,6 +1,8 @@
-@extends('layouts.onboard')
-@section('main-section')
+@extends('layouts.auth-split')
 
-<livewire:onboarding.central-portal />
+@section('title', __('auth.login_or_register'))
+@section('image-key', 'central_portal')
 
+@section('content')
+    <livewire:onboarding.central-portal />
 @endsection

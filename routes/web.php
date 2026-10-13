@@ -88,24 +88,55 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', function (Request $request) {
         $request->validate([
             'login' => 'required',
-            'password' => 'required',
+            // Only required for email logins — phone numbers are handed off
+            // to the central phone/OTP portal below, which needs no password.
+            'password' => 'nullable|string',
         ]);
 
+        $loginInput = trim($request->input('login'));
+        $login_type = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
-        $login_type = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+        if ($login_type === 'phone') {
+            $normalizedPhone = preg_replace('/[^0-9]/', '', $loginInput) ?? '';
+            if (str_starts_with($normalizedPhone, '0')) {
+                $normalizedPhone = '255' . substr($normalizedPhone, 1);
+            }
 
+            // Phone storage isn't consistently normalized across older
+            // accounts (some have a leading "+", some don't) — match either
+            // so a legacy local account with a real password isn't wrongly
+            // bounced into the central portal.
+            $localUser = \App\Models\User::where('phone', $normalizedPhone)
+                ->orWhere('phone', '+' . $normalizedPhone)
+                ->first();
 
-       // $credentials = $request->only('email', 'password');
+            // Borrower accounts (central_user_id set) have an unknowable
+            // random local password — they, and any phone with no local
+            // account at all, belong in the central phone/OTP portal, not
+            // in a local Auth::attempt() that can never succeed for them.
+            // A phone tied to a genuine local account (admin/lender) with a
+            // password typed in still falls through to Auth::attempt below.
+            if (! $request->filled('password') || ! $localUser || $localUser->central_user_id) {
+                return redirect()->route('onboarding.central', ['phone' => $normalizedPhone]);
+            }
+
+            // Auth::attempt() below needs the phone exactly as stored (it
+            // does its own lookup) — not the normalized form, which won't
+            // match a "+"-prefixed legacy value.
+            $loginInput = $localUser->phone;
+        } else {
+            $request->validate(['password' => 'required']);
+        }
 
         $credentials = [
-            $login_type => $request->input('login'),
+            $login_type => $loginInput,
             'password' => $request->input('password'),
         ];
 
 
         $remember = $request->boolean('remember');
 
-        Log::info('Login attempt', ['login' =>$request->input('login')]);
+        Log::info('Login attempt', ['login' => $loginInput]);
 
         // Attempt authentication
         if (Auth::attempt($credentials, $remember)) {
@@ -185,7 +216,7 @@ Route::middleware('guest')->group(function () {
             }
         }
 
-        Log::warning('Authentication failed', [$login_type => $request->input('login')]);
+        Log::warning('Authentication failed', [$login_type => $loginInput]);
 
         throw ValidationException::withMessages([
             'email' => 'The provided credentials do not match our records.',
