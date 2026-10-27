@@ -106,12 +106,9 @@ class FetchCreditScore implements ShouldQueue
                 // Log failed attempt
                 LogService::log(
                     'credit_score_fetch_failed',
-                    $user,
-                    null,
-                    null,
-                    null,
+                    'Credit score fetch completed but no score was returned',
                     'medium',
-                    'Credit score fetch completed but no score was returned'
+                    $user,
                 );
             }
 
@@ -126,12 +123,12 @@ class FetchCreditScore implements ShouldQueue
             if (isset($user)) {
                 LogService::log(
                     'credit_score_fetch_error',
+                    'Error fetching credit score: ' . $e->getMessage(),
+                    'high',
                     $user,
                     null,
                     null,
                     ['error' => $e->getMessage()],
-                    'high',
-                    'Error fetching credit score: ' . $e->getMessage()
                 );
             }
 
