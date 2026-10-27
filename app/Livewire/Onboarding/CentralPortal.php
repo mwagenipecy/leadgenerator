@@ -7,7 +7,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\CentralUserApiClient;
 use App\Services\LogService;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -516,7 +515,7 @@ class CentralPortal extends Component
 
         $token = $this->extractToken($body);
         $wasExistingLocalUser = User::where('phone', $centralUser['phone_number'] ?? $this->phone)->exists();
-        $localUser = $this->bridgeLocalUser($centralUser, $ninVerified, $token);
+        $localUser = $this->bridgeLocalUser($centralUser, $ninVerified);
 
         Auth::login($localUser, true);
         Session::regenerate();
@@ -560,10 +559,18 @@ class CentralPortal extends Component
         return $token ? preg_replace('/^Bearer\s+/i', '', $token) : null;
     }
 
-    protected function bridgeLocalUser(array $centralUser, bool $ninVerified, ?string $token): User
+    protected function bridgeLocalUser(array $centralUser, bool $ninVerified): User
     {
         $phone = $centralUser['phone_number'] ?? $this->phone;
         $centralUserId = $centralUser['id'] ?? $this->centralUserId;
+
+        // The central API's own user object is now the source of truth for
+        // KYC data (nin/name/dob/gender) on every call site — login,
+        // register, and channel onboarding all return it inline, so there's
+        // no need for a follow-up /profile round trip. Fall back to the NIN
+        // typed into this form only for the web NIN-QA registration path,
+        // in case the register response doesn't echo it back yet.
+        $nin = $centralUser['nin'] ?? ($ninVerified ? $this->nin : null);
 
         $user = User::where('phone', $phone)->first();
 
@@ -572,17 +579,17 @@ class CentralPortal extends Component
         }
 
         if (! $user) {
-            $user = DB::transaction(function () use ($phone, $centralUserId, $ninVerified) {
+            $user = DB::transaction(function () use ($phone, $centralUserId, $nin) {
                 $newUser = User::create([
                     'name' => 'Borrower',
                     'email' => $phone.'@phone.leadgenerator.local',
                     'phone' => $phone,
                     'central_user_id' => $centralUserId,
-                    'nida_number' => $ninVerified ? $this->nin : null,
+                    'nida_number' => $nin,
                     'password' => Hash::make(Str::random(40)),
                     'phone_verified_at' => now(),
-                    'nida_verified_at' => $ninVerified ? now() : null,
-                    'verification_status' => $ninVerified ? 'verified' : 'pending',
+                    'nida_verified_at' => $nin ? now() : null,
+                    'verification_status' => $nin ? 'verified' : 'pending',
                     'registration_type' => 'individual',
                     'role' => 'borrower',
                 ]);
@@ -605,10 +612,10 @@ class CentralPortal extends Component
                 $updates['phone_verified_at'] = now();
             }
 
-            if ($ninVerified && ! $user->isNidaVerified()) {
+            if ($nin && ! $user->isNidaVerified()) {
                 $updates['nida_verified_at'] = now();
                 $updates['verification_status'] = 'verified';
-                $updates['nida_number'] = $this->nin;
+                $updates['nida_number'] = $nin;
             }
 
             if ($updates) {
@@ -616,123 +623,88 @@ class CentralPortal extends Component
             }
         }
 
-        if ($ninVerified) {
-            $this->saveLocalNidaVerification($user);
-        }
-
-        if ($token) {
-            $this->syncProfile($user, $token);
-        }
+        $this->applyCentralUserData($user, $centralUser, $nin);
 
         return $user->fresh();
     }
 
-    protected function saveLocalNidaVerification(User $user): void
+    /**
+     * Populate local KYC fields (name, DOB, gender, email, NIDA
+     * verification) straight from the central API's user object — the same
+     * payload returned by login/register/onboard-channel — instead of a
+     * separate /profile call.
+     */
+    protected function applyCentralUserData(User $user, array $centralUser, ?string $nin): void
+    {
+        $updates = [];
+
+        $firstName = $centralUser['first_name'] ?? null;
+        $middleName = $centralUser['middle_name'] ?? null;
+        $lastName = $centralUser['last_name'] ?? null;
+
+        if ($firstName && $user->name === 'Borrower') {
+            $updates['first_name'] = $firstName;
+            $updates['middle_name'] = $middleName;
+            $updates['last_name'] = $lastName;
+            $updates['name'] = trim(implode(' ', array_filter([$firstName, $middleName, $lastName])));
+        }
+
+        if (! empty($centralUser['date_of_birth']) && empty($user->date_of_birth)) {
+            $updates['date_of_birth'] = $centralUser['date_of_birth'];
+        }
+
+        if (! empty($centralUser['email']) && str_ends_with((string) $user->email, '@phone.leadgenerator.local')) {
+            $updates['email'] = $centralUser['email'];
+        }
+
+        if ($updates) {
+            $user->update($updates);
+        }
+
+        $gender = $this->normalizeGender($centralUser['gender'] ?? null);
+
+        if ($gender) {
+            $existingProfile = $user->profile;
+
+            if (! $existingProfile || empty($existingProfile->gender)) {
+                $user->profile()->updateOrCreate([], [
+                    'gender' => $gender,
+                    'date_of_birth' => $centralUser['date_of_birth'] ?? $existingProfile?->date_of_birth,
+                ]);
+            }
+        }
+
+        if ($nin) {
+            $this->saveLocalNidaVerification($user, $nin);
+        }
+    }
+
+    /**
+     * Central API returns "MALE"/"FEMALE"; normalize to this app's
+     * lowercase convention. Unknown/missing values are left for the user
+     * to fill in rather than guessed.
+     */
+    protected function normalizeGender(?string $gender): ?string
+    {
+        return match (strtoupper((string) $gender)) {
+            'MALE', 'M' => 'male',
+            'FEMALE', 'F' => 'female',
+            default => null,
+        };
+    }
+
+    protected function saveLocalNidaVerification(User $user, string $nin): void
     {
         NidaVerification::updateOrCreate(
             ['user_id' => $user->id],
             [
-                'nida_number' => $this->nin,
+                'nida_number' => $nin,
                 'status' => 'verified',
                 'verified_at' => now(),
                 'verification_method' => 'questionnaire',
                 'expires_at' => now()->addYears(5),
             ]
         );
-    }
-
-    protected function syncProfile(User $user, string $token): void
-    {
-        try {
-            $result = $this->api->getProfile($token);
-
-            if (! $result['ok']) {
-                return;
-            }
-
-            $profile = $result['body'];
-            $updates = [];
-
-            if (! empty($profile['firstName']) && $user->name === 'Borrower') {
-                $updates['name'] = $profile['firstName'];
-                $updates['first_name'] = $profile['firstName'];
-            }
-
-            if (! empty($profile['nin']) && empty($user->nida_number)) {
-                $updates['nida_number'] = $profile['nin'];
-                $updates['nida_verified_at'] = $user->nida_verified_at ?? now();
-                $updates['verification_status'] = 'verified';
-            }
-
-            // NIN itself encodes date of birth and gender — e.g.
-            // "19900101-12345-12345-21" is dob 1990-01-01, gender digit "2"
-            // (1 = female, 2 = male). Derive both from whichever NIN we have
-            // (just-synced above, or already on the user) rather than relying
-            // on the profile endpoint to supply them separately.
-            $nin = $profile['nin'] ?? $user->nida_number;
-            $ninDetails = $nin ? $this->parseNinDetails($nin) : null;
-
-            if ($ninDetails && $ninDetails['date_of_birth'] && empty($user->date_of_birth)) {
-                $updates['date_of_birth'] = $ninDetails['date_of_birth'];
-            }
-
-            if ($updates) {
-                $user->update($updates);
-            }
-
-            if ($ninDetails && $ninDetails['gender']) {
-                $existingProfile = $user->profile;
-
-                if (! $existingProfile || empty($existingProfile->gender)) {
-                    $user->profile()->updateOrCreate([], [
-                        'gender' => $ninDetails['gender'],
-                        'date_of_birth' => $ninDetails['date_of_birth'] ?? $existingProfile?->date_of_birth,
-                    ]);
-                }
-            }
-        } catch (\Throwable $e) {
-            Log::warning('Failed to sync profile from central user API', [
-                'user_id' => $user->id,
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    /**
-     * Tanzanian NIN is a 20-digit string shaped YYYYMMDD-XXXXX-XXXXX-GX:
-     * the first 8 digits are the date of birth, and of the last two digits
-     * the first (position 19 of 20) is the gender marker — "1" female,
-     * "2" male. Returns nulls for whichever part can't be derived rather
-     * than failing outright, since callers only act on the parts present.
-     */
-    protected function parseNinDetails(string $nin): array
-    {
-        $digits = preg_replace('/[^0-9]/', '', $nin) ?? '';
-        $result = ['date_of_birth' => null, 'gender' => null];
-
-        if (strlen($digits) !== 20) {
-            return $result;
-        }
-
-        $dobDigits = substr($digits, 0, 8);
-
-        try {
-            $dob = Carbon::createFromFormat('Ymd', $dobDigits);
-
-            if ($dob && $dob->format('Ymd') === $dobDigits) {
-                $result['date_of_birth'] = $dob->format('Y-m-d');
-            }
-        } catch (\Throwable $e) {
-            // Not a real calendar date (e.g. rolled-over month/day) — leave null.
-        }
-
-        $result['gender'] = match ($digits[18]) {
-            '1' => 'female',
-            '2' => 'male',
-            default => null,
-        };
-
-        return $result;
     }
 
     protected function extractMessage(array $result, string $fallback): string
